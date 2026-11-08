@@ -2110,7 +2110,10 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
     // 2n) PARTY EFFECTS (THE RECALCITRANT CAFE, 2026-10-13 — owner: "make the town walk's choices have impact"):
     // worldEffects.partyEffects = [{ name, img?, note?, checkBonus?: [{context?,skill?,attribute?,bonus,note?}], ranks?: {<skill>:N},
-    //   strainRelief?: N, duration?: "turn" (default) | "permanent", turns?: 1 }] — every coalition Steward gets a `feature` Item
+    //   strainRelief?: N, duration?: "turn" (default) | "permanent", turns?: 1,
+    //   defenseBonus?: {guard?,evasion?,resolve?} (2026-11-07, flat to the derived defenses), group?: "<key>" (a Steward holding ANY live
+    //   party effect of the same group is skipped — Pike's briefing is one of two buffs a month) }]; worldEffects.partyEffectsTitle
+    //   (optional) replaces the chat card's "The table is fed" header — every coalition Steward gets a `feature` Item
     // carrying flags.fourththing.passives (the system's roll path itemises it on the card). "turn" rows expire when the world turn
     // advances past grantTurn + turns − 1 (hook below); "permanent" rows stay. Idempotent per (beatId, name) while the buff is live.
     try {
@@ -2128,13 +2131,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const expiresTurn = permanent ? null : (turnNow + turns - 1);
           const checkBonus = Array.isArray(row.checkBonus) ? row.checkBonus.filter(g => g && Number(g.bonus)).map(g => ({ context: g.context || "check", skill: g.skill || null, attribute: g.attribute || null, bonus: Number(g.bonus), note: g.note || name })) : [];
           const ranks = (row.ranks && typeof row.ranks === "object") ? row.ranks : null;
+          const defenseBonus = (row.defenseBonus && typeof row.defenseBonus === "object")
+            ? Object.fromEntries(["guard", "evasion", "resolve"].filter(k => Number(row.defenseBonus[k])).map(k => [k, Number(row.defenseBonus[k])])) : null;
+          const group = String(row.group || "").trim() || null;
           const relief = Math.max(0, Math.floor(Number(row.strainRelief) || 0));
           const who = [];
           for (const a of stewards) {
             try {
               const dup = (a.items || []).find(it => { const f = it.flags && it.flags["bbttcc-campaign"] && it.flags["bbttcc-campaign"].partyEffect; return f && f.name === name && String(f.beatId || "") === String(beatCtx.beatId || "") && (f.expiresTurn == null || Number(f.expiresTurn) >= turnNow); });
               if (dup) continue;
+              if (group && (a.items || []).some(it => { const f = it.flags && it.flags["bbttcc-campaign"] && it.flags["bbttcc-campaign"].partyEffect; return f && f.group === group; })) continue;
               const passives = {}; if (checkBonus.length) passives.checkBonus = checkBonus; if (ranks) passives.ranks = ranks;
+              if (defenseBonus && Object.keys(defenseBonus).length) passives.defenseBonus = defenseBonus;
               const desc = `<p>${esc(row.note || "")}</p><p><i>${permanent ? "Permanent." : `Until the end of turn ${expiresTurn}.`}</i></p>`;
               // Item type through the bbttcc-core seam: RFI "feature", dnd5e "feat" (review C34 — "feature" failed validation on
               // the D&D table and no buff ever landed). On dnd5e the RFI roll path never itemises flags.fourththing.passives, so the
@@ -2144,7 +2152,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               const itemData = { name, type: game.bbttcc?.types?.item?.("feature") ?? "feature", img: row.img || "icons/consumables/food/bowl-stew-brown.webp",
                 system: onRFI ? { category: "principle", source: String(beat?.label || "The Recalcitrant Cafe"), tags: ["recalcitrant-cafe"], description: { value: desc, chat: "" } }
                               : { description: { value: desc, chat: "" } },
-                flags: { fourththing: Object.keys(passives).length ? { passives } : {}, "bbttcc-campaign": { partyEffect: { beatId: String(beatCtx.beatId || ""), name, grantTurn: turnNow, expiresTurn, permanent } } } };
+                flags: { fourththing: Object.keys(passives).length ? { passives } : {}, "bbttcc-campaign": { partyEffect: { beatId: String(beatCtx.beatId || ""), name, grantTurn: turnNow, expiresTurn, permanent, ...(group ? { group } : {}) } } } };
               if (!onRFI) {
                 const ADD = CONST.ACTIVE_EFFECT_MODES.ADD; const raw = [];
                 for (const g of checkBonus) {
@@ -2155,6 +2163,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
                   else raw.push({ key: "system.bonuses.abilities.check", mode: ADD, value: v });
                 }
                 for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) raw.push({ key: `system.skills.${String(sk).toLowerCase()}.value`, mode: ADD, value: String(Number(n)) });
+                // dnd5e: Guard / Evasion → AC (the larger of the two), Resolve → saving throws
+                if (defenseBonus) { const ac = Math.max(Number(defenseBonus.guard) || 0, Number(defenseBonus.evasion) || 0); if (ac) raw.push({ key: "system.attributes.ac.bonus", mode: ADD, value: String(ac) }); if (Number(defenseBonus.resolve)) raw.push({ key: "system.bonuses.abilities.save", mode: ADD, value: String(Number(defenseBonus.resolve)) }); }
                 const changes = (typeof game.bbttcc?.dice?.aeChanges === "function") ? game.bbttcc.dice.aeChanges(raw) : raw;
                 if (changes.length) itemData.effects = [{ name, img: itemData.img, transfer: true, disabled: false, changes }];
               }
@@ -2164,11 +2174,11 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               who.push(a.name); changed = true;
             } catch (eA) { console.warn(TAG, "partyEffects: grant failed", a?.name, eA); }
           }
-          if (who.length) _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns);
-          if (who.length) { notes.push("partyEffect:" + name); lines.push(`🍲 ${name} → ${who.join(", ")}${permanent ? " (permanent)" : ` (until the end of turn ${expiresTurn})`}`); }
+          if (who.length) _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns, defenseBonus);
+          if (who.length) { notes.push("partyEffect:" + name); lines.push(`${String(row.icon || "🍲")} ${name} → ${who.join(", ")}${permanent ? " (permanent)" : ` (until the end of turn ${expiresTurn})`}`); }
           else lines.push(`· ${name} — everyone already has it`);
         }
-        if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-party-effects"><b>The table is fed</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` }); } catch (_eC) {} }
+        if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-party-effects"><b>${esc(String(we.partyEffectsTitle || "").trim() || "The table is fed")}</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` }); } catch (_eC) {} }
       }
     } catch (ePE) { console.warn(TAG, "partyEffects apply failed", ePE); }
 
@@ -2863,7 +2873,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       ChatMessage.create({ content: `<div class="bbttcc-beat-reward">${foundry.utils.escapeHTML(text)}</div>` }).catch?.(() => {});
     } catch (e) { console.warn(TAG, "beat reward banner failed", e); }
   }
-  function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns = 1) {
+  function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns = 1, defenseBonus = null) {
     const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
     const title = (s) => String(s || "").replace(/^./, c => c.toUpperCase());
     const parts = [];
@@ -2874,6 +2884,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     }
     for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) parts.push(`${signed(n)} ${title(sk)}`);
     if (relief) parts.push(`${relief} Strain eased`);
+    for (const [k, n] of Object.entries(defenseBonus || {})) if (Number(n)) parts.push(`${signed(n)} ${title(k)}`);
     const text = `${name}${parts.length ? ": " + parts.join(", ") : ""}${permanent ? "." : turns > 1 ? ` for ${turns} turns.` : " until the turn ends."}`;
     _announceBonus({ kicker: "BONUS", title: name, detail: text.slice(String(name).length).replace(/^:?\s*/, ""), fallback: text });
   }

@@ -912,8 +912,8 @@ for (const b of beats) {
   for (const [i, r] of (Array.isArray(we.partyEffects) ? we.partyEffects : []).entries()) {
     if (!r || typeof r !== "object" || !s(r.name)) { F("E16", "WARN", b.id, `partyEffects[${i}] needs a name — WME skips the row`); continue; }
     const cb = Array.isArray(r.checkBonus) ? r.checkBonus : [];
-    const live = cb.some(g => g && isNum(g.bonus) && Number(g.bonus) !== 0) || (r.ranks && typeof r.ranks === "object" && Object.keys(r.ranks).length) || (isNum(r.strainRelief) && Number(r.strainRelief) > 0) || String(r.duration || "").toLowerCase() === "permanent";
-    if (!live) F("E16", "WARN", b.id, `partyEffects[${i}] "${r.name}" grants nothing (no checkBonus / ranks / strainRelief) — a bare item`);
+    const live = cb.some(g => g && isNum(g.bonus) && Number(g.bonus) !== 0) || (r.ranks && typeof r.ranks === "object" && Object.keys(r.ranks).length) || (isNum(r.strainRelief) && Number(r.strainRelief) > 0) || (r.defenseBonus && typeof r.defenseBonus === "object" && ["guard", "evasion", "resolve"].some(k => isNum(r.defenseBonus[k]) && Number(r.defenseBonus[k]) !== 0)) || String(r.duration || "").toLowerCase() === "permanent";
+    if (!live) F("E16", "WARN", b.id, `partyEffects[${i}] "${r.name}" grants nothing (no checkBonus / ranks / strainRelief / defenseBonus) — a bare item`);
     for (const [j, g] of cb.entries()) { if (!isNum(g?.bonus)) F("E16", "WARN", b.id, `partyEffects[${i}].checkBonus[${j}].bonus not numeric`); if (s(g?.attribute) && !FACULTIES.includes(s(g.attribute).toLowerCase())) F("E16", "WARN", b.id, `partyEffects[${i}].checkBonus[${j}].attribute '${g.attribute}' is not a faculty (${FACULTIES.join("/")})`); }
     if (r.duration != null && !["turn", "permanent"].includes(String(r.duration).toLowerCase())) F("E16", "WARN", b.id, `partyEffects[${i}].duration '${r.duration}' — WME knows "turn" | "permanent"`);
   }

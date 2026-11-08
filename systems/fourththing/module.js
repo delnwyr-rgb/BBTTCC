@@ -16533,7 +16533,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
     }
 
-    const totalBonus = intentVal + channelVal + aeIntent + aeChannel;
+    // 2026-11-07 (Dave: Pike's briefing bonus reaches "manifestation and ability attack rolls"): flat attack bonuses
+    // (passives.checkBonus context attack, auras, banked) count here exactly as they do on a weapon Strike (attackTest).
+    const _maCb = collectCheckBonuses(actor, { context: "attack", attribute: intent, target });
+    const _maCbSum = _maCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+    for (const b of _maCb) aeContribs.push({ src: b.source, label: "attack", value: Number(b.bonus) || 0 });
+    const totalBonus = intentVal + channelVal + aeIntent + aeChannel + _maCbSum;
     const formula    = `${_ftXd10(actor)} + ${totalBonus}`;
     const roll       = new Roll(formula);
     await roll.evaluate();
@@ -16544,6 +16549,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const explosionVals = dieResults.slice(2).map(r => r.result);
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
+    consumeBankedBonus(actor, _maCb).catch(() => {});
 
     const total = roll.total;
     const hit   = total >= defenseValue;
@@ -20238,6 +20244,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         sys.derived.guard.value   += 2;
         sys.derived.evasion.value += 2;
         sys.derived.resolve.value += 2;
+      }
+
+      // 2026-11-07 (Pike's HQ briefing, "Dig in"): any item's flags.fourththing.passives.defenseBonus {guard?,evasion?,resolve?}
+      // adds flat — a timed party buff (worldEffects.partyEffects) is a feature item, not armor, so the armor path never saw it.
+      for (const _it of this.items ?? []) {
+        const _db = _it.flags?.fourththing?.passives?.defenseBonus;
+        if (!_db || typeof _db !== "object") continue;
+        sys.derived.guard.value   += Number(_db.guard)   || 0;
+        sys.derived.evasion.value += Number(_db.evasion) || 0;
+        sys.derived.resolve.value += Number(_db.resolve) || 0;
       }
 
       if (_threat?.defense) {
