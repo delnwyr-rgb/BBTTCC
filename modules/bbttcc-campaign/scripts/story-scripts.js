@@ -77,7 +77,7 @@ export const STORY_SCRIPTS = {
     ],
     after: ["allesh_gilliam_wall_stands_straight"],
     chapters: {
-      the_town_militia: { giver: "the bandits you let walk", line: "Freed bandits plus a nervous town equals a militia. The Muster is open; see what Brakk is building." },   // TODO(seeder): the three rungs
+      the_town_militia: { giver: "the bandits you let walk", line: "Brakk has it in hand. Check back when the militia is ready for prime-time." },   // Dave 2026-11-07: the Muster is Act 2; no door to send them to yet   // TODO(seeder): the three rungs
       the_confessor_s_debt: { giver: "the third candle", line: "The tea is already poured. Go and see Father Tamsin, and decide what justice looks like." }
     }
   },
