@@ -32,6 +32,9 @@ const SETTING_DIRECTOR_STATE = "directorState";
 const SETTING_STORY_STATE = "storyState";                // Phase 2 (2026-09-13): THE one story store — played beats, starts, chapter endings, closers, per campaign          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
 const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite";
+// INVITATIONS RETIRED (Dave 2026-11-07): "they're just a quest intro hook. That can just be step one of the quest." No
+// "wants a word" cards, no Director speaker invites, no Invitations tab rows; the quest log's first step does the job.
+const INVITES_RETIRED = true;
 const SETTING_INVITES_PLAYER_ACCEPT = "invites.playerAccept";   // 2026-09-12: players may accept "wants a word" invitations (relayed to the GM seat)
 const SETTING_SEAL_QUESTS = "director.sealCompletedQuests"; // 2026-09-07 ruling: a completed quest's beats never fire again
 const SETTING_SEAL_ACTS   = "director.sealDoneActs";        // 2026-09-07 ruling: a finished act's content is done in its entirety // auto-post "NPC wants a word" cards when speaker moments open
@@ -7007,6 +7010,7 @@ async function directorTick(opts = {}) {
       // Town" at the town gate on day one. Travel fires them, never offers.
       if (String(b.timeScale) === "leg") continue;
       const sid = String(b.speakerActorId || "").trim();
+      if (sid && INVITES_RETIRED) continue;   // retired 2026-11-07: a speaker moment is reached through its quest step, never a Director invite
       if (sid) {
         // Speaker beats are conversations: consumed ones are done, invited
         // ones are already pointed at, and an OPEN dialogue window with that
@@ -8014,6 +8018,7 @@ function _wordOnTrack(beatId, factionId = "") {
 }
 async function _listOpenInvites({ factionId = "" } = {}) {
   const out = [];
+  if (INVITES_RETIRED) return out;
   try {
     const campaignId = getActiveCampaignId();
     const campaign = campaignId ? getCampaign(campaignId) : null;
@@ -8843,6 +8848,7 @@ async function directorSlate({ via = "manual" } = {}) {
 // invited, not yet played. One card per beat, once. Serialized on the speaker chain.
 async function _directorIssueInvites(story, { onChain = false } = {}) {
   if (!game.user?.isGM || !story) return 0;
+  if (INVITES_RETIRED) return 0;
   let auto = true; try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
   if (!auto) return 0;
   try { if (facilitation().npcAi === "off") return 0; } catch (_eFac) {}   // FACILITATION: Tabletop plays NPCs at the table — no AI invitations

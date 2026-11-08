@@ -363,7 +363,7 @@
           { key:"completed", label:`Completed (${completed.length})` },
           { key:"archived", label:`Archived (${archived.length})` },
           { key:"all", label:`All (${all.length})` }
-        ],
+        ].filter(t => t.key !== "invites" || invites.length),   // invitations retired 2026-11-07 (Dave): no empty tab
         rows,
         selected,
         tsLabel
