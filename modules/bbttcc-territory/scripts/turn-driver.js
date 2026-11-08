@@ -1272,7 +1272,7 @@ async function computeRegenIncomeFor(A, { persist=false } = {}){
       const tf = h.tf || {}; const terr = (tf.terrain && typeof tf.terrain === "object") ? tf.terrain.key : (tf.terrainKey || tf.terrainType || tf.terrain);
       return [String(tf.type || "").toLowerCase(), String(terr || "").toLowerCase()];
     });
-    const stewards = (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
+    const stewards = stewardsOf(A);
     for (const st of stewards) for (const it of (st.items?.contents || [])) {
       const di = it.flags?.fourththing?.domainIncome;
       if (!di || typeof di !== "object") continue;
@@ -1492,8 +1492,11 @@ function homeRefundFor(paid, weeks){
   }
   return out;
 }
-// The Steward(s) of a Domain: characters assigned to it (the same reader steward identity income uses).
+// The Steward of a Domain (ONE STEWARD, ONE DOMAIN, 2026-11-07): the OP engine's reader — the roster's one Steward,
+// else every character assigned (NPC Domains). Fallback keeps the old filter if the facts layer isn't up.
 function stewardsOf(A){
+  const f = game.bbttcc?.facts?.faction?.stewards;
+  if (typeof f === "function") { try { return f(A) || []; } catch (_e) { /* fall through */ } }
   return (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
 }
 async function homeRecoverStewards(weeks){

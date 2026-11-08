@@ -2165,8 +2165,20 @@ export async function setActorEchoAssetSlot(actor, slotKey, packEntryId) {
   return next;
 }
 
-export async function setActorEnlightenment(actor, levelKey) {
-  if (!actor) return null;
+// One write at a time per actor (2026-11-07): this deletes then creates, so two overlapping calls (spark:integrated +
+// constellation, or a café grant beside a sheet edit) each read the old list and each created a level item. The Month-10
+// save carried two "Enlightenment: Awakening" items on 20 Errata Stewards, and member income counted both.
+const _ftEnlQueue = new Map();
+export function setActorEnlightenment(actor, levelKey) {
+  if (!actor) return Promise.resolve(null);
+  const key = actor.uuid || actor.id;
+  const prev = _ftEnlQueue.get(key) || Promise.resolve();
+  const next = prev.catch(() => {}).then(() => _setActorEnlightenment(actor, levelKey));
+  _ftEnlQueue.set(key, next);
+  next.finally(() => { if (_ftEnlQueue.get(key) === next) _ftEnlQueue.delete(key); }).catch(() => {});
+  return next;
+}
+async function _setActorEnlightenment(actor, levelKey) {
   const nextKey = FT_ENLIGHTENMENT_ITEM_DATA[String(levelKey ?? "").trim()] ? String(levelKey ?? "").trim() : "unawakened";
   const display = ftLabelForEnlightenment(nextKey);
 

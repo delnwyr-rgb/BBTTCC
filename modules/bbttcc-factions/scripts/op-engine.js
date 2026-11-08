@@ -124,6 +124,20 @@ export function factionCaps(faction) {
 // (flags.bbttcc-factions.factionId) whose items carry flags.fourththing.domainCapBonus
 // { <opKey>: marks } raises the Domain's caps by that much — Bulwark Founding Stance
 // (+30 violence / +20 siege) is the first. Only caps that are already > 0 move (0 = uncapped).
+// ONE STEWARD, ONE DOMAIN (Dave 2026-11-07): a Domain that names its Steward in flags.bbttcc-factions.roster is fed by
+// that one character only; anyone else carrying its factionId (trailer cast, NPCs, retainers) adds nothing. A Domain
+// with no roster (NPC towns) keeps the old reader: every character assigned to it. Used by every member reader here
+// and published as game.bbttcc.facts.faction.stewards for the turn driver.
+export function factionStewards(faction) {
+  if (!faction?.id || !globalThis.game?.actors) return [];
+  const raw = faction.getFlag?.(MOD_ID, "roster");
+  const ids = (Array.isArray(raw) ? raw : []).map(r => String(r || "").replace(/^Actor\./, "")).filter(Boolean);
+  for (const id of ids) {
+    const a = game.actors.get(id);
+    if (a?.type === "character") return [a];
+  }
+  return game.actors.filter(a => a.type === "character" && a.getFlag?.(MOD_ID, "factionId") === faction.id);
+}
 /** Free siege marks (ruling BW3 follow-up, 2026-10-25): the Domain has no "siege" cap channel, so a
  *  member's `domainCapBonus.siege` is read as marks of siege works the Domain gets for free every
  *  time it commits to a siege buffer (Begin Siege as lead, Join Siege as supporter). Consumers:
@@ -131,9 +145,7 @@ export function factionCaps(faction) {
 export function factionSiegeBonusMarks(faction) {
   if (!faction?.id || !globalThis.game?.actors) return 0;
   let total = 0;
-  for (const a of game.actors) {
-    if (a.type !== "character") continue;
-    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+  for (const a of factionStewards(faction)) {
     for (const it of (a.items ?? [])) {
       const v = _safeNum(it.flags?.fourththing?.domainCapBonus?.siege, 0);
       if (v > 0) total += v;
@@ -144,9 +156,7 @@ export function factionSiegeBonusMarks(faction) {
 function _withMemberCapBonuses(faction, out) {
   if (!faction?.id || !globalThis.game?.actors) return out;
   const add = {};
-  for (const a of game.actors) {
-    if (a.type !== "character") continue;
-    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+  for (const a of factionStewards(faction)) {
     for (const it of (a.items ?? [])) {
       const b = it.flags?.fourththing?.domainCapBonus;
       if (!b || typeof b !== "object") continue;
@@ -164,12 +174,16 @@ export function factionMemberIncomeMarks(faction) {
   const out = {}; for (const k of OP_KEYS) out[k] = 0;
   if (!faction?.id || !globalThis.game?.actors) return out;
   const per = _marksPerOp();
-  for (const a of game.actors) {
-    if (a.type !== "character") continue;
-    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+  for (const a of factionStewards(faction)) {
+    // One identity item per kind per steward (2026-11-07): duplicate copies (a doubled "Enlightenment: Awakening",
+    // a re-granted Archetype) used to pay twice. Kind = the options category, else the "Kind:" name prefix.
+    const seen = new Set();
     for (const it of (a.items ?? [])) {
       const b = it.flags?.["bbttcc-character-options"]?.bonuses;
       if (!b || typeof b !== "object") continue;
+      const kind = String(it.flags?.["bbttcc-character-options"]?.category || String(it.name || "").split(":")[0] || it.name || "").trim().toLowerCase();
+      if (kind && seen.has(kind)) continue;
+      if (kind) seen.add(kind);
       for (const k of OP_KEYS) { const v = _safeNum(b[k], 0); if (v) out[k] += v * per; }
     }
   }
@@ -183,9 +197,7 @@ export function factionMemberIncomeMarks(faction) {
 export function factionSpendDiscounts(faction) {
   const rows = [];
   if (!faction?.id || !globalThis.game?.actors) return rows;
-  for (const a of game.actors) {
-    if (a.type !== "character") continue;
-    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+  for (const a of factionStewards(faction)) {
     for (const it of (a.items ?? [])) {
       const list = it.flags?.fourththing?.domainCostDiscount;
       if (!Array.isArray(list)) continue;
@@ -689,7 +701,7 @@ function _attach() {
     };
     // Facts layer (2026-09-12): one home per faction fact.
     game.bbttcc.facts ??= {};
-    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, memberIncome: factionMemberIncomeMarks, spendDiscounts: factionSpendDiscounts, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
+    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, memberIncome: factionMemberIncomeMarks, stewards: factionStewards, spendDiscounts: factionSpendDiscounts, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
 
     log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {
