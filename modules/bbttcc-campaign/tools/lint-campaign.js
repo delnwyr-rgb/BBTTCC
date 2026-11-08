@@ -249,6 +249,8 @@ for (const b of beats) {
         if (x.beatMark != null) { if (!exists(s(x.beatMark))) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires beatMark '${x.beatMark}' — no such beat`); continue; }
         if (x.questBucket != null) { if (quests && !quests[s(x.questBucket)]) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires questBucket '${x.questBucket}' — not in the registry`); continue; }
         if (x.relation != null) continue;
+        // { partyAt: "<hex name>", not? } (2026-11-07 engine) — where the party stands; any non-empty name is accepted.
+        if (x.partyAt != null) { if (!s(x.partyAt)) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires partyAt with no hex name`); continue; }
         // { questItem: key, not? } (2026-10-30 engine) — some Steward holds that quest item. A key no choice in the campaign grants can only be met by GM hand.
         if (x.questItem != null) { if (!QUEST_ITEM_KEYS.has(s(x.questItem))) F("CG01", x.not === true ? "INFO" : "WARN", b.id, `choice[${ci}] "${s(c.label)}" requires questItem '${x.questItem}' — no choice.questItems row grants that key`); continue; }
         if (!(s(x.flag) in GATE_FLAGS)) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires unknown gate flag '${x.flag}' — hidden forever`);

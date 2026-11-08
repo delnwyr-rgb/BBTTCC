@@ -6354,6 +6354,18 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         continue;
       }
 
+      // { partyAt: "<hex name>", not?: true } — where the party stands (Dave 2026-11-07, The Word Comes In: "Go to the HQ"
+      // in Allesh-Gilliam, "Ride for Allesh-Gilliam" anywhere else). Same position the location guard reads; an unknown
+      // position fails open like the guard does.
+      if (c.partyAt != null) {
+        let here = null; try { here = _partyWhere(campaign)?.hex || null; } catch (_ePA) { here = null; }
+        if (here) {
+          const at = hexKey(String(here)) === hexKey(String(c.partyAt));
+          if (c.not === true ? at : !at) return false;
+        }
+        continue;
+      }
+
       // { questBucket: "<questId>", is: "active"|"completed"|"archived" }
       // or the negation { questBucket, isNot: "<bucket>" } — true when the quest
       // is NOT in that bucket (e.g. "offer this until the quest is underway").
@@ -6497,6 +6509,15 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
         continue;
       }
       if (!c || typeof c !== "object") continue;
+
+      if (c.partyAt != null) {   // 2026-11-07 — mirror of _beatRequiresMet
+        let here = null; try { here = _partyWhere(campaign)?.hex || null; } catch (_ePA) { here = null; }
+        const at = here ? hexKey(String(here)) === hexKey(String(c.partyAt)) : null;
+        const met = at == null ? true : (c.not === true ? !at : at);
+        out.conditions.push({ text: `party ${c.not === true ? "not " : ""}at ${c.partyAt}${here ? ` (at ${here})` : " (position unknown)"}`, met, kind: "partyAt" });
+        if (!met) out.met = false;
+        continue;
+      }
 
       if (c.questBucket != null) {
         const negated = c.is == null && c.isNot != null;
