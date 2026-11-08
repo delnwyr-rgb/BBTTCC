@@ -9635,9 +9635,13 @@ function buildCampaignAPI() {
           const uuid = String(doc.uuid || ""), name = String(doc.flags?.["bbttcc-territory"]?.name || doc.text || "");
           const key = name ? hexKey(name) : null;
           const played = _storyStateFor(c.id)?.played || {};
+          // A later act's story isn't hidden on the hex YET (Dave 2026-11-07: the Clowder's Act 2 outpost survey on Bedlam
+          // Barrens started the Act 3 Flooded Towns): only beats whose act has opened count.
+          let phase = null; try { phase = Number(_storyPhaseGet()); } catch (_eP) {}
           const beats = [], questKeys = new Set();
           for (const b of (c.beats || [])) {
             if (!b?.id || played[b.id]) continue;
+            if (Number.isFinite(phase)) { const a = _beatActOf(b); if (a != null && a > phase) continue; }
             const tied = (b.targetHexUuid && String(b.targetHexUuid) === uuid) || (key && (() => { const p = placeOf(b); return p && p !== "anywhere" && hexKey(p) === key; })());
             if (!tied) continue;
             beats.push({ id: b.id, label: String(b.label || b.id) });
