@@ -1396,7 +1396,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
                  : { op: "none" };
     try { await ftPlayAutoAnimation(actor, item, { hit: true }); } catch (_e) {}
     for (const tgt of targets) {
-      try { await _ftPostSavePromptCard(actor, tgt, item, item.system.manifestation, dr, { castDc: Number(_saveFirst.saveDcFixed) || 15, intent: item.system?.intent }); }
+      try { await _ftPostSavePromptCard(actor, tgt, item, item.system.manifestation, dr, { castDc: ftSaveDCFor(actor, _saveFirst, item.system.manifestation?.tier, item.system?.channel ?? "body"), intent: item.system?.intent }); }
       catch (e) { console.warn("Roll for Initiation | save-first strike card failed", tgt?.name, e); }
     }
     Hooks.callAll("fourththing:saveFirstStrike", { actor, item, targets });
@@ -3227,7 +3227,7 @@ async function _ftHandleMisfireConvertClick(btn, message) {
 async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, trackKey, { castDc, intent, channel, rollOverride = null } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
-  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : ftFormulaSaveDC(actor, mf?.tier, channel);
+  const dc = ftSaveDCFor(actor, r, mf?.tier, channel);
   const onSave = ["negate", "half"].includes(r.onSave) ? r.onSave : "half";
   const ctx = {
     casterUuid: actor.uuid,
@@ -3379,7 +3379,7 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
 async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
-  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : ftFormulaSaveDC(actor, mf?.tier, channel);
+  const dc = ftSaveDCFor(actor, r, mf?.tier, channel);
   const onSave = ["negate", "half"].includes(r.onSave) ? r.onSave : "half";
   const ctx = {
     casterUuid: actor.uuid,
@@ -4107,6 +4107,17 @@ function _ftSceneKey() {
 function _ftFormPaidThisScene(item) {
   return foundry.utils.getProperty(item, "flags.fourththing.formPaid") === _ftSceneKey();
 }
+
+// A Steward's save DC is always THEIRS (Dave 2026-11-08: "Their save DC should always be based on them, and not
+// something they can set"). Every save-DC read goes through here: a "fixed" DC is honored only for foes (NPC
+// stat blocks author "Body DC 13"); for a character it falls back to the formula ladder (11 + tier×2 + channel).
+// The Engine and the item sheets hide the Fixed option for Stewards; this is the belt under those braces.
+function ftSaveDCFor(actor, cfg, tier, channel) {
+  const fixed = cfg?.saveDcMode === "fixed" && Number(cfg?.saveDcFixed) > 0;
+  if (fixed && !(actor && !_ftIsFoeActor(actor))) return Number(cfg.saveDcFixed);
+  return ftFormulaSaveDC(actor, tier, channel);
+}
+function _ftStewardSetsNoDC(actor) { return !!(actor && !_ftIsFoeActor(actor)); }
 
 function ftAssessManifestationCost(actor, item, kind = "power") {
   const system = item?.system ?? {};
@@ -10500,11 +10511,28 @@ function _ftWizV2RenderStatesBlock(state, { coach } = {}) {
       <span class="ft-wiz-v2-cond-label">${cfg.label}</span>
     </label>`;
   }).join("");
+  // A Steward never sets a DC (2026-11-08): the ladder is shown, the Fixed option is a foe-only authoring tool.
+  const dcFields = state._stewardDc
+    ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">11 + tier×2 + your channel — set by you, not by the working</span></div>`
+    : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
+      ${ap.saveDcMode === "fixed" ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("appliedStates.saveDcFixed", ap.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}`;
   const saveSubFields = ap.saveEachRound ? `
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("appliedStates.saveAttribute", _ftWizV2FacultiesMap(), ap.saveAttribute ?? "body")}</div>
-      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
-      ${ap.saveDcMode === "fixed" ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("appliedStates.saveDcFixed", ap.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}
+      ${dcFields}
   ` : "";
+  return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditions Applied</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">${coach ?? "Pick states the working inflicts. Applied only when resolution lands (full or half). Tooltips show effects."} Every state counts toward the Magnitude tier.</p>
+    <div class="ft-wiz-v2-cond-grid">${condChecks}</div>
+    <div class="ft-cast-grid" style="margin-top:0.4rem">
+      <div class="ft-cast-field"><label>Duration</label>${_ftWizV2Sel("appliedStates.duration", { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" }, ap.duration ?? "1-round")}</div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off</span></label></div>
+      ${saveSubFields}
+    </div>`;
+}
+
+function _ftWizV2RenderEffectPower(state) {
+  const dr = state.damageRoll ?? {};
   return `
     <p class="ft-wiz-v2-coach">Does the working harm, heal, or transform without measurable damage? Configure the structured damage/heal roll the cast path will roll on success — and which conditions land alongside it.</p>
     <div class="ft-wiz-v2-subhead">Intent &amp; Channel</div>
@@ -10678,8 +10706,10 @@ function _ftWizV2RenderResolution(state) {
   const subSave = shape === "save" ? `
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("resolution.saveAttribute", _ftWizV2FacultiesMap(), r.saveAttribute ?? "body")}</div>
-      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
-      ${(r.saveDcMode === "fixed") ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("resolution.saveDcFixed", r.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}
+      ${state._stewardDc
+        ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">11 + tier×2 + your channel — set by you, not by the working</span></div>`
+        : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
+      ${(r.saveDcMode === "fixed") ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("resolution.saveDcFixed", r.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}`}
       <div class="ft-cast-field"><label>On save</label>${_ftWizV2Sel("resolution.onSave", { negate: "Negate damage", half: "Half damage" }, r.onSave ?? "half")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="If on, the cast posts a Save button chat card instead of the GM auto-rolling — target's owner clicks to roll their own save. Singular-target only; AoE always GM-side.">${_ftWizV2Chk("resolution.saveByPrompt", r.saveByPrompt === true)}<span>Prompt target to roll save (chat-card button)</span></label></div>
     </div>` : "";
@@ -10811,11 +10841,12 @@ function _ftWizV2AreaBudgetTier(area) {
   return { tier, note: `${area.shape} ${sz}ft → T${tier}` };
 }
 
-// Range anchors (Magnitude v1.1): T1 5 ft / touch, T2 ≤30 ft, T3 ≤60 ft, T4 beyond.
+// Range anchors — relaxed 2026-11-08 (Dave: "There need to be Tier 1 ranged manifestations"; under the
+// v1.1 band of T1 = touch every thrown blade and pistol scored T2). T1 ≤30 ft, T2 ≤60 ft, T3 ≤120 ft, T4 beyond.
 function _ftWizV2RangeBudgetTier(rangeFt) {
   const r = Number(rangeFt) || 0;
   if (r <= 0) return { tier: 0, note: null };
-  const tier = r <= 5 ? 1 : r <= 30 ? 2 : r <= 60 ? 3 : 4;
+  const tier = r <= 30 ? 1 : r <= 60 ? 2 : r <= 120 ? 3 : 4;
   return { tier, note: `range ${r}ft → T${tier}` };
 }
 
@@ -11581,6 +11612,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
 
   let STEPS = _ftWizV2Steps(wizardKind);
   state._kind = wizardKind;   // the magnitude / review readers branch on it (2026-10-29)
+  state._stewardDc = _ftStewardSetsNoDC(actor);   // a Steward never types a save DC (2026-11-08); foes and pack authoring may
 
   // The starter only picks the opening posture — the item TYPE follows what the
   // author actually builds. A "weapon" item is a strikable Form; anything else
@@ -11748,6 +11780,11 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
               ui.notifications?.warn(`${actor.name} has no open Signature slot left — nothing was created.`);
               unlock();
               return;
+            }
+            // A Steward's save DC is the ladder (2026-11-08) — whatever an older item or a stale form carried.
+            if (state._stewardDc) {
+              state.resolution    = { ...(state.resolution ?? {}),    saveDcMode: "cast-dc" };
+              state.appliedStates = { ...(state.appliedStates ?? {}), saveDcMode: "cast-dc" };
             }
             // Tier is derived from magnitude, never picked (Dave 2026-11-08). The Review banner is a readout.
             {
@@ -16717,7 +16754,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // block when present; otherwise back-derived from the tiered cast DC.
     const _mfTier    = Number((item?.system?.system ?? item?.system)?.manifestation?.tier)
       || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
-    const dc         = dcMode === "fixed" ? (Number(resolution.saveDcFixed) || 15) : ftFormulaSaveDC(actor, _mfTier, channel);
+    const dc         = ftSaveDCFor(actor, resolution, _mfTier, channel);   // a Steward's DC is the ladder, never a typed number (2026-11-08)
     const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
 
     // Base from the target's SOURCE (2026-10-01) — the AE sweep below adds
@@ -19424,7 +19461,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const _states = Array.isArray(cfg?.states) ? cfg.states : (cfg?.states && typeof cfg.states === "object" ? Object.keys(cfg.states).filter(k => cfg.states[k]) : []);
       if (cfg?.saveAttribute && _states.length && !saveResolved && target.id !== caster.id && (_resShape === "none" || _resShape === "")) {
         const _mfTierSv = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier) || 1;
-        const _dcSv = cfg.saveDcMode === "fixed" ? (Number(cfg.saveDcFixed) || 15) : ftFormulaSaveDC(caster, _mfTierSv, channel);
+        const _dcSv = ftSaveDCFor(caster, cfg, _mfTierSv, channel);
         const sv = await game.fourththing.rolls.resolveManifestationSave(caster, target, item,
           { saveAttribute: cfg.saveAttribute, saveDcMode: "fixed", saveDcFixed: _dcSv, onSave: "negate" }, { castDc: _dcSv });
         if (sv?.saved) return { applied: [], skipped: _states.map(k => ({ key: k, reason: "saved" })), saved: true, total: sv.total, dc: sv.dc };
@@ -19470,7 +19507,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const _mfTierAS = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier)
       || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
-    const dc = cfg?.saveDcMode === "fixed" ? (Number(cfg?.saveDcFixed) || 15) : ftFormulaSaveDC(caster, _mfTierAS, channel);
+    const dc = ftSaveDCFor(caster, cfg, _mfTierAS, channel);
     const globalSaveAttr = cfg?.saveAttribute || "body";
     const overrides = (cfg?.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object")
       ? cfg.saveAttributeOverrides : {};
@@ -26327,7 +26364,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           save:      "Save — target rolls vs cast DC",
           contested: "Contested — both roll, higher wins"
         },
-        SAVE_DC_MODES:      { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
+        // A Steward never sets a DC (2026-11-08): the Fixed option exists only on foe / unowned items.
+        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Standard (11 + tier×2 + channel)" } : { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
         ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
         CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
         manifestationModeLabel: ftManifestationModeLabel(system, "power"),
@@ -26439,7 +26477,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           save:      "Save — target rolls vs cast DC",
           contested: "Contested — both roll, higher wins"
         },
-        SAVE_DC_MODES:      { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
+        // A Steward never sets a DC (2026-11-08): the Fixed option exists only on foe / unowned items.
+        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Standard (11 + tier×2 + channel)" } : { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
         ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
         CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
         APPLIED_STATE_DURATIONS: { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" },
