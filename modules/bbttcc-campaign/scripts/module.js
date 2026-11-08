@@ -2571,6 +2571,25 @@ function _ftSkillKeyFor(stat) {
 // flipped to blindroll for the duration of the roll, then restored), the SUCCESS/FAIL toast is marked 🤫 and
 // stays on the GM client, and a miss does NOT re-offer the menu (the re-offer is a tell). Author the hit and the
 // miss beats to read alike — same label, same exits — and let only the hit set the mark downstream gates read.
+// Dave 2026-11-07 at the East Wall: "The roll and results aren't visible … nor did dice roll." Domain (op.*) checks, bare faculty
+// checks and the fallback die were evaluated in memory and only toasted on the GM seat. This posts the roll to chat — dice animate,
+// every seat sees the check, total and result; a secret choice posts blind to the GM (the same rule _withSecretRollMode applies).
+async function _postChoiceCheckRoll(roll, choice, { speakerActor = null, who = "", detail = "", dc = 0, total = null, ok = false } = {}) {
+  try {
+    if (!roll || typeof roll.toMessage !== "function") return;
+    const esc = (t) => _escapeHtml(String(t ?? ""));
+    const t = (total != null) ? total : (roll.total ?? 0);
+    const flavor = `<div class="bbttcc-choice-check"><b>${esc(choice?.label || "Check")}</b>${who ? ` — ${esc(who)}` : ""}`
+      + `<div style="font-size:0.85em;opacity:0.85">${detail ? esc(detail) + " · " : ""}DC ${esc(dc)}</div>`
+      + `<div style="font-weight:700;color:${ok ? "#4fc3ff" : "#ff7b7b"}">${esc(t)} — ${ok ? "SUCCESS" : "FAIL"}</div></div>`;
+    const speaker = speakerActor ? ChatMessage.getSpeaker({ actor: speakerActor }) : ChatMessage.getSpeaker();
+    if (choice?.secret === true) {
+      const gms = (ChatMessage.getWhisperRecipients?.("GM") || []).map(u => u.id);
+      await roll.toMessage({ speaker, flavor, whisper: gms, blind: true });
+    } else await roll.toMessage({ speaker, flavor });
+  } catch (e) { warn("check roll post failed", e); }
+}
+
 async function _withSecretRollMode(choice, fn) {
   if (!choice || choice.secret !== true) return fn();
   // Round 4 (2026-11-05): Foundry v14 moved this to core.messageMode; core.rollMode reads null and does nothing, so every "secret" check rolled in public.
@@ -2605,6 +2624,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
     if (!faction) {
       const roll = await _evalRoll(new Roll(_ftCanonDie()));
       const totalNF = (roll.total ?? 0) + supportBonus;   // backing was paid — it counts on every path (review P3, 2026-10-27)
+      await _postChoiceCheckRoll(roll, choice, { detail: _opKeyLabel(key), dc, total: totalNF, ok: totalNF >= dc });
       return { kind:"op", stat, dc, bonus:supportBonus, total:totalNF, ok:totalNF>=dc, roll, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
     }
     // OP-check roll bonus: faction bank contributes whole OPs only (marks/10 floor).
@@ -2647,6 +2667,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
         await faction.setFlag("bbttcc-factions", "momentum", cur + explosions);
       }
     } catch (_eMom) {}
+    await _postChoiceCheckRoll(roll, choice, { speakerActor: faction, who: faction.name, detail: `${_opKeyLabel(key)} +${bonus}`, dc, total, ok: total >= dc });
     return { kind:"op", stat, opKey:key, dc, bonus, breakdown:{ base: baseOp, baseMarks, roster:rosterSum, support:supportBonus }, total, ok:total>=dc, roll, explosions, momentumBanked: explosions, doubleTen };
   }
 
@@ -2672,6 +2693,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
           const cb = (game.fourththing?.triggers?.debug?.(actor, { context: "check", attribute: ftKey })?.bonuses ?? []).filter(x => !Number.isInteger(x?._bankedIndex)).reduce((n, x) => n + (Number(x?.bonus) || 0), 0);
           const r = await (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @a + @cb", { a: av, cb }, { actor }) ?? _evalRoll(new Roll("2d10x10 + @a + @cb", { a: av, cb })));   // armed Momentum / Surge (2026-11-04)
           const total = (r.total ?? 0) + supportBonus;
+          await _postChoiceCheckRoll(r, choice, { speakerActor: actor, who: actor.name, detail: `${_opKeyLabel(ftKey)} +${av + cb}`, dc, total, ok: total >= dc });
           return { kind:"actor", subkind:"ft-faculty", stat, faculty:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
         }
       }
@@ -2712,6 +2734,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
 
   const roll = await _evalRoll(new Roll(_ftCharacterDie()));
   const totalB = (roll.total ?? 0) + supportBonus;
+  await _postChoiceCheckRoll(roll, choice, { speakerActor: actor, who: actor?.name || "", detail: stat, dc, total: totalB, ok: totalB >= dc });
   return { kind:"basic", stat, dc, total:totalB, ok:totalB>=dc, roll, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
 }
 
