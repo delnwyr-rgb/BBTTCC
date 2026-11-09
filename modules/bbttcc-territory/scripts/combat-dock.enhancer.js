@@ -24,6 +24,8 @@
 // (game.bbttcc.playerHud.fire.*) and the system's combat moves
 // (game.fourththing.combatActions) — no second copy of any rules.
 
+import "./super-mode.js";   // SUPER MODE (2026-11-07): Draw button below + the pledge card; no manifest change
+
 (() => {
   const TAG = "[bbttcc-ui/combat-dock]";
   const MOD = "bbttcc-territory";
@@ -619,6 +621,7 @@
         <span class="cd-spacer"></span>
         <span class="cd-target">${targetLineHTML(s)}</span>
         <span class="cd-queued">${offerChips()}${queuedHTML}</span>
+        ${game.bbttcc?.superMode && s.actor?.type === "character" ? `<button type="button" class="cd-super" data-dock="super" data-tooltip="Super Mode: call a Draw from the coalition's maneuvers — everyone pledges marks, it fires on your turn">✦ Draw</button>` : ""}
         ${canEnd ? `<button type="button" class="cd-end" data-dock="end"><i class="fas fa-forward"></i> End Turn</button>` : ""}
         <button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>
         <button type="button" class="cd-icon" data-dock="collapse" data-tooltip="Shrink the dock"><i class="fas fa-chevron-down"></i></button>
@@ -671,6 +674,7 @@
         case "bars": _foldPref = !wantFold(); return render();
         case "collapse": _collapsed = true; try { localStorage.setItem(COLL_KEY(), "1"); } catch (_e) {} return render();
         case "expand": _collapsed = false; try { localStorage.setItem(COLL_KEY(), "0"); } catch (_e) {} return render();
+        case "super": return game.bbttcc?.superMode?.openPicker?.(s.actor);
         case "actAgain": return actAgain(s.actor);
         case "bonusAgain": return bonusAgain(s.actor);
       }
