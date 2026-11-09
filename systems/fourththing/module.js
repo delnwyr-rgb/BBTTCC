@@ -28716,10 +28716,99 @@ if (!globalThis.__ftApplyDmgDelegated) {
   });
 }
 
+// ── CHAT CONTRAST GUARD (Dave 2026-11-08, East Wall: "Need to eliminate all instances of this kind of
+// color on color. I can't read it.") Many card lines (Flanking, Reroll, Rider save DC, Surge banked, Aligned
+// casting, state riders …) carry inline colours picked for dark cards — pale gold / sky blue / peach — and
+// Foundry draws chat on light parchment, ~1.1:1 contrast. Rather than chase every string, every rendered chat
+// card is checked AFTER it lands in the DOM: any text whose colour reads below 4.5:1 against its real
+// background (walked up the tree; parchment counts as light) is pushed darker (or lighter, on a dark box) in
+// the SAME hue until it reads. Semantic colour survives, legibility is guaranteed, every module is covered.
+const FT_CHAT_MIN_CONTRAST = 4.5;
+const FT_PARCHMENT_RGB = { r: 225, g: 215, b: 195 };
+function _ftParseRgb(s) {
+  const m = String(s ?? "").match(/rgba?\(([^)]+)\)/);
+  if (!m) return null;
+  const p = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+  if (p.length < 3 || p.slice(0, 3).some(n => !Number.isFinite(n))) return null;
+  return { r: p[0], g: p[1], b: p[2], a: p.length > 3 && Number.isFinite(p[3]) ? p[3] : 1 };
+}
+function _ftRelLum({ r, g, b }) {
+  const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+function _ftContrast(a, b) {
+  const la = _ftRelLum(a), lb = _ftRelLum(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+function _ftEffectiveBg(el) {
+  for (let e = el; e && e !== document.documentElement; e = e.parentElement) {
+    const cs = getComputedStyle(e);
+    const c = _ftParseRgb(cs.backgroundColor);
+    if (c && c.a > 0.5) return c;
+    const img = cs.backgroundImage;
+    if (img && img !== "none") {
+      if (/parchment/i.test(img)) return FT_PARCHMENT_RGB;
+      const g = _ftParseRgb(img);                 // gradient: first stop approximates the box
+      if (g && g.a > 0.5) return g;
+      return null;                                 // unknown picture — don't guess
+    }
+  }
+  return FT_PARCHMENT_RGB;
+}
+function _ftRgbToHsl({ r, g, b }) {
+  r /= 255; g /= 255; b /= 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2;
+  if (mx === mn) return { h: 0, s: 0, l };
+  const d = mx - mn, s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+  const h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return { h: h / 6, s, l };
+}
+function _ftHslToRgb({ h, s, l }) {
+  if (s === 0) { const v = Math.round(l * 255); return { r: v, g: v, b: v }; }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const f = (t) => { t = (t + 1) % 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; };
+  return { r: Math.round(f(h + 1 / 3) * 255), g: Math.round(f(h) * 255), b: Math.round(f(h - 1 / 3) * 255) };
+}
+function _ftReadableOn(fg, bg) {
+  if (_ftContrast(fg, bg) >= FT_CHAT_MIN_CONTRAST) return null;
+  const darker = _ftRelLum(bg) > 0.18;            // light box → go darker; dark box → go lighter
+  const hsl = _ftRgbToHsl(fg);
+  for (let i = 0; i < 40; i++) {
+    hsl.l = Math.max(0, Math.min(1, hsl.l + (darker ? -0.025 : 0.025)));
+    const c = _ftHslToRgb(hsl);
+    if (_ftContrast(c, bg) >= FT_CHAT_MIN_CONTRAST) return c;
+  }
+  return darker ? { r: 0, g: 0, b: 0 } : { r: 255, g: 255, b: 255 };
+}
+function ftEnforceChatContrast(root) {
+  if (!root?.isConnected) return 0;
+  let fixed = 0;
+  for (const el of root.querySelectorAll("*")) {
+    if (!Array.from(el.childNodes).some(n => n.nodeType === 3 && n.textContent.trim())) continue;
+    const fg = _ftParseRgb(getComputedStyle(el).color);
+    if (!fg || fg.a < 0.5) continue;
+    const bg = _ftEffectiveBg(el);
+    if (!bg) continue;
+    const c = _ftReadableOn(fg, bg);
+    if (!c) continue;
+    el.style.setProperty("color", `rgb(${c.r}, ${c.g}, ${c.b})`, "important");
+    fixed++;
+  }
+  return fixed;
+}
+
 // Delegated chat listener — use renderChatMessageHTML (V14+) with fallback to renderChatMessage
 const _chatHook = typeof ChatMessage.prototype.renderHTML !== "undefined"
   ? "renderChatMessageHTML"
   : "renderChatMessage";
+
+Hooks.on(_chatHook, (message, html) => {
+  const root = html instanceof HTMLElement ? html : html?.[0];
+  if (!root) return;
+  const run = () => { try { ftEnforceChatContrast(root); } catch (e) { console.warn("fourththing | chat contrast guard", e); } };
+  requestAnimationFrame(run);
+  setTimeout(run, 300);                            // after late CSS / collapsibles settle
+});
 
 Hooks.on(_chatHook, (message, html) => {
   // renderChatMessageHTML passes an HTMLElement; renderChatMessage passes jQuery
