@@ -64,7 +64,7 @@ const SEED = [
   entry("system.magic.clarity.max",     "Clarity — Max",       "Magic / Manifestation", { desc: "Clarity ceiling. Caster discipline `clarityMaxBonus` adds here." }),
   entry("system.magic.noise.value",     "Noise — Current",     "Magic / Manifestation", { desc: "Magical noise floor. Higher = louder, easier to detect." }),
   entry("system.magic.noise.max",       "Noise — Max",         "Magic / Manifestation", { desc: "Noise ceiling before pressure mechanics trigger." }),
-  entry("system.magic.sephirah",        "Sephirothic Lock",    "Magic / Manifestation", { desc: "Sephirah key (string). Tunes manifestations to a single sefirah.", valueHint: "string" }),
+  entry("system.magic.sephirah",        "Sephirothic Lock",    "Magic / Manifestation", { desc: "The sefirah an UNALIGNED actor (foes, pre-identity) invokes with when the item names none. A Steward's Sephirotic Alignment overrides it.", valueHint: "string" }),
 
   // ── Manifestation Discipline Shifts (set on feature items, aggregated) ──
   // Read off the actor (Active Effects) as well as off each item's own flags — getDisciplineShifts sums both (2026-10-29).
@@ -165,23 +165,21 @@ const SEED = [
   entry("system.details.tier",        "Details — Tier",         "Details", { desc: "Character tier (I–IV)." }),
   entry("system.details.skillPoints", "Details — Skill Points", "Details", { desc: "Unspent skill points pool." }),
 
-  // ── Manifestation (item-level fields — AE on the manifestation item) ───
-  entry("system.manifestation.costValue",      "Manifestation — Cost Value",  "Manifestation Item", { desc: "Numeric cost (Clarity / Noise / Surge). 0–10.", valueHint: "integer" }),
-  entry("system.manifestation.costType",       "Manifestation — Cost Type",   "Manifestation Item", { desc: "Cost frame key (clarity / noise / burn = pays Surge / mixed / …).", valueHint: "string" }),
-  entry("system.manifestation.stability",      "Manifestation — Stability",   "Manifestation Item", { desc: "Stability tier (anchored / steady / volatile / …). Drives upkeep cadence.", valueHint: "string" }),
-  entry("system.manifestation.duration",       "Manifestation — Duration",    "Manifestation Item", { desc: "Duration key (instant / scene / soma-break / persistent / …).", valueHint: "string" }),
-  entry("system.manifestation.scale",          "Manifestation — Scale",       "Manifestation Item", { desc: "Scale key (self / room / hex / faction / …).", valueHint: "string" }),
-  entry("system.manifestation.interactionModel","Manifestation — Interaction Model", "Manifestation Item", { desc: "How targets engage (passive / contested / opt-in / forced).", valueHint: "string" }),
-  entry("system.intent",       "Manifestation — Intent (attribute)",   "Manifestation Item", { desc: "Attribute used as intent in the cast formula.", valueHint: "violence|intrigue|presence|body|mind|soul" }),
-  entry("system.channel",      "Manifestation — Channel (attribute)",  "Manifestation Item", { desc: "Attribute used as channel in the cast formula.", valueHint: "violence|intrigue|presence|body|mind|soul" }),
-  entry("system.sephirah",     "Manifestation — Sephirah",             "Manifestation Item", { desc: "Sefirah anchor (keter/chokhmah/binah/…). Drives alignment bonus.", valueHint: "string" }),
-  entry("system.mode",         "Manifestation — Mode (stance)",        "Manifestation Item", { desc: "Manifestation mode/stance.", valueHint: "string" }),
-  entry("system.clarityRequired","Manifestation — Legacy Clarity Cost","Manifestation Item", { desc: "Legacy Clarity cost (0–5). Spent on cast.", valueHint: "integer" }),
-  entry("system.noiseGain",    "Manifestation — Legacy Noise Gain",    "Manifestation Item", { desc: "Legacy Noise gained on cast (0–5).", valueHint: "integer" }),
-  entry("system.activation",   "Manifestation — Activation",           "Manifestation Item", { desc: "Activation type (action/bonus/reaction/free/scene).", valueHint: "string" }),
-  entry("system.target",       "Manifestation — Target Type",          "Manifestation Item", { desc: "Target schema (self/ally/enemy/area/object/…).", valueHint: "string" }),
-  entry("system.range",        "Manifestation — Range",                "Manifestation Item", { desc: "Reach key (self/touch/5/30/60/120/scene/faction/hex).", valueHint: "string" }),
-  entry("system.uses.spent",   "Manifestation — Uses Spent",           "Manifestation Item", { desc: "Per-Soma-Break use counter for limited manifestations." }),
+  // ── Manifestation (item-level fields) ───────────────────────────────────
+  // NOT AE-reachable (teeth P36, 2026-11-08): FourthThingItem never applies its own effects, and a transferred effect
+  // writes these keys onto the ACTOR, where nothing reads them. Kept so an existing effect still sorts into this group;
+  // the descriptions name the real enums so a GM reading one knows what the field holds. Edit the item instead.
+  entry("system.manifestation.costValue",      "Manifestation — Cost Value",  "Manifestation Item", { desc: "Not AE-reachable (edit the item). Amount of the extra cost (1–10), paid on top of the tier's Clarity.", valueHint: "integer" }),
+  entry("system.manifestation.costType",       "Manifestation — Extra Cost",  "Manifestation Item", { desc: "Not AE-reachable (edit the item). Extra cost on top of the tier's Clarity: none / stress / noise / strain. Every manifestation always pays its tier in Clarity (T1 1 · T2 2 · T3 3 · T4 4).", valueHint: "none|stress|noise|strain" }),
+  entry("system.manifestation.stability",      "Manifestation — Stability",   "Manifestation Item", { desc: "Not AE-reachable (edit the item). How long it lasts: instant (resolves and is gone) / sustained (the scene; tier Clarity when the scene ends) / bound (across scenes; tier Clarity per Soma Break). Legacy \"enduring\" reads as bound.", valueHint: "instant|sustained|bound" }),
+  entry("system.manifestation.duration",       "Manifestation — Duration",    "Manifestation Item", { desc: "Not AE-reachable (edit the item). Derived from stability (instant / scene / persistent) — the normalizer overwrites it; set stability instead.", valueHint: "instant|scene|persistent" }),
+  entry("system.intent",       "Manifestation — Intent (attribute)",   "Manifestation Item", { desc: "Not AE-reachable (edit the item). The faculty the item rolls with (cast or attack) AND adds to its damage or heal roll. Weapons default to Violence.", valueHint: "violence|intrigue|presence|body|mind|soul" }),
+  entry("system.channel",      "Manifestation — Channel (attribute)",  "Manifestation Item", { desc: "Not AE-reachable (edit the item). Attribute used as channel in the cast formula.", valueHint: "violence|intrigue|presence|body|mind|soul" }),
+  entry("system.sephirah",     "Manifestation — Sephirah",             "Manifestation Item", { desc: "Not AE-reachable (edit the item). Fallback sefirah (keter/chokhmah/binah/…) for an unaligned actor — sets the +1 Align bonus. A Steward's Sephirotic Alignment overrides it.", valueHint: "string" }),
+  // system.activation (legacy string) retired 2026-11-08 — system.manifestation.activation.type (action / bonus / reaction / none) is the only activation field.
+  // system.range (the power "Range Baseline" key) retired 2026-11-08 (teeth P25) — read only as a legacy shim; rangeFt is the one range.
+  entry("system.manifestation.rangeFt", "Manifestation — Range (ft)",  "Manifestation Item", { desc: "Not AE-reachable (edit the item). The manifestation's range in feet — the one range every check reads. 0 = touch / self. A Form's Short/Long follow it.", valueHint: "integer" }),
+  entry("system.uses.spent",   "Manifestation — Uses Spent",           "Manifestation Item", { desc: "Not AE-reachable (edit the item). Per-Soma-Break use counter for limited manifestations." }),
 
   // ── RFI Item Flags (item-AEs that mutate the carrier item) ──────────────
   entry("flags.fourththing.rfi.item.tier",        "Item — Tier",         "Item Flags", { desc: "RFI item tier (I/II/III/IV).", valueHint: "I|II|III|IV" }),

@@ -29,12 +29,13 @@ const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 export function weapon(sp, w) {
   const melee = w.melee !== false, type = w.dmg ?? "kinetic", track = STRESS_TYPES.has(type) ? "stress" : "integrity";
   const mf = { appliedStates: w.states ? { states: w.states, duration: w.duration ?? "1-round", saveEachRound: false, saveAttribute: w.save?.attr ?? "", saveDcMode: w.save ? "fixed" : "none", saveDcFixed: w.save?.dc ?? 15, saveAttributeOverrides: {} } : undefined,
-    resolution: w.area ? { mode: "save", saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: w.onSave ?? "half", statesOnFail: true } : (w.save && !w.states ? { saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: "negate", statesOnFail: true } : undefined),
+    // shape "save" = save-first (resolution.mode / statesOnFail retired 2026-11-08 — a passed save never lands states).
+    resolution: w.area ? { shape: "save", saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: w.onSave ?? "half" } : (w.save && !w.states ? { saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: "negate" } : undefined),
     area: w.area ? { shape: w.area.shape, size: w.area.size } : { shape: "none", size: 0 } };
-  if (w.states && w.save && !w.area) mf.resolution = { saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: "negate", statesOnFail: true };
+  if (w.states && w.save && !w.area) mf.resolution = { saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: "negate" };
   for (const k of Object.keys(mf)) if (mf[k] === undefined) delete mf[k];
   const use = w.recharge ? " (recharges on a Soma Break)" : w.perScene ? ` (${w.perScene}/scene)` : "";
-  const effect = w.area ? `${w.area.shape[0].toUpperCase() + w.area.shape.slice(1)} ${Math.max(1, Math.round(w.area.size / 5))} squares — targets roll vs ${w.save.attr === "intrigue" ? "Evasion" : w.save.attr === "violence" ? "Guard" : "Resolve"} (DC ${w.save.dc}). ${w.onSave === "negate" ? "No effect" : "Half damage"} on success.${w.rider ? " " + w.rider : ""}`
+  const effect = w.area ? `${w.area.shape[0].toUpperCase() + w.area.shape.slice(1)} ${Math.max(1, Math.round(w.area.size / 5))} squares — targets roll vs ${(w.save.attr === "intrigue" || w.save.attr === "violence") ? "Guard" : "Resolve"} (DC ${w.save.dc}). ${w.onSave === "negate" ? "No effect" : "Half damage"} on success.${w.rider ? " " + w.rider : ""}`
     : (w.rider ?? "");
   return { _id: id(), name: w.name + use, type: "weapon", img: w.img ?? ICON.bite,
     system: { category: melee ? "melee" : "ranged", intent: w.intent ?? "violence", skill: w.skill ?? (melee ? "melee" : "firearms"),

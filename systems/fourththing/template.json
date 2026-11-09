@@ -546,7 +546,6 @@
       "skill": "melee",
       "damage": {
         "formula": "2d6",
-        "attribute": "violence",
         "type": "kinetic",
         "damageFlavor": "",
         "track": "integrity"
@@ -559,21 +558,17 @@
       "tags": [],
       "effect": "",
       "flavor": "",
+      "nonlethal": false,
       "manifestation": {
         "tier": 1,
-        "family": "form",
         "concept": "",
-        "form": "weapon",
-        "function": "harm",
         "stability": "bound",
-        "interactionModel": "weapon",
         "costType": "none",
         "costValue": 0,
         "costText": "",
-        "duration": "scene",
+        "duration": "persistent",
         "durationText": "",
         "triggerText": "",
-        "scale": "personal",
         "targetText": "",
         "rangeAreaText": "",
         "rangeFt": 0,
@@ -585,9 +580,25 @@
         "mechanicalHook": "",
         "signature": "",
         "thirdThing": "",
-        "opCost": {
-          "pool": "",
-          "value": 0
+        "area": {
+          "shape": "none",
+          "size": 0
+        },
+        "activation": {
+          "type": "action"
+        },
+        "chain": {
+          "enabled": false,
+          "count": 3,
+          "range": 30,
+          "damageFormula": "1d6",
+          "damageType": "",
+          "carryConditions": false,
+          "carryEffects": false
+        },
+        "poolShift": {
+          "clarity": 0,
+          "noise": 0
         }
       }
     },
@@ -610,14 +621,8 @@
       "intent": "presence",
       "channel": "soul",
       "sephirah": "tiferet",
-      "mode": "hermetic",
-      "clarityRequired": 1,
-      "noiseGain": 0,
-      "activation": "action",
-      "target": "single",
-      "range": "near",
       "damage": "",
-      "damageType": "energy",
+      "damageType": "",
       "damageFlavor": "",
       "damageRoll": {
         "op": "none",
@@ -631,23 +636,17 @@
       "damageParts": [],
       "effect": "",
       "tags": [],
-      "category": "manifestation",
       "flavor": "",
       "manifestation": {
         "tier": 1,
-        "family": "working",
         "concept": "",
-        "form": "sigil",
-        "function": "transform",
         "stability": "instant",
-        "interactionModel": "event",
-        "costType": "clarity",
-        "costValue": 1,
+        "costType": "none",
+        "costValue": 0,
         "costText": "",
         "duration": "instant",
         "durationText": "",
         "triggerText": "",
-        "scale": "personal",
         "targetText": "",
         "rangeAreaText": "",
         "rangeFt": 0,
@@ -659,24 +658,47 @@
         "mechanicalHook": "",
         "signature": "",
         "thirdThing": "",
-        "opCost": {
-          "pool": "",
-          "value": 0
-        },
         "area": {
           "shape": "none",
           "size": 0
         },
         "activation": {
-          "type": "action",
-          "consumePool": true
+          "type": "action"
         },
-        "save": {
+        "resolution": {
+          "shape": "auto",
+          "saveAttribute": "body",
+          "saveDcMode": "cast-dc",
+          "saveDcFixed": 15,
+          "onSave": "half",
+          "saveByPrompt": false,
+          "contestCasterAttribute": "intent+channel",
+          "contestTargetAttribute": "body",
+          "onContestLoss": "negate",
+          "hitSave": false,
+          "hitSaveHalf": false
+        },
+        "appliedStates": {
+          "states": [],
+          "duration": "",
+          "saveEachRound": false,
+          "saveAttribute": "body",
+          "saveDcMode": "cast-dc",
+          "saveDcFixed": 15,
+          "saveAttributeOverrides": {}
+        },
+        "chain": {
           "enabled": false,
-          "defense": "evasion",
-          "attribute": "",
-          "dcMode": "derived",
-          "dcFixed": 15
+          "count": 3,
+          "range": 30,
+          "damageFormula": "1d6",
+          "damageType": "",
+          "carryConditions": false,
+          "carryEffects": false
+        },
+        "poolShift": {
+          "clarity": 0,
+          "noise": 0
         }
       }
     },

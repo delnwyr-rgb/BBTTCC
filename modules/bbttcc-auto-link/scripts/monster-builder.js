@@ -109,8 +109,6 @@ const BRACKET_OPTS = ["light", "medium", "heavy", "boss"];
 const SEPHIRAH_OPTS = ["keter", "chokmah", "binah", "chesed", "geburah", "tiferet", "netzach", "hod", "yesod", "malkuth", "qliphoth"];   // BS5 (2026-10-26): keter + geburah, one spelling
 const FACULTY_KEYS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 
-// Default attribute (faculty) per role — feeds engage dialog auto-bonus.
-const ROLE_ATTRIBUTE = { brute: "violence", stealth: "violence", scout: "violence", hardened: "violence", caster: "soul" };
 const ROLE_SKILL     = { brute: "melee", stealth: "melee", scout: "firearms", hardened: "melee", caster: "channel" };
 
 // Attribute baselines by role (+1 per tier above I).
@@ -258,7 +256,8 @@ function makeAttackItem(spec, atk) {
   const isMelee = !!atk.melee;
   const intent  = atk.intent ?? "violence";
   const skill   = atk.skill ?? (isMelee ? "melee" : (spec.role === "scout" ? "firearms" : "ranged"));
-  const attr    = atk.attribute ?? ROLE_ATTRIBUTE[spec.role] ?? "violence";
+  // Intent is the strike's attack AND damage faculty (2026-11-08) — NPC weapons default to Violence;
+  // there is no separate damage faculty (system.damage.attribute retired).
   const flavor  = atk.damageFlavor ?? "";
   const range   = isMelee
     ? { short: Math.max(1, Math.round((atk.reach ?? 5) / 5)), long: Math.max(1, Math.round((atk.reach ?? 5) / 5)) }
@@ -268,10 +267,10 @@ function makeAttackItem(spec, atk) {
     name: atk.name, type: "weapon", img: atk.img ?? "icons/svg/sword.svg",
     system: {
       category: isMelee ? "melee" : "ranged", intent, skill,
-      damage: { formula, attribute: attr, type: dType, damageFlavor: flavor, track: rfiTrack(dType) },
+      damage: { formula, type: dType, damageFlavor: flavor, track: rfiTrack(dType) },
       range, tags: _kitTags(spec, atk.tags ?? []),
       effect: atk.riderText ?? "", flavor: atk.flavor ?? "",
-      description: { value: `<p><strong>Strike.</strong> ${reachLabel}, one target. Damage: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${attr}.${atk.riderText ? " " + atk.riderText : ""}</p>${atk.flavor ? `<p><em>${atk.flavor}</em></p>` : ""}`, chat: "" }
+      description: { value: `<p><strong>Strike.</strong> ${reachLabel}, one target. Damage: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${intent}.${atk.riderText ? " " + atk.riderText : ""}</p>${atk.flavor ? `<p><em>${atk.flavor}</em></p>` : ""}`, chat: "" }
     },
     effects: [], flags: { fourththing: { rfi: { item: { tier: spec.tier, frame: "attack" } } } },
     folder: null, sort: 0, ownership: { default: 0 }
@@ -282,13 +281,13 @@ function makeSaveItem(spec, save) {
   const formula = _damageFormula(spec, save.damageOverride);
   const dType   = rfiType(save.damageType, save.damageFlavor);
   const dc      = _saveDC(spec, save.dcOverride);
-  const attr    = save.attribute ?? ROLE_ATTRIBUTE[spec.role] ?? "soul";
   const skill   = save.skill ?? ROLE_SKILL[spec.role] ?? "channel";
   const intent  = save.intent ?? "presence";
   const flavor  = save.damageFlavor ?? "";
   const shape   = save.template?.shape ?? "radius";
   const size    = save.template?.size ?? 10;
-  const SAVE_TO_DEFENSE = { con: "Resolve", dex: "Evasion", wis: "Resolve", str: "Guard", int: "Resolve", cha: "Resolve", body: "Resolve", presence: "Resolve", mind: "Resolve", soul: "Resolve", violence: "Guard", intrigue: "Evasion" };
+  // Guard or Resolve only — Evasion is retired as an attack target (2026-11-08); the old Evasion rows read Guard.
+  const SAVE_TO_DEFENSE = { con: "Resolve", dex: "Guard", wis: "Resolve", str: "Guard", int: "Resolve", cha: "Resolve", body: "Resolve", presence: "Resolve", mind: "Resolve", soul: "Resolve", violence: "Guard", intrigue: "Guard" };
   const targetDefense = SAVE_TO_DEFENSE[save.saveAbility] ?? "Resolve";
   const useSuffix = save.recharge ? ` (Recharge ${save.recharge})` : (save.usesPerScene ? ` (${save.usesPerScene}/scene)` : (save.usesPerDay ? ` (${save.usesPerDay}/Day)` : ""));
   const useText = save.recharge ? ` Recharge ${save.recharge}.` : (save.usesPerScene ? ` ${save.usesPerScene} per scene.` : (save.usesPerDay ? ` ${save.usesPerDay} per day.` : ""));
@@ -297,11 +296,11 @@ function makeSaveItem(spec, save) {
     name: save.name + useSuffix, type: "weapon", img: save.img ?? "icons/svg/explosion.svg",
     system: {
       category: "ranged", intent, skill,
-      damage: { formula, attribute: attr, type: dType, damageFlavor: flavor, track: rfiTrack(dType) },
+      damage: { formula, type: dType, damageFlavor: flavor, track: rfiTrack(dType) },
       range, tags: _kitTags(spec, ["aoe", `shape-${shape}`, ...(save.tags ?? [])]),
       effect: `${shape.charAt(0).toUpperCase() + shape.slice(1)} ${Math.max(1, Math.round(size / 5))} squares — targets roll vs ${targetDefense} (DC ${dc}). Half damage on success.${save.riderText ? " " + save.riderText : ""}${useText}`,
       flavor: save.flavor ?? "",
-      description: { value: `<p><strong>Area Attack.</strong> ${save.targetText ?? `Each creature in a ${Math.max(1, Math.round(size / 5))}-square ${shape}`} rolls <strong>${targetDefense}</strong> vs DC ${dc}. Hit: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${attr}; half on success.${save.riderText ? " " + save.riderText : ""}${useText ? `<br/><em>${useText.trim()}</em>` : ""}</p>${save.flavor ? `<p><em>${save.flavor}</em></p>` : ""}`, chat: "" }
+      description: { value: `<p><strong>Area Attack.</strong> ${save.targetText ?? `Each creature in a ${Math.max(1, Math.round(size / 5))}-square ${shape}`} rolls <strong>${targetDefense}</strong> vs DC ${dc}. Hit: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""}; half on success.${save.riderText ? " " + save.riderText : ""}${useText ? `<br/><em>${useText.trim()}</em>` : ""}</p>${save.flavor ? `<p><em>${save.flavor}</em></p>` : ""}`, chat: "" }
     },
     effects: [], flags: { fourththing: { rfi: { item: { tier: spec.tier, frame: "save", aoeShape: shape, aoeSize: size, dcAbility: save.saveAbility, dc } } } },
     folder: null, sort: 0, ownership: { default: 0 }

@@ -76,7 +76,7 @@ const UP = {
   "Reliquary Vow":        u(WARD([{stat:"resolve",op:"+",value:2}])),
   "Cadence Standard":     u(AREA("sphere",30), S("calmed",{save:"soul",dur:"until-saved",each:true})),
   "Court of Seven":       u(AREA("sphere",20), S("compelled",{save:"soul",dur:"until-saved",each:true})),
-  "Wrath-Brand":          u(WDMG("2d6","energy",{attr:"violence",flavor:"righteous heat"}), S("burning",{save:"body"})),
+  "Wrath-Brand":          u(WDMG("1d6","thermal",{attr:"violence",flavor:"hot"})),  // Dave 2026-11-08: fire only, no Burning
   "Pressure Front":       u(WDMG("2d6","kinetic",{attr:"violence",flavor:"advancing weight"}), AREA("cone",15), S("prone",{save:"body"})),
   "Carry-the-Unsayable":  u(AREA("sphere",30), S("shaken",{save:"soul"})),
   "Wall of My People":    u(AREA("sphere",30), WARD([{stat:"guard",op:"+",value:2}])),

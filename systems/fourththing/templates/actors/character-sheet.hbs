@@ -39,7 +39,7 @@
         <span class="ft-tier-badge">Tier {{details.tier}}</span>
         {{!-- 2026-10-13 QoL: the two breaks live beside Initiation (they were buried on the Steward tab) --}}
         <button type="button" data-action="ftSomaBreak" class="ft-level-break-btn" data-tooltip="Soma Break — refresh item uses, clarity, resource dice, Integrity and Stress. GM-gated if used twice in a scene.">❈ Soma</button>
-        <button type="button" data-action="ftSceneBreak" class="ft-level-break-btn" data-tooltip="Scene Break — lighter recovery between Soma Breaks: Clarity to at least half, shaves 1 Noise.">◐ Scene</button>
+        <button type="button" data-action="ftSceneBreak" class="ft-level-break-btn" data-tooltip="Scene Break — bills scene upkeep, ends scene-long manifestation effects, then refills Clarity to at least half and shaves 1 Noise.">◐ Scene</button>
         {{#if details.statPoints}}<span class="ft-sp-badge ft-sp-stat" data-tooltip="Unspent attribute points — bump a Faculty by clicking it in edit mode.">{{details.statPoints}} attr pts</span>{{/if}}
         {{#if details.skillPoints}}<span class="ft-sp-badge ft-sp-skill" data-tooltip="Unspent aptitude points — click to open the spend dialog." data-action="ftSpendSkillPoints">{{details.skillPoints}} apt pts ▶</span>{{/if}}
       </div>
@@ -1173,7 +1173,7 @@
       <section class="ft-tab-manifest-panel">
     <div class="ft-magic-panel flexcol">
       <h2>Manifestations</h2>
-      <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5 / 7 / 10 / 14). Recovers fully on Soma Break. Dreamwalker Discipline boosts max.">
+      <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=4; TCCs −1, never below 1) and on upkeep on sustained manifestations. Max scales with Steward tier (5 / 7 / 10 / 14). Recovers fully on Soma Break. Dreamwalker Discipline boosts max.">
         <label>Clarity</label>
         <div class="ft-clarity-track">
           {{#each magic.clarityPips as |pip|}}
@@ -1182,7 +1182,7 @@
         </div>
         <input type="number" name="system.magic.clarity.value" value="{{magic.clarity.value}}" min="0" max="{{magic.clarity.max}}" class="ft-pip-input"/>
       </div>
-      <div class="ft-magic-row" data-tooltip="Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise.">
+      <div class="ft-magic-row" data-tooltip="Noise — metaphysical residue from Chaotic casts (+2 per cast). 0–10 pool. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Shamanic, Hermetic and Ascendant generate 0 Noise.">
         <label>Noise</label>
         <span class="ft-noise-bar">
           <span class="ft-noise-fill {{ftNoiseClass magic.noise.value}}" style="width: {{magic.noisePercent}}%"></span>
@@ -1225,14 +1225,16 @@
       </div>
 
       {{#if signatureSlots}}
-      {{!-- SIGNATURES (ruling 14, 2026-10-17; moved off Conflict onto Manifestations 2026-10-29): one slot per tier reached; a Signature grows with its steward. --}}
-      <div class="ft-signatures" data-tooltip="Your Signatures — the effects only you could have made. One per tier you have reached; they rise in tier with you.">
-        <span class="ft-signatures-label">✦ Signatures <small>{{signatureSlots.used}}/{{signatureSlots.max}}</small></span>
+      {{!-- SIGNATURES (ruling 14, 2026-10-17; moved off Conflict onto Manifestations 2026-10-29): one slot per tier reached.
+           Teeth P29 (2026-11-08): a Signature never levels itself — its tier is what it does, capped at the steward's tier;
+           a tier-up raises the cap and the player grows it from the slot. --}}
+      <div class="ft-signatures" data-tooltip="Your Signatures — the effects only you could have made. One slot per tier you have reached. A Signature's tier comes from what it does — with 2 free points of magnitude, so it can do a little more than an unsigned manifestation of the same tier — capped at your tier; it never levels itself. When your tier rises, open it from its slot and grow it.">
+        <span class="ft-signatures-label">✦ Signatures <small>{{signatureSlots.used}}/{{signatureSlots.max}}</small>{{#if signatureSlots.extra}} <small class="ft-sig-extra" style="color:#e8c84a" data-tooltip="More items are marked Signature than you have slots — the GM marked extra. Only the first {{signatureSlots.max}} show as slots.">+{{signatureSlots.extra}} over cap</small>{{/if}}</span>
         {{#each signatureSlots.slots as |s|}}
           {{#if s.item}}
-          <button type="button" class="ft-sig-slot filled" data-action="ftSignatureEdit" data-item-id="{{s.item.id}}" data-tooltip="Signature {{s.roman}} — open it in the Manifestation Engine to grow it."><img src="{{s.item.img}}" alt=""/><span class="ft-sig-name">{{s.item.name}}</span><small class="ft-sig-tier">{{s.item.tierLabel}}</small></button>
+          <button type="button" class="ft-sig-slot filled" data-action="ftSignatureEdit" data-item-id="{{s.item.id}}" data-tooltip="Signature {{s.roman}} ({{s.item.tierLabel}}) — open it in the Manifestation Engine to grow it, up to your tier."><img src="{{s.item.img}}" alt=""/><span class="ft-sig-name">{{s.item.name}}</span><small class="ft-sig-tier">{{s.item.tierLabel}}</small></button>
           {{else}}
-          <button type="button" class="ft-sig-slot empty" data-action="ftSignatureMake" data-tooltip="Slot {{s.roman}} is open — author your Signature in the Manifestation Engine.">✦ Make your Signature <small>{{s.roman}}</small></button>
+          <button type="button" class="ft-sig-slot empty" data-action="ftSignatureMake" data-tooltip="Slot {{s.roman}} is open — author a Signature in the Manifestation Engine. Its tier comes from what it does, up to your tier.">✦ Make your Signature <small>{{s.roman}}</small></button>
           {{/if}}
         {{/each}}
       </div>
@@ -1243,7 +1245,7 @@
         <div class="ft-section-header">
           <h4>Active</h4>
           <span class="ft-mini-count">{{activeManifestations.length}}</span>
-          <button type="button" data-action="ftManifestEndScene" class="ft-add-btn ft-add-btn-subtle" data-tooltip="Charge Sustained upkeep (1 Clarity × tier per active Sustained manifestation)">End Scene</button>
+          <button type="button" data-action="ftManifestEndScene" class="ft-add-btn ft-add-btn-subtle" data-tooltip="Same as Scene Break: bills each active manifestation's scene upkeep (drops what you can't pay), ends scene-long effects, then half-refills Clarity.">End Scene</button>
         </div>
         <div class="ft-item-list">
           {{#each activeManifestations as |a|}}
@@ -1338,7 +1340,7 @@
         {{else}}
         <div class="ft-empty-state">
           <p>No manifestations yet.</p>
-          <p class="ft-hint">{{#if alpha.wizard}}Your Path grants manifestations as you grow; your Signature slots are on the Core tab.{{else}}Use <em>✦ Open Manifestation Engine</em> to start.{{/if}}</p>
+          <p class="ft-hint">{{#if alpha.wizard}}Your Path grants manifestations as you grow; your Signature slots are on this tab.{{else}}Use <em>✦ Open Manifestation Engine</em> to start.{{/if}}</p>
         </div>
         {{/if}}
       </div>

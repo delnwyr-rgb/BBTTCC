@@ -147,7 +147,7 @@ const shapeOf = (t) => shapesOf(t)[0];
 const HINT = {
   empty: "doctrine has NO rules text at all — author the text first (lint: D1)",
   reroll: "flags.fourththing.rerolls (collectRerolls) or ID_REROLL_GRANTS row",
-  save: "manifestation.save / weapon appliedStates (rider save) — strike riders need a weapon-side appliedStates reader (new)",
+  save: "manifestation.resolution (shape save) / weapon appliedStates (rider save) — strike riders need a weapon-side appliedStates reader (new)",
   condition: "manifestation.appliedStates.states or trigger effect {kind:'apply-state'} (new trigger effect kind)",
   resist: "flags.fourththing.grants.resistances / conditionImmunities (ftComputeDefenses) or AE",
   damage: "triggers effect extra-damage / damageRoll on a power",
@@ -226,7 +226,8 @@ function carriers(pack, v, effs) {
     if (ae && ((ae.modifiers || []).length || (ae.resists || []).length || (ae.immunes || []).length)) c.push("appliedEffects");
     const dr = v.system?.damageRoll;
     if (dr && dr.op && dr.op !== "none" && Number(dr.number) > 0) c.push(`damageRoll:${dr.op}`);
-    if (mf.save?.enabled) c.push("save");
+    // A save is resolution.shape "save" (the old manifestation.save block retired 2026-11-08; an enabled legacy block still counts).
+    if (mf.resolution?.shape === "save" || mf.save?.enabled) c.push("save");
     if (mf.chain?.enabled) c.push("chain");
     if (mf.area && mf.area.shape && mf.area.shape !== "none") c.push("area");
     if (v.type === "weapon" && String(v.system?.damage || "").trim()) c.push("weapon-damage");

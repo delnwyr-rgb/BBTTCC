@@ -679,7 +679,8 @@ function monsterFeature(it0, needs, actorSlug, dc = 12) {
     const ability = INTENT_SAVE[s.intent] ?? "wis";
     const aid = sha("act" + actorSlug + e.slug).slice(0, 16).padEnd(16, "0");
     const types = dmgTypes([s.damageType ?? s.damageRoll?.type ?? "psychic"]);
-    const self = s.target === "self" || s.range === "self";
+    // Self signal = range "self" (Target Shape retired 2026-11-08); a legacy record's target "self" still counts.
+    const self = s.range === "self" || s.target === "self";
     e.system.activities[aid] = { _id: aid, type: dm && !self ? "save" : "utility", name: "", img: "", sort: 0,
       activation: { type: s.activation === "bonus" ? "bonus" : s.activation === "reaction" ? "reaction" : "action", value: null, condition: "", override: false },
       consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: false }, description: { chatFlavor: "" },
@@ -916,7 +917,8 @@ function convertMonster(a, items, needs) {
       const sizeFt = Number(w.system?.range?.short || 3) * 5;
       act.type = "save"; delete act.attack;
       const ability = w.system?.damage?.track === "stress" || w.system?.damage?.type === "psychic" ? "wis" : "dex";
-      act.save = { ability: [ability], dc: { calculation: "", formula: String(8 + prof + Math.floor((abil[INTENT_SAVE[w.system?.damage?.attribute] ?? "cha"] - 10) / 2)) } };
+      // DC faculty = the weapon's Intent (system.damage.attribute retired 2026-11-08)
+      act.save = { ability: [ability], dc: { calculation: "", formula: String(8 + prof + Math.floor((abil[INTENT_SAVE[w.system?.intent] ?? "cha"] - 10) / 2)) } };
       act.damage = { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: e.system.damage.base.number, denomination: e.system.damage.base.denomination, bonus: "", types: e.system.damage.base.types, scaling: { mode: "", number: 1 } }] };
       act.target = { template: { count: "", contiguous: false, type: { cone: "cone", sphere: "sphere", line: "line", burst: "radius" }[shape] ?? "cone", size: String(sizeFt), width: shape === "line" ? "5" : "", height: "", units: "ft" }, affects: { count: "", type: "", choice: false, special: "" }, prompt: true, override: false };
       act.range = { value: "", units: "self", special: "", override: false };
@@ -1269,7 +1271,8 @@ function laneManifestations() {
     const effectTxt = String(S.effect ?? "");
     const fn = M.function ?? "protect";
     const school = MANIF_SCHOOL[fn] ?? "abj";
-    const self = S.target === "self" || /^(Self|Sustained vestment \(self\)|Sustained self)/i.test(effectTxt);
+    // Self signal = range "self" (Target Shape retired 2026-11-08); a legacy record's target "self" still counts.
+    const self = S.range === "self" || S.target === "self" || /^(Self|Sustained vestment \(self\)|Sustained self)/i.test(effectTxt);
     const allyOrSelf = /\(or yourself\)|Self or one ally|or one touched ally/i.test(effectTxt);
     const area = M.area?.shape && M.area.shape !== "none" ? { type: M.area.shape === "cone" ? "cone" : "sphere", size: Number(M.area.size) || 15 } : null;
     const near = /within 3 squares/i.test(effectTxt) ? 15 : 30;

@@ -1368,25 +1368,26 @@ const manifestations = {
           body: `<p>Everything you manifest is one of two shapes.</p>
             <ul>
               <li><b>Workings</b> are instant. They happen, they resolve, they're over.</li>
-              <li><b>Forms</b> persist — sustained, bound or enduring — and cost you <b>upkeep</b> every tick to keep holding open.</li>
+              <li><b>Forms</b> persist — sustained or bound — and cost you <b>upkeep</b> every tick to keep holding open.</li>
             </ul>
             <span class="bbttcc-deck-key">Only Trad Caster Classes may manifest Workings. Everyone else shapes the world by <em>holding it open</em>, not by intervening directly. That's a setting statement as much as a rule.</span>`
         },
         {
           title: "Clarity — what it costs",
-          body: `<p><b>Clarity</b> is your focus pool, and it is the price of every cast: <b>T1 = 1, T2 = 2, T3 = 3, T4 = 5</b>, plus upkeep per tick on anything you're sustaining.</p>
+          body: `<p><b>Clarity</b> is your focus pool, and it is the price of every cast: <b>T1 = 1, T2 = 2, T3 = 3, T4 = 4</b> (a Trad Caster pays one less, never below 1) plus any extra cost the manifestation names (Stress, Noise or Strain), plus upkeep on anything you're holding open.</p>
             <p>Your maximum scales with your own tier (5 / 7 / 10 / 14). A <b>Soma Break</b> refills it; a <b>Scene Break</b> half-fills it and shaves a point of Noise.</p>
             <p>Run dry and you simply cannot cast. Budget it like ammunition.</p>`
         },
         {
-          title: "Stance — the three ways to cast",
-          body: `<p>Every Invoke asks for a stance, and the stance moves three dials at once:</p>
+          title: "Stance — the ways to cast",
+          body: `<p>Every Invoke asks for a stance, and the stance moves the dials — and decides which actions the cast uses:</p>
             <ul>
-              <li><b>Hermetic</b> — +1 Clarity, no Noise, misfire shifted <b>−2</b> (safer), slower setup.</li>
-              <li><b>Chaos</b> — −1 Clarity, <b>+2 Noise</b>, misfire shifted <b>+2</b> (worse), fast.</li>
-              <li><b>Ascendant</b> — T3+ only. Pays <b>+1 Blood Debt</b> instead of Clarity. No Noise, no misfire at all.</li>
+              <li><b>Shamanic</b> (the default) — the tier's Clarity, no Noise, normal misfire. Uses your <b>Action</b>.</li>
+              <li><b>Hermetic</b> — +1 Clarity, no Noise, misfire shifted <b>−2</b> (safer). Uses your <b>Action and your Bonus action</b>. Can cast a Working one tier above you with no reach cost.</li>
+              <li><b>Chaotic</b> — +1 Clarity, <b>+2 Noise</b>, misfire shifted <b>+2</b> (worse), <b>+1 damage die</b> this cast. Uses <b>only your Bonus action</b> — your Action stays free.</li>
+              <li><b>Ascendant</b> — unlocks at Understanding (Enlightenment). Pays <b>+1 Blood Debt</b> instead of Clarity. No Noise, no misfire at all, <b>+1 damage die</b> this cast.</li>
             </ul>
-            <span class="bbttcc-deck-key">Cheap, safe, quiet: pick two. That's the whole design.</span>`
+            <span class="bbttcc-deck-key">Safe, quiet or quick: pick two. That's the whole design.</span>`
         },
         {
           title: "Misfire, and the ledgers",
@@ -1397,7 +1398,7 @@ const manifestations = {
         {
           title: "Noise — the one that compounds",
           speak: "Pay attention to this one. It's the resource people ruin themselves with.",
-          body: `<p><b>Noise</b> is the residue Chaos leaves behind: <b>+2 per cast</b>, on a 0–10 track. It does <b>not</b> decay on its own — a Scene Break shaves exactly <b>one</b> point.</p>
+          body: `<p><b>Noise</b> is the residue a Chaotic cast leaves behind: <b>+2 per cast</b>, on a 0–10 track. It does <b>not</b> decay on its own — a Scene Break shaves exactly <b>one</b> point.</p>
             <p>It is not decoration. Every single point is a flat <b>−1 to your own cast rolls</b>, forever, until you bring it down.</p>
             <p>And it bands:</p>
             <ul>
@@ -1405,7 +1406,7 @@ const manifestations = {
               <li><b>Loud</b> (5+) — −2 to Intrigue, and your misfires roll <b>one band worse</b>.</li>
               <li><b>Screaming</b> (8+) — −3 to Intrigue, misfires <b>two bands worse</b>, and the Lattice is looking directly at you.</li>
             </ul>
-            <span class="bbttcc-deck-key">Chaos is cheaper and faster. The bill arrives later, it arrives compounding, and it makes you easy to find. Spend it on purpose.</span>`
+            <span class="bbttcc-deck-key">Chaotic is faster — it leaves your Action free. The bill arrives later, it arrives compounding, and it makes you easy to find. Spend it on purpose.</span>`
         },
         {
           title: "Reach — casting above your tier",
@@ -1490,7 +1491,7 @@ const manifestations = {
     // can speak to what the player actually DID instead of guessing.
     //
     // This replaced a Clarity-decrease heuristic, which was silently wrong for
-    // every zero-cost cast (Ascendant, TCC Chaos T1, free-Clarity, T0 Fiat).
+    // every zero-cost cast (free-Clarity, miracle, T0 Fiat).
     // itemAnimated stays as the backstop for a cast routed through a path that
     // doesn't reach castManifestation.
     const markFired = (why) => {

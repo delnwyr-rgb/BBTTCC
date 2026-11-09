@@ -914,7 +914,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d6",
+          "formula": "1d6",
           "attribute": "violence",
           "type": "thermal",
           "damageFlavor": "hot",
@@ -932,7 +932,7 @@
           "burn",
           "visible"
         ],
-        "effect": "Melee attack: 2d6 thermal (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.",
+        "effect": "Melee attack: 1d6 fire (thermal). No rider: it just burns.",
         "flavor": "Witness her unsheathe the brand and you witness exactly what she will not forgive.",
         "manifestation": {
           "tier": 1,
@@ -957,7 +957,7 @@
           "pathResonance": "Aurablade — fury chosen well, channeled cleanly.",
           "fictionalPermission": "You hold a weapon people can see, fear, and recognize as yours alone.",
           "gmCalibration": "A Tier-1 Form. Visible to anyone in the room. Cannot be hidden, smuggled, or ambushed-with.",
-          "mechanicalHook": "On a hit, target gains the Burning condition for 1 round.",
+          "mechanicalHook": "",
           "signature": "The edge sings the name of the wrong it answers.",
           "thirdThing": "When you kill with it, the body's clothes scorch the precise sin into the cloth.",
           "opCost": {

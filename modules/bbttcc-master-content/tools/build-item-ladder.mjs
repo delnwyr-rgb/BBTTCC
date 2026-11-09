@@ -140,7 +140,7 @@ for (const spec of WORKINGS) {
   const host = byName(spec.host), power = byName(spec.power), r = rfi(host), frame = frameOf(host);
   const pTier = Number(power.system?.manifestation?.tier) || 1, tier = Math.min(4, Math.max(tierOf(host), pTier + 1)), v = strip(host);
   v.name = spec.name;
-  const ps = structuredClone(power.system); ps.clarityRequired = 0; if (ps.manifestation) { ps.manifestation.costType = "none"; ps.manifestation.costValue = 0; }
+  const ps = structuredClone(power.system); if (ps.manifestation) { ps.manifestation.costType = "none"; ps.manifestation.costValue = 0; }
   v.flags = v.flags || {}; v.flags.fourththing = v.flags.fourththing || {};
   // power.flags.autoanimations rides along so the companion casts with the kit power's animation (item-ladder.js companionData copies it).
   const pFlags = power.flags?.autoanimations ? { autoanimations: structuredClone(power.flags.autoanimations) } : undefined;

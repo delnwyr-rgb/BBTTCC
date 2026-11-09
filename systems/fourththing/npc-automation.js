@@ -195,7 +195,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     if (d.condition?.key && target) {
       if (d.condition.save) {
         const mf = {
-          resolution: { saveAttribute: d.condition.save.attr || "body", saveDcMode: "fixed", saveDcFixed: Number(d.condition.save.dc) || 13, onSave: "negate", statesOnFail: true },
+          resolution: { saveAttribute: d.condition.save.attr || "body", saveDcMode: "fixed", saveDcFixed: Number(d.condition.save.dc) || 13, onSave: "negate" },
           appliedStates: { states: [d.condition.key], duration: d.condition.duration || "1-round", saveEachRound: d.condition.duration === "until-saved", saveAttribute: d.condition.save.attr || "body" }
         };
         const dr = d.damage?.formula ? toDr(d.damage) : { op: "none" };
@@ -207,14 +207,16 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       lines.push(`${tName}: <b>${esc(d.condition.key)}</b>`);
     }
     if (d.save && !d.condition && target) {   // save-for-damage aura (no condition)
-      const mf = { resolution: { saveAttribute: d.save.attr || "soul", saveDcMode: "fixed", saveDcFixed: Number(d.save.dc) || 13, onSave: d.save.onSave || "negate", statesOnFail: true }, appliedStates: {} };
+      const mf = { resolution: { saveAttribute: d.save.attr || "soul", saveDcMode: "fixed", saveDcFixed: Number(d.save.dc) || 13, onSave: d.save.onSave || "negate" }, appliedStates: {} };
       await postSavePrompt(actor, target, item, mf, d.damage?.formula ? toDr(d.damage) : { op: "none" }, { castDc: Number(d.save.dc) || 13 });
       lines.push(`${tName}: ${esc(d.save.attr)} DC ${d.save.dc} — save card posted`);
       return;
     }
     if (d.damage?.formula && target) {
       const roll = await new Roll(String(d.damage.formula)).evaluate();
-      const track = d.damage.track || ((["psychic", "qliphothic"].includes(d.damage.type)) ? "stress" : "integrity");
+      // Track derives from the damage type (2026-11-08, one rule: game.fourththing.trackForDamage).
+      const track = game.fourththing.trackForDamage?.(d.damage.track, d.damage.type || "kinetic")
+        ?? (d.damage.track || ((["psychic", "qliphothic"].includes(d.damage.type)) ? "stress" : "integrity"));
       await game.fourththing.rolls._applyDamageToActor(target, roll.total, { op: "damage", track, damageType: d.damage.type || "kinetic" });
       lines.push(`${tName}: ${roll.total} ${esc(d.damage.type || "kinetic")}${track === "stress" ? " to Stress" : ""}`);
     }
@@ -516,7 +518,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       const lines = [];
       for (const d of mine) {
         const roll = await new Roll(d.formula).evaluate();
-        const track = ["psychic", "qliphothic"].includes(d.type) ? "stress" : "integrity";
+        const track = game.fourththing.trackForDamage?.("", d.type) ?? (["psychic", "qliphothic"].includes(d.type) ? "stress" : "integrity");
         await game.fourththing.rolls._applyDamageToActor(cur, roll.total, { op: "damage", track, damageType: d.type });
         lines.push(`${esc(cur.name)} takes ${roll.total} ${esc(d.type)} from ${esc(d.sourceName)}${d.ends === "action" ? " — spend an action to end it" : ""}`);
       }

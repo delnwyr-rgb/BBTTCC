@@ -12,20 +12,21 @@
     "activation": "action",
     "target": "single",
     "range": "near",
-    "damage": "3d6",
-    "damageType": "sephirotic",
-    "damageFlavor": "",
+    "damage": "",
+    "damageType": "psychic",
+    "damageFlavor": "sephirotic judgment",
     "damageRoll": {
-      "op": "none",
-      "number": 0,
+      "op": "damage",
+      "number": 2,
       "die": "d6",
+      "bonus": 0,
       "attribute": "",
-      "type": "sephirotic",
-      "flavor": "",
-      "track": "integrity"
+      "type": "psychic",
+      "flavor": "sephirotic judgment",
+      "track": "stress"
     },
     "damageParts": [],
-    "effect": "A luminous bough extends from the bark. The named target must speak the truest thing they fear; on a failed Resolve, take 2d6 sephirotic damage applied to Stress and Calmed for one exchange while the tree weighs the answer.",
+    "effect": "A luminous bough extends from the bark toward one creature within 30 ft. The target must speak the truest thing it fears and makes a Soul save; on a failure it takes 2d6 psychic damage to Stress — sephirotic judgment — and is Calmed for 1 round while the tree weighs the answer. A save negates both.",
     "tags": [
       "translated",
       "phase2-narrative",
@@ -35,7 +36,7 @@
     "category": "manifestation",
     "flavor": "Bark grows over the wound and sings hymns until they answer.",
     "manifestation": {
-      "tier": 1,
+      "tier": 2,
       "family": "working",
       "concept": "A bough that interrogates by judgment, not pain.",
       "form": "branch",
@@ -46,18 +47,18 @@
       "costValue": 2,
       "costText": "2 Clarity",
       "duration": "instant",
-      "durationText": "Until the answer is given.",
+      "durationText": "Calmed for 1 round while the tree weighs the answer.",
       "triggerText": "When the target tries to lie about the thing they fear most.",
       "scale": "personal",
-      "targetText": "One creature within near.",
-      "rangeAreaText": "Near; the bough reaches.",
-      "rangeFt": 0,
+      "targetText": "One creature within 30 ft.",
+      "rangeAreaText": "30 ft; the bough reaches.",
+      "rangeFt": 30,
       "maintenanceCost": "",
       "riskText": "If the target speaks a truth that wounds the Tree, the Tree takes 1 Stress.",
       "pathResonance": "Tiferet — beauty as judgment.",
       "fictionalPermission": "May force a public confession and apply Calmed.",
-      "gmCalibration": "Sephirotic damage; only fires on a genuine evasion of fear.",
-      "mechanicalHook": "2d6 sephirotic to Stress + Calmed on failed Resolve.",
+      "gmCalibration": "Soul save (negates); psychic damage — sephirotic judgment — to Stress; Calmed 1 round.",
+      "mechanicalHook": "One creature within 30 ft, Soul save (negates): 2d6 psychic to Stress + Calmed 1 round.",
       "signature": "Bark grows over the wound and sings hymns.",
       "thirdThing": "The bough remembers every confession it has heard.",
       "opCost": {
@@ -78,10 +79,31 @@
         "attribute": "",
         "dcMode": "derived",
         "dcFixed": 15
+      },
+      "resolution": {
+        "shape": "save",
+        "hitSave": false,
+        "hitSaveHalf": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "saveByPrompt": false
+      },
+      "appliedStates": {
+        "states": [
+          "calmed"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
-      "value": "<p><strong>Working.</strong> <em>A bough that interrogates by judgment.</em></p>\n<p>A luminous bough extends from the bark toward one creature within near range. The target must speak the truest thing they fear; on a failed Resolve check (DC by tier), they take 3d6 sephirotic damage to Stress and are Calmed for one exchange while the tree weighs the answer.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · single / near.</p>\n<p><em>Bark grows over the wound and sings hymns until they answer.</em></p>"
+      "value": "<p><strong>Working.</strong> <em>A bough that interrogates by judgment.</em></p>\n<p>A luminous bough extends from the bark toward one creature within 30 ft. The target must speak the truest thing it fears and makes a Soul save (DC by tier); on a failure it takes 2d6 psychic damage to Stress — sephirotic judgment — and is Calmed for 1 round while the tree weighs the answer. A save negates both.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · one creature / 30 ft.</p>\n<p><em>Bark grows over the wound and sings hymns until they answer.</em></p>"
     }
   },
   "flags": {
@@ -279,7 +301,7 @@
               },
               "damage": {
                 "formula": "2d6",
-                "type": "sephirotic"
+                "type": "psychic"
               },
               "prompt": "The 2d6 goes to Stress."
             }

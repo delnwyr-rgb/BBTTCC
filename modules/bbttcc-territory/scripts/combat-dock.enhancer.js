@@ -105,6 +105,9 @@
   // aim: foe | ally | any (pick or "No target") | self | area (engine template) | none
   const RANGE_BASE = { self: 0, touch: 5, near: 30, far: 60, sight: 120, hex: 300 };
   const gridFt = () => Number(canvas?.grid?.distance) || 5;
+  // 2026-11-08 (teeth P25): the system's one range — game.fourththing.itemRangeFt (rangeFt; legacy short/long and Range
+  // Baseline read through it; touch 5, self 0 = no check). The local reads are only for an older system build.
+  const sysRangeFt = (it) => { try { const fn = game.fourththing?.itemRangeFt; if (typeof fn === "function") return Number(fn(it)) || 0; } catch (_e) {} return null; };
 
   function strikeEntry(it, kind = "strike") {
     const sys = it.system ?? {}, mf = sys.manifestation ?? {};
@@ -112,24 +115,29 @@
     const area = mf.area?.shape && mf.area.shape !== "none";
     // 10-30: a primed Echo Strike (Surge) is a free Strike — the weapon stays live after the Action is spent.
     const echo = it.type === "weapon" && !!it.parent?.flags?.fourththing?.surge?.oneShot?.["echo-strike"];
+    const rangeFt = sysRangeFt(it) ?? (sq * gridFt());
     return { kind, item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "khanda",
-      cost: echo ? null : engineCost(it, normCost(mf.activation?.type) ?? "action"), aim: area ? "area" : "foe", rangeFt: sq * gridFt() };
+      cost: echo ? null : engineCost(it, normCost(mf.activation?.type) ?? "action"), aim: area ? "area" : "foe", rangeFt };
   }
   function powerEntry(it) {
     const sys = it.system ?? {}, mf = sys.manifestation ?? {};
-    const tgt = String(sys.target ?? "single");
+    // Aim derives from what the working does (2026-11-08, Target Shape retired): an area shape → engine
+    // template; self range → the caster; a heal → an ally; damage → a foe; anything else → any.
+    // A legacy item's stored system.target "self" still reads as self.
     const op = String(sys.damageRoll?.op ?? "");
     let aim = "foe";
-    if (tgt === "self" || sys.range === "self") aim = "self";
-    else if (mf.area?.shape && mf.area.shape !== "none") aim = "area";
-    else if (tgt === "faction") aim = "none";
-    else if (tgt === "burst" || tgt === "area") aim = "any";
+    if (mf.area?.shape && mf.area.shape !== "none") aim = "area";
+    else if (sys.range === "self" || sys.target === "self") aim = "self";
     else if (op === "heal") aim = "ally";
     else if (op !== "damage") aim = "any";
-    const rangeFt = Number(mf.rangeFt) || RANGE_BASE[sys.range] || 30;
-    const act = String(sys.activation ?? mf.activation?.type ?? "action");
+    const rangeFt = sysRangeFt(it) ?? (Number(mf.rangeFt) || RANGE_BASE[sys.range] || 30);
+    // One activation field (2026-11-08, teeth P20): manifestation.activation.type. Ritual is gone. The engine reports
+    // "mixed" for an Invoke whose stance picks the pools (Shamanic Action · Chaotic Bonus · Hermetic both).
+    const act = String(mf.activation?.type ?? "action");
+    // Rolls damage? (a legacy power keeps its dice only in the flat system.damage string.)
+    const rollsDamage = op === "damage" || (!op && typeof sys.damage === "string" && /\d*d\d+/i.test(sys.damage));
     return { kind: "mani", item: it, label: it.name, icon: "wand-magic-sparkles",
-      cost: engineCost(it, normCost(act)), ritual: act === "ritual", aim, rangeFt };
+      cost: engineCost(it, normCost(act)), aim, rangeFt, rollsDamage };
   }
   function featureEntry(it) {
     return { kind: "ability", item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "bolt",
@@ -371,9 +379,11 @@
     } catch (e) { warn(`fire failed: ${entry.label}`, e); ui.notifications?.error?.(`${entry.label}: something went wrong — see console.`); }
   }
   function activate(entry, s) {
-    if (entry.ritual) return ui.notifications?.warn?.(`${entry.label} is a ritual — not a combat action.`);
     if (entry.cost && slotSpent(s.actor, entry.cost)) return ui.notifications?.warn?.(`${s.actor.name}: your ${entry.cost === "action" ? "Action" : entry.cost === "bonus" ? "Bonus Action" : "Reaction"} is spent this round.`);
-    if (entry.aim === "self" || entry.aim === "none" || entry.aim === "area") return fire(entry, s, []);
+    // A self manifestation passes the caster's own token so a self-ward lands on them (2026-11-08) — but never one that
+    // rolls damage (fix round 2026-11-08, R5): that would aim the damage at the caster.
+    if (entry.aim === "self") return fire(entry, s, entry.kind === "mani" && s.token && !entry.rollsDamage ? [s.token] : []);
+    if (entry.aim === "none" || entry.aim === "area") return fire(entry, s, []);
     return beginAim(entry, s);
   }
 
@@ -528,17 +538,18 @@
     const out = [];
     for (const g of groups) {
       // Off your turn: what the engine lets you take then — Bonus (any time, ruling U4) and Reaction.
-      const shown = g.entries.filter(e => !offTurn || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed");
+      const shown = g.entries.filter(e => !offTurn || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed" || e.cost === "free");
       if (!shown.length) continue;
       out.push(`<div class="cd-group"><span class="cd-group-label">${esc(g.label)}</span>` + shown.map(e => {
         const spent = e.cost && slotSpent(s.actor, e.cost);
         let hk = "";
-        if (!spent && !e.ritual && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
+        if (!spent && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
+        const _mixTip = e.kind === "mani" ? "Your stance picks: Shamanic uses the Action · Chaotic the Bonus action · Hermetic both" : "Cost depends on which ability you pick";
         const costTag = { action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]
-          ? `<span class="cd-cost cd-cost-${e.cost}" ${e.cost === "mixed" ? `data-tooltip="Cost depends on which ability you pick"` : ""}>${{ action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]}</span>` : "";
+          ? `<span class="cd-cost cd-cost-${e.cost}" ${e.cost === "mixed" ? `data-tooltip="${_mixTip}"` : ""}>${{ action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]}</span>` : "";
         const tip = e.item ? (hud()?.synopsisFor?.(e.item) ?? esc(e.label)) : `<b>${esc(e.label)}</b><br>${esc(e.tip ?? "")}`;
         const aimTag = { area: "◎", self: "", none: "" }[e.aim] ?? "🎯";
-        return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""}" ${spent || e.ritual ? "disabled" : ""}
+        return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""}" ${spent ? "disabled" : ""}
           data-dock="fire" data-g="${esc(g.id)}" data-k="${esc(e.item?.id ?? e.key)}" data-tooltip="${esc(tip)}">
           ${hk ? `<span class="cd-hk">${hk}</span>` : ""}${e.emoji ? `<span class="cd-emoji">${e.emoji}</span>` : `<i class="fas fa-${esc(e.icon)}"></i>`}
           <span class="cd-ab-name">${esc(e.label)}</span>${aimTag ? `<span class="cd-aim">${aimTag}</span>` : ""}${costTag}</button>`;

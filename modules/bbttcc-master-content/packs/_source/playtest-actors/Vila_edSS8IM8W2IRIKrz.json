@@ -814,7 +814,7 @@
             ],
             "duration": "1-round",
             "saveEachRound": false,
-            "saveAttribute": "mind",
+            "saveAttribute": "soul",
             "saveDcMode": "cast-dc",
             "saveDcFixed": 15,
             "saveAttributeOverrides": {}
@@ -833,6 +833,10 @@
             "modifiers": [],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "hitSave": true,
+            "saveAttribute": "soul"
           }
         }
       },
@@ -3800,7 +3804,7 @@
             ],
             "duration": "2-rounds",
             "saveEachRound": true,
-            "saveAttribute": "soul",
+            "saveAttribute": "mind",
             "saveDcMode": "cast-dc",
             "saveDcFixed": 15,
             "saveAttributeOverrides": {}
@@ -3825,6 +3829,10 @@
             ],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "hitSave": true,
+            "saveAttribute": "mind"
           }
         }
       },
@@ -7014,6 +7022,10 @@
             "modifiers": [],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "hitSave": true,
+            "saveAttribute": "body"
           }
         }
       },

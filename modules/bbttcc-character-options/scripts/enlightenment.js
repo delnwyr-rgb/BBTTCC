@@ -626,7 +626,7 @@ async function castMinorMiracle(actor, item = null) {
 
   await actor.setFlag(MOD, "miracleUsed", true); // claim the charge first (race-safe)
   try {
-    const ok = await cast(actor, item, { miracle: true, mode: "hermetic", freeClarity: true, label: `✦ Minor Miracle — ${item.name} (T${tier})` });
+    const ok = await cast(actor, item, { miracle: true, mode: "shamanic", freeClarity: true, label: `✦ Minor Miracle — ${item.name} (T${tier})` });
     if (ok === false) { await actor.unsetFlag(MOD, "miracleUsed"); return; } // cast aborted → refund
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),

@@ -635,20 +635,21 @@
         "activation": "action",
         "target": "single",
         "range": "far",
-        "damage": "2d8",
+        "damage": "",
         "damageType": "electrical",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
           "number": 0,
           "die": "d6",
+          "bonus": 0,
           "attribute": "",
           "type": "electrical",
           "flavor": "",
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
+        "effect": "Name a creature within 60 ft and speak a vow against it. The next time it misses an attack against the Adept or one of the Adept's allies, lightning answers — it takes 2d8 electrical damage and the vow ends. The vow lasts the scene; the Adept holds one vow at a time, and a new vow moves it.",
         "tags": [
           "translated",
           "phase2-narrative",
@@ -658,7 +659,7 @@
         "category": "manifestation",
         "flavor": "Ozone smell, and a bell rings somewhere in Valhaul.",
         "manifestation": {
-          "tier": 1,
+          "tier": 2,
           "family": "working",
           "concept": "A martial pact with a sky that owes you.",
           "form": "vow",
@@ -669,18 +670,18 @@
           "costValue": 2,
           "costText": "2 Clarity",
           "duration": "scene",
-          "durationText": "Until paid out or scene ends.",
+          "durationText": "Until it pays out or the scene ends.",
           "triggerText": "When the named target misses an attack against the Adept or an ally.",
           "scale": "personal",
-          "targetText": "One creature within far range.",
-          "rangeAreaText": "Far; sightline.",
-          "rangeFt": 0,
+          "targetText": "One creature within 60 ft.",
+          "rangeAreaText": "60 ft; sightline.",
+          "rangeFt": 60,
           "maintenanceCost": "",
           "riskText": "If the named target dies before the vow pays out, the Adept takes 1 Stress.",
           "pathResonance": "Geburah — severity, the answer that comes back.",
-          "fictionalPermission": "May call lightning on a missed attack.",
-          "gmCalibration": "Resolves once and ends; one Spark Vow at a time.",
-          "mechanicalHook": "2d8 energy on triggered miss.",
+          "fictionalPermission": "Lightning answers the vowed target's next miss.",
+          "gmCalibration": "Fires once and ends; one Spark Vow at a time; lasts the scene.",
+          "mechanicalHook": "Vow on one creature within 60 ft: its next miss against the Adept or an ally → 2d8 electrical to it, once. One vow at a time (a new vow moves it); lasts the scene.",
           "signature": "Ozone, then a distant bell.",
           "thirdThing": "The struck target's hair stands up for an hour after.",
           "opCost": {
@@ -701,10 +702,27 @@
             "attribute": "",
             "dcMode": "derived",
             "dcFixed": 15
-          }
+          },
+          "resolution": {
+            "shape": "auto",
+            "hitSave": false,
+            "hitSaveHalf": false,
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "saveByPrompt": false
+          },
+          "onMissRetaliation": {
+            "formula": "2d8",
+            "type": "electrical",
+            "scope": "vow-target",
+            "once": true
+          },
+          "markDuration": "scene"
         },
         "description": {
-          "value": "<p><strong>Working.</strong> <em>A martial pact with a sky that keeps score.</em></p>\n<p>Name a target within far range and speak a vow against them. The next time that target misses an attack against the adept or an ally, lightning answers: it takes 2d8 electrical damage. The vow lasts one scene; only one Spark Vow may be active at a time.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · single / far.</p>\n<p><em>Ozone smell, and a bell rings somewhere in Valhaul.</em></p>"
+          "value": "<p><strong>Working.</strong> <em>A martial pact with a sky that keeps score.</em></p>\n<p>Name a creature within 60 ft and speak a vow against it. The next time it misses an attack against the adept or one of the adept's allies, lightning answers: it takes 2d8 electrical damage and the vow ends. The vow lasts the scene; the adept holds one vow at a time, and a new vow moves it.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · one creature / 60 ft.</p>\n<p><em>Ozone smell, and a bell rings somewhere in Valhaul.</em></p>"
         }
       },
       "_id": "NcSWpVeoOdr7Jsdu",
@@ -948,7 +966,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "While wielding a martial Form, +1 Guard. While the ward holds, kinetic damage you deal counts as energy.",
+        "effect": "For the scene, the Adept has +1 Guard while it wields a melee or unarmed Form, and kinetic damage it deals is dealt as electrical.",
         "tags": [
           "translated",
           "phase2-narrative",
@@ -969,18 +987,18 @@
           "costValue": 1,
           "costText": "1 Clarity / Soma Break",
           "duration": "soma-break",
-          "durationText": "Until next Soma Break.",
+          "durationText": "The scene.",
           "triggerText": "Activated as a Bonus action.",
           "scale": "personal",
-          "targetText": "Self while armed.",
+          "targetText": "Self, while armed.",
           "rangeAreaText": "Self.",
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "While the ward is up, the Adept cannot benefit from cover.",
           "pathResonance": "Geburah — bright martial discipline.",
-          "fictionalPermission": "May reflavor kinetic strikes as energy.",
-          "gmCalibration": "+1 Guard, kinetic→energy on outgoing damage.",
-          "mechanicalHook": "+1 Guard; outgoing damage type swap.",
+          "fictionalPermission": "Kinetic strikes land as lightning.",
+          "gmCalibration": "+1 Guard while a melee or unarmed Form is in hand; kinetic damage it deals becomes electrical.",
+          "mechanicalHook": "For the scene: +1 Guard while wielding a melee or unarmed Form; kinetic damage it deals becomes electrical.",
           "signature": "Sparks crawl up the haft.",
           "thirdThing": "Iron near the wielder rings faintly.",
           "opCost": {
@@ -1001,10 +1019,27 @@
             "attribute": "",
             "dcMode": "derived",
             "dcFixed": 15
-          }
+          },
+          "appliedEffects": {
+            "modifiers": [
+              {
+                "stat": "guard",
+                "op": "+",
+                "value": 1
+              }
+            ],
+            "resists": [],
+            "immunes": [],
+            "condition": "martial-form"
+          },
+          "damageConvert": {
+            "from": "kinetic",
+            "to": "electrical"
+          },
+          "markDuration": "scene"
         },
         "description": {
-          "value": "<p><strong>Form.</strong> <em>A bright halo around the haft of any weapon.</em></p>\n<p>While wielding a martial Form, the adept has +1 Guard. While the ward holds, kinetic damage the adept deals counts as electrical.</p>\n<p><strong>Cost.</strong> 1 Clarity · bonus · self / self.</p>\n<p><em>Sparks crawl up the haft.</em></p>"
+          "value": "<p><strong>Form.</strong> <em>A bright halo around the haft of any weapon.</em></p>\n<p>For the scene, the adept has +1 Guard while it wields a melee or unarmed Form, and kinetic damage it deals is dealt as electrical.</p>\n<p><strong>Cost.</strong> 1 Clarity · bonus · self.</p>\n<p><em>Sparks crawl up the haft.</em></p>"
         }
       },
       "_id": "A7B9KAYVvGO58KWI",

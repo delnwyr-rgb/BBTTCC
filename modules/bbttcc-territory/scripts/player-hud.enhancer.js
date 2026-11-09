@@ -625,17 +625,33 @@
       const dmgT = heal ? (dr.track ?? "") : String(sys.damage?.type ?? dr.type ?? "");
       bits.push(`${heal ? "❤" : "⚔"} ${dmgF}${dmgT ? ` ${dmgT}` : ""}`);
     }
-    if (mf.area?.shape && mf.area.shape !== "none") bits.push(`◎ ${mf.area.size ?? "?"}ft ${mf.area.shape}`);
-    const rng = Number(mf.rangeFt) ? `${mf.rangeFt}ft`
+    if (mf.area?.shape && mf.area.shape !== "none") bits.push(mf.area.shape === "hex" ? "◎ hex-wide" : `◎ ${mf.area.size ?? "?"}ft ${mf.area.shape === "cube" ? "sphere" : mf.area.shape}`);
+    // The one range (2026-11-08, teeth P25): game.fourththing.itemRangeFt — rangeFt, legacy fields read through it.
+    let _rFt = null;
+    try {
+      const fn = game.fourththing?.itemRangeFt, isForm = game.fourththing?.isFormWeapon;
+      const isMani = it?.type === "power" || (typeof isForm === "function" && isForm(it, { stamp: false }));
+      if (isMani && typeof fn === "function") _rFt = Number(fn(it)) || 0;
+    } catch (_e) {}
+    const rng = (_rFt !== null && !["cone", "line", "hex"].includes(mf.area?.shape)) ? (_rFt >= 999 ? "any range" : _rFt === 0 ? "self" : `${_rFt}ft`)
+      : Number(mf.rangeFt) ? `${mf.rangeFt}ft`
       : (mf.rangeAreaText ? String(mf.rangeAreaText)
       : (sys.range?.short ? `${sys.range.short} sq` : ""));
     if (rng) bits.push(`→ ${rng}`);
-    if (mf.costType && mf.costType !== "none") bits.push(`✦ ${[mf.costValue, mf.costType].filter(Boolean).join(" ")}`);
-    { const mk = mf.maintenanceKey;
-      const up = (mk && mk !== "none" && mk !== "custom") ? mk.replace(/^(\d+)-(\w+)-(\w+)$/, (_m, n, r, per) => `${r === "noise" ? "+" : ""}${n} ${r === "burn" ? "Surge" : r[0].toUpperCase() + r.slice(1)} per ${per}`) : mf.maintenanceCost;
-      if (up) bits.push(`↻ ${up}`); }
-    const act = mf.activation?.type ?? sys.activation?.type;
-    if (act) bits.push(`⏱ ${act}`);
+    // Cost / upkeep / activation from the engine's one cost source (2026-11-08, teeth P16/P18/P20/P23):
+    // "T2: 2 Clarity + 1 Stress", what upkeep actually bills, and which action it takes.
+    const sumFn = game.fourththing?.manifestationCostSummary;
+    if ((it?.type === "power" || it?.type === "weapon") && typeof sumFn === "function") {
+      try {
+        const sm = sumFn(it);
+        if (sm.cost) bits.push(`✦ ${sm.cost}`);
+        if (sm.upkeep) bits.push(`↻ ${sm.upkeep}`);
+        if (sm.activation) bits.push(`⏱ ${sm.activation}`);
+      } catch (_e) {}
+    } else {
+      const act = mf.activation?.type ?? sys.activation?.type;
+      if (act) bits.push(`⏱ ${act}`);
+    }
     let desc = String(sys.description?.value ?? sys.effect ?? sys.body ?? sys.flavor ?? "")
       .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
     if (desc.length > 260) desc = desc.slice(0, 257) + "…";

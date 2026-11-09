@@ -128,6 +128,8 @@ function isRealManifestation(it) {
   } catch (_e) {}
   if (!it) return false;
   if (it.type === "power") return true;
+  // The Engine's Form flag (2026-11-08, teeth P30) — the system test above reads it; this fallback does too.
+  if (it.type === "weapon" && it.flags?.fourththing?.manifested === true) return true;
   const mf = it.system?.manifestation;
   if (mf && (String(mf.concept ?? "").trim() || String(mf.signature ?? "").trim())) return true;
   const tags = Array.isArray(it.system?.tags) ? it.system.tags : [];

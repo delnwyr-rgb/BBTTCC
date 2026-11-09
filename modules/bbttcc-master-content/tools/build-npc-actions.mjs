@@ -42,11 +42,11 @@ const SAVE_TO_DEFENSE = {
 //   shape  : "radius" | "cone" | "single"   (cosmetic — drives effect text)
 //   size   : AoE size in ft (ignored for single)
 //   range  : delivery range in ft (token reach; converted to 5-ft squares)
-//   dice   : bare damage dice (engage dialog adds `attribute`)
+//   dice   : bare damage dice (the strike adds its Intent faculty)
 //   dmgType: RFI-7 canon (kinetic/energy/sephirotic/qliphothic/psychic/poison/radiation)
 //   saveAttr: original save attribute → mapped to a target defense
 //   dc     : cosmetic DC label (engage dialog rolls 2d10x10 + intent + skill)
-//   intent/skill/attribute: feed the engage dialog's attack-roll + damage bonus
+//   intent/skill: the engage dialog's attack roll; Intent is also the damage add (`attribute` retired 2026-11-08, ignored)
 //   rider  : the non-damage effect text the GM still applies by hand
 //   note   : prefix shown before the area/target line (triggers, recharge, etc.)
 const CONV = {
@@ -137,7 +137,7 @@ function buildSystem(c) {
   // HTML description (rendered on the sheet)
   let descHtml = "<p><strong>" + (single ? "Save Attack." : "Area Attack.") + "</strong> " +
     areaLabel + " rolls <strong>" + targetDefense + "</strong> vs DC " + c.dc + ". " +
-    "Hit: <code>" + c.dice + "</code> " + c.dmgType + " + " + c.attribute + (single ? "" : "; half on success") + ".";
+    "Hit: <code>" + c.dice + "</code> " + c.dmgType + " + " + c.intent + (single ? "" : "; half on success") + ".";
   if (c.rider)   descHtml += " " + c.rider;
   if (c.trigger) descHtml += "<br/><em>" + c.trigger + "</em>";
   if (cadence)   descHtml += "<br/><em>" + cadence + "</em>";
@@ -147,7 +147,7 @@ function buildSystem(c) {
   return {
     category: "ranged",
     intent: c.intent, skill: c.skill,
-    damage: { formula: c.dice, attribute: c.attribute, type: c.dmgType, damageFlavor: "", track },
+    damage: { formula: c.dice, type: c.dmgType, damageFlavor: "", track },
     range: { short: sq, long: sq },
     tags: ["translated","5e-port","npc-action-wired", c.shape === "single" ? "single" : "aoe", `shape-${c.shape}`],
     effect: effectLine.trim(),
@@ -194,7 +194,7 @@ for await (const [key, it] of db.iterator()) {
 console.log(`\n${APPLY ? "APPLYING" : "DRY RUN"} — ${ops.length} conversions\n`);
 for (const o of ops) {
   console.log(`■ ${o.after.name}  (${o.before.type} → ${o.after.type})`);
-  console.log(`   dmg ${o.after.system.damage.formula} ${o.after.system.damage.type} → ${o.after.system.damage.track}; intent=${o.after.system.intent} skill=${o.after.system.skill} attr=${o.after.system.damage.attribute}`);
+  console.log(`   dmg ${o.after.system.damage.formula} ${o.after.system.damage.type} → ${o.after.system.damage.track}; intent=${o.after.system.intent} skill=${o.after.system.skill}`);
   console.log(`   effect: ${o.after.system.effect}`);
 }
 

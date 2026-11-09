@@ -274,7 +274,6 @@
       enums: {
         damageTypes:        FT?.DAMAGE_TYPES        || null,
         conditions:         FT?.CONDITIONS          || null,
-        manifestationForms: FT?.MANIFESTATION_FORMS || null,
         raidTypes:    ["assault", "infiltration", "courtly"],
         opCategories: ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"]
       }

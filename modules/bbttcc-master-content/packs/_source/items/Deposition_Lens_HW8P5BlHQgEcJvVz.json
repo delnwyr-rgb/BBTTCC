@@ -94,7 +94,7 @@
         ],
         "duration": "until-saved",
         "saveEachRound": true,
-        "saveAttribute": "soul",
+        "saveAttribute": "mind",
         "saveDcMode": "cast-dc",
         "saveDcFixed": 15,
         "saveAttributeOverrides": {}
@@ -113,6 +113,10 @@
         "modifiers": [],
         "resists": [],
         "immunes": []
+      },
+      "resolution": {
+        "hitSave": true,
+        "saveAttribute": "mind"
       }
     },
     "description": {

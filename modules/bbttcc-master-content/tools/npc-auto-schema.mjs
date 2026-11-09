@@ -94,7 +94,8 @@ export function validateWeaponManifestation(mf, where = "") {
     if (!["fixed", "cast-dc", undefined].includes(r.saveDcMode)) err(`resolution.saveDcMode "${r.saveDcMode}"`);
     if (r.saveDcMode === "fixed" && !(Number(r.saveDcFixed) > 0)) err(`resolution fixed DC needs saveDcFixed`);
     if (r.onSave && !["half", "negate"].includes(r.onSave)) err(`resolution.onSave "${r.onSave}"`);
-    if (r.mode && r.mode !== "save") err(`resolution.mode "${r.mode}"`);
+    if (r.mode && r.mode !== "save") err(`resolution.mode "${r.mode}"`);   // legacy — read as shape "save" (2026-11-08)
+    if (r.shape && !["auto", "attack", "save"].includes(r.shape)) err(`resolution.shape "${r.shape}" (weapons: attack or save-first)`);
   }
   // states: array (authored) or object-of-booleans (wizard shape) — the system normalizes both
   for (const s of statesList(mf.appliedStates?.states)) if (!CONDITIONS.includes(s)) err(`state "${s}"`);

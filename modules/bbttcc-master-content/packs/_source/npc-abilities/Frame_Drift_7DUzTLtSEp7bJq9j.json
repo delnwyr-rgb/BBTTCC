@@ -12,20 +12,21 @@
     "activation": "action",
     "target": "self",
     "range": "self",
-    "damage": "1d6",
+    "damage": "",
     "damageType": "qliphothic",
     "damageFlavor": "",
     "damageRoll": {
       "op": "none",
       "number": 0,
       "die": "d6",
+      "bonus": 0,
       "attribute": "",
       "type": "qliphothic",
       "flavor": "",
       "track": "stress"
     },
     "damageParts": [],
-    "effect": "Phase the Wraith partially out of the current frame. Until the start of its next turn, attackers reroll-lowest on attacks against it; on each missed attack, the attacker takes 1d6 qliphothic to Stress as the slip bleeds back into them.",
+    "effect": "Phase the Wraith partially out of the current frame. Until the start of its next turn, attacks against it roll with disadvantage, and each attack that misses it deals 1d6 qliphothic damage to the attacker's Stress as the slip bleeds back into them.",
     "tags": [
       "translated",
       "phase2-narrative",
@@ -46,7 +47,7 @@
       "costValue": 1,
       "costText": "1 Clarity / scene",
       "duration": "scene",
-      "durationText": "Until the next turn or dismissed.",
+      "durationText": "Until the start of its next turn.",
       "triggerText": "When attacked.",
       "scale": "personal",
       "targetText": "Self.",
@@ -56,8 +57,8 @@
       "riskText": "The Wraith may slip too far and lose 1 Integrity to a frame it can't return from.",
       "pathResonance": "Yesod — foundation as suggestion.",
       "fictionalPermission": "May refuse to be where it was.",
-      "gmCalibration": "Reroll-lowest on attacks; 1d6 qliphothic to Stress on misses.",
-      "mechanicalHook": "Reroll-lowest defense; reflective qliphothic damage.",
+      "gmCalibration": "Attacks against it at disadvantage; each miss deals 1d6 qliphothic to the attacker's Stress.",
+      "mechanicalHook": "Until its next turn: attacks against it roll with disadvantage; each miss → 1d6 qliphothic to the attacker's Stress.",
       "signature": "The air remembers things that didn't happen.",
       "thirdThing": "Anyone watching forgets where they were standing.",
       "opCost": {
@@ -78,10 +79,18 @@
         "attribute": "",
         "dcMode": "derived",
         "dcFixed": 15
-      }
+      },
+      "attackersDisadvantage": true,
+      "onMissRetaliation": {
+        "formula": "1d6",
+        "type": "qliphothic",
+        "scope": "self",
+        "once": false
+      },
+      "markDuration": "next-turn"
     },
     "description": {
-      "value": "<p><strong>Working.</strong> <em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attackers reroll the highest die on attacks against it; each missed attack costs the attacker 1d6 qliphothic damage to Stress as the slip bleeds back into them.</p>\n<p><strong>Cost.</strong> 1 Clarity, +2 Noise · action · self / self.</p>\n<p><em>The air around it remembers things that didn't happen.</em></p>"
+      "value": "<p><strong>Working.</strong> <em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attacks against it roll with disadvantage, and each attack that misses it deals 1d6 qliphothic damage to the attacker's Stress as the slip bleeds back into them.</p>\n<p><strong>Cost.</strong> 1 Clarity, +2 Noise · action · self.</p>\n<p><em>The air around it remembers things that didn't happen.</em></p>"
     }
   },
   "flags": {

@@ -25,7 +25,7 @@
     const kind = it.type === "weapon" ? "weapon" : "power";
     const stored = Math.max(1, Math.min(4, Number(mf.tier) || 1));
     const preview = foundry.utils.mergeObject(it.toObject(), { system: { manifestation: { rangeFt: 30 } } }, { inplace: false });
-    const at30 = M.magnitudeTier(preview, kind);
+    const at30 = M.magnitudeTier(preview, kind, it.parent ?? null);   // owner as the 3rd arg (fix round 2026-11-08, S6); null = scoring error
     return { range, stored, at30, qualifies: stored === 1 || at30 === 1 };
   }
 

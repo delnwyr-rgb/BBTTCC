@@ -2584,7 +2584,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d6",
+          "formula": "1d6",
           "attribute": "violence",
           "type": "thermal",
           "damageFlavor": "hot",
@@ -2605,7 +2605,7 @@
           "harm",
           "bound"
         ],
-        "effect": "Melee attack: 2d6 thermal (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.",
+        "effect": "Melee attack: 1d6 fire (thermal). No rider: it just burns.",
         "flavor": "Mercy has a sibling. The sibling does not get invited to things, for reasons about to be demonstrated.",
         "manifestation": {
           "tier": 1,
@@ -2651,9 +2651,7 @@
             "dcFixed": 15
           },
           "appliedStates": {
-            "states": [
-              "burning"
-            ],
+            "states": [],
             "duration": "1-round",
             "saveEachRound": false,
             "saveAttribute": "body",

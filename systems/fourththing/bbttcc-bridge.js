@@ -1532,7 +1532,9 @@ const TERRAIN_KEY_ALIAS = {
  * alignBonus: +1 if actor's sephirah resonates with current hex terrain
  * noiseBonus: +1 if terrain is Qliphothic/irradiated
  */
-export function getTerrainMagicModifiers(actor) {
+// `sephirah` (2026-11-08, teeth P35): the cast's resolved sefirah (a Steward's alignment, else the item's) — the actor's
+// magic.sephirah is only the fallback when a caller passes none.
+export function getTerrainMagicModifiers(actor, sephirah = null) {
   const result = { alignBonus: 0, noiseBonus: 0, terrainKey: null, terrainLabel: null };
   if (!bbttccActive()) return result;
 
@@ -1570,7 +1572,7 @@ export function getTerrainMagicModifiers(actor) {
       // Qliphothic / irradiated — adds Noise
       result.noiseBonus = 1;
     } else if (sephirahResonance) {
-      let actorSeph = String((actor.system?.system ?? actor.system)?.magic?.sephirah ?? "tiferet").toLowerCase();
+      let actorSeph = String(sephirah || ((actor.system?.system ?? actor.system)?.magic?.sephirah) || "tiferet").toLowerCase();
       if (actorSeph === "gevurah" || actorSeph === "gevura") actorSeph = "geburah";   // legacy spelling (2026-10-26)
       if (actorSeph === sephirahResonance) result.alignBonus = 1;
     }

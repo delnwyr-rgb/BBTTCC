@@ -15,7 +15,7 @@
         <span class="ft-badge ft-manifest-mode-badge">{{manifestationModeLabel}}</span>
         <span class="ft-badge ft-intent-badge intent-{{system.intent}}">{{ftCap system.intent}}</span>
         <span class="ft-badge ft-channel-badge channel-{{system.channel}}">{{ftCap system.channel}}</span>
-        <span class="ft-badge ft-seph-badge-sm" style="border-color:{{ftSephColor system.sephirah}}55;color:{{ftSephColor system.sephirah}}">{{ftSephLabel system.sephirah}}</span>
+        <span class="ft-badge ft-seph-badge-sm" style="border-color:{{ftSephColor effSephirah}}55;color:{{ftSephColor effSephirah}}">{{ftSephLabel effSephirah}}</span>
         <button type="button" data-action="ftToggleManifestMode" class="ft-manifest-mode-toggle" title="Switch between display and edit views">
           {{#if isEditMode}}<i class="fas fa-eye"></i> Display{{else}}<i class="fas fa-pen"></i> Edit{{/if}}
         </button>
@@ -27,6 +27,17 @@
   </header>
 
   <section class="ft-item-body">
+
+  {{!-- Rubric v1.2 (2026-11-08): the tier's points, compact — the same lines the Engine Review shows. --}}
+  {{#if magnitude}}
+  <details class="ft-magnitude-why" style="margin:0 0 0.5rem;font-size:0.78rem;border:1px solid rgba(232,200,74,0.25);border-radius:4px;padding:0.25rem 0.5rem">
+    <summary style="cursor:pointer{{#if magnitude.drift}};color:#e8c84a{{/if}}">{{magnitude.summary}}</summary>
+    <ul style="margin:0.3rem 0 0;padding-left:1.2rem;line-height:1.45;opacity:0.85">
+      {{#each magnitude.lines as |l|}}<li>{{l}}</li>{{else}}<li>Nothing here adds magnitude.</li>{{/each}}
+    </ul>
+    <div style="margin-top:0.2rem;opacity:0.6;font-style:italic;font-size:0.72rem">{{magnitude.scale}}</div>
+  </details>
+  {{/if}}
 
   {{#unless isEditMode}}
     <div class="ft-manifest-display">
@@ -69,7 +80,7 @@
 
       {{#if system.manifestation.mechanicalHook}}
       <div class="ft-manifest-display-section">
-        <div class="ft-prev-label">Mechanical Hook</div>
+        <div class="ft-prev-label" data-tooltip="Prose only — the Effect section is what the engine runs.">Rules note</div>
         <p>{{system.manifestation.mechanicalHook}}</p>
       </div>
       {{/if}}
@@ -97,24 +108,23 @@
 
       {{#if system.manifestation.durationText}}
       <div class="ft-manifest-display-section">
-        <div class="ft-prev-label">Duration</div>
+        <div class="ft-prev-label">Duration (in the fiction)</div>
         <p>{{system.manifestation.durationText}}</p>
       </div>
       {{/if}}
 
       {{#if system.manifestation.triggerText}}
       <div class="ft-manifest-display-section">
-        <div class="ft-prev-label">Trigger</div>
+        <div class="ft-prev-label">Trigger (narrative, GM calls it)</div>
         <p>{{system.manifestation.triggerText}}</p>
       </div>
       {{/if}}
 
-      {{#if system.manifestation.costText}}
       <div class="ft-manifest-display-section">
         <div class="ft-prev-label">Cost</div>
-        <p>{{system.manifestation.costText}}</p>
+        <p>{{costSpecLabel}}</p>
+        {{#if system.manifestation.costText}}<p style="opacity:0.8"><i>In the fiction:</i> {{system.manifestation.costText}}</p>{{/if}}
       </div>
-      {{/if}}
 
       {{#if system.manifestation.maintenanceCost}}
       <div class="ft-manifest-display-section">
@@ -125,7 +135,7 @@
 
       {{#if system.manifestation.riskText}}
       <div class="ft-manifest-display-section">
-        <div class="ft-prev-label">Risk / Fallout</div>
+        <div class="ft-prev-label">Fallout (GM colour)</div>
         <p>{{system.manifestation.riskText}}</p>
       </div>
       {{/if}}
@@ -168,28 +178,12 @@
 
     <div class="ft-manifest-sheet-section">
       <div class="ft-prev-label">How does it appear?</div>
-      <div class="ft-prev-align-note">Expression tells us what the manifestation looks like. Signature tells us why it is yours. The Third Thing tells us why it matters.</div>
+      <div class="ft-prev-align-note">Signature tells us why it is yours. The Third Thing tells us why it matters.</div>
       <div class="ft-power-grid">
         <div class="ft-field">
-          <label>Expression</label>
-          <select name="system.manifestation.form">
-            {{#each MANIFESTATION_FORMS as |entry key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.form key)}}selected{{/if}}>{{entry.label}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Function</label>
-          <select name="system.manifestation.function">
-            {{#each MANIFESTATION_FUNCTIONS as |entry key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.function key)}}selected{{/if}}>{{entry.label}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Intent</label>
+          <label data-tooltip="The faculty this manifestation rolls with and adds to its damage or heal roll — any of the six.">Intent</label>
           <select name="system.intent">
-            {{#each INTENTS as |intent key|}}
+            {{#each FACULTIES as |intent key|}}
             <option value="{{key}}" {{#if (eq ../system.intent key)}}selected{{/if}}>{{intent.label}}</option>
             {{/each}}
           </select>
@@ -203,20 +197,21 @@
           </select>
         </div>
         <div class="ft-field">
-          <label>Sephirah</label>
+          {{#if sephLocked}}
+          <label data-tooltip="Your Sephirotic Alignment is the sefirah you invoke with — it decides the +1 Align bonus, whatever the item names.">Sephirah — your alignment</label>
+          <select disabled>
+            {{#each SEPHIROTH as |seph key|}}
+            <option value="{{key}}" {{#if (eq ../effSephirah key)}}selected{{/if}}>{{seph.label}}</option>
+            {{/each}}
+          </select>
+          {{else}}
+          <label data-tooltip="The sefirah this manifestation invokes with — it decides the +1 Align bonus. A Steward's Sephirotic Alignment replaces it.">Sephirah</label>
           <select name="system.sephirah">
             {{#each SEPHIROTH as |seph key|}}
             <option value="{{key}}" {{#if (eq ../system.sephirah key)}}selected{{/if}}>{{seph.label}}</option>
             {{/each}}
           </select>
-        </div>
-        <div class="ft-field">
-          <label>Style</label>
-          <select name="system.mode">
-            {{#each MODES as |mode key|}}
-            <option value="{{key}}" {{#if (eq ../system.mode key)}}selected{{/if}}>{{mode.label}}</option>
-            {{/each}}
-          </select>
+          {{/if}}
         </div>
       </div>
 
@@ -230,7 +225,7 @@
           {{!-- GM-only (2026-10-29): players make Signatures through a slot, which checks the count. --}}
           {{#if isGM}}<input type="checkbox" name="system.manifestation.isSignature" {{#if system.manifestation.isSignature}}checked{{/if}}/>
           {{else}}<input type="checkbox" {{#if system.manifestation.isSignature}}checked{{/if}} disabled/>{{/if}}
-          <span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you when you tier up{{#unless isGM}} · players fill Signature slots from the Manifestations tab{{/unless}}</small></span>
+          <span>Signature manifestation <small style="opacity:0.6">— fills one of the owner's Signature slots (one per tier). Its tier comes from what it does, with 2 free points of magnitude (it scores 2 points lower than the same build unsigned), capped at the owner's tier; it never levels itself — when the tier rises, grow it from its slot.{{#unless isGM}} Only the GM ticks this; players make Signatures from a slot on the Manifestations tab.{{/unless}}</small></span>
         </label>
       </div>
 
@@ -269,15 +264,12 @@
             {{/each}}
           </select>
         </div>
-        <div class="ft-field">
+        <div class="ft-field" data-tooltip="The roll adds this manifestation's Intent faculty (set Intent above).">
           <label>+ Faculty</label>
-          <select name="system.damageRoll.attribute" data-tooltip="Faculty bonus added to the rolled total. Empty = no faculty add.">
-            <option value="">— none —</option>
-            {{#each FACULTIES as |attr key|}}
-            <option value="{{key}}" {{#if (eq ../system.damageRoll.attribute key)}}selected{{/if}}>{{attr.label}}</option>
-            {{/each}}
-          </select>
+          <span style="padding:0.25rem 0;display:inline-block">+ Intent</span>
         </div>
+        {{!-- A heal has no damage type or flavor (teeth P36) — only the bar it fills. --}}
+        {{#unless (eq system.damageRoll.op "heal")}}
         <div class="ft-field">
           <label>Type</label>
           <select name="system.damageRoll.type">
@@ -286,19 +278,62 @@
             {{/each}}
           </select>
         </div>
+        {{/unless}}
+        {{#if (eq system.damageRoll.op "heal")}}
         <div class="ft-field">
-          <label>Track</label>
-          <select name="system.damageRoll.track" data-tooltip="Which actor track the roll touches. Damage subtracts; heal adds.">
-            {{#each TRACKS as |label key|}}
+          <label>Heal track</label>
+          <select name="system.damageRoll.track" data-tooltip="Which bar the heal fills. Clarity and Noise move by set amounts in the row below.">
+            {{!-- A legacy Clarity / Noise heal shows as itself (fix round 2026-11-08, E8) so saving the sheet never rewrites it. --}}
+            {{#if (eq system.damageRoll.track "clarity")}}<option value="clarity" selected disabled>Clarity (legacy — use the Clarity &amp; Noise row)</option>{{/if}}
+            {{#if (eq system.damageRoll.track "noise")}}<option value="noise" selected disabled>Noise (legacy — use the Clarity &amp; Noise row)</option>{{/if}}
+            {{#each HEAL_TRACKS as |label key|}}
             <option value="{{key}}" {{#if (eq ../system.damageRoll.track key)}}selected{{/if}}>{{label}}</option>
             {{/each}}
           </select>
         </div>
+        {{else}}
+        <div class="ft-field" data-tooltip="Damage lands on the bar its type sets — Psychic / Qliphothic → Stress, Radiation → Radiation, everything else → Integrity.">
+          <label>Hits</label>
+          <span style="padding:0.25rem 0;display:inline-block">{{damageTrackLabel}}</span>
+        </div>
+        {{/if}}
+        {{#unless (eq system.damageRoll.op "heal")}}
         <div class="ft-field-full">
-          <label>Damage flavor</label>
-          <input type="text" name="system.damageRoll.flavor" value="{{system.damageRoll.flavor}}" placeholder="e.g. 'fire' (for energy:fire) or 'sanctified'"/>
+          {{#if damageFlavorOpts}}
+          <label data-tooltip="Thermal and Chemical hits carry one of these; a resist to the flavor (or the whole type) catches it.">Damage flavor</label>
+          <select name="system.damageRoll.flavor">
+            <option value="" {{#unless damageFlavorValue}}selected{{/unless}}>— none —</option>
+            {{#each damageFlavorOpts as |label key|}}
+            <option value="{{key}}" {{#if (eq ../damageFlavorValue key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+          {{else}}
+          <label data-tooltip="A cosmetic tag for this type — nothing resists a tag on its own.">Damage flavor (tag)</label>
+          <input type="text" name="system.damageRoll.flavor" value="{{system.damageRoll.flavor}}" placeholder="optional tag, e.g. sanctified"/>
+          {{/if}}
         </div>
         {{/unless}}
+        {{/unless}}
+      </div>
+
+      {{!-- Clarity / Noise pool row (2026-11-08): set amounts, never rolled. --}}
+      <div class="ft-power-grid">
+        <div class="ft-field" data-tooltip="A set amount, never rolled, landing with the hit. Draining Clarity is an attack on Resolve; restoring it is a buff. A half save doesn't halve it — only a negate stops it. Rigs have no Clarity.">
+          <label>Clarity</label>
+          <select name="system.manifestation.poolShift.clarity">
+            {{#each POOL_CLARITY_OPTS as |label key|}}
+            <option value="{{key}}" {{#if (eq ../poolShiftClarity key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="ft-field" data-tooltip="A set amount, never rolled, landing with the hit. Adding Noise is an attack on Resolve; clearing it is a buff. A half save doesn't halve it — only a negate stops it. Rigs have no Noise.">
+          <label>Noise</label>
+          <select name="system.manifestation.poolShift.noise">
+            {{#each POOL_NOISE_OPTS as |label key|}}
+            <option value="{{key}}" {{#if (eq ../poolShiftNoise key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
       </div>
 
       {{!-- Additional damage dice moved to the Manifestation Engine (2026-05-29)
@@ -309,44 +344,47 @@
       <div class="ft-power-grid">
         <div class="ft-field">
           <label>Area shape</label>
-          <select name="system.manifestation.area.shape" data-tooltip="None for single-target. Other shapes prompt to place a measured template on cast.">
+          <select name="system.manifestation.area.shape" data-tooltip="None = one target. Sphere / Cylinder: a circle you place within range (size = radius). Cone (53°) and Line (5 ft wide) start at you (size = length). Hex-wide: everyone on the scene — harmful hits every non-friendly token, helpful every friendly one; no template. An area manifestation never chains.">
             {{#each AREA_SHAPES as |label key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.area.shape key)}}selected{{/if}}>{{label}}</option>
             {{/each}}
           </select>
         </div>
-        {{#unless (eq system.manifestation.area.shape "none")}}
+        {{#if areaIsTemplate}}
         <div class="ft-field">
-          <label>Size (ft)</label>
-          <input type="number" name="system.manifestation.area.size" min="0" max="120" value="{{system.manifestation.area.size}}" style="width:80px"/>
+          <label>{{areaSizeLabel}}</label>
+          <input type="number" name="system.manifestation.area.size" min="5" max="600" value="{{system.manifestation.area.size}}" style="width:80px"/>
         </div>
-        {{/unless}}
+        {{/if}}
       </div>
 
       {{!-- Activation --}}
       <div class="ft-power-grid">
         <div class="ft-field">
-          <label>Activation</label>
+          <label data-tooltip="An Invoke's stance picks the action it uses (Shamanic: Action · Chaotic: Bonus action · Hermetic: both). Reaction and Free override the stance.">Activation</label>
           <select name="system.manifestation.activation.type">
             {{#each ACTIVATION_TYPES as |label key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.activation.type key)}}selected{{/if}}>{{label}}</option>
+            <option value="{{key}}" {{#if (eq ../activationKey key)}}selected{{/if}}>{{label}}</option>
             {{/each}}
           </select>
-        </div>
-        <div class="ft-field">
-          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer">
-            <input type="checkbox" name="system.manifestation.activation.consumePool" {{#if system.manifestation.activation.consumePool}}checked{{/if}}/>
-            <span>Consume action pool on cast</span>
-          </label>
         </div>
       </div>
 
       {{!-- Resolution — post-cast effect resolution (2026-05-05).
-           Replaces the legacy save block. Cast-fail fires misfire (unchanged);
-           THIS panel governs what happens AFTER the cast lands. --}}
+           Cast-fail fires misfire (unchanged); THIS panel governs what happens AFTER the cast lands.
+           2026-11-08 (teeth P05/P10/P15): the attack defense is derived from the damage (no select); a beneficial
+           working is locked to Auto; attack / auto shapes may give the target a save against the conditions. --}}
+      {{#if isBeneficialWorking}}
       <div class="ft-power-grid">
         <div class="ft-field" style="flex-basis:100%">
-          <label data-tooltip="What happens after the cast check succeeds. Auto = legacy behavior (damage rolls + applies). Attack/Save/Contested gate the damage on a second roll vs the target.">Resolution shape</label>
+          <label>Resolution shape</label>
+          <div class="ft-prev-align-note">Auto — beneficial working. A heal, ward or buff with no harm in it lands on its target without an attack, save or contest.</div>
+        </div>
+      </div>
+      {{else}}
+      <div class="ft-power-grid">
+        <div class="ft-field" style="flex-basis:100%">
+          <label data-tooltip="What decides whether a successful cast takes hold. Auto = it lands. Attack = Intent + Channel vs the target's defense. Save / Contested = the target rolls; a pass (or a target win) always stops the conditions.">Resolution shape</label>
           <select name="system.manifestation.resolution.shape">
             {{#each RESOLUTION_SHAPES as |label key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.shape key)}}selected{{/if}}>{{label}}</option>
@@ -358,14 +396,52 @@
       {{#if (eq system.manifestation.resolution.shape "attack")}}
       <div class="ft-power-grid">
         <div class="ft-field">
-          <label data-tooltip="Static defense the caster's 2d10x10 + Intent + Channel must equal or exceed.">Attack vs</label>
-          <select name="system.manifestation.resolution.attackVs">
-            {{#each DEFENSES as |def key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.attackVs key)}}selected{{/if}}>{{def.label}}</option>
+          <label data-tooltip="Set by the damage type: Stress damage (and draining Clarity / adding Noise) attacks Resolve, everything else attacks Guard. The caster rolls 2d10x10 + Intent + Channel.">Attack vs</label>
+          <div style="padding:0.25rem 0;opacity:0.85">{{attackDefenseLabel}}</div>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if hitSaveAllowed}}
+      <div class="ft-power-grid">
+        <div class="ft-field" style="flex-basis:100%">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer" data-tooltip="Off: when the working lands, its conditions simply land. On: the target rolls a save — a pass stops the conditions (and the Clarity / Noise row); the damage still lands unless half damage is ticked.">
+            <input type="checkbox" name="system.manifestation.resolution.hitSave" {{#if system.manifestation.resolution.hitSave}}checked{{/if}}/>
+            <span>Target gets a save against the conditions</span>
+          </label>
+        </div>
+        {{#if system.manifestation.resolution.hitSave}}
+        <div class="ft-field">
+          <label data-tooltip="Faculty the target rolls 2d10x10 with to resist.">Save attribute</label>
+          <select name="system.manifestation.resolution.saveAttribute">
+            {{#each FACULTIES as |attr key|}}
+            <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.saveAttribute key)}}selected{{/if}}>{{attr.label}}</option>
             {{/each}}
           </select>
         </div>
+        <div class="ft-field">
+          <label data-tooltip="Ladder = 11 + tier×2 + the caster's channel. A Steward's save DC is always theirs; Fixed is for foes only.">DC</label>
+          <select name="system.manifestation.resolution.saveDcMode">
+            {{#each SAVE_DC_MODES as |label key|}}
+            <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.saveDcMode key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        {{#if (eq system.manifestation.resolution.saveDcMode "fixed")}}
+        <div class="ft-field">
+          <label>DC</label>
+          <input type="number" name="system.manifestation.resolution.saveDcFixed" min="5" max="40" value="{{system.manifestation.resolution.saveDcFixed}}" style="width:60px"/>
+        </div>
+        {{/if}}
+        <div class="ft-field">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer" data-tooltip="The GM's seat rolls this save as the working lands.">
+            <input type="checkbox" name="system.manifestation.resolution.hitSaveHalf" {{#if system.manifestation.resolution.hitSaveHalf}}checked{{/if}}/>
+            <span>Half damage on a save</span>
+          </label>
+        </div>
+        {{/if}}
       </div>
+      {{/if}}
       {{/if}}
 
       {{#if (eq system.manifestation.resolution.shape "save")}}
@@ -393,7 +469,7 @@
         </div>
         {{/if}}
         <div class="ft-field">
-          <label data-tooltip="What a successful save does to the damage. Negate = no damage. Half = halved damage applies.">On save</label>
+          <label data-tooltip="A pass always stops the conditions; this sets what happens to the damage.">On a pass</label>
           <select name="system.manifestation.resolution.onSave">
             {{#each ON_RESOLVE_OUTCOMES as |label key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.onSave key)}}selected{{/if}}>{{label}}</option>
@@ -403,7 +479,7 @@
         <div class="ft-field" style="flex-basis:100%">
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer" data-tooltip="If on, the cast posts a Save button chat card instead of GM auto-rolling. Target's owner clicks to roll their own save. Singular-target only; AoE always GM-side.">
             <input type="checkbox" name="system.manifestation.resolution.saveByPrompt" {{#if system.manifestation.resolution.saveByPrompt}}checked{{/if}}/>
-            <span>Prompt target to roll save (chat-card button)</span>
+            <span>Target's owner rolls the save (chat-card button)</span>
           </label>
         </div>
       </div>
@@ -428,7 +504,7 @@
           </select>
         </div>
         <div class="ft-field">
-          <label data-tooltip="What a target win (incl. ties — defensive bias) does to the damage. Negate = no damage. Half = halved damage applies.">On target win</label>
+          <label data-tooltip="A target win (ties go to the target) always stops the conditions, like a passed save; this sets what happens to the damage.">On a target win</label>
           <select name="system.manifestation.resolution.onContestLoss">
             {{#each ON_RESOLVE_OUTCOMES as |label key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.resolution.onContestLoss key)}}selected{{/if}}>{{label}}</option>
@@ -443,7 +519,7 @@
            a recurring 2d10x10+faculty roll at start of target's turn to shake
            off (see _ftHandleTurnStart). --}}
       <div class="ft-prev-label" style="margin-top:0.6rem">Applied States</div>
-      <div class="ft-prev-align-note">Conditions inflicted when the cast lands. Choose any. Tooltips show the effect.</div>
+      <div class="ft-prev-align-note">Conditions inflicted when the cast lands. Tooltips say exactly what each does. States the engine sets itself (Dying, Strain, water, sky, radiation, Darkness) aren't offered.</div>
       <div class="ft-wiz-v2-cond-grid">
         {{#each CONDITIONS as |cond key|}}
         <label class="ft-wiz-v2-cond-chip" data-tooltip="{{cond.desc}}" style="border-color:{{cond.color}}66">
@@ -455,10 +531,10 @@
       </div>
       <div class="ft-power-grid" style="margin-top:0.4rem">
         <div class="ft-field">
-          <label data-tooltip="How long the conditions stick. 'Until saved' requires saveEachRound.">Duration</label>
+          <label data-tooltip="How long the conditions and wards stick. 'From stability' = one round for an Instant working, the scene for a Sustained or Bound one. Scene-long effects end at Scene Break or when the fight ends. 'Until saved' always rolls a save each round.">Applied for</label>
           <select name="system.manifestation.appliedStates.duration">
             {{#each APPLIED_STATE_DURATIONS as |label key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.appliedStates.duration key)}}selected{{/if}}>{{label}}</option>
+            <option value="{{key}}" {{#if (eq ../appliedDurationRaw key)}}selected{{/if}}>{{label}}</option>
             {{/each}}
           </select>
         </div>
@@ -471,7 +547,7 @@
       </div>
       {{#if appliedStatesOverrideRows.length}}
       <details style="margin-top:0.4rem;font-size:0.78rem">
-        <summary style="cursor:pointer;opacity:0.85" data-tooltip="Per-condition save attribute overrides. Only matters if 'Save each round' is on. Leave 'inherit' to use the global save attribute above.">Per-condition save attribute (advanced)</summary>
+        <summary style="cursor:pointer;opacity:0.85" data-tooltip="The faculty each state rolls to shake it off each round (Save each round). When the item applies just one state and the target rolls to resist it on landing, that roll uses this faculty too. Leave 'inherit' to use the save attribute above.">Per-condition save attribute (advanced)</summary>
         <table style="width:100%;margin-top:0.3rem;border-collapse:collapse">
           <tbody>
             {{#each appliedStatesOverrideRows as |row|}}
@@ -524,47 +600,14 @@
       <div class="ft-prev-label">What does it do? — narrative</div>
       <div class="ft-prev-align-note">Color, corner cases, and stuff the structured rules above don't cover.</div>
       <div class="ft-power-grid">
+
         <div class="ft-field">
-          <label>Interaction Model</label>
-          <select name="system.manifestation.interactionModel">
-            {{#each MANIFESTATION_INTERACTIONS as |entry key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.interactionModel key)}}selected{{/if}}>{{entry.label}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Activation</label>
-          <select name="system.activation">
-            <option value="action"   {{#if (eq system.activation "action")}}selected{{/if}}>Action</option>
-            <option value="bonus"    {{#if (eq system.activation "bonus")}}selected{{/if}}>Bonus</option>
-            <option value="reaction" {{#if (eq system.activation "reaction")}}selected{{/if}}>Reaction</option>
-            <option value="ritual"   {{#if (eq system.activation "ritual")}}selected{{/if}}>Ritual</option>
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Target Shape</label>
-          <select name="system.target">
-            <option value="self"    {{#if (eq system.target "self")}}selected{{/if}}>Self</option>
-            <option value="single"  {{#if (eq system.target "single")}}selected{{/if}}>Single</option>
-            <option value="burst"   {{#if (eq system.target "burst")}}selected{{/if}}>Burst</option>
-            <option value="area"    {{#if (eq system.target "area")}}selected{{/if}}>Area</option>
-            <option value="faction" {{#if (eq system.target "faction")}}selected{{/if}}>Faction</option>
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Range Baseline</label>
-          <select name="system.range">
-            <option value="self"  {{#if (eq system.range "self")}}selected{{/if}}>Self (0 ft)</option>
-            <option value="touch" {{#if (eq system.range "touch")}}selected{{/if}}>Touch (5 ft)</option>
-            <option value="near"  {{#if (eq system.range "near")}}selected{{/if}}>Near (30 ft)</option>
-            <option value="far"   {{#if (eq system.range "far")}}selected{{/if}}>Far (60 ft)</option>
-            <option value="sight" {{#if (eq system.range "sight")}}selected{{/if}}>Sight (120 ft)</option>
-            <option value="hex"   {{#if (eq system.range "hex")}}selected{{/if}}>Hex-scale (300 ft)</option>
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Range (ft) — engine</label>
-          <input type="number" name="system.manifestation.rangeFt" value="{{system.manifestation.rangeFt}}" min="0" placeholder="0 = use Baseline" data-tooltip="Real range in feet used for the out-of-range warning. 0 = derive from the Range Baseline above."/>
+          <label data-tooltip="How far it reaches, in feet — every Invoke checks it (a soft check: you may go ahead past it, the GM's call). 0 = touch, or yourself. Cones, lines and hex-wide start at you and use no range.">Range (ft)</label>
+          {{#if areaRangeless}}
+          <span class="ft-prev-align-note">Starts at you — no range</span>
+          {{else}}
+          <input type="number" name="system.manifestation.rangeFt" value="{{system.manifestation.rangeFt}}" min="0" max="999" placeholder="0 = touch / self"/>
+          {{/if}}
         </div>
       </div>
 
@@ -579,7 +622,7 @@
       </div>
 
       <div class="ft-field-full">
-        <label>Mechanical Hook</label>
+        <label data-tooltip="A plain-words note for the table. The engine never reads it — what the Effect section sets is what happens.">Rules note (prose; the Effect section is what the engine runs)</label>
         <input type="text" name="system.manifestation.mechanicalHook" value="{{system.manifestation.mechanicalHook}}" placeholder="Bonus, condition, damage, movement, protection, reveal, pressure..."/>
       </div>
 
@@ -594,7 +637,7 @@
       <div class="ft-prev-align-note">Workings tend to happen. Forms tend to stay. This section determines where on that spectrum this manifestation lives.</div>
       <div class="ft-power-grid">
         <div class="ft-field">
-          <label>Stability</label>
+          <label data-tooltip="Instant = resolves and is gone. Sustained = lasts the scene; pays its tier in Clarity when the scene ends. Bound = lasts across scenes; pays its tier in Clarity at each Soma Break. A keyed upkeep below replaces that baseline.">Stability</label>
           <select name="system.manifestation.stability">
             {{#each MANIFESTATION_STABILITIES as |entry key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.stability key)}}selected{{/if}}>{{entry.label}}</option>
@@ -602,30 +645,18 @@
           </select>
         </div>
         <div class="ft-field">
-          <label>Duration Baseline</label>
-          <select name="system.manifestation.duration">
-            {{#each MANIFESTATION_DURATIONS as |entry key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.duration key)}}selected{{/if}}>{{entry.label}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="ft-field">
-          <label>Scale</label>
-          <select name="system.manifestation.scale">
-            {{#each MANIFESTATION_SCALES as |entry key|}}
-            <option value="{{key}}" {{#if (eq ../system.manifestation.scale key)}}selected{{/if}}>{{entry.label}}</option>
-            {{/each}}
-          </select>
+          <label data-tooltip="Set by Stability.">Lasts</label>
+          <span class="ft-prev-align-note">{{durationLabel}} (from Stability)</span>
         </div>
       </div>
 
       <div class="ft-field-full">
-        <label>Duration / Trigger</label>
+        <label data-tooltip="Flavour for how long it lasts in the story. How long it lasts in play comes from Stability.">Duration (in the fiction)</label>
         <input type="text" name="system.manifestation.durationText" value="{{system.manifestation.durationText}}" placeholder="Until dawn. For one exchange. While the singer continues. Until somebody lies."/>
       </div>
 
       <div class="ft-field-full">
-        <label>Trigger</label>
+        <label data-tooltip="Narrative only — the GM decides when it fires. Shown on the cast card when the manifestation is a Reaction.">Trigger (narrative, GM calls it)</label>
         <input type="text" name="system.manifestation.triggerText" value="{{system.manifestation.triggerText}}" placeholder="When the vow is broken. When fear enters the room. When the threshold is crossed."/>
       </div>
     </div>
@@ -634,8 +665,12 @@
       <div class="ft-prev-label">What does reality charge?</div>
       <div class="ft-prev-align-note">If the manifestation is strong, elegant, broad, or durable, reality usually sends a bill.</div>
       <div class="ft-power-grid">
+        <div class="ft-field-full">
+          <label>Cost</label>
+          <span class="ft-prev-align-note"><b>{{costSpecLabel}}</b> — {{costFloorNote}}</span>
+        </div>
         <div class="ft-field">
-          <label>Cost Type</label>
+          <label data-tooltip="Charged on top of the tier's Clarity, every time the Clarity is charged.">Extra cost</label>
           <select name="system.manifestation.costType">
             {{#each MANIFESTATION_COSTS as |entry key|}}
             <option value="{{key}}" {{#if (eq ../system.manifestation.costType key)}}selected{{/if}}>{{entry.label}}</option>
@@ -643,56 +678,57 @@
           </select>
         </div>
         <div class="ft-field">
-          <label>Cost Value</label>
+          <label>Amount</label>
           <input type="number" name="system.manifestation.costValue" value="{{system.manifestation.costValue}}" min="0" max="10"/>
         </div>
-        <div class="ft-field">
-          <label>Legacy Clarity Cost</label>
-          <input type="number" name="system.clarityRequired" value="{{system.clarityRequired}}" min="0" max="5"/>
-        </div>
-        <div class="ft-field">
-          <label>Legacy Noise Shift</label>
-          <input type="number" name="system.noiseGain" value="{{system.noiseGain}}" min="0" max="5"/>
-        </div>
       </div>
 
       <div class="ft-field-full">
-        <label>Cost</label>
-        <input type="text" name="system.manifestation.costText" value="{{system.manifestation.costText}}" placeholder="1 Clarity, 2 Noise, 1 Burn and the room remembers you..."/>
+        <label>In the fiction</label>
+        <input type="text" name="system.manifestation.costText" value="{{system.manifestation.costText}}" placeholder="a cut across the palm, the room remembers you..."/>
       </div>
 
       <div class="ft-field-full">
-        <label>Maintenance Cost</label>
-        <input type="text" name="system.manifestation.maintenanceCost" value="{{system.manifestation.maintenanceCost}}" placeholder="Leave blank if it does not keep costing anything."/>
+        <label data-tooltip="What it costs to keep it running. The amount is the tier (Clarity: never less than the tier). Baseline = tier Clarity at the stability's cadence: Sustained at the end of each scene, Bound at each Soma Break.">Upkeep</label>
+        {{#if upkeepAllowed}}
+        <select name="system.manifestation.maintenanceKey">
+          {{#each MAINTENANCE_COSTS as |entry key|}}
+          <option value="{{key}}" {{#if (eq ../maintenanceKeyCanonical key)}}selected{{/if}}>{{entry.label}}</option>
+          {{/each}}
+        </select>
+        {{else}}
+        <span class="ft-prev-align-note">None — an Instant manifestation has no upkeep.</span>
+        {{/if}}
       </div>
-
+      {{#if (eq maintenanceKeyCanonical "custom")}}
       <div class="ft-field-full">
-        <label>Risk / Fallout</label>
-        <textarea name="system.manifestation.riskText" rows="3" placeholder="What can go wrong, fray, attract notice, or scar the caster?">{{system.manifestation.riskText}}</textarea>
+        <label>Custom upkeep note (the engine bills the baseline)</label>
+        <input type="text" name="system.manifestation.maintenanceCost" value="{{system.manifestation.maintenanceCost}}" placeholder="What keeping it running looks like at the table."/>
       </div>
+      {{/if}}
     </div>
 
     <div class="ft-manifest-sheet-section">
       <div class="ft-prev-label">How should the table read this?</div>
       <div class="ft-prev-align-note">This is where you align the manifestation with the setting, your class flavor, and the tone of the campaign.</div>
       <div class="ft-field-full">
-        <label>Path / Doctrine / Resonance</label>
-        <input type="text" name="system.manifestation.pathResonance" value="{{system.manifestation.pathResonance}}" placeholder="What belief, oath, appetite, wound, or philosophy gives this manifestation its logic?"/>
+        <label data-tooltip="The Path (and Doctrine, if any) this belongs to. Prose only — the coach reads your Path and Doctrine from your sheet, not from here.">Path / Doctrine</label>
+        <input type="text" name="system.manifestation.pathResonance" value="{{system.manifestation.pathResonance}}" placeholder="The Path and Doctrine it belongs to, e.g. Pactkeeper — steward of living communities"/>
       </div>
 
       <div class="ft-field-full">
-        <label>GM Calibration</label>
+        <label data-tooltip="Colour for the GM — printed in the misfire box when a cast or strike misfires. Never billed.">Fallout (GM colour)</label>
+        <textarea name="system.manifestation.riskText" rows="3" placeholder="What can go wrong, fray, attract notice, or scar the caster?">{{system.manifestation.riskText}}</textarea>
+      </div>
+
+      <div class="ft-field-full">
+        <label>GM notes</label>
         <textarea name="system.manifestation.gmCalibration" rows="3" placeholder="Scope, duration, collateral weirdness, who can resist it, how obvious it is, what breaks it...">{{system.manifestation.gmCalibration}}</textarea>
       </div>
     </div>
 
     <div class="ft-manifest-sheet-section">
       <div class="ft-prev-label">Engine notes</div>
-      <div class="ft-field-full">
-        <label>Effect Formula <span class="ft-hint-label">(optional — e.g. 2d6, 1d8+violence)</span></label>
-        <input type="text" name="system.damage" value="{{system.damage}}" placeholder="e.g. 2d6"/>
-      </div>
-
       <div class="ft-field-full">
         <label>Description</label>
         <textarea name="system.effect" rows="4" placeholder="Describe what the manifestation does in the world...">{{system.effect}}</textarea>
@@ -707,7 +743,7 @@
     <div class="ft-formula-preview-box">
       <span class="ft-prev-label">Roll formula</span>
       <code>2d10 + {{ftCap system.intent}} + {{ftCap system.channel}} + Clarity + {{alignMod}} (align) − Noise</code>
-      <span class="ft-prev-align-note">Alignment bonus +{{alignMod}} — {{ftSephLabel system.sephirah}} resonates with {{ftCap system.intent}}/{{ftCap system.channel}}. Current cost frame: {{manifestationCostLabel}}</span>
+      <span class="ft-prev-align-note">Alignment bonus +{{alignMod}} — {{ftSephLabel effSephirah}}{{#if sephLocked}} (your alignment){{/if}} resonates with {{ftCap system.intent}}/{{ftCap system.channel}}. Current cost frame: {{manifestationCostLabel}}</span>
     </div>
   {{/unless}}
 

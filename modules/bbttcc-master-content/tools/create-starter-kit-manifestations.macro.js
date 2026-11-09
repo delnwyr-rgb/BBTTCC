@@ -182,12 +182,12 @@ const SPECS_NONTCC = [
     kind: "weapon", path: "aurablade", doctrine: "", tier: 1,
     form: "weapon", func: "harm", stability: "bound", interactionModel: "weapon",
     intent: "violence", category: "melee", skill: "melee",
-    damageFormula: "1d6", damageType: "energy", damageTrack: "integrity",
+    damageFormula: "1d6", damageType: "thermal", damageFlavor: "hot", damageTrack: "integrity",
     rangeShort: 1, rangeLong: 1,
     sephirah: "geburah", channel: "body",
-    appliedStates: states(["burning"], { saveAttribute: "body" }),
+    // Dave 2026-11-08: no Burning — "just want a weapon that does fire damage."
     concept: "The same aura, run hot — a brand of righteous heat that says the quiet part with fire.",
-    effect: "Melee attack: 1d6 energy (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.",
+    effect: "Melee attack: 1d6 fire (thermal). No rider: it just burns.",
     flavor: "Mercy has a sibling. The sibling does not get invited to things, for reasons about to be demonstrated.",
     tags: ["starter-kit", "weapon", "fire"]
   },

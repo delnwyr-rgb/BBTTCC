@@ -30,25 +30,18 @@
   // overridden falls back to schema defaults appropriate for the type.
   function mk(spec) {
     const isWorking = spec.kind === "power";
-    const family = isWorking ? "working" : "form";
     const stability = spec.stability ?? (isWorking ? "instant" : "bound");
-    const interaction = spec.interaction ?? (isWorking ? "event" : "weapon");
 
     const baseManifestation = {
       tier: spec.tier ?? 1,
-      family,
       concept: spec.concept ?? "",
-      form: spec.form ?? (isWorking ? "sigil" : "weapon"),
-      function: spec.function ?? (isWorking ? "transform" : "harm"),
-      stability,
-      interactionModel: interaction,
+      stability,   // Expression / Function / Interaction Model / Scale / opCost retired 2026-11-08
       costType: spec.costType ?? (isWorking ? "clarity" : "none"),
       costValue: spec.costValue ?? (isWorking ? 1 : 0),
       costText: spec.costText ?? "",
       duration: spec.duration ?? (isWorking ? "instant" : "scene"),
       durationText: spec.durationText ?? "",
       triggerText: spec.triggerText ?? "",
-      scale: spec.scale ?? "personal",
       targetText: spec.targetText ?? "",
       rangeAreaText: spec.rangeAreaText ?? "",
       maintenanceCost: spec.maintenanceCost ?? "",
@@ -58,8 +51,7 @@
       gmCalibration: spec.gmCalibration ?? "",
       mechanicalHook: spec.mechanicalHook ?? "",
       signature: spec.signature ?? "",
-      thirdThing: spec.thirdThing ?? "",
-      opCost: { pool: "", value: 0 }
+      thirdThing: spec.thirdThing ?? ""
     };
 
     if (isWorking) {
@@ -71,14 +63,10 @@
           intent: spec.intent ?? "presence",
           channel: spec.channel ?? "soul",
           sephirah: spec.sephirah ?? "tiferet",
-          mode: spec.mode ?? "hermetic",
-          clarityRequired: spec.clarityRequired ?? Math.max(1, baseManifestation.tier),
-          noiseGain: spec.noiseGain ?? 0,
           activation: spec.activation ?? "action",
-          target: spec.target ?? "single",
           range: spec.range ?? "near",
           damage: spec.damage ?? "",
-          damageType: spec.damageType ?? "energy",
+          damageType: spec.damageType ?? "",
           damageFlavor: spec.damageFlavor ?? "",
           effect: spec.effect ?? "",
           tags: spec.tags ?? [],
@@ -136,11 +124,11 @@
       path: "aurablade", kind: "weapon", name: "Wrath-Brand",
       stability: "sustained", interaction: "weapon", form: "weapon", function: "harm",
       intent: "violence", channel: "body", sephirah: "geburah", mode: "chaos",
-      damageFormula: "1d6", damageType: "fire", damageFlavor: "righteous heat",
+      damageFormula: "1d6", damageType: "thermal", damageFlavor: "hot",
       concept: "A blade made of your conviction, hot to the touch and visibly upset.",
       signature: "The edge sings the name of the wrong it answers.",
       thirdThing: "When you kill with it, the body's clothes scorch the precise sin into the cloth.",
-      mechanicalHook: "On a hit, target gains the Burning condition for 1 round.",
+      mechanicalHook: "1d6 fire on a hit. No rider (Dave 2026-11-08: fire damage, no Burning).",
       duration: "scene", durationText: "Until the scene ends or you sheath your fury.",
       costType: "stress", costValue: 1, costText: "1 Stress to summon.",
       maintenanceCost: "1 Stress per scene maintained past the first.",
@@ -148,7 +136,7 @@
       pathResonance: "Aurablade — fury chosen well, channeled cleanly.",
       fictionalPermission: "You hold a weapon people can see, fear, and recognize as yours alone.",
       gmCalibration: "A Tier-1 Form. Visible to anyone in the room. Cannot be hidden, smuggled, or ambushed-with.",
-      tags: ["aurablade", "fire", "burn", "visible"],
+      tags: ["aurablade", "fire", "visible"],
       flavor: "Witness her unsheathe the brand and you witness exactly what she will not forgive."
     },
     {

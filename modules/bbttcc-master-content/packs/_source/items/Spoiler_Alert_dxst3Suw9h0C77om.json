@@ -93,7 +93,7 @@
         ],
         "duration": "1-round",
         "saveEachRound": false,
-        "saveAttribute": "mind",
+        "saveAttribute": "body",
         "saveDcMode": "cast-dc",
         "saveDcFixed": 15,
         "saveAttributeOverrides": {}
@@ -112,6 +112,10 @@
         "modifiers": [],
         "resists": [],
         "immunes": []
+      },
+      "resolution": {
+        "hitSave": true,
+        "saveAttribute": "body"
       }
     },
     "description": {

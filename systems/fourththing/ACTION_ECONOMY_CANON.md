@@ -49,8 +49,10 @@ legendary action for Stewards."*
 
 ## 1b. Where an ability's cost comes from (2026-10-29)
 
-`game.fourththing.actionCostOf(item)` answers "what does this cost?" exactly as the fire paths gate it — powers and
-form-weapons by `manifestation.activation.type` (Action by default); class/ancestry features by an item
+`game.fourththing.actionCostOf(item)` answers "what does this cost?" exactly as the fire paths gate it — powers by
+their **stance** (`"mixed"`: see §2a) unless authored Reaction (`"reaction"`) or Free (`"free"`); Engine Form weapons
+by `manifestation.activation.type` (`ftStrikePool`: action / bonus / reaction / free); every other weapon and every rig
+gun the Action; class/ancestry features by an item
 `flags.fourththing.actionCost` override, else the CHAR_OPT spec's `actionCost` / body text ("Bonus action —",
 "as a reaction" …), else the technique/generic path's text rule, else `LEGACY_ACTION_COST`. The Combat Dock reads it for
 its A / B / R tags and the off-turn list. **Every one of these gates is OFF unless the world setting "Steward sheet
@@ -65,8 +67,29 @@ Anything beyond a single strike or single invocation per Action must come from a
 ### Enforcement points
 
 - **Strikes:** `ftOpenEngageDialog` (`module.js:873`). Personal-weapon path must gate on `system.actions.actionUsed`. (Rig-weapon path at line 15570 already does.)
-- **Invocations:** `castManifestation` (`module.js:2574`). Must gate on `system.actions.actionUsed` for `activation:"action"` items, `bonusUsed` for `activation:"bonus"`, and `reactionUsed` for `activation:"reaction"`. The dispatcher already maps activation→pool at `module.js:2704` (`POOL_KEY_FROM_TYPE`).
+- **Strikes:** an Engine Form (`flags.fourththing.manifested`) strikes with its `manifestation.activation.type` (2026-11-08,
+  Dave: "It can be a bonus or reaction"): Action → the strike counter (`_ftCountStrike`), Bonus → `bonusUsed`, Reaction →
+  `reactionUsed` (refused under Aurablade Fury, `_ftReactionsDenied`), none → free. The stance never applies to a Strike.
+- **Invocations:** `castManifestation` gates and debits the pools the **stance** names (`ftInvokePools`, §2a). A
+  Reaction-authored working spends the Reaction (refused under Aurablade Fury whether or not the economy is enforced);
+  a Free one (`activation.type "none"`, which is what the retired `consumePool: false` became) spends nothing.
+  Elites' bonus manifestation (§5) covers a spent Action.
+- **Ritual is not an activation** (dropped 2026-11-08); the legacy top-level `system.activation` string is retired —
+  `manifestation.activation.type` (action / bonus / reaction / none) is the only field.
 - **Combat menu** (Dash / Disengage / Hide / Aid / Dodge / Hold): already gated via `cost:"actionUsed"` (`module.js:4541+`). No change needed.
+
+### 2a. Stances spend actions (Dave R11, 2026-11-08)
+
+| Stance | Clarity | Noise | Misfire | Uses |
+|---|---|---|---|---|
+| **Shamanic** (default) | tier | 0 | normal | the **Action** |
+| **Hermetic** | tier +1 | 0 | d10 −2 | the **Action AND the Bonus action** |
+| **Chaotic** (key `chaos`) | tier +1 | +2 | d10 +2 | **only the Bonus action** |
+| **Ascendant** (unlocks at Understanding — Enlightenment; foes at tier 3+) | none — +1 Blood Debt instead | 0 | none | the item's activation |
+
+Tier Clarity is T1 1 · T2 2 · T3 3 · T4 4; a TCC pays 1 less; an Invoke never pays below 1 ("can't pay zero"). A stance whose
+slots are already spent this round is disabled in the Invoke dialog and refused by `castManifestation`. Chaotic still adds
+one damage die of the same size; Hermetic still casts a Working one tier above the caster with no reach cost.
 
 ---
 

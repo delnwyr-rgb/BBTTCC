@@ -91,11 +91,11 @@
     const m = sys.manifestation || {};
     const isPower = typeof sys.channel === 'string' || (sys.category === 'manifestation' && !sys.skill);
 
-    let dmgFormula='', dmgType='', dmgTrack='', dmgFlavor='', dmgAttr='';
+    let dmgFormula='', dmgType='', dmgTrack='', dmgFlavor='';
     if (sys.damage && typeof sys.damage === 'object') {
-      dmgFormula=sys.damage.formula||''; dmgType=sys.damage.type||''; dmgTrack=sys.damage.track||''; dmgFlavor=sys.damage.damageFlavor||''; dmgAttr=sys.damage.attribute||'';
+      dmgFormula=sys.damage.formula||''; dmgType=sys.damage.type||''; dmgTrack=sys.damage.track||''; dmgFlavor=sys.damage.damageFlavor||'';
     } else if (typeof sys.damage === 'string') {
-      dmgFormula=sys.damage; dmgType=sys.damageType||''; dmgFlavor=sys.damageFlavor||''; dmgAttr=sys.attribute||'';
+      dmgFormula=sys.damage; dmgType=sys.damageType||''; dmgFlavor=sys.damageFlavor||'';
     }
     let anyMagnitude=false;
     if (present(dmgFormula)) {
@@ -106,7 +106,8 @@
       if (present(dmgFlavor)) d += ` <span style="opacity:.75">(${esc(dmgFlavor)})</span>`;
       lines.push({ label:'Damage', val:d });
     }
-    if (present(dmgAttr)) lines.push({ label:'Faculty', val:esc(titleCase(dmgAttr)) });
+    // Intent is the attack AND damage faculty (2026-11-08) — no separate damage faculty line.
+    if (present(dmgFormula) && present(sys.intent)) lines.push({ label:'Faculty', val:`+ ${esc(titleCase(sys.intent))} (Intent)` });
     if (present(sys.skill)) lines.push({ label:'Attack', val:`${esc(titleCase(sys.skill))}${present(sys.intent)?` (${esc(titleCase(sys.intent))})`:''}` });
     else if (present(sys.intent) && isPower) lines.push({ label:'Intent', val:esc(titleCase(sys.intent)) });
     if (present(sys.activation)) lines.push({ label:'Action', val:esc(titleCase(sys.activation)) });
@@ -117,14 +118,9 @@
     } else if (typeof sys.range === 'string' && present(sys.range)) {
       lines.push({ label:'Range', val:esc(titleCase(sys.range)) });
     }
-    if (present(sys.target)) lines.push({ label:'Target', val:esc(titleCase(sys.target)) });
-    else if (present(m.scale) && m.scale!=='personal') lines.push({ label:'Scale', val:esc(titleCase(m.scale)) });
     if (present(m.targetText)) lines.push({ label:'Target', val:esc(m.targetText) });
     const costBits=[];
     if (present(m.costType) && m.costType!=='none' && present(m.costValue)) costBits.push(`${esc(m.costValue)} ${esc(titleCase(m.costType))}`);
-    if (present(sys.clarityRequired)) costBits.push(`Clarity ${esc(sys.clarityRequired)}`);
-    if (present(sys.noiseGain)) costBits.push(`+${esc(sys.noiseGain)} Noise`);
-    if (m.opCost && present(m.opCost.value) && present(m.opCost.pool)) costBits.push(`${esc(m.opCost.value)} ${esc(titleCase(m.opCost.pool))} OP`);
     if (present(m.costText)) costBits.push(esc(m.costText));
     if (costBits.length) lines.push({ label:'Cost', val:costBits.join(', ') });
     if (present(m.durationText)) lines.push({ label:'Duration', val:esc(m.durationText) });

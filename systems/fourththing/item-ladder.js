@@ -70,7 +70,6 @@ export async function refillWorkingCharges(actor, { cadence = "soma-break" } = {
 function companionData(host) {
   const w = workingOf(host); const p = w?.power; if (!p?.system) return null;
   const system = foundry.utils.deepClone(p.system);
-  system.clarityRequired = 0;
   if (system.manifestation) { system.manifestation.costType = "none"; system.manifestation.costValue = 0; system.manifestation.costText = `1 charge of ${host.name} (${Number(w.charges?.value) || 0}/${Number(w.charges?.max) || 0})`; }
   system.tags = Array.from(new Set([...(system.tags || []), "bound-working"]));
   return {

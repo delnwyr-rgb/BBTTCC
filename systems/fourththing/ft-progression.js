@@ -1245,7 +1245,7 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
       if (!tgt || !args.key) break;
       const mf = { appliedStates: { states: [args.key], duration: args.duration || "1-round", saveEachRound: args.duration === "until-saved", saveAttribute: args.save?.attr } };
       if (args.save?.attr) {
-        mf.resolution = { saveAttribute: args.save.attr, saveDcMode: "fixed", saveDcFixed: Number(args.save.dc) || 13, onSave: "negate", statesOnFail: true };
+        mf.resolution = { saveAttribute: args.save.attr, saveDcMode: "fixed", saveDcFixed: Number(args.save.dc) || 13, onSave: "negate" };
         const post = game.fourththing?._postSavePromptCard;
         if (post && srcItem) { await post(actor, tgt, srcItem, mf, { op: "none" }, { castDc: mf.resolution.saveDcFixed }); return { ok:true, summary:`${args.key} save card → ${tgt.name}` }; }
       }
@@ -2026,30 +2026,13 @@ export async function grantStarterManifestations(actor) {
 
 // ─── Level up ─────────────────────────────────────────────────────────────────
 
-// Signature manifestations (system.manifestation.isSignature === true) auto-level
-// their tier in tandem with the steward. Called on a tier-up: bump any signature
-// manifestation whose tier trails the steward's new tier up to match. Never
-// lowers a manually higher-tier item, never touches authored damage/effects —
-// tier alone raises DC / Clarity cost / reach / misfire scaling. Returns the
-// names of bumped items so the level-up chat note can report them.
-export async function levelSignatureManifestations(actor, newTier) {
-  const target = Math.max(1, Math.min(4, Number(newTier) || 1));
-  const updates = [];
-  const bumped  = [];
-  for (const item of actor?.items ?? []) {
-    const mf = item.system?.manifestation;
-    if (!mf || mf.isSignature !== true) continue;
-    const cur = Math.max(1, Math.min(4, Number(mf.tier) || 1));
-    if (cur >= target) continue;
-    updates.push({ _id: item.id, "system.manifestation.tier": target });
-    bumped.push(item.name);
-  }
-  if (updates.length) {
-    try { await actor.updateEmbeddedDocuments("Item", updates); }
-    catch (e) { console.warn("ft-progression: signature manifestation tier-up failed", e); }
-  }
-  return bumped;
-}
+// Signatures (teeth P29, Dave 2026-11-08: "The Sig should be Extra"): a tier-up no
+// longer writes a Signature's tier. Its tier is derived from what it does (the
+// magnitude score); a tier-up raises the CAP the steward may grow it to, and the
+// player grows it from the slot on the Manifestations tab. The old auto-bump
+// (levelSignatureManifestations + the signatureBumps ledger) is gone; old ledger
+// entries are still honoured by levelDown, and the teeth-phaseA-signatures-labels
+// macro restores the pre-bump tiers.
 
 // 10-29: one Advance dialog per actor — two open dialogs both applied (double faculty/aptitude/technique).
 const _ftLevelUpInFlight = new Set();
@@ -2271,21 +2254,6 @@ async function _ftLevelUpDialog(actor) {
               console.error("ft-progression: post-levelUp auto-grant failed", e);
             }
 
-            // Signature manifestations climb in tier with their steward (phase 1
-            // — tier only). Only on an actual tier-up, not on every level.
-            let signatureLeveled = [];
-            const signatureBumps = [];
-            if (tierUp) {
-              // Record where each signature sat BEFORE the bump — the minus
-              // button restores exactly that, not "one tier down".
-              for (const it of actor.items) {
-                const mf = it.system?.manifestation;
-                if (mf?.isSignature === true && (Number(mf.tier) || 1) < newTier) signatureBumps.push({ id: it.id, from: Math.max(1, Number(mf.tier) || 1) });
-              }
-              try { signatureLeveled = await levelSignatureManifestations(actor, newTier); }
-              catch (e) { console.error("ft-progression: signature manifestation tier-up failed", e); }
-            }
-
             // Level ledger (2026-09-08, owner request "take Marginalia from 2 back
             // to 1"): everything this level granted, keyed by level, so
             // levelDown() can reverse it exactly. Levels gained before the
@@ -2298,7 +2266,6 @@ async function _ftLevelUpDialog(actor) {
                 techniqueItemId: grantedTechId,
                 importedFeatureIds: autoGranted.importedIds,
                 grantedSkills: autoGranted.grantedSkills.slice(),
-                signatureBumps,
                 integrityTopUp: integrityGain
               } });
             } catch (e) { console.warn("ft-progression: level ledger write failed", e); }
@@ -2317,13 +2284,12 @@ async function _ftLevelUpDialog(actor) {
                   ${grantedTechName ? `<br/>Technique gained: <b>${grantedTechName}</b>.` : ""}
                   ${autoGranted.imported.length ? `<br/>✦ New principles: <b>${autoGranted.imported.join(", ")}</b>.` : ""}
                   ${autoGranted.grantedSkills.length ? `<br/>✦ Aptitude rank 1: <b>${autoGranted.grantedSkills.join(", ")}</b>.` : ""}
-                  ${signatureLeveled.length ? `<br/>✦ Signature manifestations advanced to <b>Tier ${newTier}</b>: ${signatureLeveled.join(", ")}.` : ""}
-                  ${tierUp ? `<br/>✦ A new <b>Signature</b> slot opened (one per tier) — make it from the Core tab.` : ""}
+                  ${tierUp ? `<br/>✦ Your <b>Signature</b> cap rose to <b>T${newTier}</b> — grow it from the slot on the Manifestations tab (a Signature gets 2 free points of magnitude). A new Signature slot opened too (one per tier).` : ""}
                 </p>
               </div>`
             });
 
-            resolve({ attrKey, newVal, newLevel, newTier, tierUp, gainSkillPts, grantedTechName, autoGranted, signatureLeveled });
+            resolve({ attrKey, newVal, newLevel, newTier, tierUp, gainSkillPts, grantedTechName, autoGranted });
           })().catch(e => { console.error("ft-progression: levelUp failed", e); resolve(null); }); }
         },
         cancel: { label: "Cancel", callback: () => resolve(null) }
@@ -2342,9 +2308,11 @@ async function _ftLevelUpDialog(actor) {
 //   · ledger levels (gained since 2026-09-08): exact reversal from
 //     flags.fourththing.levelGrants[L] — faculty point, aptitude points
 //     (unspent first, then the latest rank spends LIFO), technique + imported
-//     path features (by id), rank-1 grants, signature manifestation tiers.
+//     path features (by id), rank-1 grants, and (old ledgers only) the
+//     Signature tier bumps a pre-11-08 level-up wrote.
 //   · pre-ledger levels: inference — items stamped grantedAtLevel L, feats whose
-//     unlock gate sits above the new level/tier, signatures above the new tier;
+//     unlock gate sits above the new level/tier (Signatures are left alone: their
+//     tier is what they do, not the steward's level — teeth P29);
 //     the GM picks which faculty to lower (nothing recorded which one rose).
 // Derived values (Integrity/Stress max, Clarity max, Pace, class-ability
 // gates) fall out on their own from the new level. Also re-arms the Director's
@@ -2440,19 +2408,20 @@ export async function levelDown(actor) {
     : "";
 
   // ── signature manifestations ──────────────────────────────────────────────
+  // Teeth P29 (2026-11-08): level-ups no longer bump Signatures, so nothing is
+  // inferred. Only an OLD ledger entry that recorded an unearned bump is undone
+  // (exactly to the tier it sat at before that bump).
   const sigRows = [];
-  if (tierDown) {
-    const known = new Map((ledger?.signatureBumps || []).map(b => [b.id, Math.max(1, Number(b.from) || 1)]));
-    for (const it of actor.items) {
-      const mf = it.system?.manifestation;
-      if (!mf || mf.isSignature !== true) continue;
-      const cur = Math.max(1, Math.min(4, Number(mf.tier) || 1));
-      const to = known.has(it.id) ? known.get(it.id) : newTier;
-      if (cur > to) sigRows.push({ id: it.id, name: it.name, from: cur, to });
-    }
+  for (const b of (ledger?.signatureBumps || [])) {
+    const it = actor.items.get(b?.id);
+    const mf = it?.system?.manifestation;
+    if (!mf || mf.isSignature !== true) continue;
+    const cur = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+    const to = Math.max(1, Number(b.from) || 1);
+    if (cur > to) sigRows.push({ id: it.id, name: it.name, from: cur, to });
   }
   const sigHtml = sigRows.length
-    ? `<div class="ft-ld-row">▾ Signature manifestations back to <b>Tier ${newTier}</b>: ${sigRows.map(r => `<b>${_esc(r.name)}</b> T${r.from}→T${r.to}`).join(", ")}</div>` : "";
+    ? `<div class="ft-ld-row">▾ Undo the Signature tier bump an old level-up wrote: ${sigRows.map(r => `<b>${_esc(r.name)}</b> T${r.from}→T${r.to}`).join(", ")}</div>` : "";
 
   const epicReset = target < 18 && !!actor.getFlag?.("bbttcc-epic", "converged");
 

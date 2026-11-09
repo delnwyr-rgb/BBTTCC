@@ -1823,8 +1823,8 @@ export async function openDreamwalkerDeployCache(actor) {
   // castManifestation returns false on a refusal and undefined on a cast that went off.
   let ok = false;
   try {
-    ok = await cast(actor, item, { intent, channel, sephirah: seph, label: item.name, freeClarity: true,
-      reachPath: cache.reachPath || "", mode: cache.mode || "hermetic" });
+    ok = await cast(actor, item, { intent, channel, sephirah: seph, label: item.name, freeClarity: true, fromCache: true,
+      reachPath: cache.reachPath || "", mode: cache.mode || "shamanic" });
   } catch (e) { console.warn("[fourththing] Dream-Cache deploy cast failed", e); }
   if (ok === false) {
     await actor.update(snap);
@@ -3036,7 +3036,9 @@ export async function openTechnique(actor, item) {
 // ─── Bulwark T2 — Anchor or Advance (wired 2026-06-07, Brexit audit) ──────────
 // 1/scene signature stance, lasts until the end of your next turn (recovers on
 // Scene/Soma Break — flag cleared there). Anchor = immovable: an anchor-kind AE
-// the damage/CC paths already honor (kind:"anchor", ccImmune/forcedMoveImmune).
+// (kind:"anchor", ccImmune/forcedMoveImmune) — module.js _ftSurgeAnchorAE refuses new
+// conditions (applyManifestationStates, _ftTempCondition) and forced movement
+// (resistsForcedMove) while it is on the actor (wired 2026-11-08).
 // Advance = unstoppable path: marker AE + table directive (terrain/ZoC/reaction
 // gates are board-state the GM adjudicates). Also stamps the legacy
 // `bulwarkStance` flag that Catastrophic Entry pricing still reads.

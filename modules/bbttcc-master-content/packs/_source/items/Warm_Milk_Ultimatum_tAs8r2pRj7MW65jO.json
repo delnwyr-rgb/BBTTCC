@@ -113,6 +113,10 @@
         "modifiers": [],
         "resists": [],
         "immunes": []
+      },
+      "resolution": {
+        "hitSave": true,
+        "saveAttribute": "soul"
       }
     },
     "description": {

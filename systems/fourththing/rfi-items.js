@@ -99,11 +99,9 @@ const UPKEEP_BY_FRAME = {
 export function defaultsForItem(item) {
   const itemType = item?.type ?? null;
   const frame = FRAME_BY_TYPE[itemType] ?? "tool";
-  // Scale-based tier inference for legacy items (FT.MANIFESTATION_SCALES)
-  const legacyScale = item?.system?.scale ?? null;
-  const scaleTier = { personal: 1, scene: 2, faction: 3, hex: 4 }[legacyScale] ?? 1;
+  // (The old system.scale tier read was dead — no item stores a top-level scale; Scale retired 2026-11-08.)
   return {
-    tier:       tierToRoman(scaleTier),
+    tier:       tierToRoman(1),
     footprint:  FOOTPRINT_BY_FRAME[frame] ?? 1,
     reach:      frame === "weapon" ? "5" : (frame === "vehicle" ? "scene" : "self"),
     frame,
@@ -200,10 +198,11 @@ export const RfiItemQueries = {
   // A power item is always a manifestation. Gear is a manifestation when
   // a hero crafted it OR when the item carries *authored* manifestation
   // data (concept or signature filled in) OR a "manifestation" tag.
-  // Note: template.json defaults manifestation.family to "form" on every
-  // weapon, so a bare family check would mis-route baseline weapons (rifle,
-  // saber) onto the Manifestations tab — concept/signature are the fields
-  // that only get populated when someone actually authors a manifestation.
+  // Note: every weapon carries a default manifestation block from template.json
+  // (manifestation.family is retired 2026-11-08), so a bare block check would
+  // mis-route baseline weapons (rifle, saber) onto the Manifestations tab —
+  // concept/signature are the fields that only get populated when someone
+  // actually authors a manifestation.
   isManifestation: (item) => {
     if (!item) return false;
     if (item.type === "power") return true;
@@ -211,6 +210,14 @@ export const RfiItemQueries = {
     // (the Working's companion power is the manifestation). The ladder used to stamp origin "crafted", which routed all 62 here.
     const _lad = item.flags?.fourththing;
     if (_lad && (_lad.grade || _lad.working)) return false;
+    // A weapon is a manifestation exactly when it is a Form — the system's one test (2026-11-08, teeth P30:
+    // game.fourththing.isFormWeapon — the Engine's flag, or the legacy heuristic, which stamps it). Crafted origin still counts.
+    // A foe's weapon keeps the old authored-text test (Forms are never guessed on foes).
+    if (item.type === "weapon") {
+      const isForm = globalThis.game?.fourththing?.isFormWeapon, isFoe = globalThis.game?.fourththing?.isFoeActor;
+      if (typeof isForm === "function" && isForm(item)) return true;
+      if (typeof isForm === "function" && !(item.parent && typeof isFoe === "function" && isFoe(item.parent))) return getRfiItem(item)?.origin === "crafted";
+    }
     const mf = item.system?.manifestation;
     if (mf && (String(mf.concept ?? "").trim() || String(mf.signature ?? "").trim())) return true;
     const tags = Array.isArray(item.system?.tags) ? item.system.tags : [];

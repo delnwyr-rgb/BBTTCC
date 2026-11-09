@@ -255,10 +255,23 @@ const FT = {
     mind: { label: "Mind", attr: "mind" },
     soul: { label: "Soul", attr: "soul" }
   },
+  // An item's Intent may be any of the six faculties (Dave 2026-11-08). It drives BOTH the
+  // attack / cast roll faculty and the faculty added to damage. Weapons default to Violence.
+  FACULTIES: {
+    violence: { label: "Violence", attr: "violence" },
+    intrigue: { label: "Intrigue", attr: "intrigue" },
+    presence: { label: "Presence", attr: "presence" },
+    body:     { label: "Body",     attr: "body" },
+    mind:     { label: "Mind",     attr: "mind" },
+    soul:     { label: "Soul",     attr: "soul" }
+  },
+  // Stances (Dave R11, 2026-11-08). Shamanic is the default. The key "chaos" stays (stored dreamCache / hook payloads
+  // / cast tags read it); players see "Chaotic". Every stance pays at least the tier's Clarity (the floor).
   MODES: {
-    hermetic:  { label: "Hermetic",  desc: "Ritual — stable, structured, low Noise" },
-    chaos:     { label: "Chaos",     desc: "Gnosis — fast, volatile, high Surge"    },
-    ascendant: { label: "Ascendant", desc: "Enlightenment — effortless, near-silent"}
+    shamanic:  { label: "Shamanic",  desc: "Tier Clarity · no Noise · normal misfire · uses your Action" },
+    hermetic:  { label: "Hermetic",  desc: "+1 Clarity · no Noise · misfire d10 −2 · uses your Action AND Bonus action · a Working one tier above you casts with no reach cost" },
+    chaos:     { label: "Chaotic",   desc: "+1 Clarity · +2 Noise · misfire d10 +2 · uses only your Bonus action · +1 damage die this cast" },
+    ascendant: { label: "Ascendant", desc: "Unlocks at Understanding (Enlightenment) · +1 Blood Debt in place of Clarity · no Noise · no misfire · +1 damage die this cast" }
   },
   // Tier-clamped misfire table. Each d10 band names a category; the magnitude
   // scales with the tier the caster was operating at (reach-up uses the target
@@ -319,92 +332,56 @@ const FT = {
       }
     }
   },
-  INTENT_COLORS:  { violence: "#c03030", intrigue: "#546e7a", presence: "#4a90d9" },
+  INTENT_COLORS:  { violence: "#c03030", intrigue: "#546e7a", presence: "#4a90d9", body: "#27ae60", mind: "#d4a017", soul: "#9b59b6" },
   CHANNEL_COLORS: { body: "#27ae60",     mind: "#d4a017",     soul: "#9b59b6"     },
-  MANIFESTATION_FORMS: {
-    sigil:     { label: "Sigil" },
-    field:     { label: "Field" },
-    echo:      { label: "Echo" },
-    vestment:  { label: "Vestment" },
-    weapon:    { label: "Weapon" },
-    tool:      { label: "Tool" },
-    rite:      { label: "Rite" },
-    construct: { label: "Construct" },
-    body:      { label: "Body-shift" },
-    gate:      { label: "Gate" }
-  },
-  MANIFESTATION_FUNCTIONS: {
-    harm:      { label: "Harm" },
-    protect:   { label: "Protect" },
-    heal:      { label: "Heal" },      // mend a creature — healing dice (2026-06-06)
-    reveal:    { label: "Reveal" },
-    move:      { label: "Move" },
-    repair:    { label: "Repair" },
-    command:   { label: "Command" },
-    transform: { label: "Transform" },
-    bind:      { label: "Bind" }
-  },
+  // MANIFESTATION_FORMS (Expression) / MANIFESTATION_FUNCTIONS retired 2026-11-08 — flavour, not rules.
+  // Derived from stability (2026-11-08, teeth P24 — ftDurationForStability); never picked. action / turn retired.
   MANIFESTATION_DURATIONS: {
     instant:    { label: "Instant" },
-    action:     { label: "Action" },
     scene:      { label: "Scene" },
-    turn:       { label: "Turn" },
     persistent: { label: "Persistent" }
   },
   MANIFESTATION_STABILITIES: {
     instant:   { label: "Instant" },
     sustained: { label: "Sustained" },
-    bound:     { label: "Bound" },
-    enduring:  { label: "Enduring" }
+    bound:     { label: "Bound" }   // Enduring folded into Bound 2026-11-08 (normalizer maps the old key)
   },
-  MANIFESTATION_INTERACTIONS: {
-    event:          { label: "Event" },
-    weapon:         { label: "Weapon" },
-    tool:           { label: "Tool" },
-    worn:           { label: "Worn Thing" },
-    companion:      { label: "Companion" },
-    zone:           { label: "Zone / Field" },
-    mark:           { label: "Mark / Condition" },
-    structure:      { label: "Structure / Object" },
-    transformation: { label: "Transformation" },
-    other:          { label: "Other" }
-  },
+  // MANIFESTATION_INTERACTIONS (Interaction Model) retired 2026-11-08.
+  // EXTRA cost, charged ON TOP of the tier's Clarity (Dave 2026-11-08, teeth P16/P18). Clarity is never picked —
+  // every manifestation always pays its tier in Clarity. Surge is not a cost ("keep surge out of the resource pool");
+  // the old clarity / none / custom / burn keys read as no extra cost (ftNormalizeManifestationData).
   MANIFESTATION_COSTS: {
-    none:    { label: "No fixed cost" },
-    clarity: { label: "Clarity" },
-    noise:   { label: "Noise" },
+    none:    { label: "None" },
     stress:  { label: "Stress" },
-    burn:    { label: "Surge (was Burn)" },   // key kept; pays banked Surge (2026-10-29)
-    custom:  { label: "Custom" }
+    noise:   { label: "Noise" },
+    strain:  { label: "Strain" }
   },
   // Phase F2 — Maintenance cost (ongoing upkeep). Authored as a structured
   // dropdown so the engine + chat surface know exactly what gets ticked over
   // time, instead of relying on free-text the GM has to interpret. "custom"
   // falls back to the free-text override field (state.maintenanceCost), and
   // "none" means the manifestation has no ongoing upkeep.
+  // Upkeep picks only the resource and the cadence (Dave 2026-11-08, teeth P23: "floor tiered"); the amount is the
+  // tier (Clarity: the higher of a legacy key's number and the tier). "none" = the stability baseline. Legacy
+  // "<n>-<resource>-<cadence>" keys still parse (_ftParseMaintenanceKey); the old Surge key reads as the baseline.
   MAINTENANCE_COSTS: {
-    none:               { label: "None — no ongoing cost" },
-    "1-clarity-scene":  { label: "1 Clarity per scene" },
-    "2-clarity-scene":  { label: "2 Clarity per scene" },
-    "1-clarity-round":  { label: "1 Clarity per round" },
-    "1-stress-scene":   { label: "1 Stress per scene" },
-    "1-stress-round":   { label: "1 Stress per round" },
-    "1-noise-scene":    { label: "+1 Noise per scene" },
-    "1-burn-scene":     { label: "1 Surge per scene" },   // key kept; drains Surge (2026-10-29)
-    custom:             { label: "Custom (see notes below)" }
+    none:            { label: "Baseline — tier Clarity at the stability's cadence" },
+    "clarity-scene": { label: "Clarity (tier) each scene" },
+    "clarity-round": { label: "Clarity (tier) each round" },
+    "stress-scene":  { label: "Stress (tier) each scene" },
+    "stress-round":  { label: "Stress (tier) each round" },
+    "noise-scene":   { label: "Noise +tier each scene" },
+    "noise-round":   { label: "Noise +tier each round" },
+    custom:          { label: "Custom note — the engine bills the baseline" }
   },
-  MANIFESTATION_SCALES: {
-    personal: { label: "Personal" },
-    scene:    { label: "Scene" },
-    faction:  { label: "Faction" },
-    hex:      { label: "Hex" }
-  },
+  // MANIFESTATION_SCALES retired 2026-11-08 (Dave: "Drop it"); FT_MANIFESTATION_SCALE_TO_TIER below only
+  // reads a tier-less legacy item's stored scale at load.
   MANIFESTATION_TIERS: {
     0: { label: "T0 Fiat",      footprint: "spoken cue · 'Let there be …' · trivial / ambient flicker",  clarityCost: 0 },
     1: { label: "T1 Personal",  footprint: "one body / object / sense",       clarityCost: 1 },
     2: { label: "T2 Scene",     footprint: "one room / group / conversation", clarityCost: 2 },
     3: { label: "T3 Operation", footprint: "district / mission / night",      clarityCost: 3 },
-    4: { label: "T4 Age",       footprint: "region / generation / treaty",    clarityCost: 5 }
+    4: { label: "T4 Age",       footprint: "region / generation / treaty",    clarityCost: 4 }   // Dave 2026-11-08: "T4 = 4"
   },
   CLARITY_BY_TIER: { 1: 5, 2: 7, 3: 10, 4: 14 },
   // Cast DC ladder (2026-05-06). Replaces the static DC 15 — higher-tier
@@ -424,7 +401,8 @@ function ftTierCastDC(tier) {
 // faculty. The cast DC stays static-per-tier (no double-tax on caster growth);
 // the TARGET's save bar scales with the hand behind the working. When the
 // channel isn't known at the callsite, the caster's better casting faculty
-// (mind/soul) stands in.
+// (mind/soul) stands in. A Form (weapons carry no channel) is always that case:
+// 11 + the Form's tier×2 + max(Mind, Soul) (Dave 2026-11-08, teeth P11: "keep").
 function ftFormulaSaveDC(caster, tier, channel) {
   const t = Math.max(1, Math.min(4, Number(tier) || 1));
   const sys = caster?.system?.system ?? caster?.system ?? {};
@@ -439,7 +417,7 @@ function ftFormulaSaveDC(caster, tier, channel) {
 // get a deeper Clarity pool, a per-cast discount, exclusive access to T0
 // Fiats (narrative "Let there be …" cues), and exclusive access to "working"-stability
 // (instant) manifestations. Non-TCCs are restricted to "form"-stability shapes
-// (sustained / bound / enduring) — they can still author and use them.
+// (sustained / bound) — they can still author and use them.
 const FT_TCC_IDENTIFIERS = new Set([
   "cosmic_linguist",
   "wyrdlens-adept",
@@ -593,7 +571,7 @@ function ftRigSystemPassives(rig) {
 }
 
 // Stability options surfaced in the manifestation wizard. Non-TCCs see only
-// Form stabilities (sustained / bound / enduring); the engine rejects an
+// Form stabilities (sustained / bound); the engine rejects an
 // `instant`-stability cast from non-TCCs at runtime regardless, but pruning
 // the dropdown keeps the UI honest.
 function ftStabilityOptionsForActor(actor) {
@@ -602,7 +580,18 @@ function ftStabilityOptionsForActor(actor) {
   return Object.fromEntries(Object.entries(all).filter(([k]) => k !== "instant"));
 }
 
-// Inference map for pre-existing items that only declare a `scale`.
+// The sheet's Stability list: an owner who isn't a TCC isn't offered Instant — unless the item already is Instant, so the
+// select never silently rewrites it (2026-11-08, teeth P21).
+function ftStabilityOptionsForItem(item) {
+  const actor = item?.actor ?? null;
+  if (!actor) return FT.MANIFESTATION_STABILITIES;
+  const opts = { ...ftStabilityOptionsForActor(actor) };
+  const cur = String(item?.system?.manifestation?.stability ?? "");
+  if (cur && !opts[cur] && FT.MANIFESTATION_STABILITIES[cur]) return FT.MANIFESTATION_STABILITIES;
+  return opts;
+}
+
+// Inference map for pre-existing tier-less items that only declare the retired `scale` (load-time only).
 const FT_MANIFESTATION_SCALE_TO_TIER = {
   personal: 1,
   scene:    2,
@@ -820,22 +809,155 @@ const FT_MANIFESTATION_DOCTRINE_LENSES = [
       "A good manifestation should make the scene bounce off you.",
       "Ask what becomes immovable, load-bearing, or patient."
     ]
+  },
+  // The 15 Bad Eden Doctrines that had no lens (2026-11-08, teeth P36): Forge ×3, Mandate ×3, Refraction ×3, Trance ×3,
+  // Blood Hymn / Stillheart / Void Edge.
+  {
+    rx: /forge of victory/i,
+    label: "Forge of Victory doctrine",
+    prompts: [
+      "A beaten foe is raw material — what do you take from it?",
+      "Manifestations should feel like trophies being worked into tools.",
+      "Ask what the win leaves behind for you to use."
+    ]
+  },
+  {
+    rx: /forge of the spark reclaimer/i,
+    label: "Spark Reclaimer doctrine",
+    prompts: [
+      "Nothing is beyond salvage: broken things near you become fuel.",
+      "Good manifestations repurpose wreckage, scrap, and spent power.",
+      "Ask what just broke, and what it can become."
+    ]
+  },
+  {
+    rx: /forge of bound light/i,
+    label: "Forge of Bound Light doctrine",
+    prompts: [
+      "Containment first: hold the dangerous thing so it stops hurting people.",
+      "Manifestations should feel like cages, wards, seals, and safe vessels.",
+      "Ask what must be held still, and for how long."
+    ]
+  },
+  {
+    rx: /mandate of overwatch/i,
+    label: "Mandate of Overwatch doctrine",
+    prompts: [
+      "Nothing unobserved: you already saw it coming.",
+      "Your manifestations should answer movement, not start it.",
+      "Ask what you are watching for, and what happens when it shows."
+    ]
+  },
+  {
+    rx: /mandate of resolve/i,
+    label: "Mandate of Resolve doctrine",
+    prompts: [
+      "No one breaks: keep people standing past the point they should fall.",
+      "Manifestations should brace, steady, and refuse collapse.",
+      "Ask who is about to give way, and what holds them up."
+    ]
+  },
+  {
+    rx: /mandate of accord/i,
+    label: "Mandate of Accord doctrine",
+    prompts: [
+      "Act as one: the squad moves like a single animal.",
+      "Good manifestations link allies — shared timing, shared position, shared intent.",
+      "Ask who moves together, and what that lets them do."
+    ]
+  },
+  {
+    rx: /refraction of truth/i,
+    label: "Refraction of Truth doctrine",
+    prompts: [
+      "Perception bent toward exposure: lies, concealment, the unnamed thing.",
+      "Manifestations should reveal what something actually is.",
+      "Ask what is hiding, and what it costs it to be seen."
+    ]
+  },
+  {
+    rx: /refraction of mercy/i,
+    label: "Refraction of Mercy doctrine",
+    prompts: [
+      "Perception bent toward compassion: motive over action, the offered exit.",
+      "Your workings should prevent the blow as often as they land one.",
+      "Ask who deserves a way out, and what it looks like."
+    ]
+  },
+  {
+    rx: /refraction of foresight/i,
+    label: "Refraction of Foresight doctrine",
+    prompts: [
+      "Perception bent toward the next instant: routes, reactions, the moment before.",
+      "Manifestations should act just ahead of the world.",
+      "Ask what is about to happen, and where you stand when it does."
+    ]
+  },
+  {
+    rx: /trance of the sapphire gate/i,
+    label: "Sapphire Gate doctrine",
+    prompts: [
+      "Every threshold is also a doorway; walls are suggestions.",
+      "Manifestations should reposition — you, an ally, a foe, a door.",
+      "Ask where something ends up, and how it got there."
+    ]
+  },
+  {
+    rx: /trance of the quiet sun/i,
+    label: "Quiet Sun doctrine",
+    prompts: [
+      "Stillness is the loudest thing: stop the room by going still.",
+      "Good manifestations bend perception and pace, not bodies.",
+      "Ask what everyone stops to notice."
+    ]
+  },
+  {
+    rx: /trance of the thousand faces/i,
+    label: "Thousand Faces doctrine",
+    prompts: [
+      "Identity is negotiable: never quite where — or who — they swung at.",
+      "Manifestations should misdirect, borrow faces, and swap places.",
+      "Ask who they think you are, and who you really are this round."
+    ]
+  },
+  {
+    rx: /blood hymn/i,
+    label: "Blood Hymn doctrine",
+    prompts: [
+      "The wound is the prayer: suffering becomes amplification.",
+      "Manifestations should grow stronger as the cost is paid in you.",
+      "Ask what it takes out of you, and what that buys."
+    ]
+  },
+  {
+    rx: /stillheart/i,
+    label: "Stillheart doctrine",
+    prompts: [
+      "The calm is the discipline: hold the aura instead of feeding it.",
+      "Manifestations should protect by stillness rather than strike by heat.",
+      "Ask what you refuse to let move."
+    ]
+  },
+  {
+    rx: /void edge/i,
+    label: "Void Edge doctrine",
+    prompts: [
+      "Entropy has a shape — cut along it.",
+      "Manifestations should unmake: seams, weak points, things already coming apart.",
+      "Ask what is already failing, and how you finish it."
+    ]
   }
 ];
 
+// Coach cues (2026-11-08): the kind-keyed power/weapon cues were never shown (sliced off at 4);
+// the upkeep cue is now keyed on stability and shows for sustained/bound manifestations.
 const FT_MANIFESTATION_USAGE_CUES = {
   generic: [
     "Start with what you are bringing into the world, not with taxonomy.",
     "If it mostly happens, it will tend to read like a Working. If it mostly stays, it will tend to read like a Form.",
-    "Stability and interaction tell the table whether this manifestation flashes, lingers, binds, or endures."
+    "Stability tells the table whether this manifestation flashes, lingers, or binds."
   ],
-  power: [
-    "Ephemeral and ritual manifestations usually live here: rites, revelations, transformations, echoes, curses, and one-scene miracles."
-  ],
-  weapon: [
-    "Stable manifestations usually live here: blades, tools, vestments, companions, lingering zones, and strange objects that stay."
-  ],
-  ritual: [
+  upkeep: [
     "Ongoing manifestations want a visible upkeep rhythm: breath, vow, hymn, pain, attention, or repeated cost."
   ]
 };
@@ -846,15 +968,9 @@ const FT_MANIFESTATION_STARTERS = {
     kind: "power",
     helper: "It happens, strikes, unfolds, appears briefly, or resolves.",
     defaults: {
-      family: "working",
-      form: "sigil",
-      function: "transform",
       stability: "instant",
-      interactionModel: "event",
-      duration: "instant",
-      scale: "personal",
-      costType: "clarity",
-      costValue: 1
+      costType: "none",
+      costValue: 0
     }
   },
   stable: {
@@ -862,13 +978,7 @@ const FT_MANIFESTATION_STARTERS = {
     kind: "weapon",
     helper: "It remains, can be carried, worn, inhabited, wielded, or sustained.",
     defaults: {
-      family: "form",
-      form: "weapon",
-      function: "harm",
       stability: "bound",
-      interactionModel: "weapon",
-      duration: "scene",
-      scale: "personal",
       costType: "none",
       costValue: 0
     }
@@ -878,17 +988,12 @@ const FT_MANIFESTATION_STARTERS = {
     kind: "power",
     helper: "It remains because attention, rhythm, cost, or vow keeps it alive.",
     defaults: {
-      family: "working",
-      form: "rite",
-      function: "bind",
       stability: "sustained",
-      interactionModel: "event",
-      duration: "scene",
-      scale: "scene",
-      costType: "stress",
-      costValue: 1,
+      // Every cast pays tier Clarity; no extra cost by default (2026-11-08). Upkeep: Stress (tier) each scene.
+      costType: "none",
+      costValue: 0,
       // A structured key the upkeep engine bills — free text here was shown but never charged (2026-10-29).
-      maintenanceKey: "1-stress-scene"
+      maintenanceKey: "stress-scene"
     }
   },
   working: {
@@ -896,15 +1001,9 @@ const FT_MANIFESTATION_STARTERS = {
     kind: "power",
     helper: "A manifestation in motion. Best for strikes, revelations, transformations, curses, bursts, and one-scene miracles.",
     defaults: {
-      family: "working",
-      form: "sigil",
-      function: "transform",
       stability: "instant",
-      interactionModel: "event",
-      duration: "instant",
-      scale: "personal",
-      costType: "clarity",
-      costValue: 1
+      costType: "none",
+      costValue: 0
     }
   },
   form: {
@@ -912,13 +1011,7 @@ const FT_MANIFESTATION_STARTERS = {
     kind: "weapon",
     helper: "A manifestation that has learned how to stay. Best for blades, vestments, companions, wards, lingering zones, and strange objects.",
     defaults: {
-      family: "form",
-      form: "weapon",
-      function: "harm",
       stability: "bound",
-      interactionModel: "weapon",
-      duration: "scene",
-      scale: "personal",
       costType: "none",
       costValue: 0
     }
@@ -985,9 +1078,16 @@ function ftStewardSephirah(actor) {
     const cho = actor.flags?.["bbttcc-character-options"] ?? {};
     const k = pick(cho.identity?.sephirothicAlignment) || pick(cho.sephirot);
     if (k) return k;
-    const it = (actor.items?.contents ?? []).find(i =>
-      /^alignment[:\-]/i.test(String(i?.name || "")) || i?.flags?.["bbttcc-character-options"]?.category === "sephirothic-alignments");
-    if (it) return norm(it.name) || norm(it.system?.identifier);
+    // Item fallback (2026-11-08, teeth P35): never a power or weapon (a manifestation named "Alignment: …" isn't an
+    // identity pick); the sephirothic-alignments flag first, then an "Alignment: X" name; a candidate whose name
+    // doesn't read as a sefirah is skipped, not returned as "".
+    const cands = (actor.items?.contents ?? []).filter(i => !["power", "weapon"].includes(i?.type));
+    const byFlag = cands.filter(i => i?.flags?.["bbttcc-character-options"]?.category === "sephirothic-alignments");
+    const byName = cands.filter(i => /^alignment[:\-]/i.test(String(i?.name || "")));
+    for (const it of [...byFlag, ...byName]) {
+      const k = norm(it.name) || norm(it.system?.identifier);
+      if (k) return k;
+    }
   } catch (_e) {}
   return "";
 }
@@ -1211,25 +1311,198 @@ function ftResolveWeaponSkill(actor, weaponSkillKey, weaponCategory = "") {
   if (known(key)) return key;
   const aliased = FT_LEGACY_SKILL_ALIASES[key];
   if (known(aliased)) return aliased;
-  const cat = String(weaponCategory ?? "").toLowerCase().trim();
-  if (cat === "ranged") return "firearms";
-  return "melee";
+  return ftWeaponCategoryTraits(weaponCategory).skillFallback;
+}
+
+// What a weapon's Form Type (system.category) means in play (2026-11-08, teeth P34) — one table for every reader:
+//   melee / unarmed → isMelee: flank bonus, Prone +2 against the target, can be the reaction (AoO) weapon;
+//   ranged / thrown → isRanged: Prone −2 against the target, the underwater ranged-kinetic disadvantage;
+//   skillFallback when the weapon names no known skill: unarmed → Brawl, ranged / thrown → Firearms, else Melee.
+function ftWeaponCategoryTraits(cat) {
+  const c = String(cat ?? "").toLowerCase().trim();
+  const isMelee  = c === "melee" || c === "unarmed";
+  const isRanged = c === "ranged" || c === "thrown";
+  return { category: c, isMelee, isRanged, skillFallback: c === "unarmed" ? "brawl" : (isRanged ? "firearms" : "melee") };
 }
 
 // Which defense an attack rolls against — Dave's ruling 2026-11-07 at the East Wall ("it becomes binary"): anything that
 // does Integrity damage attacks GUARD, anything that does Stress damage attacks RESOLVE. Evasion is no longer a target
 // (ranged weapons used to swing at it, which made Guard-only armor useless against a bullet). Track first; the damage type
 // (psychic / qliphothic → Stress) is the fallback for items with no track.
-function ftDefenseForDamage(track, type) {
-  const t = String(track ?? "").toLowerCase(), ty = String(type ?? "").toLowerCase();
-  if (t === "stress") return "resolve";
-  if (t === "integrity") return "guard";
-  if (ty === "psychic" || ty === "qliphothic") return "resolve";
-  return "guard";
+// One rule for which track damage lands on (Dave 2026-11-08: "Track derives from damage type."). The damage
+// TYPE decides the bar (FT.DAMAGE_TYPES: psychic / qliphothic → Stress, radiation → the radiation track, everything
+// else → Integrity); a stored track only speaks for untyped damage (Integrity / Stress / Radiation). Every damage
+// landing site and ftDefenseForDamage read this, so the defense attacked and the bar hit always agree.
+function ftTrackForDamage(track, type) {
+  let ty = String(type ?? "").toLowerCase().trim();
+  if (ty === "energy") ty = "electrical";   // retired broad energy → the energy family (all Integrity)
+  const byType = FT.DAMAGE_TYPES?.[ty]?.track;
+  if (byType) return byType;
+  const t = String(track ?? "").toLowerCase();
+  return (t === "stress" || t === "radiation") ? t : "integrity";
 }
-function ftWeaponTargetDefense(item) {
-  const dmg = item?.system?.damage ?? {};
-  return ftDefenseForDamage(dmg.track, dmg.type);
+// Heals keep an authored track — Integrity or Stress (Clarity / Noise move by a fixed amount through the
+// manifestation's pool row, never a rolled heal; a legacy clarity / noise heal still lands on its pool).
+const FT_HEAL_TRACKS = Object.freeze({ integrity: "Integrity", stress: "Stress" });
+function ftLandingTrack(op, track, type) {
+  if (op === "heal") {
+    const t = String(track ?? "").toLowerCase();
+    return (FT_HEAL_TRACKS[t] || t === "clarity" || t === "noise") ? t : "integrity";
+  }
+  return ftTrackForDamage(track, type);
+}
+// Which defense an attack rolls against — same precedence as ftTrackForDamage: Stress → Resolve, else Guard.
+function ftDefenseForDamage(track, type) {
+  return ftTrackForDamage(track, type) === "stress" ? "resolve" : "guard";
+}
+// Clarity / Noise as targets (Dave 2026-11-08: "valid attack and buff targets, but they should only be affected by
+// set amounts, not rolled. A t1 non TCC steward only gets 5 clarity to begin with"). A manifestation's pool row
+// system.manifestation.poolShift = { clarity, noise }: Clarity −N drains / +N restores, Noise +N adds / −N clears.
+// FIXED amounts, 1–4 each — no dice, no faculty add, no stance damage step, and a save that halves damage does not
+// halve it (only a negate / miss stops it). Hostile rows (drain Clarity / add Noise) attack Resolve.
+function ftNormalizePoolShift(raw) {
+  const src = (raw && typeof raw === "object") ? raw : {};
+  const clamp = (v) => Math.max(-4, Math.min(4, Math.trunc(Number(v) || 0)));
+  return { clarity: clamp(src.clarity), noise: clamp(src.noise) };
+}
+function ftPoolShiftIsHostile(raw) { const ps = ftNormalizePoolShift(raw); return ps.clarity < 0 || ps.noise > 0; }
+function ftPoolShiftIsBeneficial(raw) { const ps = ftNormalizePoolShift(raw); return ps.clarity > 0 || ps.noise < 0; }
+function ftPoolShiftLabel(raw) {
+  const ps = ftNormalizePoolShift(raw), out = [];
+  if (ps.clarity) out.push(`Clarity ${ps.clarity > 0 ? "+" : "−"}${Math.abs(ps.clarity)}`);
+  if (ps.noise)   out.push(`Noise ${ps.noise > 0 ? "+" : "−"}${Math.abs(ps.noise)}`);
+  return out.join(" · ");
+}
+// Land a pool row on one target. `multiplier` is the resolution outcome: 0 (missed / negated) stops it, anything
+// above 0 lands the full authored amount. Rigs have no Clarity or Noise — refused with a message. Writes go through
+// the _applyDamageToActor chokepoint (its clarity / noise branch), so non-owner seats relay to the GM.
+async function ftApplyPoolShift(caster, target, item, shift, { multiplier = 1 } = {}) {
+  const ps = ftNormalizePoolShift(shift ?? item?.system?.manifestation?.poolShift);
+  if ((!ps.clarity && !ps.noise) || !target) return [];
+  if (!(Number(multiplier) > 0)) return [];
+  if (target.type === "rig") {
+    ui.notifications?.warn(`${item?.name ?? "Manifestation"}: ${target.name} is a rig — it has no Clarity or Noise to touch.`);
+    return [];
+  }
+  const lines = [];
+  for (const [pool, n] of [["clarity", ps.clarity], ["noise", ps.noise]]) {
+    if (!n) continue;
+    const op = (pool === "clarity" ? n < 0 : n > 0) ? "damage" : "heal";
+    try {
+      const desc = await game.fourththing.rolls._applyDamageToActor(target, Math.abs(n), { op, track: pool });
+      if (desc) lines.push(desc);
+    } catch (e) { console.warn("[fourththing] pool shift failed", pool, target?.name, e); }
+  }
+  if (lines.length) {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: caster ?? null }),
+      content: `<div class="fourththing-roll" style="border-color:#7fb3ff"><div class="ft-roll-header"><span class="ft-roll-name">✦ ${ftEscapeHtml(item?.name ?? "Manifestation")} — ${ftEscapeHtml(ftPoolShiftLabel(ps))}</span></div><ul style="margin:0.2rem 0 0;padding-left:1.2rem;font-size:0.8rem">${lines.map(l => `<li>${ftEscapeHtml(l)}</li>`).join("")}</ul></div>`
+    }).catch(() => null);
+  }
+  return lines;
+}
+
+// The defense an attack rolls against is never authored (2026-11-08, teeth P05 — Dave: "Migrate to guard. Fully
+// derived"): Stress damage → Resolve, everything else → Guard (ftDefenseForDamage). A weapon reads its flat damage,
+// a power its normalized damageRoll; a working whose only harm is its pool row (drain Clarity / add Noise) attacks
+// Resolve. resolution.attackVs is retired — the Engine, both sheets and every roll read this.
+function ftAttackDefenseFor(item) {
+  const sys = item?.system ?? {};
+  const flat = (item?.type === "weapon" && sys.damage && typeof sys.damage === "object") ? sys.damage : null;
+  if (flat?.formula) return ftDefenseForDamage(flat.track, flat.type);
+  const dr = ftNormalizeDamageRoll(sys);
+  if (dr.op === "damage" && Number(dr.number) > 0) return ftDefenseForDamage(dr.track, dr.type);
+  if (ftPoolShiftIsHostile(sys.manifestation?.poolShift)) return "resolve";
+  return flat?.type ? ftDefenseForDamage(flat.track, flat.type) : ftDefenseForDamage(dr.track, dr.type);
+}
+function ftWeaponTargetDefense(item) { return ftAttackDefenseFor(item); }
+
+// How a weapon's Strike resolves (2026-11-08, teeth P10 — Dave: "a weapon that, if it hits, does damage and applies an
+// effect. It should be possible to allow for a saving throw if the creator adds one").
+//   · A Form (manifested weapon) ALWAYS rolls to hit. On a hit: damage + its states. When the creator added a save
+//     (resolution.hitSave + saveAttribute) the target rolls it vs ftSaveDCFor — a pass stops the states; the damage
+//     stands unless resolution.hitSaveHalf ("half damage on a save"). No save-first and no contest on a Form: a stored
+//     save / contested shape (pre-11-08 Engine data) reads as a hit save on that faculty (read-time shim).
+//   · Any other weapon (foes, guns) keeps its authored behaviour: shape "save" (or the legacy resolution.mode "save")
+//     with a save faculty = save-first, no attack roll; otherwise an attack roll whose on-hit rider save fires when
+//     the resolution names a saveAttribute and something rides on it.
+// saveCfg is the resolution block to hand resolveManifestationSave / _ftPostSavePromptCard.
+function ftStrikeResolution(item) {
+  const raw = item?.system?.manifestation?.resolution ?? {};
+  const isForm = ftIsManifestedForm(item);
+  const out = { isForm, saveFirst: false, rider: false, hitSave: false, hitSaveHalf: false, saveAttribute: raw.saveAttribute || "", saveCfg: raw };
+  if (isForm) {
+    const shape = String(raw.shape ?? "");
+    // An explicit hitSave (true / false) wins; only a Form that never had one reads its old save / contested shape.
+    if (raw.hitSave === true)        { out.hitSave = true; out.hitSaveHalf = raw.hitSaveHalf === true;       out.saveAttribute = raw.saveAttribute || "body"; }
+    else if (raw.hitSave === false)  { /* the creator turned it off */ }
+    else if (shape === "save")       { out.hitSave = true; out.hitSaveHalf = raw.onSave === "half";          out.saveAttribute = raw.saveAttribute || "body"; }
+    else if (shape === "contested")  { out.hitSave = true; out.hitSaveHalf = raw.onContestLoss === "half";   out.saveAttribute = raw.contestTargetAttribute || "body"; }
+    out.saveCfg = { ...raw, saveAttribute: out.saveAttribute || "body", onSave: out.hitSaveHalf ? "half" : "negate" };
+    return out;
+  }
+  out.saveFirst = (raw.mode === "save" || raw.shape === "save") && !!raw.saveAttribute;
+  out.rider = !out.saveFirst && !!raw.saveAttribute;
+  return out;
+}
+
+// A beneficial Strike (2026-11-08, teeth P15): a Form whose only effect is a heal, ward or buff (no damage, no hostile
+// state — _ftIsBeneficialManifestation) skips the attack roll, like a beneficial Invoke, and lands on the targeted
+// tokens (or on the striker with nothing targeted). Cost, Action and recharge are charged by the Engage dialog as usual.
+function _ftStrikeIsBeneficial(item) {
+  const mf = item?.system?.manifestation;
+  if (!mf || typeof mf !== "object") return false;
+  const dr = (item?.type === "weapon" && String(item?.system?.damage?.formula ?? "").trim())
+    ? { op: "damage", number: 1 } : ftNormalizeDamageRoll(item?.system ?? {});
+  return _ftIsBeneficialManifestation(mf, item, dr);
+}
+async function _ftBeneficialStrike(actor, item) {
+  const targets = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
+  const list = targets.length ? targets : [actor];
+  const mf = item.system?.manifestation ?? {};
+  const dr = ftNormalizeDamageRoll(item.system ?? {});
+  for (const t of list) {
+    try {
+      if (_ftHasManifestationApplicables(mf, item)) await game.fourththing.applyManifestationStates(actor, t, item, mf, { saveResolved: true });
+      await ftApplyPoolShift(actor, t, item, mf.poolShift, { multiplier: 1 });
+    } catch (e) { console.warn("[fourththing] beneficial strike apply failed", t?.name, e); }
+  }
+  if (dr.op === "heal" && Number(dr.number) > 0) {
+    try { await ftRollManifestationDamage(actor, item, dr, { targetUuid: list.length === 1 ? list[0].uuid : null }); }
+    catch (e) { console.warn("[fourththing] beneficial strike heal failed", e); }
+  }
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#5fb35f"><div class="ft-roll-header"><span class="ft-roll-name">✦ ${ftEscapeHtml(item.name)} — beneficial, no attack roll</span></div><p style="margin:0.25rem 0 0;font-size:0.8rem">Lands on ${list.map(a => `<b>${ftEscapeHtml(a.name)}</b>`).join(", ")}.</p></div>`
+  }).catch(() => null);
+  return { success: true, beneficial: true };
+}
+
+// Per-target record of what happened to a Strike's states (2026-11-08, teeth P12), stamped on the strike's chat card
+// at flags.fourththing.statesResolved.<actor uuid with dots → _>: "landed" (states went on with the hit), "pending"
+// (a save card is waiting), "saved" / "saved-half" (the target passed — no states; "-half" halves the card's damage),
+// "failed" (the save card landed them). Apply Damage reads it so it never re-lands states a target saved against.
+// "chained" under the key "chain" (2026-11-08, teeth P28): this strike's chain already arced — Apply Damage won't arc again.
+const FT_STRIKE_STATE_STAMPS = new Set(["landed", "pending", "saved", "saved-half", "failed", "chained"]);
+function _ftStrikeStampKey(uuid) { return String(uuid ?? "").replace(/\./g, "_"); }
+async function _ftStampStrikeStates(message, targetUuid, value) {
+  if (!message || !targetUuid || !FT_STRIKE_STATE_STAMPS.has(value)) return;
+  const key = _ftStrikeStampKey(targetUuid);
+  if (message.isOwner) {
+    try { await message.setFlag("fourththing", `statesResolved.${key}`, value); } catch (e) { console.warn("[fourththing] strike states stamp failed", e); }
+  } else if (game.users?.some?.(u => u.isGM && u.active)) {
+    _ftRelayEmit({ t: "ft-statesResolved", messageId: message.id, key, value });
+  }
+}
+
+function _ftStrikeChained(message) { return message?.flags?.fourththing?.statesResolved?.chain === "chained"; }
+async function _ftStampStrikeChained(message) {
+  if (!message) return;
+  if (message.isOwner) {
+    try { await message.setFlag("fourththing", "statesResolved.chain", "chained"); } catch (e) { console.warn("[fourththing] chain stamp failed", e); }
+  } else if (game.users?.some?.(u => u.isGM && u.active)) {
+    _ftRelayEmit({ t: "ft-statesResolved", messageId: message.id, key: "chain", value: "chained" });
+  }
 }
 
 // Find an item suitable for an Attack of Opportunity. AoO can fire on any
@@ -1238,7 +1511,7 @@ function ftWeaponTargetDefense(item) {
 // melee Form manifestation. Returns null if nothing usable.
 function ftFindMeleeAttackItem(actor) {
   if (!actor?.items) return null;
-  const isMelee = (it) => String(it?.system?.category ?? "").toLowerCase() === "melee";
+  const isMelee = (it) => ftWeaponCategoryTraits(it?.system?.category).isMelee;   // an Unarmed Form can be the reaction weapon (teeth P34)
   const equipped = (it) => !!it.getFlag?.("fourththing", "equipped");
   const weapons = Array.from(actor.items).filter(i => i.type === "weapon");
   return weapons.find(w => isMelee(w) && equipped(w))
@@ -1328,10 +1601,9 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   _ftWarnIfTargetDown();
   if (!actor || !item) return;
 
-  // A Form above your tier is inert in your hands (Dave 2026-11-08: "Inert above tier").
-  // Invoke already gates tier (reach one above with Surge / Blood Debt); Strikes never
-  // looked. No reach for Strikes — a bound blade can't be Surged every swing. Foes are
-  // GM-driven and exempt; Minor Miracle callers pass skipTierGate.
+  // A Form above your tier is inert in your hands (Dave 2026-11-08: "Inert above tier"). No reach for Forms on either
+  // path — a bound blade can't be Surged every swing, and Invoke refuses a Form above tier with this same message
+  // (teeth P31; only Workings reach one tier up). Foes are GM-driven and exempt; Minor Miracle callers pass skipTierGate.
   if (ftIsManifestedForm(item) && !options.skipTierGate && !_ftIsFoeActor(actor)) {
     const mfTier = Math.max(1, Math.min(4, Number(item.system?.manifestation?.tier) || 1));
     const mine = _ftCasterTier(actor);
@@ -1346,28 +1618,49 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // and auto-target everyone caught — the engage flow + Apply Damage then land
   // on the whole blast instead of one token. Same ftPlaceAreaTemplate +
   // _ftTokensInTemplate machinery the cast path uses.
-  const _engageArea = item?.system?.manifestation?.area;
+  // 2026-11-08 (teeth P27 + hex-wide): the area is read through the normalizer (a legacy cube lands as a sphere), a
+  // movable template is range-checked where it lands, Hex-wide takes every token on the scene with no template, and the
+  // caught tokens are sorted by disposition exactly like an Invoke — harmful → non-friendly, beneficial → friendly (the
+  // picker dialog when the world setting is on).
+  const _engageArea = ftNormalizeManifestationData(item?.system ?? {}, item?.type === "weapon" ? "weapon" : "power").area;
   if (_engageArea?.shape && _engageArea.shape !== "none" && !options.skipAreaTemplate && canvas?.ready) {
     try {
-      const placed = await ftPlaceAreaTemplate(actor, _engageArea);
-      if (placed) {
-        const toks = _ftTokensInTemplate(placed, { excludeActorUuids: new Set([actor.uuid]) });
-        if (toks.length) {
-          ftSetUserTargets(toks);
-          ui.notifications?.info(`${item.name}: ${toks.length} target${toks.length === 1 ? "" : "s"} caught in the area — Apply Damage will hit all of them.`);
+      let toks = null;
+      if (_engageArea.shape === "hex") toks = _ftTokensOnScene(actor);
+      else {
+        const placed = await ftPlaceAreaTemplate(actor, _engageArea, { rangeFt: _ftItemRangeFt(item) });
+        if (placed) toks = _ftTokensInTemplate(placed, { excludeActorUuids: new Set([actor.uuid]) });
+      }
+      if (toks) {
+        { const seen = new Set(); toks = toks.filter(t => t?.actor && t.actor.uuid !== actor.uuid && (seen.has(t.actor.uuid) ? false : (seen.add(t.actor.uuid), true))); }
+        const _benef = _ftStrikeIsBeneficial(item);
+        let picked = [];
+        if (toks.length && game.settings.get("fourththing", "ftAoeTargetPicker")) {
+          const chosen = new Set((await _ftPickAoeTargets(actor, toks, { beneficial: _benef, label: item.name })).map(a => a.uuid));
+          picked = toks.filter(t => chosen.has(t.actor.uuid));
         } else {
-          ui.notifications?.warn(`${item.name}: the area caught no targets — Apply Damage will use your manual targets.`);
+          picked = _ftFilterByDisposition(actor, toks, _benef ? "allies" : "foes");
+        }
+        if (picked.length) {
+          ftSetUserTargets(picked);
+          ui.notifications?.info(`${item.name}: ${picked.length} target${picked.length === 1 ? "" : "s"} in the area — Apply Damage will hit all of them.`);
+        } else {
+          ui.notifications?.warn(`${item.name}: the area caught no ${_benef ? "friendly" : "non-friendly"} targets — Apply Damage will use your manual targets.`);
         }
       }
     } catch (e) { console.warn("Roll for Initiation | engage area template failed", e); }
   }
 
+  // Calmed / Charmed (2026-11-08, teeth P03): checked once the area template has picked its targets, and again on Engage.
+  { const _refuse = ftConditionActionRefusal(actor, item, { kind: "strike" }); if (_refuse) { ui.notifications?.warn(_refuse); return; } }
+
   // SAVE-FIRST STRIKE (2026-10-06, NPC Pack automation): "15 ft cone — Resolve DC 13, fail 1d10 psychic + Shaken, half on
-  // success". The weapon's manifestation.resolution.mode === "save": no attack roll — every target (the area template's
-  // catch, else the user's targets) gets the standard save-prompt card: damage halved/negated by resolution.onSave,
-  // states only on a failed save when resolution.statesOnFail. Damage = the weapon formula (+ threat-chassis tier damage
-  // for monsters); no faculty add (the authored DC already carries the creature's edge). Recharge/uses gates still apply
-  // upstream (npc-automation). Animation plays once, on the caster.
+  // success". A foe weapon whose resolution.shape is "save" (legacy: resolution.mode "save" — ftStrikeResolution; never a
+  // Form): no attack roll — every target (the area template's catch, else the user's targets) gets the standard
+  // save-prompt card: damage halved/negated by resolution.onSave, states only on a failed save. Damage = the weapon formula (+ threat-chassis tier damage
+  // for monsters) + the item's Intent faculty (2026-11-08: Intent drives damage on every path, ftItemIntent), plus its
+  // Additional Damage Dice at the same save multiplier. Recharge/uses gates still apply upstream (npc-automation).
+  // Animation plays once, on the caster.
   // NPC automation recharge gate (2026-10-06): "(Recharge 5–6)" / "1/Day" weapons are spent on use and roll back at turn start
   // 10-29: check here, SPEND at the moment the strike resolves (save cards post /
   // the Engage roll fires) — a no-target warning, a later gate or a dialog Cancel
@@ -1383,20 +1676,27 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
     if (!_ftRecharge) return true;
     try { return (await game.fourththing.npcAuto?.useRecharge?.(actor, item)) ?? true; } catch (_e) { return true; }
   };
-  const _saveFirst = item?.system?.manifestation?.resolution;
-  if (item?.type === "weapon" && _saveFirst?.mode === "save" && _saveFirst?.saveAttribute && !options.skipSaveFirst) {
+  // 2026-11-08 (teeth P10): ftStrikeResolution decides — a Form never strikes save-first; a foe weapon's shape "save"
+  // (or legacy resolution.mode "save") still does, exactly as before.
+  const _strikeRes = ftStrikeResolution(item);
+  const _saveFirst = _strikeRes.saveCfg;
+  if (item?.type === "weapon" && _strikeRes.saveFirst && !options.skipSaveFirst) {
     const targets = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
     if (!targets.length) { ui.notifications?.warn(`${item.name}: target the creatures in the area first (or place the template).`); return; }
     if (!(await _ftSpendRecharge())) return;
     const f = String(item.system?.damage?.formula || "").replace(/\s+/g, "");
     const m = f.match(/^(\d+)(d\d+)([+-]\d+)?$/);
     const threatDmg = Number(actor.system?.derived?.threat?.damage) || 0;
+    const _sfType = ftOutgoingDamageType(actor, item.system?.damage?.type || "kinetic");   // conversion marks (2026-11-08)
     const dr = m ? { op: "damage", number: Number(m[1]), die: m[2], bonus: (Number(m[3]) || 0) + threatDmg,
-                     type: item.system?.damage?.type || "kinetic", flavor: item.system?.damage?.damageFlavor || "" }
+                     type: _sfType, flavor: item.system?.damage?.damageFlavor || "",
+                     track: ftTrackForDamage(item.system?.damage?.track, _sfType), attribute: ftItemIntent(item, "violence") }
                  : { op: "none" };
+    const _sfParts = dr.op === "damage" ? ftCollectExtraDamageParts(item) : [];
     try { await ftPlayAutoAnimation(actor, item, { hit: true }); } catch (_e) {}
     for (const tgt of targets) {
-      try { await _ftPostSavePromptCard(actor, tgt, item, item.system.manifestation, dr, { castDc: ftSaveDCFor(actor, _saveFirst, item.system.manifestation?.tier, item.system?.channel ?? "body"), intent: item.system?.intent }); }
+      // The card and the save both read ftSaveDCFor (weapons carry no channel: 11 + tier×2 + max(Mind, Soul), or a foe's fixed DC).
+      try { await _ftPostSavePromptCard(actor, tgt, item, item.system.manifestation, dr, { castDc: ftSaveDCFor(actor, _saveFirst, item.system.manifestation?.tier, null), intent: ftItemIntent(item, "violence"), damageParts: _sfParts }); }
       catch (e) { console.warn("Roll for Initiation | save-first strike card failed", tgt?.name, e); }
     }
     Hooks.callAll("fourththing:saveFirstStrike", { actor, item, targets });
@@ -1427,12 +1727,21 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // player-controlled actors during active combat. NPCs/foes are GM-driven (fire
   // multiattacks freely — the Action chip still tracks usage), and out of combat
   // there are no rounds to limit. The rig per-weapon gate below is unaffected.
+  // A Form's Strike spends the pool its activation names (2026-11-08, teeth P20 — Dave: "It can be a bonus or
+  // reaction"): Action (the strike counter), Bonus action, Reaction, or none (free). Plain weapons and rig guns strike
+  // with the Action. Stance never applies to a Strike. Any Reaction strike is refused under Aurablade Fury.
+  const _strikePool = ftStrikePool(item, { rig: isRigWeapon });
+  if (!options.skipActionGate && _strikePool === "reaction" && _ftReactionsDenied(actor)) {
+    ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
+    return;
+  }
   const _ftEnforceActionGate = !options.skipActionGate && _ftIsActionEconomyActive(actor);
-  if (_ftEnforceActionGate) {
+  if (_ftEnforceActionGate && _strikePool !== "none") {
     const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
+    const _poolKey = { action: "actionUsed", bonus: "bonusUsed", reaction: "reactionUsed" }[_strikePool];
     // 10-30: a primed Echo Strike is a FREE strike — it swings even after the Action is spent.
-    if (sysActs && sysActs.actionUsed && !actor?.flags?.fourththing?.surge?.oneShot?.["echo-strike"]) {
-      ui.notifications?.warn(`${actor.name}: action already used this turn.`);
+    if (sysActs && sysActs[_poolKey] && !(_strikePool === "action" && actor?.flags?.fourththing?.surge?.oneShot?.["echo-strike"])) {
+      ui.notifications?.warn(`${actor.name}: ${({ action: "Action", bonus: "Bonus action", reaction: "Reaction" })[_strikePool]} already used this round — ${item.name} strikes with it.`);
       return;
     }
   }
@@ -1464,13 +1773,16 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
     return;
   }
 
-  _ftWarnIfOutOfRange(actor, item); // playtest #1 — warn-only numeric range
+  // One range check, the same one Invoke uses (2026-11-08, teeth P25): confirm when a target is out of range.
+  // Reaction / AoO / bonus Strikes have already spent their pool — those callers pass rangeConfirm:false (warn only).
+  if (!options.skipRangeCheck && !(await _ftCheckRange(actor, item, null, { confirm: options.rangeConfirm !== false }))) return;
 
-  const intent  = item?.system?.intent   ?? "violence";
+  const intent  = ftItemIntent(item, "violence");   // attack + damage faculty (2026-11-08)
   const skill   = item?.system?.skill    ?? "melee";
   let   dmgF    = item?.system?.damage?.formula      ?? "";
   let   dmgT    = item?.system?.damage?.type         ?? "kinetic";
   let   dmgFlv  = item?.system?.damage?.damageFlavor ?? "";
+  let   dmgTrk  = item?.system?.damage?.track ?? "";   // only speaks for untyped damage (ftTrackForDamage)
 
   // 2026-05-19 — Power-type items (Form Manifestations routed through the
   // Strike button via isWeaponForm) store damage on `system.damageRoll`
@@ -1488,11 +1800,13 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
       dmgF = `${n}${d}${Number(dr.bonus) ? ` ${dr.bonus > 0 ? "+" : "-"} ${Math.abs(dr.bonus)}` : ""}`;
       if (dr.type)   dmgT   = String(dr.type);
       if (dr.flavor) dmgFlv = String(dr.flavor);
+      dmgTrk = dr.track;
     }
   }
 
   const label   = item?.name ?? "Strike";
   const chatLabel = rig ? `${label} · ${rig.name}` : label;
+  const _benefStrike = _ftStrikeIsBeneficial(item);
 
   return new Dialog({
     title:   rig ? `Fire ${label} · ${rig.name}` : `Engage: ${label}`,
@@ -1521,11 +1835,14 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           const defVal       = parseInt(html.find("[name='defenseValue']").val()) || 14;
           const selIntent    = html.find("[name='intent']").val()         || intent;
           const selSkill     = html.find("[name='skill']").val()          || skill;
-          const applyCost    = html.find("[name='applyCost']").is(":checked");
+          // A Form can't strike for free (2026-11-08, teeth P18): until this scene's activation is paid the cost is
+          // charged whatever the box says.
+          const _mustPayNow  = _ftStrikeMustPay(item);
+          const applyCost    = _mustPayNow || html.find("[name='applyCost']").is(":checked");
           const costAssessment = ftAssessManifestationCost(actor, item, "weapon");
 
           if (applyCost && costAssessment?.autoSupported && !costAssessment.canPay) {
-            ui.notifications?.warn(`${actor.name}: cannot currently pay ${costAssessment.label}.`);
+            ui.notifications?.warn(`${actor.name}: can't pay ${costAssessment.label} — ${costAssessment.blockedReason}.`);
             return false;
           }
 
@@ -1534,6 +1851,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           const targetTokens = Array.from(game.user?.targets ?? []);
           const targetActor  = targetTokens[0]?.actor ?? null;
           const flankBonus   = Number(html.find(".ft-cast-dialog").attr("data-ft-flank-bonus")) || 0;
+          { const _refuse = ftConditionActionRefusal(actor, item, { kind: "strike", targets: targetTokens.map(t => t.actor) }); if (_refuse) { ui.notifications?.warn(_refuse); return false; } }
 
           // 2026-05-19 — Aimed-shot consumption. Set by the "aimed-shot"
           // crew action; +2 to-hit and +2 damage on the next rig-weapon
@@ -1545,10 +1863,11 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           if (!(await _ftSpendRecharge())) return false;   // 10-29: spent on the roll, not on open
           // 10-30: read before the roll (attackTest consumes it) — an Echo Strike costs no Action and no strike count.
           const _echoFree = !rig && !!actor?.flags?.fourththing?.surge?.oneShot?.["echo-strike"];
-          const result = await game.fourththing.rolls.attackTest(actor, {
+          // A beneficial Form (ward / heal / buff, no harm) skips the attack and lands on its target (2026-11-08, teeth P15).
+          const result = _benefStrike ? await _ftBeneficialStrike(actor, item) : await game.fourththing.rolls.attackTest(actor, {
             intent: selIntent, skill: selSkill,
             defense, defenseValue: defVal,
-            label: chatLabel, damageFormula: dmgF, damageType: dmgT, damageFlavor: dmgFlv,
+            label: chatLabel, damageFormula: dmgF, damageType: dmgT, damageFlavor: dmgFlv, damageTrack: dmgTrk,
             damageParts: ftCollectExtraDamageParts(item),
             costNote: costAssessment?.label ?? "",
             signature: item?.system?.manifestation?.signature ?? "",
@@ -1565,9 +1884,17 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           if (applyCost && costAssessment) {
             const applied = await ftApplyManifestationCost(actor, costAssessment);
             if (applied.applied) ui.notifications?.info(`${actor.name}: ${applied.summary}.`);
-            // A persistent Form's activation is paid for this scene — the next Engage opens with the box clear (2026-11-08).
+            // A persistent Form's activation is paid for this scene — the next Engage opens with the box clear (2026-11-08),
+            // and it joins the Active strip so its upkeep bills (teeth P21; one entry per item).
             if (applied.applied && ftIsManifestedForm(item) && !ftManifestationCostIsPerUse(item)) {
               try { await item.setFlag("fourththing", "formPaid", _ftSceneKey()); } catch (_e) {}
+              try {
+                const _act = actor.getFlag("fourththing", "activeManifestations") ?? [];
+                if (!_act.some(e => e.itemId === item.id)) {
+                  const _mfA = ftNormalizeManifestationData(item.system ?? {}, "weapon");
+                  await ftAddActiveManifestation(actor, item, { tier: _mfA.tier, stability: _mfA.stability, mode: "", reachPath: "" });
+                }
+              } catch (e) { console.warn("[fourththing] active Form registration failed", e); }
             }
           }
 
@@ -1577,7 +1904,14 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           // AoO/reaction (caller already burned reactionUsed) and for actors
           // without a `system.actions` slot (bosses pre-Phase B). Rig-weapon
           // path additionally maintains its per-gunner-per-weapon flag below.
-          if (!options.skipActionGate && result && !_echoFree) {
+          if (!options.skipActionGate && result && _strikePool !== "none" && _strikePool !== "action") {
+            // Bonus / Reaction Form strikes spend that slot; never the strike counter (2026-11-08, teeth P20).
+            const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
+            if (sysActs) {
+              try { await actor.update({ [`system.actions.${_strikePool === "bonus" ? "bonusUsed" : "reactionUsed"}`]: true }); }
+              catch (e) { console.warn("[fourththing] action-economy debit failed", e); }
+            }
+          } else if (!options.skipActionGate && result && !_echoFree && _strikePool === "action") {
             const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
             if (sysActs && !sysActs.actionUsed) {
               // Striker paths make Tier strikes per round — only the last one spends the Action.
@@ -1960,22 +2294,21 @@ function ftManifestationGuide(sephirah = "tiferet") {
   };
 }
 
+// Extra-cost resources (Dave 2026-11-08: Stress / Noise / Strain; "keep surge out of the resource pool").
+const FT_EXTRA_COST_TYPES = ["stress", "noise", "strain"];
+
 function ftManifestationDefaults(kind = "power") {
   const base = {
     tier: 1,
-    family: kind === "weapon" ? "form" : "working",
     concept: "",
-    form: kind === "weapon" ? "weapon" : "sigil",
-    function: kind === "weapon" ? "harm" : "transform",
     stability: kind === "weapon" ? "bound" : "instant",
-    interactionModel: kind === "weapon" ? "weapon" : "event",
-    costType: kind === "weapon" ? "none" : "clarity",
-    costValue: kind === "weapon" ? 0 : 1,
-    costText: "",
-    duration: kind === "weapon" ? "scene" : "instant",
+    // Extra cost on top of the tier's Clarity (2026-11-08, teeth P16/P18): none | stress | noise | strain, 1–10.
+    costType: "none",
+    costValue: 0,
+    costText: "",                       // "In the fiction" — prose only; the mechanical label is built from tier + extra
+    duration: kind === "weapon" ? "persistent" : "instant",   // derived from stability (ftDurationForStability)
     durationText: "",
     triggerText: "",
-    scale: "personal",
     targetText: "",
     rangeAreaText: "",
     // Phase F2 — Structured maintenance cost. Dropdown selection from
@@ -1990,19 +2323,20 @@ function ftManifestationDefaults(kind = "power") {
     gmCalibration: "",
     mechanicalHook: "",
     signature: "",
-    // When true, this manifestation's tier auto-levels to match the steward's
-    // tier on tier-up (ft-progression levelSignatureManifestations). Authored
-    // damage/effects are untouched — tier alone raises DC / Clarity / reach /
-    // misfire scaling. Never lowers a manually higher-tier manifestation.
+    // When true, this manifestation fills one of its steward's Signature slots (one per tier).
+    // Its tier is derived from what it does like any manifestation, capped at the steward's
+    // tier; a tier-up raises the cap, never the item (teeth P29, 2026-11-08). GM-set on sheets.
     isSignature: false,
     thirdThing: "",
-    opCost: { pool: "", value: 0 },
     // Phase A — structured mechanical hooks. Phase B will surface them; Phase
     // C will read them in the cast path. Defaults are inert (no template, no
     // pool consumption gate, no save) so existing items behave identically.
     area:       { shape: "none",   size: 0 },
-    activation: { type: "action",  consumePool: true },
-    save:       { enabled: false,  defense: "evasion", attribute: "", dcMode: "derived", dcFixed: 15 },
+    // The only activation field (2026-11-08, teeth P20): action | bonus | reaction | none (free). consumePool is folded in
+    // (false → none) and the legacy top-level system.activation string is read once by the normalizer, never written.
+    activation: { type: "action" },
+    // The old `save` block (enabled/defense/dcMode) was retired 2026-11-08 — saves live in
+    // resolution.shape "save". ftNormalizeManifestationData folds a legacy enabled save in.
     // Post-cast effect resolution. shape="auto" preserves legacy behavior
     // (damage rolls + applies on cast success). shape="attack" runs a second
     // 2d10x10 + intent + channel roll vs target's static defense; misses skip
@@ -2014,8 +2348,11 @@ function ftManifestationDefaults(kind = "power") {
     resolution: {
       shape:         "auto",
       // attack-shape fields:
-      attackVs:      "evasion",          // "guard" | "evasion" | "resolve"
-      attackBonus:   "intent+channel",   // shorthand for the bonus formula
+      // (attackVs retired 2026-11-08 — the defense is derived from the damage, ftAttackDefenseFor)
+      // hit save (2026-11-08, teeth P10): on an attack / auto shape the creator MAY give the target a save against
+      // the states — a pass stops them; the damage stands unless hitSaveHalf. Faculty = saveAttribute.
+      hitSave:       false,
+      hitSaveHalf:   false,
       // save-shape fields:
       saveAttribute: "body",             // any of the six faculties
       saveDcMode:    "cast-dc",          // "cast-dc" reuses the cast difficulty; "fixed" uses saveDcFixed
@@ -2036,7 +2373,7 @@ function ftManifestationDefaults(kind = "power") {
     // of each turn vs DC; success removes the effect.
     appliedStates: {
       states:        [],          // array of FT.CONDITIONS keys, e.g. ["staggered","burning"]
-      duration:      "1-round",   // "1-round" | "2-rounds" | "3-rounds" | "scene" | "until-saved"
+      duration:      "",          // "" = from stability (instant 1 round · sustained/bound scene) | "1-round" | "2-rounds" | "3-rounds" | "scene" | "until-saved" (forces save each round)
       saveEachRound: false,
       saveAttribute: "body",      // target's faculty for the recurring save
       saveDcMode:    "cast-dc",
@@ -2067,11 +2404,9 @@ function ftManifestationDefaults(kind = "power") {
       carryConditions: false,
       carryEffects:    false
     },
-    // Phase F1 — Structured range for engine-side adjacency / distance check.
-    // Free-text rangeAreaText (above) stays the canonical flavor field; this
-    // numeric is used ONLY at cast time to warn the caster when the target is
-    // outside the manifestation's reach. 0 = no engine check (skip warning).
-    // Common presets: 5 (touch), 30 (short), 60 (medium), 120 (long).
+    // The one authored range (2026-11-08, teeth P25): feet, 0 = touch / self. Every Invoke and Strike checks it
+    // (_ftCheckRange — a soft confirm); a Form's system.range follows it. rangeAreaText stays flavour.
+    // Common: 30 (short), 60 (medium), 120 (long).
     rangeFt: 0,
     // Phase E — Conditional Damage. Extra damage rolls that fire when the
     // target's creature type matches. Up to three rows of
@@ -2080,13 +2415,16 @@ function ftManifestationDefaults(kind = "power") {
     // computes once, on the combined type). Rolled at apply time inside
     // applyDamageFromButton for BOTH manifestation and weapon cards.
     conditionalDamage: [],
+    // Clarity / Noise pool row (2026-11-08, Dave P07): set amounts, never rolled — clarity −N drains / +N restores,
+    // noise +N adds / −N clears; each −4..4 (ftNormalizePoolShift). Landed by ftApplyPoolShift with the hit.
+    poolShift: { clarity: 0, noise: 0 },
     // Phase C — Buffs & Wards. Active-effect-equivalent outcomes the
     // manifestation imparts to its targets on a successful resolution.
     // Authored in the wizard's Step 4; surfaced on the target as ONE
     // AE per cast (sibling to per-condition AEs) so the buff is visible
     // in Foundry's effect bar and the duration auto-expires.
     //   modifiers — numeric stat bumps. Each: { stat, op:"+"|"-", value }
-    //     stat is one of FT_EFFECT_MOD_AE_KEYS (guard/evasion/resolve/initiative).
+    //     stat is one of FT_EFFECT_MOD_AE_KEYS (guard/resolve/initiative; a legacy evasion row reads as guard).
     //     Numeric bumps land via AE.changes targeting system.derived.<stat>.aeBonus,
     //     which character derive folds into the final value (initiative.bonus pattern).
     //   resists — damage-TYPE keys (kinetic/fire/cold/…) the target halves.
@@ -2097,8 +2435,23 @@ function ftManifestationDefaults(kind = "power") {
     appliedEffects: {
       modifiers: [],   // [{ stat:"guard", op:"+", value:2 }, ...]
       resists:   [],   // ["fire", "cold"]
-      immunes:   []    // ["radiation"]
-    }
+      immunes:   [],   // ["radiation"]
+      // A ward that only holds while a condition is true (2026-11-08, six foe powers): "" = always ·
+      // "martial-form" = only while the bearer has a melee / unarmed Form weapon equipped (checked at the Guard read).
+      condition: ""
+    },
+    // ── Marks (2026-11-08, six foe powers) — one AE (flags.fourththing.manifestationMark) carries these on the caster
+    // (a self-range working) or the target. Read at the attack roll / miss path / outgoing damage type. ──
+    // On a miss, lightning answers: `scope` "vow-target" = the marked target takes the damage the next time it MISSES an
+    // attack against the caster or the caster's allies; "self" = whoever misses the bearer takes it. formula "" = off.
+    onMissRetaliation: { formula: "", type: "electrical", scope: "vow-target", once: true },
+    // Attacks against the bearer roll at disadvantage (3d10 keep lowest 2) while the mark holds.
+    attackersDisadvantage: false,
+    // While the mark holds, damage of type `from` the bearer deals is dealt as `to` ("" = off).
+    damageConvert: { from: "", to: "" },
+    // How long the mark lasts: "" = from stability (instant → until the start of the caster's next turn; sustained /
+    // bound → the scene) · "next-turn" · "scene". A vow is always the scene.
+    markDuration: ""
   };
 
   return foundry.utils.deepClone(base);
@@ -2108,6 +2461,16 @@ function ftManifestationDefaults(kind = "power") {
 // by Phase C in castManifestation. `op` switches damage vs heal; `attribute`
 // (faculty) is added to the rolled total; `track` selects which actor track
 // receives the result. Defaults to op:"none" so legacy items roll nothing.
+// The faculty an item attacks and deals damage with (2026-11-08): its Intent — any of the six
+// faculties — falling back to Violence (or `fallback`) when unset or unknown. The old separate
+// damage-faculty fields (weapon system.damage.attribute, power damageRoll.attribute) are ignored.
+const FT_FACULTY_KEYS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+function ftItemIntent(itemOrSystem, fallback = "violence") {
+  const sys = itemOrSystem?.system ?? itemOrSystem ?? {};
+  const v = String(sys?.intent ?? "").toLowerCase();
+  return FT_FACULTY_KEYS.includes(v) ? v : fallback;
+}
+
 function ftDamageRollDefaults() {
   return { op: "none", number: 0, die: "d6", attribute: "", type: "kinetic", flavor: "", track: "integrity" };
 }
@@ -2117,18 +2480,19 @@ function ftDamageRollDefaults() {
 // reads system.derived.<stat>.aeBonus AFTER Foundry applies AE changes,
 // so the bonus survives recompute (same pattern initiative.bonus uses).
 // Returns null for unknown keys so unmapped entries are silently skipped.
+// Evasion retired from wards 2026-11-08 (teeth P05): an attack only ever rolls against Guard or Resolve. A stored
+// evasion row reads as guard (ftNormalizeAppliedEffects); teeth-phaseA-resolution macro rewrites them.
 const FT_EFFECT_MOD_AE_KEYS = Object.freeze({
   guard:      "system.derived.guard.aeBonus",
-  evasion:    "system.derived.evasion.aeBonus",
   resolve:    "system.derived.resolve.aeBonus",
   initiative: "system.derived.initiative.bonus"
 });
 function ftEffectModifierAEKey(stat) {
-  return FT_EFFECT_MOD_AE_KEYS[stat] ?? null;
+  const s = String(stat ?? "").toLowerCase();
+  return FT_EFFECT_MOD_AE_KEYS[s === "evasion" ? "guard" : s] ?? null;   // legacy evasion ward → Guard (2026-11-08)
 }
 const FT_EFFECT_MOD_LABELS = Object.freeze({
   guard:      "Guard",
-  evasion:    "Evasion",
   resolve:    "Resolve",
   initiative: "Initiative"
 });
@@ -2244,15 +2608,17 @@ function _ftTokenEdgeGapFt(tokenA, tokenB) {
   return Math.hypot(dx, dy) * ftPerPixel;
 }
 
-// 2026-05-29 (playtest #1) — Effective range in feet for any weapon/manifestation
-// item. Real numeric ranges replacing flavor "near/far". Resolution order:
-//   1. explicit `system.manifestation.rangeFt` override (>0)
-//   2. weapon `system.range.long`/`.short` (multiples of 5 = feet, else squares ×5)
-//   3. power categorical `system.range` ("near"/"far"/...) mapped to feet
-// Returns 0 when nothing meaningful is authored → callers skip the range check
-// (covers self/touch/unlimited). Centralizes the mapping so no data migration is
-// needed; the explicit field just overrides when an author wants a precise number.
-const _FT_RANGE_LABEL_FT = { self: 0, personal: 0, touch: 5, close: 15, near: 30, medium: 60, far: 60, long: 120, sight: 120, hex: 300, scene: 0, unlimited: 0 };
+// 2026-05-29 (playtest #1) — Effective range in feet for any weapon/manifestation item.
+// 2026-11-08 (teeth P25 — Dave: range is a weight, not an automatic tier): a manifestation's ONLY authored range is
+// `system.manifestation.rangeFt` (0 = touch / self). The power "Range Baseline" select and the Form Short/Long fields
+// are gone from the Engine; a Form's system.range {short,long} is derived from rangeFt on save. _ftItemRangeFt returns
+// the reach in feet every range check uses (0 = no check):
+//   1. rangeFt > 0 → that.
+//   2. read-time shim for items the teeth-phaseA-range-area-forms macro hasn't reached: weapon `system.range.long`/
+//      `.short` (squares ×5 unless the units say feet — plain weapons keep these as their real range), then a power's
+//      old Range Baseline label (self 0 · touch 5 · near 30 · far 60 · sight 120 · hex 300 · scene / unlimited 999).
+//   3. a manifestation with rangeFt 0 and nothing legacy → touch (5 ft), or 0 for a self manifestation.
+const _FT_RANGE_LABEL_FT = { self: 0, personal: 0, touch: 5, close: 15, near: 30, medium: 60, far: 60, long: 120, sight: 120, hex: 300, scene: 999, unlimited: 999 };
 // Weapon range units: the content mixes squares (Scrap-Throw 4/12, Mind-Spike
 // 12/36, rig autocannons 12) with feet (Laser Pistol 30/120, Slug Pistol 20/80,
 // melee 5/5). One rule fits every authored value: multiples of 5 are feet,
@@ -2287,31 +2653,79 @@ function _ftItemRangeFt(item) {
   const short = Number(sys?.range?.short);
   const wr = (Number.isFinite(long) && long > 0) ? long : ((Number.isFinite(short) && short > 0) ? short : 0);
   if (wr > 0) return _ftWeaponRangeToFt(wr, sys?.range?.units);
-  // Power categorical label (string form) or rangeAreaText fallback.
-  const cat = String(sys?.range ?? sys?.power?.range ?? "").trim().toLowerCase();
+  // Legacy power Range Baseline label (string form).
+  const cat = String((typeof sys?.range === "string" ? sys.range : "") || sys?.power?.range || "").trim().toLowerCase();
   if (cat in _FT_RANGE_LABEL_FT) return _FT_RANGE_LABEL_FT[cat];
+  // A manifestation authored at 0: touch, or self.
+  if (item?.type === "power" || ftIsFormWeapon(item, { stamp: false })) return ftManifestationIsSelf(item) ? 0 : 5;
   return 0;
 }
 
-// Warn-only out-of-range notice (playtest #1 — decision: numeric feet, warn-only).
-// Posts a heads-up if the actor's first target is beyond the item's effective
-// range, but never blocks the action (GM keeps the final call).
-function _ftWarnIfOutOfRange(actor, item) {
+// What a Form's derived system.range {short, long} reads for a rangeFt (2026-11-08, teeth P25): squares, touch = 1.
+function ftFormRangeFromFt(rangeFt) {
+  const sq = Math.max(1, Math.round((Math.max(0, Number(rangeFt) || 0)) / 5));
+  return { short: sq, long: sq, units: "sq" };
+}
+
+// ONE range check for Invoke and Strike (2026-11-08, teeth P25 — replaces the Invoke confirm, the Invoke + Strike
+// warn toasts that doubled up on a cast). Measures from the user's token (a rig gun: the rig's) to each target that
+// isn't the user; when the farthest is beyond _ftItemRangeFt(item) it asks to go ahead anyway (soft — the GM's call)
+// or, with { confirm: false }, only warns. The Dreamwalker's Walking Lane (held, 1/round) lets one out-of-range use
+// through. Area and hex manifestations skip it — a template is checked where it is placed. Returns true to proceed.
+async function _ftCheckRange(actor, item, targets = null, { confirm = true } = {}) {
   try {
     const rangeFt = _ftItemRangeFt(item);
-    if (!(rangeFt > 0)) return; // self/touch/unlimited → no check
-    // Rig-weapons fire FROM the rig — a boarded steward's own token is hidden
-    // back at the boarding spot and goes stale the moment the rig moves
-    // (2026-08-21 playtest: point-blank autocannons warned "~98 ft away").
+    if (!(rangeFt > 0) || !actor) return true;
+    const _shape = String(item?.system?.manifestation?.area?.shape ?? "none");
+    if (_shape && _shape !== "none") return true;
+    // Rig-weapons fire FROM the rig — a boarded steward's own token is hidden back at the boarding spot and goes stale
+    // the moment the rig moves (2026-08-21 playtest: point-blank autocannons warned "~98 ft away").
     const originActor = (item?.parent?.type === "rig") ? item.parent : actor;
     const myTok = originActor?.getActiveTokens?.()?.[0] ?? actor?.getActiveTokens?.()?.[0];
-    const tgt   = Array.from(game.user?.targets ?? [])[0];
-    if (!myTok || !tgt || tgt.id === myTok.id) return;
-    const d = _ftDistanceBetweenTokens(myTok, tgt);
-    if (d > rangeFt + 0.5) {
-      ui.notifications?.warn(`${item?.name ?? "This"} — range ${rangeFt} ft, but ${tgt.actor?.name ?? "target"} is ~${Math.round(d)} ft away. Proceeding (GM's call).`);
+    if (!myTok) return true;
+    const mine = new Set([...(actor.getActiveTokens?.() ?? []), ...(originActor?.getActiveTokens?.() ?? [])].map(t => t?.id));
+    const toks = (targets ?? Array.from(game.user?.targets ?? []))
+      .map(t => t?.center ? t : (t?.getActiveTokens?.()?.[0] ?? t?.object ?? null))
+      .filter(t => t && !mine.has(t.id));
+    // Edge to edge (fix round 2026-11-08, R1): centre-to-centre read adjacent 2×2 rigs / big foes as 10 ft and stopped
+    // melee. Reach = the gap between footprints + one square, so touching tokens are 5 ft apart whatever their size.
+    const _sq = Number(canvas?.grid?.distance) || 5;
+    let far = null, farD = 0;
+    for (const t of toks) {
+      const gap = _ftTokenEdgeGapFt(myTok, t);
+      const d = Number.isFinite(gap) ? gap + _sq : _ftDistanceBetweenTokens(myTok, t);
+      if (Number.isFinite(d) && d > farD) { farD = d; far = t; }
     }
-  } catch (e) { /* range check never blocks */ }
+    if (!far || farD <= rangeFt + 0.5) return true;
+    const label = item?.name ?? "This";
+    const who = far.actor?.name ?? far.name ?? "the target";
+    // Dreamwalker — The Walking Lane: 1/round while held, reach across the band — an out-of-range use goes through
+    // (the range half of "ignore one band of cover or distance"; cover stays GM-adjudicated). Marks it used.
+    const wlOn   = !!actor.flags?.fourththing?.modes?.dwWalkingLane;
+    const wlUsed = !!actor.flags?.fourththing?.modes?.walkingLaneUsedRound;
+    if (wlOn && !wlUsed) {
+      await actor.update({ "flags.fourththing.modes.walkingLaneUsedRound": true });
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll" style="border-color:#6a3a8a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8a0ff">⟁ Walking Lane</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${ftEscapeHtml(actor.name)} reaches across the band — <b>${ftEscapeHtml(label)}</b> ignores range this time (${farD.toFixed(0)} ft / ${rangeFt} ft range). 1/round.</p></div>`
+      });
+      return true;
+    }
+    if (!confirm) {
+      ui.notifications?.warn(`${label} — range ${rangeFt} ft, but ${who} is ~${Math.round(farD)} ft away. Going ahead (GM's call).`);
+      return true;
+    }
+    return await Dialog.confirm({
+      title: "Out of Range",
+      content: `<div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.2rem 0;font-size:0.84rem">
+        <div>⚠ <b>${ftEscapeHtml(label)}</b> reaches <b>${rangeFt} ft</b>, but <b>${ftEscapeHtml(who)}</b> is <b>${farD.toFixed(0)} ft</b> away.</div>
+        <div style="font-size:0.78rem;opacity:0.75">Go ahead anyway? (A soft check — the GM may allow it.)${wlOn ? " <em>Walking Lane already used this round.</em>" : ""}</div>
+      </div>`,
+      yes: () => true,
+      no:  () => false,
+      defaultYes: false
+    });
+  } catch (e) { console.warn("[fourththing] range check failed — going ahead", e); return true; }
 }
 
 // 2026-05-29 (playtest #5) — Advantage/Disadvantage roll modes for every d10 roll.
@@ -2522,12 +2936,12 @@ async function _ftPromptChainTargets(item, candidates, maxCount, rangeFt) {
   });
 }
 
-// Fire the chain. Called from the singular cast path AFTER primary damage +
-// states are applied. For each picked secondary: rolls the chain formula,
-// auto-applies via _applyDamageToActor (no per-target save), and (when
-// carryConditions / carryEffects flags are set on the manifestation's chain
-// config) calls applyManifestationStates with a tailored mf so conditions
-// + effects land on the secondary too. Posts a single summary chat card.
+// Fire the chain. Called AFTER the primary lands — the singular cast path, the single-target save card (on a failed
+// save), a Form's Strike hit, and the Apply Damage fallback (2026-11-08, teeth P28). Never for an area manifestation.
+// For each picked secondary (non-friendly tokens within chain.range of the primary): rolls the chain formula and lands
+// it in full — the primary's save never halves it — and (when carryConditions / carryEffects are set) calls
+// applyManifestationStates with a tailored mf. Carried conditions get their OWN save on each secondary (the primary's
+// save faculty, the caster's DC) — a pass stops them there. Posts a single summary chat card.
 async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc = 15 } = {}) {
   const chain = mf?.chain ?? null;
   if (!chain?.enabled) return;
@@ -2541,14 +2955,21 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
 
   // Damage type inherits from the primary's damageRoll.type if blank.
   const damageType  = chain.damageType || dr?.type || "kinetic";
-  const trackKey    = dr?.track ?? "integrity";
+  const trackKey    = ftTrackForDamage(dr?.track, damageType);   // the chain's own type picks its bar (2026-11-08)
   const damageFlav  = dr?.flavor ?? "";
   const formula     = String(chain.damageFormula ?? "1d6").trim() || "1d6";
   // Synthetic mf for the carry-* paths — only includes the parts we want
   // applied on secondaries, so the cast resolver doesn't try to re-resolve
   // them (no second attack roll, no second save).
   const carryMf = {};
-  if (chain.carryConditions && ftAppliedStatesToArray(mf?.appliedStates)?.states?.length) carryMf.appliedStates = ftAppliedStatesToArray(mf.appliedStates);
+  if (chain.carryConditions && ftAppliedStatesToArray(mf?.appliedStates)?.states?.length) {
+    carryMf.appliedStates = ftAppliedStatesToArray(mf.appliedStates);
+    // A secondary rolls its own save against the carried conditions (teeth P28): a hit-save-style resolution with no
+    // shape and saveResolved false, so applyManifestationStates' gate rolls the faculty the primary saved with.
+    const _pr = mf?.resolution ?? {};
+    const _svAttr = _pr.saveAttribute || mf?.appliedStates?.saveAttribute || "body";
+    carryMf.resolution = { hitSave: true, saveAttribute: _svAttr, saveDcMode: _pr.saveDcMode, saveDcFixed: _pr.saveDcFixed };
+  }
   if (chain.carryEffects && mf?.appliedEffects && (mf.appliedEffects.modifiers?.length || mf.appliedEffects.resists?.length || mf.appliedEffects.immunes?.length)) {
     carryMf.appliedEffects = mf.appliedEffects;
   } else if (carryMf.appliedStates) {
@@ -2579,6 +3000,9 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
         });
         // Non-owner seats relay through the chokepoint and get "— sent to GM" back.
         if (apply) dmgDesc = apply;
+        // P09 (2026-11-08): the conditional (vs creature type) rider rides the chain hit too.
+        const _cd = await ftApplyConditionalDamage(item, secActor, { track: trackKey, type: damageType, flavor: damageFlav, multiplier: 1 });
+        if (_cd.length) dmgDesc += ` · ${_cd.join(" · ")}`;
       } catch (e) {
         console.warn("Roll for Initiation | chain _applyDamageToActor failed", secActor.name, e);
         dmgDesc = `${secActor.name}: ${rawTotal} ${damageType} — apply failed (see console)`;
@@ -2588,7 +3012,7 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
     // Carry conditions / effects via applyManifestationStates with the synthetic mf.
     if (Object.keys(carryMf).length) {
       try {
-        await game.fourththing.applyManifestationStates(caster, secActor, item, carryMf, { castDc });
+        await game.fourththing.applyManifestationStates(caster, secActor, item, carryMf, { castDc, saveResolved: false });
       } catch (e) {
         console.warn("Roll for Initiation | chain carry-states failed", secActor.name, e);
       }
@@ -2597,7 +3021,7 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
 
   // Summary chat card — one entry per secondary with its rolled total.
   const carryBits = [];
-  if (chain.carryConditions) carryBits.push("conditions");
+  if (chain.carryConditions) carryBits.push("conditions (each secondary saves)");
   if (chain.carryEffects)    carryBits.push("buffs/wards");
   const carryNote = carryBits.length
     ? `<p style="margin:0.2rem 0;font-size:0.74rem;opacity:0.7;font-style:italic">Carried to secondaries: ${carryBits.join(" + ")}.</p>`
@@ -2634,9 +3058,48 @@ function ftNormalizeConditionalDamage(raw) {
   return out;
 }
 
+// Conditional damage (vs creature type) — ONE helper for every apply path (P09, 2026-11-08): the Apply button, the AoE
+// walk, the AoE save prompt, Apply-All and chain secondaries. Each matching row rolls its bonus formula and lands as a
+// follow-up hit of the primary's type (track from that type), scaled by the target's own multiplier — a half save
+// halves the rider too; 0 skips it. Returns the description lines.
+async function ftApplyConditionalDamage(sourceItem, target, { track = "", type = "", flavor = "", multiplier = 1 } = {}) {
+  if (!sourceItem || !target) return [];
+  const mult = (Number.isFinite(Number(multiplier)) && Number(multiplier) >= 0) ? Number(multiplier) : 1;
+  if (mult <= 0) return [];
+  const rows = ftNormalizeConditionalDamage(sourceItem?.system?.manifestation?.conditionalDamage);
+  if (!rows.length) return [];
+  const tgtTypes = new Set(ftActorCreatureTypes(target));
+  const trackKey = ftTrackForDamage(track, type);
+  const out = [];
+  for (const row of rows) {
+    if (!tgtTypes.has(row.vsType)) continue;
+    try {
+      const bRoll = await new Roll(row.bonusFormula).evaluate();
+      const raw = Math.max(0, Math.floor(Number(bRoll.total) || 0));
+      const landed = Math.floor(raw * mult);
+      if (landed <= 0) continue;
+      const bDesc = await game.fourththing.rolls._applyDamageToActor(target, raw, {
+        op: "damage", track: trackKey, damageType: type, damageFlavor: flavor, perTargetMultiplier: mult
+      });
+      out.push(bDesc || `${target.name}: +${landed}`);
+      const typeLabel = FT.CREATURE_TYPES?.[row.vsType]?.label ?? ftCap(row.vsType);
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: sourceItem?.parent ?? null }),
+        content: `<div class="fourththing-roll" style="border-color:#e8c84a">
+          <div class="ft-roll-header"><span class="ft-roll-name">✦ ${ftEscapeHtml(sourceItem?.name ?? "Source")} — conditional bonus vs ${ftEscapeHtml(typeLabel)}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${ftEscapeHtml(row.bonusFormula)}</b> = ${raw}${mult !== 1 ? ` ×${mult} = ${landed}` : ""} → ${ftEscapeHtml(bDesc || target.name)}</p>
+        </div>`
+      });
+    } catch (e) {
+      console.warn("[fourththing] conditional damage roll failed", row, e);
+    }
+  }
+  return out;
+}
+
 // 2026-05-29 — normalize `system.damageParts` (Additional Damage Dice). Accepts
 // an array or the engine's indexed object-map (p0/p1/p2). Drops blank-formula
-// rows, lowercases type, defaults track from the damage-type table. Caps at 6.
+// rows, lowercases type, derives track from the damage type (2026-11-08 — a stored part track is ignored). Caps at 6.
 // Idempotent — the canonical writer for the field across sheet + engine paths.
 function ftNormalizeDamageParts(raw) {
   const src = Array.isArray(raw) ? raw : (raw && typeof raw === "object" ? Object.values(raw) : []);
@@ -2648,7 +3111,8 @@ function ftNormalizeDamageParts(raw) {
     let   type   = String(p.type ?? "kinetic").toLowerCase();
     let   flavor = String(p.flavor ?? "");
     if (type === "energy") { const a = _ftAliasEnergyDamage(type, flavor); type = a.type; flavor = a.flavor; }
-    const track  = String(p.track || FT.DAMAGE_TYPES?.[type]?.track || "integrity");
+    flavor = ftAliasHitFlavor(type, flavor);   // fire → hot etc. (teeth P36)
+    const track  = ftTrackForDamage(p.track, type);
     out.push({ formula, type, flavor, track });
     if (out.length >= 6) break;
   }
@@ -2679,15 +3143,18 @@ function ftNormalizeChainConfig(raw) {
 // Drops empty rows and unknown stats. Idempotent — safe to call on already
 // normalized data.
 function ftNormalizeAppliedEffects(raw) {
-  const out = { modifiers: [], resists: [], immunes: [] };
+  const out = { modifiers: [], resists: [], immunes: [], condition: "" };
   if (!raw || typeof raw !== "object") return out;
+  // A ward that holds only while a condition is true (2026-11-08): "martial-form" or "" (always).
+  out.condition = FT_WARD_CONDITIONS.includes(String(raw.condition ?? "")) ? String(raw.condition) : "";
   // Modifiers: keep only rows with a known stat AND a positive value.
   const modsArr = Array.isArray(raw.modifiers)
     ? raw.modifiers
     : Object.values(raw.modifiers ?? {});
   for (const m of modsArr) {
     if (!m || typeof m !== "object") continue;
-    const stat = String(m.stat ?? "").toLowerCase();
+    let stat = String(m.stat ?? "").toLowerCase();
+    if (stat === "evasion") stat = "guard";   // Evasion retired 2026-11-08 — a legacy ward lands on Guard, same value
     if (!FT_EFFECT_MOD_AE_KEYS[stat]) continue;
     const value = Math.max(0, Math.floor(Number(m.value) || 0));
     if (value <= 0) continue;
@@ -2721,25 +3188,227 @@ function ftNormalizeAppliedEffects(raw) {
   return out;
 }
 
+// ── Manifestation marks (2026-11-08, Dave: make six foe powers do what their rules text says) ─────────────────────────
+// One AE per cast, flags.fourththing.manifestationMark = { kind, source, itemId, itemName, durationKind, … }, carries any of:
+//   onMissRetaliation {formula, type, scope, once, source}  — read by the miss path (attackTest Strike misses AND
+//       resolveManifestationAttack misses, ftOnMissRetaliation). scope "vow-target": the mark sits on the vowed target —
+//       when IT misses an attack against the caster or anyone sharing the caster's disposition, it takes the damage.
+//       scope "self": the mark sits on the bearer — whoever misses the bearer takes it. once → the mark ends when it fires.
+//   attackersDisadvantage true — attack rolls against the bearer roll 3d10 keep lowest 2 (ftAttackedAtDisadvantage).
+//   damageConvert {from, to}  — damage of type `from` the bearer deals is dealt as `to` (ftOutgoingDamageType).
+// durationKind "scene" ends at the scene boundary (ftEndSceneManifestationEffects); "next-turn" ends at the start of the
+// SOURCE's next turn (ftExpireTurnStartMarks) — and at the scene boundary, out of combat.
+const FT_WARD_CONDITIONS = ["", "martial-form"];
+function ftNormalizeMissRetaliation(raw) {
+  const r = (raw && typeof raw === "object") ? raw : {};
+  const formula = String(r.formula ?? "").replace(/\s+/g, "");
+  const ok = /^\d{1,2}d\d{1,3}([+-]\d{1,3})?$/i.test(formula);
+  let type = String(r.type ?? "electrical").toLowerCase();
+  if (type === "energy") type = "electrical";
+  if (!FT.DAMAGE_TYPES?.[type]) type = "kinetic";
+  return { formula: ok ? formula : "", type, scope: r.scope === "self" ? "self" : "vow-target", once: r.once !== false };
+}
+function ftNormalizeDamageConvert(raw) {
+  const r = (raw && typeof raw === "object") ? raw : {};
+  const from = String(r.from ?? "").toLowerCase(), to = String(r.to ?? "").toLowerCase();
+  if (!FT.DAMAGE_TYPES?.[from] || !FT.DAMAGE_TYPES?.[to] || from === to) return { from: "", to: "" };
+  return { from, to };
+}
+// Does this manifestation leave a mark? (normalized mf)
+function ftManifestationHasMark(mf) {
+  return !!(mf?.onMissRetaliation?.formula || mf?.attackersDisadvantage === true || mf?.damageConvert?.from);
+}
+function _ftLiveMarks(actor, pred = null) {
+  return Array.from(actor?.effects ?? []).filter(e => !e.disabled && e.flags?.fourththing?.manifestationMark && (!pred || pred(e)));
+}
+// Outgoing damage type after the bearer's damageConvert marks (Hammer-Bright Ward: kinetic → electrical). One helper for
+// the Strike card (attackTest), castManifestation's damage roll and the Additional Damage Dice (ftCollectExtraDamageParts).
+function ftOutgoingDamageType(actor, type) {
+  const t = String(type ?? "").toLowerCase();
+  if (!actor || !t) return type;
+  for (const e of _ftLiveMarks(actor)) {
+    const dc = e.flags.fourththing.damageConvert;
+    if (dc?.from && dc.from === t && dc.to) return dc.to;
+  }
+  return type;
+}
+// Attacks against `target` roll at disadvantage (Frame Drift).
+function ftAttackedAtDisadvantage(target) {
+  const a = target?.actor ?? target;
+  return _ftLiveMarks(a, e => e.flags.fourththing.attackersDisadvantage === true).length > 0;
+}
+// A ward with condition "martial-form" holds only while the bearer has a melee / unarmed Form weapon equipped. Foes and
+// any actor with no weapon marked equipped count every carried weapon as in hand.
+function ftActorWieldsMartialForm(actor) {
+  const ws = Array.from(actor?.items ?? []).filter(i => i.type === "weapon");
+  if (!ws.length) return false;
+  const eq = (w) => w.flags?.fourththing?.equipped === true || w.system?.equipped === true;
+  const pool = ws.some(eq) ? ws.filter(eq) : ws;
+  return pool.some(w => ftWeaponCategoryTraits(w.system?.category).isMelee && ftIsFormWeapon(w, { stamp: false }));
+}
+// Guard points from conditional wards whose condition does not hold right now (taken back off at the Guard read).
+function ftConditionalWardGuardOff(actor) {
+  let off = 0, wields = null;
+  for (const e of Array.from(actor?.effects ?? [])) {
+    if (e.disabled) continue;
+    const me = e.flags?.fourththing?.manifestationEffect;
+    if (me?.condition !== "martial-form") continue;
+    wields ??= ftActorWieldsMartialForm(actor);
+    if (wields) continue;
+    for (const c of (e.changes ?? [])) if (c?.key === "system.derived.guard.aeBonus") off += Number(c.value) || 0;
+  }
+  return off;
+}
+// Who gets the mark: a vow goes on the target; every other mark on a self-range working sits on the caster.
+// One vow per caster — recasting moves it (the old mark is removed wherever it is on the scene).
+async function ftApplyManifestationMarks(caster, target, item, mf) {
+  if (!caster || !mf || !ftManifestationHasMark(mf)) return null;
+  const ret = mf.onMissRetaliation?.formula ? mf.onMissRetaliation : null;
+  const isVow = !!ret && ret.scope === "vow-target";
+  const recipient = isVow ? (target?.actor ?? target) : (ftManifestationIsSelf(item) ? caster : (target?.actor ?? target ?? caster));
+  if (!recipient || (isVow && recipient.uuid === caster.uuid)) return null;
+  const stab = String(mf.stability ?? "instant").toLowerCase();
+  const durationKind = isVow ? "scene" : (mf.markDuration || (["sustained", "bound", "enduring"].includes(stab) ? "scene" : "next-turn"));
+  const itemId = item?.id ?? null;
+  // Drop the caster's previous mark from this item (one per caster: the vow moves; a re-cast ward replaces itself).
+  const holders = new Map();
+  const _add = (a) => { if (a?.effects && !holders.has(a.uuid)) holders.set(a.uuid, a); };
+  _add(recipient); _add(caster);
+  for (const c of (game.combat?.combatants ?? [])) _add(c.actor);
+  for (const tok of (canvas?.scene?.tokens ?? [])) _add(tok.actor);
+  for (const a of holders.values()) {
+    const old = Array.from(a.effects ?? []).filter(e => {
+      const mk = e.flags?.fourththing?.manifestationMark;
+      return mk && mk.source === caster.uuid && (isVow ? mk.kind === "vow" : mk.itemId === itemId);
+    });
+    if (old.length) await _ftEndMarks(a, old);
+  }
+  const flags = {
+    manifestationMark: { kind: isVow ? "vow" : "ward", source: caster.uuid, sourceName: caster.name, itemId, itemName: item?.name ?? "Manifestation", durationKind,
+      startRound: game.combat?.round ?? null, startTurn: game.combat?.turn ?? null }
+  };
+  if (ret) flags.onMissRetaliation = { ...ret, source: caster.uuid };
+  if (mf.attackersDisadvantage === true) flags.attackersDisadvantage = true;
+  if (mf.damageConvert?.from) flags.damageConvert = { ...mf.damageConvert };
+  const aeData = { name: item?.name ?? "Manifestation", img: item?.img ?? "icons/svg/aura.svg", icon: item?.img ?? "icons/svg/aura.svg",
+    origin: caster.uuid, duration: {}, changes: [], flags: { fourththing: flags } };
+  const mode = await _ftApplyEffectsToTarget(recipient, [aeData], []);
+  const bits = [];
+  if (ret) bits.push(isVow ? `the next time ${ftEscapeHtml(recipient.name)} misses ${ftEscapeHtml(caster.name)} or an ally, it takes ${ftEscapeHtml(ret.formula)} ${ftEscapeHtml(ret.type)}`
+                           : `each attack that misses ${ftEscapeHtml(recipient.name)} costs the attacker ${ftEscapeHtml(ret.formula)} ${ftEscapeHtml(ret.type)}${ret.once ? " (once)" : ""}`);
+  if (mf.attackersDisadvantage === true) bits.push(`attacks against ${ftEscapeHtml(recipient.name)} roll at disadvantage`);
+  if (mf.damageConvert?.from) bits.push(`${ftEscapeHtml(ftCap(mf.damageConvert.from))} damage ${ftEscapeHtml(recipient.name)} deals is ${ftEscapeHtml(ftCap(mf.damageConvert.to))}`);
+  const until = durationKind === "scene" ? "for the scene" : `until the start of ${ftEscapeHtml(caster.name)}'s next turn`;
+  try {
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }),
+      content: `<div style="font-size:0.8rem">✦ <b>${ftEscapeHtml(item?.name ?? "Manifestation")}</b> — ${bits.join("; ")} ${until}.${mode === "none" ? " <i>(not applied — no GM online)</i>" : ""}</div>` });
+  } catch (_e) {}
+  return { recipient, mode, durationKind };
+}
+// End marks on one actor: delete when we may, else disable through the GM relay (it honours manifestationMark AEs).
+async function _ftEndMarks(actor, effects) {
+  const ids = (effects ?? []).map(e => e.id).filter(Boolean);
+  if (!ids.length) return;
+  if (game.user?.isGM || actor.isOwner) {
+    try { await actor.deleteEmbeddedDocuments("ActiveEffect", ids); return; } catch (e) { console.warn("[fourththing] mark delete failed", e); }
+  }
+  await _ftApplyEffectsToTarget(actor, [], [], { updates: ids.map(_id => ({ _id, disabled: true })) });
+}
+// The miss path: `attacker` just missed `missed`. Fires the attacker's vow (the attack was against the vow's caster or
+// someone sharing its disposition) and the missed bearer's "self" retaliation. Damage goes through _applyDamageToActor
+// (GM-relayed from a player seat); a short chat card says lightning answers.
+async function ftOnMissRetaliation(attacker, missed) {
+  const atk = attacker?.actor ?? attacker, tgt = missed?.actor ?? missed;
+  if (!atk || !tgt || atk.uuid === tgt.uuid) return [];
+  const fired = [];
+  // 1) The attacker carries a vow.
+  for (const e of _ftLiveMarks(atk, x => x.flags.fourththing.onMissRetaliation?.scope === "vow-target")) {
+    const r = e.flags.fourththing.onMissRetaliation;
+    let src = null; try { src = r.source ? await fromUuid(r.source) : null; } catch (_e) { src = null; }
+    src = src?.actor ?? src;
+    const dSrc = src ? _ftActorDisposition(src) : null, dTgt = _ftActorDisposition(tgt);
+    const covered = (r.source && r.source === tgt.uuid) || (dSrc !== null && dTgt !== null && dSrc === dTgt);
+    if (!covered) continue;
+    fired.push({ effect: e, holder: atk, victim: atk, r, sourceName: src?.name ?? e.flags.fourththing.manifestationMark?.sourceName ?? "" });
+  }
+  // 2) The missed bearer carries a "self" retaliation.
+  for (const e of _ftLiveMarks(tgt, x => x.flags.fourththing.onMissRetaliation?.scope === "self")) {
+    fired.push({ effect: e, holder: tgt, victim: atk, r: e.flags.fourththing.onMissRetaliation, sourceName: tgt.name });
+  }
+  const out = [];
+  for (const f of fired) {
+    let total = 0, roll = null;
+    try { roll = await new Roll(String(f.r.formula)).evaluate(); total = Math.max(0, Number(roll.total) || 0); } catch (e) { console.warn("[fourththing] retaliation roll failed", e); continue; }
+    const type = String(f.r.type || "kinetic");
+    const track = ftTrackForDamage("", type);
+    let desc = null;
+    try { desc = await game.fourththing.rolls._applyDamageToActor(f.victim, total, { op: "damage", track, damageType: type }); }
+    catch (e) { console.warn("[fourththing] retaliation damage failed", e); }
+    if (f.r.once) { try { await _ftEndMarks(f.holder, [f.effect]); } catch (_e) {} }
+    const itemName = f.effect.flags.fourththing.manifestationMark?.itemName ?? f.effect.name;
+    const lead = f.r.scope === "vow-target" ? `⚡ ${ftEscapeHtml(itemName)} — lightning answers` : `⚡ ${ftEscapeHtml(itemName)} — the miss bleeds back`;
+    try {
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: f.holder }), rolls: roll ? [roll] : [],
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">${lead}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.8rem">${ftEscapeHtml(f.victim.name)} missed and takes <b>${total}</b> ${ftEscapeHtml(type)}${track === "stress" ? " to Stress" : ""} (${ftEscapeHtml(f.r.formula)}).${f.r.once ? " The vow is spent." : ""}</p>
+          ${desc ? `<p style="margin:0;font-size:0.72rem;opacity:0.75">${ftEscapeHtml(String(desc))}</p>` : ""}</div>` });
+    } catch (_e) {}
+    out.push({ victim: f.victim, total, type, track, once: !!f.r.once });
+  }
+  return out;
+}
+// "Until the start of its next turn": at the start of `actor`'s turn, its next-turn marks end wherever they sit.
+async function ftExpireTurnStartMarks(actor, combat = game.combat) {
+  if (!actor) return 0;
+  const holders = new Map();
+  const _add = (a) => { if (a?.effects && !holders.has(a.uuid)) holders.set(a.uuid, a); };
+  _add(actor);
+  for (const c of (combat?.combatants ?? [])) _add(c.actor);
+  let n = 0;
+  for (const a of holders.values()) {
+    const due = _ftLiveMarks(a, e => e.flags.fourththing.manifestationMark.durationKind === "next-turn" && e.flags.fourththing.manifestationMark.source === actor.uuid);
+    if (due.length) { await _ftEndMarks(a, due); n += due.length; }
+  }
+  return n;
+}
+
 // Phase C — place a Foundry MeasuredTemplate. The caster's token center is
 // the *initial* anchor for the preview ghost; the player drags to aim and
 // left-clicks to commit (right-click cancels). Maps RFI shapes → Foundry
-// template types: cone→cone, sphere→circle, line→ray, cube→rect,
-// cylinder→circle (height not modeled — Foundry's MeasuredTemplate is 2D).
-async function ftPlaceAreaTemplate(actor, area) {
+// template types: cone→cone, sphere→circle, line→ray, cylinder→circle (height not modeled — Foundry's
+// MeasuredTemplate is 2D). Cube is retired (2026-11-08, teeth P27): a legacy cube places a circle of that radius —
+// a Foundry "rect" measures its size as the DIAGONAL and anchors at a corner, so it never landed where the author meant.
+// Hex-wide places no template (callers take every token on the scene). `rangeFt` (teeth P25): a movable (circle)
+// template centred beyond the manifestation's range tints red and warns on placement — cones and lines start at the
+// caster and ignore range.
+async function ftPlaceAreaTemplate(actor, area, { rangeFt = 0, onCaster = false } = {}) {
   if (!canvas?.scene) return null;
   const token = actor?.getActiveTokens?.()?.[0];
-  const SHAPE_MAP = { cone: "cone", sphere: "circle", line: "ray", cube: "rect", cylinder: "circle" };
-  const t = SHAPE_MAP[area.shape];
+  const SHAPE_MAP = { cone: "cone", sphere: "circle", line: "ray", cube: "circle", cylinder: "circle" };
+  const t = SHAPE_MAP[area?.shape];
   if (!t) return null;
   const distance = Math.max(5, Number(area.size) || 5);
+  // Centred on the caster (2026-11-08): a self-range sphere / cylinder lands on the caster's token — no aiming.
+  if (onCaster && t === "circle" && token) {
+    try {
+      const docs = await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [{
+        t, user: game.user.id, distance, direction: 0, x: token.center?.x ?? token.x, y: token.center?.y ?? token.y, fillColor: game.user.color ?? "#ff5500"
+      }]);
+      const created = docs?.[0] ?? null;
+      if (created) await new Promise(r => requestAnimationFrame(() => r()));
+      return created;
+    } catch (e) { console.warn("[fourththing] caster-centred template failed; falling back to aiming", e); }
+  }
+  const _reach = (t === "circle" && token && Number(rangeFt) > 0) ? Number(rangeFt) : 0;
+  const _baseFill = game.user.color ?? "#ff5500";
+  let _beyondFt = 0;   // how far the centre sits from the caster when it is past range (0 = in range)
   const initial = token
     ? { x: token.center?.x ?? token.x, y: token.center?.y ?? token.y }
     : { x: canvas.dimensions.width / 2, y: canvas.dimensions.height / 2 };
   const baseData = {
     t, user: game.user.id, distance, direction: 0,
     x: initial.x, y: initial.y,
-    fillColor: game.user.color ?? "#ff5500"
+    fillColor: _baseFill
   };
   if (t === "cone") baseData.angle = 53;   // standard 5e cone angle
   if (t === "ray")  baseData.width = 5;    // 5 ft default line width
@@ -2774,8 +3443,10 @@ async function ftPlaceAreaTemplate(actor, area) {
       try { preview.destroy({ children: true }); } catch (_e) {}
       try { priorLayer?.activate?.(); } catch (_e) {}
       if (!commit) return resolve(null);
+      if (_beyondFt > 0) ui.notifications?.warn(`The area's centre is ~${Math.round(_beyondFt)} ft away — beyond its ${_reach} ft range (GM's call).`);
       try {
         const data = preview.document.toObject();
+        data.fillColor = _baseFill;
         // Re-mark current user as author so the embedded doc is owned correctly.
         data.user = game.user.id;
         const docs = await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [data]);
@@ -2812,6 +3483,13 @@ async function ftPlaceAreaTemplate(actor, area) {
         // Cone/ray pivot stays at caster — don't move x/y.
       } else {
         preview.document.updateSource({ x: p.x, y: p.y });
+        if (_reach > 0) {
+          const g = canvas.grid;
+          const ft = Math.hypot(p.x - initial.x, p.y - initial.y) * ((g?.distance ?? 5) / (g?.size ?? 100));
+          const beyond = ft > _reach + 0.5;
+          _beyondFt = beyond ? ft : 0;
+          preview.document.updateSource({ fillColor: beyond ? "#c03030" : _baseFill });
+        }
       }
       preview.refresh();
       _hitLabel(ev);
@@ -2833,7 +3511,7 @@ async function ftPlaceAreaTemplate(actor, area) {
         const cd = _ftActorDisposition(actor);
         let foes = 0, allies = 0;
         for (const tk of toks) (_ftAoeRelation(cd, tk.document?.disposition ?? 0) === "foe") ? foes++ : allies++;
-        hitEl.innerHTML = `<b>${toks.length}</b> caught${foes ? ` · ${foes} foe${foes === 1 ? "" : "s"}` : ""}${allies ? ` · <span class="ft-thc-ally">${allies} ally ⚠</span>` : ""}`;
+        hitEl.innerHTML = `<b>${toks.length}</b> caught${foes ? ` · ${foes} foe${foes === 1 ? "" : "s"}` : ""}${allies ? ` · <span class="ft-thc-ally">${allies} ally ⚠</span>` : ""}${_beyondFt > 0 ? ` · <span class="ft-thc-ally">out of range (${Math.round(_beyondFt)} / ${_reach} ft)</span>` : ""}`;
       } catch (_e) { hitEl.textContent = ""; }
     };
 
@@ -2918,6 +3596,18 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set(), exclude
     if (inside) out.push(tok);
   }
   return out;
+}
+
+// Hex-wide area (2026-11-08, Dave: "a manifestation that impacted an entire hex"): every token on the current scene
+// except the caster's own, one per actor — the caller sorts them by disposition like any other area.
+function _ftTokensOnScene(caster) {
+  const seen = new Set();
+  return (canvas?.tokens?.placeables ?? []).filter(t => {
+    const a = t?.actor;
+    if (!a || a.uuid === caster?.uuid || seen.has(a.uuid)) return false;
+    seen.add(a.uuid);
+    return true;
+  });
 }
 
 // ── AoE disposition filter + target picker (2026-05-29 playtest) ─────────────
@@ -3224,7 +3914,7 @@ async function _ftHandleMisfireConvertClick(btn, message) {
 // the AoE walk; each target's owner clicks Save to roll their own. The pre-
 // rolled AoE base damage is snapshotted onto the chat-message context so each
 // target multiplies the SAME base damage (mirrors the canonical AoE semantic).
-async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, trackKey, { castDc, intent, channel, rollOverride = null } = {}) {
+async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, trackKey, { castDc, intent, channel, rollOverride = null, lockedParts = [] } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
   const dc = ftSaveDCFor(actor, r, mf?.tier, channel);
@@ -3239,6 +3929,10 @@ async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, tr
     damageRoll: foundry.utils.deepClone(dr ?? {}),
     aoeBaseDmg: Number(baseDmg) || 0,
     aoeTrackKey: String(trackKey || "integrity"),
+    // P08 (2026-11-08): the cast's Additional Damage Dice, rolled ONCE beside the base — every target takes the same
+    // locked numbers at its own save multiplier. P07: the pool row (set amounts) lands unless the save negates.
+    aoeParts: Array.isArray(lockedParts) ? lockedParts.map(p => ({ amount: Number(p.amount) || 0, type: p.type ?? "", flavor: p.flavor ?? "", track: p.track ?? "" })) : [],
+    poolShift: ftNormalizePoolShift(mf?.poolShift),
     rollOverride: rollOverride || null,
     expiresAt: Date.now() + 86400000
   };
@@ -3247,7 +3941,7 @@ async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, tr
     <div class="ft-roll-header"><span class="ft-roll-name">⚖ ${ftEscapeHtml(item.name)} (AoE) — Save vs ${ftCap(saveAttr)} (DC ${dc})</span></div>
     <p style="margin:0.4rem 0;font-size:0.82rem">
       <b>${ftEscapeHtml(target.name)}</b>, click below to roll your save against <b>${ftEscapeHtml(actor.name)}</b>'s working.
-      <span style="opacity:0.75">On ${onSave === "negate" ? "success: no " + opLabel : "success: half " + opLabel}.</span>
+      <span style="opacity:0.75">On ${onSave === "negate" ? "success: no " + opLabel + ", no conditions" : "success: half " + opLabel + ", no conditions"}.</span>
     </p>
     <button class="ft-aoe-save-prompt-btn" data-message-id="">Roll save (2d10x10 + ${ftCap(saveAttr)})</button>
   </div>`;
@@ -3297,11 +3991,25 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
         op: dr.op, track: ctx.aoeTrackKey, damageType: dr.type, damageFlavor: dr.flavor,
         perTargetMultiplier: mult
       });
-      if (desc) await ChatMessage.create({
+      const _lines = desc ? [desc] : [];
+      if (dr.op === "damage") {
+        for (const part of (Array.isArray(ctx.aoeParts) ? ctx.aoeParts : [])) {
+          const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
+          if (amt <= 0) continue;
+          const pDesc = await game.fourththing.rolls._applyDamageToActor(target, amt, {
+            op: "damage", track: ftTrackForDamage(part.track, part.type), damageType: part.type, damageFlavor: part.flavor,
+            perTargetMultiplier: mult
+          });
+          if (pDesc) _lines.push(pDesc);
+        }
+        _lines.push(...await ftApplyConditionalDamage(item, target, { track: ctx.aoeTrackKey, type: dr.type, flavor: dr.flavor, multiplier: mult }));
+      }
+      if (_lines.length) await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: caster }),
-        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">⚔ ${ftEscapeHtml(item.name)} — ${ftEscapeHtml(target.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${ftEscapeHtml(desc)}</p></div>`
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">⚔ ${ftEscapeHtml(item.name)} — ${ftEscapeHtml(target.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${_lines.map(l => ftEscapeHtml(l)).join("<br>")}</p></div>`
       });
     }
+    if (mult > 0 && ctx.poolShift) await ftApplyPoolShift(caster, target, item, ctx.poolShift, { multiplier: mult });
     // Same gate as the single-target save prompt (2026-08-21 fix, ported
     // 2026-10-01): wards-only workings and object-of-booleans states apply too.
     const _wardsEff = item?.system?.manifestation?.appliedEffects;
@@ -3311,7 +4019,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
       : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
     if (mult > 0 && !sav?.saved && (_hasStates || _hasWards)) {
       try {
-        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
+        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null, saveResolved: true });
       } catch (e) {
         console.warn("AoE save prompt: applyManifestationStates failed", e);
       }
@@ -3349,16 +4057,32 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
   const dr = ctx.dr ?? {};
   const baseDmg = Number(ctx.baseDmg) || 0;
   const trackKey = String(ctx.trackKey || "integrity");
+  const _aaItem = ctx.itemUuid ? await fromUuid(ctx.itemUuid).catch(() => null) : null;   // re-resolved for the conditional rows
   const lines = [];
   for (const entry of (ctx.pending ?? [])) {
     const tgt = await fromUuid(entry.uuid).catch(() => null);
     if (!tgt) { lines.push(`${entry.name}: target not found (skipped)`); continue; }
     try {
+      const _m = Number(entry.mult) || 1;
       const desc = await game.fourththing.rolls._applyDamageToActor(tgt, baseDmg, {
         op: dr.op, track: trackKey, damageType: dr.type, damageFlavor: dr.flavor,
-        perTargetMultiplier: Number(entry.mult) || 1
+        perTargetMultiplier: _m
       });
       if (desc) lines.push(desc);
+      // P08 / P09 (2026-11-08): the locked Additional Damage Dice and the conditional (vs creature type) rider, both
+      // at this target's multiplier.
+      if (dr.op === "damage") {
+        for (const part of (Array.isArray(ctx.parts) ? ctx.parts : [])) {
+          const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
+          if (amt <= 0) continue;
+          const pDesc = await game.fourththing.rolls._applyDamageToActor(tgt, amt, {
+            op: "damage", track: ftTrackForDamage(part.track, part.type), damageType: part.type, damageFlavor: part.flavor,
+            perTargetMultiplier: _m
+          });
+          if (pDesc) lines.push(pDesc);
+        }
+        if (_aaItem) lines.push(...await ftApplyConditionalDamage(_aaItem, tgt, { track: trackKey, type: dr.type, flavor: dr.flavor, multiplier: _m }));
+      }
     } catch (e) {
       console.warn("AoE apply-all: per-target apply failed", entry.name, e);
       lines.push(`${entry.name}: error (see console)`);
@@ -3376,7 +4100,12 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
   await _ftMarkCardResolved(message, "aoeApplyAllContext", "✓ Applied");
 }
 
-async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null } = {}) {
+// strikeMessageId / hitSave (2026-11-08, teeth P10/P12): a save card posted by a Strike's hit stamps its outcome on the
+// strike card (flags.fourththing.statesResolved) so Apply Damage never re-lands states the target saved against; a
+// Form's hit save ("hitSave") stops the states on a pass and halves the strike's damage when resolution.onSave is half.
+// chain / chainDr (2026-11-08, teeth P28): a single-target card may carry the manifestation's chain — it arcs on a failed
+// save (the primary landed), stamped on the strike card so Apply Damage never arcs a second time.
+async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null, damageParts = [], poolShift = undefined, strikeMessageId = null, hitSave = false, chain = null, chainDr = null } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
   const dc = ftSaveDCFor(actor, r, mf?.tier, channel);
@@ -3392,15 +4121,28 @@ async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, inte
     resolution: foundry.utils.deepClone(r),
     appliedStates: foundry.utils.deepClone(mf.appliedStates ?? {}),
     damageRoll: foundry.utils.deepClone(dr ?? {}),
+    // P08 / P07 (2026-11-08): Additional Damage Dice roll with the primary at the save's multiplier; the pool row
+    // (Clarity / Noise, set amounts) lands unless the save negates.
+    damageParts: dr?.op === "damage" ? ftNormalizeDamageParts(damageParts) : [],
+    poolShift: ftNormalizePoolShift(poolShift !== undefined ? poolShift : mf?.poolShift),
     rollOverride: rollOverride || null,
+    strikeMessageId: strikeMessageId || null,
+    hitSave: hitSave === true,
+    chain: (chain && chain.enabled === true) ? foundry.utils.deepClone(ftNormalizeChainConfig(chain)) : null,
+    chainDr: chainDr ? { type: chainDr.type ?? "", track: chainDr.track ?? "", flavor: chainDr.flavor ?? "" } : null,
     expiresAt: Date.now() + 86400000
   };
   const opLabel = dr?.op === "heal" ? "heal" : (dr?.op === "damage" ? "damage" : "effect");
+  const passText = hitSave
+    ? (onSave === "half" ? "success: no conditions, half the strike's damage" : "success: no conditions (the strike's damage stands)")
+    : (dr?.op === "damage" || dr?.op === "heal")
+      ? (onSave === "negate" ? `success: no ${opLabel}, no conditions` : `success: half ${opLabel}, no conditions`)
+      : "success: no conditions";
   const html = `<div class="fourththing-roll ft-save-prompt-card">
     <div class="ft-roll-header"><span class="ft-roll-name">⚖ ${ftEscapeHtml(item.name)} — Save vs ${ftCap(saveAttr)} (DC ${dc})</span></div>
     <p style="margin:0.4rem 0;font-size:0.82rem">
       <b>${ftEscapeHtml(target.name)}</b>, click below to roll your save against <b>${ftEscapeHtml(actor.name)}</b>'s working.
-      <span style="opacity:0.75">On ${onSave === "negate" ? "success: no " + opLabel : "success: half " + opLabel}.</span>
+      <span style="opacity:0.75">On ${passText}.</span>
     </p>
     <button class="ft-save-prompt-btn" data-message-id="">Roll save (2d10x10 + ${ftCap(saveAttr)})</button>
   </div>`;
@@ -3440,18 +4182,22 @@ async function _ftHandleSavePromptClick(btn, message) {
     const sav = await game.fourththing.rolls.resolveManifestationSave(caster, target, item, ctx.resolution, {
       castDc: ctx.castDc,
       channel: ctx.channel || null,
-      rollOverride: ctx.rollOverride || null
+      rollOverride: ctx.rollOverride || null,
+      passLabel: ctx.hitSave ? (ctx.resolution?.onSave === "half" ? "half damage, no conditions" : "no conditions (damage stands)") : null
     });
     let mult = 1;
     if (sav?.saved) mult = (sav.onSave === "negate") ? 0 : 0.5;
+    // A Form's hit save: a pass stops the states (and the pool row); the strike's own damage stands or halves on its card.
+    if (ctx.hitSave && sav?.saved) mult = 0;
 
     // Apply damage with the resolved multiplier. Reuse ftRollManifestationDamage
     // for the chat card + Apply button (same as singular non-prompt path).
     const dr = ctx.damageRoll;
     if (dr?.op !== "none" && Number(dr?.number) > 0 && mult > 0) {
       // 10-29: bake the prompted target — Apply hits THIS target, not the clicker's targets.
-      await ftRollManifestationDamage(caster, item, dr, { multiplier: mult, targetUuid: ctx.targetUuid });
+      await ftRollManifestationDamage(caster, item, dr, { multiplier: mult, targetUuid: ctx.targetUuid, parts: ctx.damageParts ?? [] });
     }
+    if (mult > 0 && ctx.poolShift) await ftApplyPoolShift(caster, target, item, ctx.poolShift, { multiplier: mult });
     // Apply states AND Buffs & Wards with the same gate. Two latent bugs here
     // (2026-08-21, the first stuck [sic] applied nothing):
     //  · wards-only workings (no conditions — a pure stat-mark) never reached
@@ -3464,22 +4210,36 @@ async function _ftHandleSavePromptClick(btn, message) {
     const _sts = ctx.appliedStates?.states;
     const _hasStates = Array.isArray(_sts) ? _sts.length > 0
       : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
-    // resolution.statesOnFail (2026-10-06, NPC riders): "half on success, NO Shaken" — conditions/wards land only on a
-    // failed save. Default false keeps the PC manifestation behaviour (half-success still applies states) unchanged.
-    const _statesGate = ctx.resolution?.statesOnFail ? !sav?.saved : mult > 0;
-    if (_statesGate && !sav?.saved && (_hasStates || _hasWards)) {
+    // A passed save never lands states or wards (Dave 2026-11-06; statesOnFail retired 2026-11-08 — it only ever said so).
+    if (!sav?.saved && (_hasStates || _hasWards)) {
       // applyManifestationStates reads mf.appliedStates — pass a synthetic mf
       // shape with the snapshotted appliedStates so it doesn't re-read the
-      // (potentially edited) item.
+      // (potentially edited) item. saveResolved: this card WAS the save — no second roll (P12).
       try {
-        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
+        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null, saveResolved: true });
       } catch (e) {
         console.warn("Roll for Initiation | savePrompt applyManifestationStates failed", e);
       }
     }
     // NPC automation: the caster's "saveFail" rules (no reactions, +Radiation, extra damage, push prompt…)
     if (!sav?.saved) { try { await game.fourththing.npcAuto?.onSaveFail?.(caster, item, target); } catch (e) { console.warn("[fourththing] npc automation saveFail", e); } }
-    btn.textContent   = sav?.saved ? `Saved (${sav.onSave === "negate" ? "negated" : "halved"})` : `Failed save`;
+    // Chain (2026-11-08, teeth P28): the primary landed (multiplier > 0, not saved) → arc to the secondaries, once.
+    if (ctx.chain?.enabled && mult > 0 && !sav?.saved) {
+      const _sm = ctx.strikeMessageId ? game.messages?.get(ctx.strikeMessageId) : null;
+      if (!_ftStrikeChained(_sm)) {
+        try {
+          const _cmf = { chain: ctx.chain, appliedStates: ctx.appliedStates, appliedEffects: item?.system?.manifestation?.appliedEffects, resolution: ctx.resolution };
+          await _ftFireManifestationChain(caster, target, item, _cmf, ctx.chainDr ?? ctx.damageRoll ?? {}, { castDc: ctx.castDc });
+          if (_sm) await _ftStampStrikeChained(_sm);
+        } catch (e) { console.warn("Roll for Initiation | savePrompt chain failed", e); }
+      }
+    }
+    // The strike card learns the outcome (P12): Apply Damage skips states for a saver and halves a half-on-save Form.
+    if (ctx.strikeMessageId) {
+      const _sm = game.messages?.get(ctx.strikeMessageId);
+      if (_sm) await _ftStampStrikeStates(_sm, target.uuid, sav?.saved ? ((ctx.hitSave && sav.onSave === "half") ? "saved-half" : "saved") : "failed");
+    }
+    btn.textContent   = sav?.saved ? (ctx.hitSave ? `Saved (no conditions${sav.onSave === "half" ? ", half damage" : ""})` : `Saved (${sav.onSave === "negate" ? "negated" : "halved"})`) : `Failed save`;
     btn.style.opacity = "0.5";
     await _ftMarkCardResolved(message, "savePromptContext", btn.textContent);
   } catch (err) {
@@ -3538,7 +4298,7 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
       const rolled = Math.max(0, Math.floor(Number(dmgRoll.total) || 0));
       const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
       const tip = dice.length ? `[${dice.join(" · ")}]` : "";
-      const track = FT.DAMAGE_TYPES[ctx.damageType]?.track ?? "integrity";
+      const track = ftTrackForDamage(ctx.damageTrack, ctx.damageType);
       const facTail = (ctx.damageFacultyMod && ctx.damageBaseFormula)
         ? ` <span style="opacity:0.7;font-size:0.78rem">(${ftEscapeHtml(String(ctx.damageBaseFormula))} ${ctx.damageFacultyMod >= 0 ? "+" : "−"} ${Math.abs(ctx.damageFacultyMod)})</span>`
         : "";
@@ -3574,7 +4334,21 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
 // card with an Apply button. Bakes the rolled total into data-formula so
 // the apply path applies the same number rather than re-rolling. Heal flows
 // through the same apply button via data-op="heal" (extended in applyDamage).
-async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targetUuid = null } = {}) {
+// `parts` (P08, 2026-11-08): the item's Additional Damage Dice (ftCollectExtraDamageParts) — rolled beside the primary
+// when op is damage, no faculty add, same save multiplier, carried on the Apply button (data-parts) as locked numbers.
+// Additional healing dice (teeth P36): on a heal, each extra-dice row's formula is added to the heal roll (its type and
+// flavor mean nothing on a heal). Returns " + 1d6 + 1d4" or "". Invalid formulas are skipped.
+function ftHealPartsFormula(parts) {
+  const out = [];
+  for (const p of (Array.isArray(parts) ? parts : [])) {
+    const f = String(p?.formula ?? "").trim();
+    if (!f) continue;
+    try { if (Roll.validate(f)) out.push(`(${f})`); } catch (_e) {}
+  }
+  return out.length ? ` + ${out.join(" + ")}` : "";
+}
+
+async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targetUuid = null, parts = [] } = {}) {
   if (!actor || !item || !dr || dr.op === "none") return null;
   if (!Number.isFinite(dr.number) || dr.number <= 0) return null;
   const sys = actor.system?.system ?? actor.system;
@@ -3582,7 +4356,9 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targ
   // dr.bonus (2026-10-06, NPC riders): a flat add — weapon riders like "2d8+2" and the threat chassis's tier damage on
   // save-first strikes. Absent/0 for every legacy caller, so their formulas are unchanged.
   const flatBonus    = Number(dr.bonus) || 0;
-  const baseFormula  = `${dr.number}${dr.die}${flatBonus ? (flatBonus > 0 ? ` + ${flatBonus}` : ` - ${Math.abs(flatBonus)}`) : ""}`;
+  // A heal's Additional healing dice join the heal roll itself (teeth P36) — same bar, same multiplier.
+  const healExtra    = dr.op === "heal" ? ftHealPartsFormula(parts) : "";
+  const baseFormula  = `${dr.number}${dr.die}${healExtra}${flatBonus ? (flatBonus > 0 ? ` + ${flatBonus}` : ` - ${Math.abs(flatBonus)}`) : ""}`;
   const finalFormula = attrVal !== 0
     ? `${baseFormula} ${attrVal >= 0 ? "+" : "−"} ${Math.abs(attrVal)}`
     : baseFormula;
@@ -3598,8 +4374,30 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targ
   const isHeal     = dr.op === "heal";
   const opLabel    = isHeal ? "Healing" : "Damage";
   const opIcon     = isHeal ? "❤" : "⚔";
-  const trackKey   = isHeal ? (dr.track || "integrity") : (FT.DAMAGE_TYPES?.[dr.type]?.track ?? dr.track ?? "integrity");
+  const trackKey   = ftLandingTrack(dr.op, dr.track, dr.type);
   const facultyTag = attrVal !== 0 ? ` <span style="opacity:0.7;font-size:0.78rem">(${baseFormula} ${attrVal >= 0 ? "+" : "−"} ${Math.abs(attrVal)} ${ftCap(dr.attribute)})</span>` : "";
+  // Additional Damage Dice — damage only, each its own type (track from that type), scaled like the primary.
+  const rolledParts = [];
+  const partRolls = [];
+  if (!isHeal && Array.isArray(parts)) {
+    for (const part of parts) {
+      if (!part?.formula) continue;
+      try {
+        const pr = new Roll(String(part.formula)); await pr.evaluate();
+        partRolls.push(pr);
+        const raw = Math.max(0, Math.floor(Number(pr.total) || 0));
+        const amount = Math.max(0, Math.floor(raw * safeMult));
+        const dice = (pr.dice || []).flatMap(d => (d.results || []).map(r => r.result));
+        if (amount > 0) rolledParts.push({ amount, raw, type: String(part.type ?? ""), flavor: String(part.flavor ?? ""),
+          track: ftTrackForDamage(part.track, part.type), formula: String(part.formula), tooltip: dice.length ? `[${dice.join(" · ")}]` : "" });
+      } catch (e) { console.warn("[fourththing] manifestation damage part roll failed", part, e); }
+    }
+  }
+  const partsDisplay = rolledParts.map(p =>
+    ` <span class="ft-dmg-type ${ftEscapeHtml(p.type)}" style="opacity:0.92">+ ${p.amount} ${ftCap(p.type)} <span style="opacity:0.6">(${ftEscapeHtml(p.formula)} ${p.tooltip}${safeMult !== 1 ? ` = ${p.raw} ×${safeMult}` : ""})</span></span>`).join("");
+  const partsData = rolledParts.length
+    ? ` data-parts="${ftEscapeHtml(JSON.stringify(rolledParts.map(p => ({ amount: p.amount, type: p.type, flavor: p.flavor, track: p.track }))))}"`
+    : "";
   const html = `<div class="fourththing-roll">
     <div class="ft-roll-header"><span class="ft-roll-name">${opIcon} ${ftEscapeHtml(item.name)} — ${opLabel}${multTag}</span></div>
     <div class="ft-result-row ft-success">
@@ -3609,13 +4407,14 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targ
     <div class="ft-dmg-row">
       <span class="ft-dmg-label">${opLabel}</span>
       <span class="ft-dmg-formula">${finalFormula} = <b>${rawTotal}</b>${safeMult !== 1 ? ` → <b>${finalTotal}</b>` : ""}${facultyTag}</span>
-      <span class="ft-dmg-type ${ftEscapeHtml(dr.type ?? "")}">${ftCap(dr.type)}</span>
+      <span class="ft-dmg-type ${ftEscapeHtml(dr.type ?? "")}">${ftCap(dr.type)}</span>${partsDisplay}
       <button class="ft-apply-dmg-btn"
               data-formula="${finalTotal}"
               data-damage-type="${ftEscapeHtml(dr.type ?? "")}"
               data-damage-flavor="${ftEscapeHtml(dr.flavor ?? "")}"
               data-track="${trackKey}"
               data-op="${dr.op}"
+              data-multiplier="${safeMult}"${partsData}
               data-item-uuid="${ftEscapeHtml(item?.uuid ?? "")}"${targetUuid ? ` data-target-uuid="${ftEscapeHtml(targetUuid)}" data-target-first="1"` : ""}>
         ${isHeal ? "Heal target" : "Apply to target"}
       </button>
@@ -3624,7 +4423,7 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targ
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: html,
-    rolls: [roll]
+    rolls: [roll, ...partRolls]
   });
   return roll;
 }
@@ -3643,12 +4442,24 @@ function ftItemStatStrip(item, systemOverride = null) {
     const l = String(label ?? "").trim();
     if (l) chips.push({ icon, label: l, tip: tip ?? "" });
   };
-  const act = mf.activation?.type ?? sys.activation?.type;
-  if (act && act !== "none") add("⏱", ftCap(act), "Action type to use");
-  const rng = Number(mf.rangeFt) ? `${mf.rangeFt} ft`
+  // One activation field + stances (2026-11-08, teeth P20 / R11).
+  const _kind = (item?.type ?? (sys.damage?.formula !== undefined ? "weapon" : "power")) === "weapon" ? "weapon" : "power";
+  const _nmf = ftNormalizeManifestationData(sys, _kind);
+  const act = _nmf.activation.type;
+  const _isForm = _kind === "power" || (item ? ftIsManifestedForm(item) : !!item?.flags?.fourththing?.manifested);
+  if (_kind === "power") add("⏱", act === "reaction" ? "Reaction" : act === "none" ? "Free" : "Stance: Action / Bonus", act === "reaction" || act === "none" ? "Action type to use" : "Shamanic uses the Action · Chaotic the Bonus action · Hermetic both");
+  else if (item && ftIsManifestedForm(item)) add("⏱", act === "none" ? "Free" : ({ action: "Action", bonus: "Bonus action", reaction: "Reaction" })[act] ?? "Action", "Action a Strike spends");
+  // A manifestation's range is rangeFt (teeth P25; 0 = touch / self) — the same number every check reads.
+  const _isMani = _kind === "power" || (item ? ftIsFormWeapon(item, { stamp: false }) : false);
+  const _rFt = (_isMani && item) ? _ftItemRangeFt(item) : Number(mf.rangeFt) || 0;
+  const _shp = _nmf.area?.shape ?? "none";
+  const rng = (_isMani && (_shp === "cone" || _shp === "line")) ? "From you"
+    : (_isMani && _shp === "hex") ? ""
+    : (_isMani && item) ? (_rFt >= 999 ? "Unlimited" : _rFt === 0 ? "Self" : (_rFt === 5 && !(Number(mf.rangeFt) > 0)) ? "Touch" : `${_rFt} ft`)
+    : Number(mf.rangeFt) ? `${mf.rangeFt} ft`
     : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} ${_ftWeaponRangeIsFeet(sys.range.long ?? sys.range.short, sys.range.units) ? "ft" : "sq"}` : (mf.rangeAreaText || ""));
   add("→", rng, "Range");
-  if (mf.area?.shape && mf.area.shape !== "none") add("◎", `${mf.area.size} ft ${mf.area.shape}`, "Area of effect");
+  if (mf.area?.shape && mf.area.shape !== "none") add("◎", mf.area.shape === "hex" ? "Hex-wide" : `${mf.area.size} ft ${mf.area.shape}`, mf.area.shape === "hex" ? "Area: everyone on the scene, sorted by disposition" : "Area of effect");
   add("◌", mf.targetText, "Target");
   const wDmg = String(sys.damage?.formula ?? "").trim();
   if (wDmg) add("⚔", `${wDmg} ${sys.damage?.type ?? ""}`.trim(), "Strike damage");
@@ -3657,14 +4468,13 @@ function ftItemStatStrip(item, systemOverride = null) {
   for (const p of (Array.isArray(sys.damageParts) ? sys.damageParts : [])) {
     if (p?.formula) add("＋", `${p.formula} ${p.type ?? ""}`.trim(), "Extra damage part");
   }
-  if (mf.costType && mf.costType !== "none") add("✦", [mf.costValue, ftCap(mf.costType)].filter(v => v !== "" && v != null && v !== 0).join(" "), "Cost to use");
-  else if (Number(sys.clarityRequired) > 0) add("✦", `${sys.clarityRequired} Clarity`, "Cost to use");
-  if (Number(sys.noiseGain) > 0) add("〰", `+${sys.noiseGain} Noise`, "Noise gain");
-  const mk = mf.maintenanceKey;
-  const ongoing = (mk && mk !== "none" && mk !== "custom")
-    ? (FT.MAINTENANCE_COSTS?.[mk]?.label ?? mk)
-    : (mf.maintenanceCost || "");
-  add("↻", ongoing, "Ongoing / maintenance cost");
+  { const _ps = ftPoolShiftLabel(mf.poolShift); if (_ps) add("◇", _ps, "Clarity / Noise — a set amount that lands with the hit"); }
+  // The one cost source (2026-11-08, teeth P16/P18): tier Clarity (powers and Engine Forms) + the extra cost; upkeep =
+  // what ftChargeUpkeep bills.
+  { const _sum = ftManifestationCostSummary(item, sys, _kind);
+    if (_sum.cost) add("✦", _sum.cost, _kind === "weapon" && ftStabilityPersists(_nmf) ? "Cost — paid once a scene while the Form persists" : "Cost to use");
+    if (_sum.upkeep) add("↻", _sum.upkeep, "Upkeep while it persists");
+    else if (mf.maintenanceCost && !ftStabilityPersists(_nmf)) add("↻", mf.maintenanceCost, "Upkeep note"); }
   return chips;
 }
 
@@ -3726,6 +4536,9 @@ function ftNormalizeDamageRoll(system = {}) {
   dr.number    = Math.max(0, Math.min(20, Number(dr.number) || 0));
   dr.die       = FT_DAMAGE_DICE.includes(dr.die) ? dr.die : "d6";
   dr.attribute = String(dr.attribute ?? "");
+  // Intent drives the faculty add (Dave 2026-11-08): when the system carries an intent, the stored
+  // damageRoll.attribute is ignored. Callers passing a bare { damageRoll } keep what they pass.
+  if (system && system.intent !== undefined) dr.attribute = ftItemIntent(system);
   dr.type      = String(dr.type ?? "kinetic");
   dr.flavor    = String(dr.flavor ?? "");
   // Retire legacy broad "energy" → electrical/thermal/chemical by flavor.
@@ -3733,8 +4546,54 @@ function ftNormalizeDamageRoll(system = {}) {
     const a = _ftAliasEnergyDamage(dr.type, dr.flavor);
     dr.type = a.type; dr.flavor = a.flavor;
   }
-  dr.track     = String(dr.track ?? "integrity");
+  dr.flavor    = ftAliasHitFlavor(dr.type, dr.flavor);   // fire → hot etc. (teeth P36)
+  // Track derives from the damage type (2026-11-08) — a stored damage track is ignored; heals keep theirs.
+  dr.track     = ftLandingTrack(dr.op, dr.track, dr.type);
   return dr;
+}
+
+// Legacy manifestation.save → resolution (2026-11-08). The old block ({ enabled, defense, attribute,
+// dcMode, dcFixed }) was written by the V1 wizard and never read by the cast path. When it is enabled
+// and the item has no live resolution shape yet, return the resolution it meant: a save, rolled with
+// its faculty (explicit attribute, else guard/evasion → Body, resolve → Soul), DC from the cast ladder
+// unless it carried a fixed DC. Returns null when there is nothing to fold in.
+function ftLegacySaveToResolution(mf) {
+  const sv = mf?.save;
+  if (!sv || typeof sv !== "object" || sv.enabled !== true) return null;
+  const res = (mf.resolution && typeof mf.resolution === "object") ? mf.resolution : {};
+  if (res.shape && res.shape !== "auto") return null;
+  const FAC = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+  const attr = String(sv.attribute ?? "").toLowerCase();
+  const faculty = FAC.includes(attr) ? attr : (sv.defense === "resolve" ? "soul" : "body");
+  const fixed = sv.dcMode === "fixed" && Number(sv.dcFixed) > 0;
+  return {
+    ...foundry.utils.deepClone(res),
+    shape: "save",
+    saveAttribute: faculty,
+    saveDcMode: fixed ? "fixed" : "cast-dc",
+    ...(fixed ? { saveDcFixed: Number(sv.dcFixed) } : {})
+  };
+}
+
+// Area shapes an author can pick (2026-11-08, teeth P27 / hex-wide). Cube retired (reads as sphere). Labels say what
+// the size means: a radius for sphere / cylinder, a length for cone (53°) / line (5 ft wide); hex = the whole scene.
+function ftAreaShapeKeys() { return ["none", "cone", "sphere", "line", "cylinder", "hex"]; }   // a function, not a top-level const (TDZ)
+function ftAreaShapeOptions() {
+  return {
+    none:     "None — single target",
+    sphere:   "Sphere — radius",
+    cylinder: "Cylinder — radius",
+    cone:     "Cone — length (53°, from you)",
+    line:     "Line — length (5 ft wide, from you)",
+    hex:      "Hex-wide — everyone on the scene"
+  };
+}
+function ftAreaSizeLabel(shape) {
+  const s = String(shape ?? "none");
+  if (s === "cone") return "Length (ft) — 53° cone from you";
+  if (s === "line") return "Length (ft) — 5 ft wide, from you";
+  if (s === "hex")  return "Size — the whole scene";
+  return "Radius (ft)";
 }
 
 function ftNormalizeManifestationData(system = {}, kind = "power") {
@@ -3743,10 +4602,6 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
     foundry.utils.deepClone(system?.manifestation ?? {}),
     { inplace: false }
   );
-
-  if (!mf.targetText && system?.target) {
-    mf.targetText = ftCap(system.target);
-  }
 
   if (!mf.rangeAreaText) {
     if (kind === "weapon" && system?.range) {
@@ -3762,8 +4617,8 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
     mf.concept = system.effect;
   }
 
-  // Tier normalization. Explicit tier wins; otherwise infer from legacy scale
-  // so pre-existing items load at a plausible tier without migration.
+  // Tier normalization. Explicit tier wins; otherwise infer from the retired
+  // Scale field (2026-11-08) so a tier-less legacy item loads at a plausible tier.
   const explicitTier = Number(mf.tier);
   if (Number.isFinite(explicitTier) && explicitTier >= 1 && explicitTier <= 4) {
     mf.tier = Math.floor(explicitTier);
@@ -3771,25 +4626,68 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
     mf.tier = FT_MANIFESTATION_SCALE_TO_TIER[mf.scale] ?? 1;
   }
 
-  if (!mf.opCost || typeof mf.opCost !== "object") mf.opCost = { pool: "", value: 0 };
-  mf.opCost.pool = typeof mf.opCost.pool === "string" ? mf.opCost.pool : "";
-  mf.opCost.value = Number(mf.opCost.value) || 0;
+  // Enduring folded into Bound (Dave 2026-11-08: "Fold into bound. Cost per Soma break.") —
+  // read-time shim for items the migration hasn't reached.
+  if (mf.stability === "enduring") mf.stability = "bound";
+  // Any other unknown key (e.g. a legacy "soulbound") reads as Bound too (fix round 2026-11-08, R3) — so a legacy Form
+  // pays once a scene, not on every Strike. Empty falls back to the kind's default.
+  if (typeof mf.stability === "string") mf.stability = mf.stability.trim().toLowerCase();
+  if (!mf.stability) mf.stability = ftManifestationDefaults(kind).stability ?? "instant";
+  else if (!["instant", "sustained", "bound"].includes(mf.stability)) mf.stability = "bound";
 
   // Phase A — structured mechanical hook coercion.
+  // Area (2026-11-08, teeth P27 + hex-wide): Cube is gone — a stored cube reads as a sphere of the same size (the
+  // teeth-phaseA-range-area-forms macro rewrites it). A template shape is at least 5 ft. "hex" = the whole scene (every
+  // token on it, sorted by disposition like any area) — no template, no size.
   if (!mf.area || typeof mf.area !== "object") mf.area = { shape: "none", size: 0 };
-  mf.area.shape = ["none", "cone", "sphere", "line", "cube", "cylinder"].includes(mf.area.shape) ? mf.area.shape : "none";
-  mf.area.size  = Math.max(0, Math.min(120, Number(mf.area.size) || 0));
+  if (mf.area.shape === "cube") mf.area.shape = "sphere";
+  mf.area.shape = ftAreaShapeKeys().includes(mf.area.shape) ? mf.area.shape : "none";
+  // Clamp raised 120 → 600 ft (fix round 2026-11-08, S4): the v1.2 rubric scores an area beyond 120 ft at 2 points.
+  mf.area.size  = Math.max(0, Math.min(600, Number(mf.area.size) || 0));
+  if (mf.area.shape === "hex") mf.area.size = 0;
+  else if (mf.area.shape !== "none") mf.area.size = Math.max(5, mf.area.size);
 
-  if (!mf.activation || typeof mf.activation !== "object") mf.activation = { type: "action", consumePool: true };
-  mf.activation.type        = ["action", "bonus", "reaction", "none"].includes(mf.activation.type) ? mf.activation.type : "action";
-  mf.activation.consumePool = mf.activation.consumePool !== false; // default true
+  // Range (2026-11-08, teeth P25): rangeFt is the one authored range, 0–999 ft (0 = touch / self).
+  mf.rangeFt = Math.max(0, Math.min(999, Math.floor(Number(mf.rangeFt) || 0)));
 
-  if (!mf.save || typeof mf.save !== "object") mf.save = { enabled: false, defense: "evasion", attribute: "", dcMode: "derived", dcFixed: 15 };
-  mf.save.enabled   = mf.save.enabled === true;
-  mf.save.defense   = ["guard", "evasion", "resolve"].includes(mf.save.defense) ? mf.save.defense : "evasion";
-  mf.save.attribute = String(mf.save.attribute ?? "");
-  mf.save.dcMode    = ["fixed", "derived"].includes(mf.save.dcMode) ? mf.save.dcMode : "derived";
-  mf.save.dcFixed   = Math.max(5, Math.min(40, Number(mf.save.dcFixed) || 15));
+  // Chain (2026-11-08, teeth P28): an area and a chain don't compose — an area manifestation never chains.
+  mf.chain = ftNormalizeChainConfig(mf.chain ?? {});
+  if (mf.area.shape !== "none") mf.chain.enabled = false;
+
+  // Activation — one field (2026-11-08, teeth P20). Read-time shims: consumePool false → "none" (free); the legacy
+  // top-level system.activation string fills in when the item never stored a structured type; Ritual (dropped, Dave:
+  // "Drop ritual as a manifestation form") and anything unknown → Action; "free" → none.
+  if (!mf.activation || typeof mf.activation !== "object") mf.activation = { type: "action" };
+  {
+    const _rawAct = system?.manifestation?.activation;
+    let _at = String((_rawAct && typeof _rawAct === "object" && _rawAct.type) ? _rawAct.type
+      : (typeof system?.activation === "string" && system.activation ? system.activation : mf.activation.type) ?? "").toLowerCase();
+    if (_at === "free" || _at === "passive") _at = "none";
+    if (_rawAct && typeof _rawAct === "object" && _rawAct.consumePool === false) _at = "none";
+    mf.activation.type = ["action", "bonus", "reaction", "none"].includes(_at) ? _at : "action";
+    delete mf.activation.consumePool;
+  }
+
+  // Cost (2026-11-08, teeth P16/P18): costType is the EXTRA cost on top of the tier's Clarity — Stress / Noise / Strain,
+  // 1–10. clarity / none / custom / burn (Surge) read as no extra cost (the teeth-phaseA-cost-activation macro migrates
+  // and reports them).
+  {
+    const _ex = ftExtraCostOf(mf);
+    if (_ex) { mf.costType = _ex.type; mf.costValue = _ex.value; }
+    else { mf.costType = "none"; mf.costValue = 0; }
+  }
+
+  // Duration is one knob derived from stability (2026-11-08, teeth P24). An Instant manifestation has no upkeep (P21).
+  mf.duration = ftDurationForStability(mf.stability);
+  if (mf.stability === "instant") mf.maintenanceKey = "none";
+
+  // Legacy `save` block retired 2026-11-08 (nothing read it). Read-time shim: an enabled legacy
+  // save on an auto-shape item becomes resolution.shape "save" with its faculty; then the block
+  // and the retired `family` key are dropped. teeth-phaseA-legacy-intent macro migrates stored items.
+  const _legacySaveRes = ftLegacySaveToResolution(mf);
+  if (_legacySaveRes) mf.resolution = _legacySaveRes;
+  delete mf.save;
+  delete mf.family;
 
   // Post-cast effect resolution (2026-05-05). Coerces every shape's fields to
   // safe defaults so the sheet UI can read any field without conditional
@@ -3797,9 +4695,25 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
   // by the engine; the rest sit dormant.
   if (!mf.resolution || typeof mf.resolution !== "object") mf.resolution = {};
   const VALID_FACULTIES = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+  // resolution.mode folded into shape (2026-11-08, teeth P10): the NPC packs' save-first weapons store mode "save" —
+  // read as shape "save" (ftStrikeResolution honours both on a foe weapon). The packs are not rewritten.
+  if (mf.resolution.mode === "save") mf.resolution.shape = "save";
+  delete mf.resolution.mode;
+  delete mf.resolution.statesOnFail;   // retired 2026-11-08 — a passed save never lands states, on every path
   mf.resolution.shape         = ["auto", "attack", "save", "contested"].includes(mf.resolution.shape) ? mf.resolution.shape : "auto";
-  mf.resolution.attackVs      = ["guard", "evasion", "resolve"].includes(mf.resolution.attackVs) ? mf.resolution.attackVs : "evasion";
-  mf.resolution.attackBonus   = String(mf.resolution.attackBonus ?? "intent+channel");
+  delete mf.resolution.attackVs;      // retired 2026-11-08 — derived from the damage (ftAttackDefenseFor)
+  // A weapon that never set hitSave but stored a save / contested shape (pre-11-08 Engine Forms) shows it as the hit
+  // save it now is on a Form (ftStrikeResolution reads the same way). The raw-source check: the defaults merge hides it.
+  const _rawHs = system?.manifestation?.resolution?.hitSave;
+  if (kind === "weapon" && _rawHs === undefined && mf.resolution.shape === "save") {
+    mf.resolution.hitSave = true; mf.resolution.hitSaveHalf = mf.resolution.onSave === "half";
+  } else if (kind === "weapon" && _rawHs === undefined && mf.resolution.shape === "contested") {
+    mf.resolution.hitSave = true; mf.resolution.hitSaveHalf = mf.resolution.onContestLoss === "half";
+    if (VALID_FACULTIES.includes(mf.resolution.contestTargetAttribute)) mf.resolution.saveAttribute = mf.resolution.contestTargetAttribute;
+  }
+  mf.resolution.hitSave       = mf.resolution.hitSave === true;
+  mf.resolution.hitSaveHalf   = mf.resolution.hitSaveHalf === true;
+  delete mf.resolution.attackBonus;   // retired 2026-11-08 — nothing read it
   mf.resolution.saveAttribute = VALID_FACULTIES.includes(mf.resolution.saveAttribute) ? mf.resolution.saveAttribute : "body";
   mf.resolution.saveDcMode    = ["cast-dc", "fixed"].includes(mf.resolution.saveDcMode) ? mf.resolution.saveDcMode : "cast-dc";
   mf.resolution.saveDcFixed   = Math.max(5, Math.min(40, Number(mf.resolution.saveDcFixed) || 15));
@@ -3822,10 +4736,14 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
   } else {
     stateList = [];
   }
-  const validConds = new Set(Object.keys(FT.CONDITIONS ?? {}));
+  // Authored states only (2026-11-08, teeth P04): engine-owned states (Dying, Incapacitated, the water / sky / orbit
+  // ladder, Strain, radiation, Darkness) drop at read, so a legacy item that ticked one simply stops applying it.
+  const validConds = new Set(Object.keys(FT.CONDITIONS ?? {}).filter(k => ftConditionAuthorable(k)));
   mf.appliedStates.states        = stateList.filter(k => validConds.has(k));
-  mf.appliedStates.duration      = ["1-round", "2-rounds", "3-rounds", "scene", "until-saved"].includes(mf.appliedStates.duration) ? mf.appliedStates.duration : "1-round";
-  mf.appliedStates.saveEachRound = mf.appliedStates.saveEachRound === true;
+  // Applied for (2026-11-08, teeth P24): a missing / blank / stray value (permanent, soma-break, action, turn …) follows
+  // the stability — scene-long for sustained / bound, one round for instant. Until-saved forces save each round.
+  mf.appliedStates.duration      = ["1-round", "2-rounds", "3-rounds", "scene", "until-saved"].includes(mf.appliedStates.duration) ? mf.appliedStates.duration : ftAppliedDurationDefault(mf.stability);
+  mf.appliedStates.saveEachRound = mf.appliedStates.saveEachRound === true || mf.appliedStates.duration === "until-saved";
   mf.appliedStates.saveAttribute = VALID_FACULTIES.includes(mf.appliedStates.saveAttribute) ? mf.appliedStates.saveAttribute : "body";
   mf.appliedStates.saveDcMode    = ["cast-dc", "fixed"].includes(mf.appliedStates.saveDcMode) ? mf.appliedStates.saveDcMode : "cast-dc";
   mf.appliedStates.saveDcFixed   = Math.max(5, Math.min(40, Number(mf.appliedStates.saveDcFixed) || 15));
@@ -3839,6 +4757,19 @@ function ftNormalizeManifestationData(system = {}, kind = "power") {
     if (validConds.has(k) && VALID_FACULTIES.includes(v)) cleanOverrides[k] = v;
   }
   mf.appliedStates.saveAttributeOverrides = cleanOverrides;
+  mf.poolShift = ftNormalizePoolShift(mf.poolShift);   // Clarity / Noise set amounts (2026-11-08)
+  // Marks (2026-11-08, six foe powers).
+  mf.onMissRetaliation     = ftNormalizeMissRetaliation(mf.onMissRetaliation);
+  mf.attackersDisadvantage = mf.attackersDisadvantage === true;
+  mf.damageConvert         = ftNormalizeDamageConvert(mf.damageConvert);
+  mf.markDuration          = ["next-turn", "scene"].includes(String(mf.markDuration ?? "")) ? String(mf.markDuration) : "";
+
+  // A beneficial working (heal / ward / buff with no harm — _ftIsBeneficialManifestation) always lands: its shape is
+  // Auto and it offers no save (2026-11-08, teeth P15). Cast and Strike apply the same rule at run time.
+  try {
+    const _bDr = (kind === "weapon" && system?.damage?.formula) ? { op: "damage", number: 1 } : ftNormalizeDamageRoll(system ?? {});
+    if (_ftIsBeneficialManifestation(mf, { system }, _bDr)) { mf.resolution.shape = "auto"; mf.resolution.hitSave = false; }
+  } catch (_e) { /* keep the authored shape */ }
 
   return mf;
 }
@@ -3849,62 +4780,187 @@ function ftManifestationStarterConfig(starter = "", kind = "power") {
   return FT_MANIFESTATION_STARTERS[key];
 }
 
+// "Form" = a weapon-kind manifestation (the Engine's Strike-able thing) or one Bound to last across
+// scenes; everything else is a Working. Interaction Model retired 2026-11-08 — no longer consulted.
 function ftManifestationModeLabel(system = {}, kind = "power") {
   const mf = ftNormalizeManifestationData(system, kind);
-  const formLean = ["bound", "enduring"].includes(mf.stability)
-    || ["weapon", "tool", "worn", "companion", "zone", "structure"].includes(mf.interactionModel);
+  const formLean = kind === "weapon" || mf.stability === "bound";
   return formLean ? "Form" : "Working";
 }
 
-function ftManifestationFrameChips(kind, system = {}) {
+function ftManifestationFrameChips(kind, system = {}, { item = null } = {}) {
   const mf = ftNormalizeManifestationData(system, kind);
   const chips = [];
 
-  if (mf.form) chips.push(ftLabelFromMap(FT.MANIFESTATION_FORMS, mf.form, ftCap(mf.form)));
-  if (mf.function) chips.push(ftLabelFromMap(FT.MANIFESTATION_FUNCTIONS, mf.function, ftCap(mf.function)));
   if (mf.stability) chips.push(ftLabelFromMap(FT.MANIFESTATION_STABILITIES, mf.stability, ftCap(mf.stability)));
-  if (mf.interactionModel) chips.push(ftLabelFromMap(FT.MANIFESTATION_INTERACTIONS, mf.interactionModel, ftCap(mf.interactionModel)));
+  // The baseline (from Stability) always shows; the prose duration rides beside it, never instead of it (teeth P36).
+  if (mf.duration) chips.push(ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, ftCap(mf.duration)));
   if (mf.durationText) chips.push(mf.durationText);
-  else if (mf.duration) chips.push(ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, ftCap(mf.duration)));
 
-  const costLabel = ftManifestationCostLabel(kind, system);
-  if (costLabel) chips.push(costLabel);
-
-  if (mf.scale && mf.scale !== "personal") {
-    chips.push(ftLabelFromMap(FT.MANIFESTATION_SCALES, mf.scale, ftCap(mf.scale)));
-  }
+  const costLabel = ftManifestationCostLabel(kind, system, { item });
+  if (costLabel && costLabel !== "No cost") chips.push(costLabel);
 
   return chips;
 }
 
-function ftManifestationCostLabel(kind, system = {}) {
+// ── One cost source (2026-11-08, teeth P16/P18 — Dave: "Those additional costs should be charged on top of clarity …
+// T4 = 4") ─────────────────────────────────────────────────────────────────────────────────────────────────────────
+// Every manifestation (power or Form) pays its tier's Clarity (T1 1 · T2 2 · T3 3 · T4 4), shifted up by the stance on
+// Invoke, minus 1 for a TCC, never below 1 ("can't pay zero"; Ascendant pays Blood Debt instead, as before); a stamped
+// Form's activation pays the tier's Clarity (the 11-08 Form floor); PLUS an authored
+// extra cost (Stress / Noise / Strain, 1–10) on top. costText is prose only ("In the fiction"), never the mechanical label.
+// Plain weapons (not Engine Forms) pay no Clarity — only an extra cost if one is authored.
+function ftTierClarity(tier) {
+  const t = Math.max(1, Math.min(4, Number(tier) || 1));
+  return Number(FT.MANIFESTATION_TIERS?.[t]?.clarityCost) || t;
+}
+// Stance table (Dave R11, 2026-11-08). pools = the action-economy slots an Invoke spends in this stance.
+function ftStanceConfig(mode) {
+  const T = {
+    shamanic:  { clarityShift: 0,  noiseGain: 0, misfireBias:  0, ascendant: false, pools: ["action"],          label: "Shamanic" },
+    hermetic:  { clarityShift: +1, noiseGain: 0, misfireBias: -2, ascendant: false, pools: ["action", "bonus"], label: "Hermetic" },
+    chaos:     { clarityShift: +1, noiseGain: 2, misfireBias: +2, ascendant: false, pools: ["bonus"],           label: "Chaotic" },
+    // Ascendant is left as it was (factions / raid code key off it); it spends whatever the item's activation names.
+    ascendant: { clarityShift: 0,  noiseGain: 0, misfireBias:  0, ascendant: true,  pools: null,                label: "Ascendant" }
+  };
+  return T[mode] ?? T.shamanic;
+}
+// Ascendant unlocks by Enlightenment (Dave 2026-11-08: "Ascendant should be unlocked at a certain level of
+// enlightenment") — was a flat T3+ gate. One threshold constant; the ladder mirrors bbttcc-character-options
+// enlightenment.js (LEVEL_KEYS + ALIASES). Qliphothic (corruption) sits outside the ascension → never unlocks.
+// Foes keep their old rule: a foe passes at tier ≥ 3 OR when its Enlightenment reaches the threshold.
+const FT_ASCENDANT_ENLIGHTENMENT = "understanding";
+const FT_ASCENDANT_LADDER = ["unawakened", "awakening", "seeking", "wisdom", "understanding", "enlightened"];
+const FT_ASCENDANT_ALIASES = { awakened: "awakening", adept: "seeking", illuminated: "wisdom", transcendent: "enlightened", sleeper: "unawakened" };
+function ftEnlightenmentLevelOf(actor) {
+  let lv = "";
+  try { lv = String(actor?.getFlag?.("bbttcc-character-options", "enlightenment")?.level ?? ""); }
+  catch (_e) { lv = String(actor?.flags?.["bbttcc-character-options"]?.enlightenment?.level ?? ""); }
+  lv = lv.trim().toLowerCase();
+  return FT_ASCENDANT_ALIASES[lv] ?? (lv || "unawakened");
+}
+function ftAscendantUnlocked(actor) {
+  if (!actor) return false;
+  const lv = ftEnlightenmentLevelOf(actor);
+  const rank = lv === "qliphothic" ? -1 : FT_ASCENDANT_LADDER.indexOf(lv);
+  const unlocked = rank >= FT_ASCENDANT_LADDER.indexOf(FT_ASCENDANT_ENLIGHTENMENT);
+  if (unlocked) return true;
+  if (_ftIsFoeActor(actor)) return _ftCasterTier(actor) >= 3;
+  return false;
+}
+function ftAscendantLockedText() {
+  const lbl = FT_ASCENDANT_ENLIGHTENMENT.charAt(0).toUpperCase() + FT_ASCENDANT_ENLIGHTENMENT.slice(1);
+  return `Ascendant unlocks at ${lbl} (Enlightenment).`;
+}
+// The pools an Invoke spends: the stance's, except a Reaction-authored working spends the Reaction and a Free one
+// spends nothing (the authored activation outranks the stance there). Ascendant keeps the item's activation.
+function ftInvokePools(mode, mf) {
+  const t = mf?.activation?.type ?? "action";
+  if (t === "reaction") return ["reaction"];
+  if (t === "none") return [];
+  const cfg = ftStanceConfig(mode);
+  if (cfg.pools) return cfg.pools;
+  return [t === "bonus" ? "bonus" : "action"];
+}
+function ftExtraCostOf(mf) {
+  const t = String(mf?.costType ?? "").toLowerCase();
+  if (!FT_EXTRA_COST_TYPES.includes(t)) return null;
+  const v = Math.max(1, Math.min(10, Math.floor(Number(mf?.costValue) || 1)));
+  return { type: t, value: v, label: `${v} ${ftCap(t)}` };
+}
+// { tier, base, clarity, extra, label } — label "T2: 2 Clarity + 1 Stress".
+// opts.mode = the Invoke stance (shift; TCC −1 via opts.actor; minimum 1; Ascendant 0); no mode = the Form floor (tier Clarity).
+// opts.clarity false = no tier Clarity (a plain weapon).
+function ftManifestationCostSpec(system = {}, kind = "power", { mode = null, actor = null, clarity = true } = {}) {
   const mf = ftNormalizeManifestationData(system, kind);
-  if (mf.costText) return mf.costText;
-
-  const legacy = [];
-  if (kind === "power") {
-    if ((system.clarityRequired ?? 0) > 0) legacy.push(`Clarity ${system.clarityRequired}`);
-    if ((system.noiseGain ?? 0) > 0) legacy.push(`Noise +${system.noiseGain}`);
+  const tier = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+  const base = ftTierClarity(tier);
+  let cl = 0;
+  if (clarity && mode) {
+    // Invoke (orchestrator correction 2026-11-08): tier Clarity + stance shift − the TCC discount, never below 1 ("can't
+    // pay zero"). Ascendant pays its Blood Debt INSTEAD of Clarity, exactly as before Phase A.
+    const cfg = ftStanceConfig(mode);
+    const tcc = (actor && isTCC(actor)) ? 1 : 0;
+    cl = cfg.ascendant ? 0 : Math.max(1, base + (Number(cfg.clarityShift) || 0) - tcc);
+  } else if (clarity) {
+    // A stamped Form's activation / a label with no stance: the tier's Clarity (the 11-08 Form floor). A legacy authored
+    // Clarity cost above the floor still stands, as it did before Phase A.
+    const raw = system?.manifestation ?? {};
+    const legacyCl = String(raw.costType ?? "").toLowerCase() === "clarity" ? (Number(raw.costValue) || 0) : 0;
+    cl = Math.max(base, legacyCl);
   }
+  const extra = ftExtraCostOf(mf);
+  const parts = [];
+  if (cl > 0) parts.push(`${cl} Clarity`);
+  if (extra) parts.push(extra.label);
+  const label = parts.length ? `${clarity ? `T${tier}: ` : ""}${parts.join(" + ")}` : "No cost";
+  return { tier, base, clarity: cl, extra, label };
+}
+function ftManifestationCostLabel(kind, system = {}, { item = null } = {}) {
+  // A weapon pays tier Clarity only when it is an Engine Form (flags.fourththing.manifested); the sheet passes the item.
+  const clarity = kind !== "weapon" || !item || ftIsManifestedForm(item);
+  return ftManifestationCostSpec(system, kind, { clarity }).label;
+}
+// { cost, upkeep, activation } as plain text for chips / the player HUD (2026-11-08, teeth P16/P18/P20/P21/P23).
+function ftManifestationCostSummary(item, sysOverride = null, kindOverride = null) {
+  const kind = kindOverride ?? (item?.type === "weapon" ? "weapon" : "power");
+  const sys = sysOverride ?? item?.system ?? {};
+  const nmf = ftNormalizeManifestationData(sys, kind);
+  const isForm = kind === "power" || (!!item && ftIsManifestedForm(item));
+  const spec = ftManifestationCostSpec(sys, kind, { clarity: isForm });
+  let upkeep = "";
+  if (isForm && ftStabilityPersists(nmf)) {
+    const sp = _ftParseMaintenanceKey(nmf.maintenanceKey);
+    const t = Math.max(1, Math.min(4, Number(nmf.tier) || 1));
+    upkeep = sp ? `${sp.resource === "noise" ? "+" : ""}${ftUpkeepAmount(sp, t)} ${ftCap(sp.resource)} / ${sp.cadence}`
+                : `${t} Clarity / ${nmf.stability === "sustained" ? "scene" : "Soma Break"}`;
+  }
+  const a = nmf.activation.type;
+  const activation = kind === "power"
+    ? (a === "reaction" ? "Reaction" : a === "none" ? "Free" : "Stance: Action / Bonus")
+    : (isForm ? ({ action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free" })[a] ?? "Action" : "Action");
+  return { cost: (spec.clarity > 0 || spec.extra) ? spec.label : "", upkeep, activation };
+}
+// Stance line for the Engine Cost step / power sheet.
+const FT_STANCE_COST_NOTE = "Invoke stance: Shamanic +0 · Hermetic +1 · Chaotic +1 Clarity · Ascendant Blood Debt instead · TCC −1 (never below 1)";
 
-  const costType = mf.costType ?? (legacy.length ? "custom" : "none");
-  const costValue = Number(mf.costValue ?? 0) || 0;
-
-  if (costType === "none") return legacy.join(" · ") || "No fixed cost";
-  if (costType === "clarity") return `Clarity ${costValue || system.clarityRequired || 1}`;
-  if (costType === "noise")   return `Noise +${costValue || system.noiseGain || 1}`;
-  if (costType === "stress")  return `Stress ${costValue || 1}`;
-  if (costType === "burn")    return `Surge ${costValue || 1}`;
-  if (costType === "custom")  return mf.costText || legacy.join(" · ") || "Custom";
-  return `${ftCap(costType)} ${costValue || 1}`;
+// Item-sheet context for cost / activation / upkeep / duration (2026-11-08, teeth P16/P18/P20/P21/P23/P24) — shared by
+// the power and weapon sheets so both print what the engine charges.
+function ftManifestationSheetCostContext(item, system, kind) {
+  const mf = system.manifestation ?? ftNormalizeManifestationData(system, kind);
+  const isForm = kind === "power" || ftIsManifestedForm(item);
+  const spec = ftManifestationCostSpec(system, kind, { clarity: isForm });
+  const persists = ftStabilityPersists(mf);
+  const rawDur = foundry.utils.getProperty(item?._source ?? {}, "system.manifestation.appliedStates.duration");
+  const derivedDur = ftAppliedDurationDefault(mf.stability);
+  const durLabels = { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved (rolls each round)" };
+  const act = mf.activation?.type ?? "action";
+  return {
+    costSpecLabel: spec.label,
+    costFloorNote: kind === "power"
+      ? `Every Invoke pays ${spec.base} Clarity before stance. ${FT_STANCE_COST_NOTE}.`
+      : (isForm ? (persists ? `A Form pays at least ${spec.base} Clarity — once a scene while it persists.` : `A Form pays at least ${spec.base} Clarity on every Strike.`)
+                : "A plain weapon pays only the extra cost, if any."),
+    ACTIVATION_TYPES: kind === "power"
+      ? { action: "Stance decides (Action / Bonus)", reaction: "Reaction", none: "Free (no action)" }
+      : { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free (no action)" },
+    activationKey: (kind === "power" && act === "bonus") ? "action" : act,
+    isManifestedForm: isForm,
+    MAINTENANCE_COSTS: FT.MAINTENANCE_COSTS,
+    maintenanceKeyCanonical: mf.maintenanceKey === "custom" ? "custom" : ftMaintenanceKeyCanonical(mf.maintenanceKey),
+    upkeepAllowed: mf.stability !== "instant",
+    durationLabel: ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, ftCap(mf.duration)),
+    APPLIED_STATE_DURATIONS: { "": `From stability (${durLabels[derivedDur] ?? derivedDur})`, ...durLabels },
+    appliedDurationRaw: ["1-round", "2-rounds", "3-rounds", "scene", "until-saved"].includes(rawDur) ? rawDur : ""
+  };
 }
 
 function ftBuildManifestationRow(item, kind = "power") {
   const doc = item?.toObject ? item.toObject() : item;
   const system = doc?.system ?? {};
   const mf = ftNormalizeManifestationData(system, kind);
-  const chips = ftManifestationFrameChips(kind, system);
-  const costLabel = ftManifestationCostLabel(kind, system);
+  const chips = ftManifestationFrameChips(kind, system, { item });
+  const costLabel = ftManifestationCostLabel(kind, system, { item });
   const modeLabel = ftManifestationModeLabel(system, kind);
   const tier = Math.max(1, Math.min(4, Number(mf.tier) || 1));
   const tierInfo = FT.MANIFESTATION_TIERS?.[tier] ?? FT.MANIFESTATION_TIERS?.[1];
@@ -3932,11 +4988,10 @@ function ftBuildManifestationRow(item, kind = "power") {
     stabilityLabel,
     isForm: modeLabel === "Form",
     isWorking: modeLabel === "Working",
-    // Strike is reserved for Forms whose interactionModel is `weapon`. Other
-    // Form shapes (companion, zone, structure, tool, worn, event) render a
-    // "Manifest" button that routes through the cast (ftCast) handler instead.
-    isWeaponForm: modeLabel === "Form" && mf.interactionModel === "weapon",
-    interactionModel: mf.interactionModel ?? (kind === "weapon" ? "weapon" : "event"),
+    // Strike is reserved for weapon-kind manifestations (the item type; Interaction Model
+    // retired 2026-11-08). A Bound power renders a "Manifest" button that routes through the
+    // cast (ftCast) handler instead.
+    isWeaponForm: kind === "weapon",
     desc: mf.concept || system.effect || system.flavor || system.description?.value || "",
     signature: mf.signature || "",
     thirdThing: mf.thirdThing || ""
@@ -3964,13 +5019,9 @@ function ftBuildManifestationCoach(actor, { kind = "power", system = {} } = {}) 
   const guide = ftManifestationGuide(sephirah);
   const { pathLenses, doctrineLenses } = ftCollectManifestationLenses(actor);
 
-  const form = mf.form ?? (kind === "weapon" ? "weapon" : "sigil");
-  const fn = mf.function ?? (kind === "weapon" ? "harm" : "transform");
-  const scale = mf.scale ?? "personal";
   const stability = mf.stability ?? (kind === "weapon" ? "bound" : "instant");
-  const interaction = mf.interactionModel ?? (kind === "weapon" ? "weapon" : "event");
-  const durationChip = mf.durationText || ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, ftCap(mf.duration));
-  const frame = `${ftLabelFromMap(FT.MANIFESTATION_FORMS, form, ftCap(form))} → ${ftLabelFromMap(FT.MANIFESTATION_FUNCTIONS, fn, ftCap(fn))} · ${ftLabelFromMap(FT.MANIFESTATION_STABILITIES, stability, ftCap(stability))} · ${ftLabelFromMap(FT.MANIFESTATION_INTERACTIONS, interaction, ftCap(interaction))}${durationChip ? ` · ${durationChip}` : ""}${scale !== "personal" ? ` · ${ftLabelFromMap(FT.MANIFESTATION_SCALES, scale, ftCap(scale))}` : ""}`;
+  const durationChip = [ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, ftCap(mf.duration)), mf.durationText].filter(Boolean).join(" — ");
+  const frame = `T${Math.max(1, Math.min(4, Number(mf.tier) || 1))} · ${ftLabelFromMap(FT.MANIFESTATION_STABILITIES, stability, ftCap(stability))}${durationChip ? ` · ${durationChip}` : ""}`;
 
   const modeLabel = ftManifestationModeLabel(system, kind);
   const shellCue = modeLabel === "Form"
@@ -3981,7 +5032,7 @@ function ftBuildManifestationCoach(actor, { kind = "power", system = {} } = {}) 
     guide,
     kindLabel: modeLabel,
     frame,
-    usageCues: [...FT_MANIFESTATION_USAGE_CUES.generic, shellCue, ...(FT_MANIFESTATION_USAGE_CUES[kind] ?? [])].slice(0, 4),
+    usageCues: [...FT_MANIFESTATION_USAGE_CUES.generic, shellCue, ...(stability === "instant" ? [] : FT_MANIFESTATION_USAGE_CUES.upkeep)],
     pathLenses: pathLenses.slice(0, 2),
     doctrineLenses: doctrineLenses.slice(0, 2),
     thirdThingPrompts: FT_MANIFESTATION_THIRD_THING_PROMPTS
@@ -4040,13 +5091,13 @@ function buildManifestationCoachHTML(actor, { kind = "power", system = {} } = {}
 // caster discipline pilot to fix the "no in-app definition" gap.
 function buildManifestationGlossaryHTML() {
   const rows = [
-    ["Clarity",     "Your focus pool. Spent on cast (T1=1, T2=2, T3=3, T4=5) and on per-tick upkeep for sustained manifestations. Max scales with Steward tier (T1=5, T2=7, T3=10, T4=14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more."],
-    ["Reach",       "Casting one tier above your own. Surge: cast at higher tier, misfire on the higher column. Blood Debt: cast at higher tier, +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline: −1 to −2 Blood-Debt-reach cost."],
-    ["Misfire",     "The d10 failure table (1-2 Reality Flicker → 10 Catastrophic Resonance). Mode-bias: Hermetic −2, Chaos +2, Ascendant skip. Negative shifts = milder bands. Wyrdlens Discipline: −2 to −4 additive shift. Reach pushes the column up by one tier."],
-    ["Concurrency", "How many sustained / bound / enduring manifestations you have active at once. No hard cap — soft-capped by the Clarity needed to pay each tick's upkeep. Each point of concurrency frees one entry's Clarity upkeep per tick: the Pactkeeper baseline (+1, +3 with Sealed Pact) frees pact-bound entries; technique concurrency (Many Hands, Refracted Attention) frees any sustained entry."],
-    ["Noise",       "Metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool, separate from Clarity. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise. Scene Break shaves 1."],
-    ["Workings vs Forms", "Workings (instant) resolve and end; Forms (sustained / bound / enduring) persist and pay upkeep. <b>Only TCCs can manifest workings.</b> Non-TCCs are restricted to forms — they shape the world by holding it open, not by intervening directly."],
-    ["TCC Bonuses", "Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) get: +5 Clarity max, −1 Clarity per cast (floor 0), exclusive access to T0 Fiats and to Workings."],
+    ["Clarity",     "Your focus pool. Every cast pays its tier (T1=1, T2=2, T3=3, T4=4); Hermetic and Chaotic add +1, TCCs −1, never below 1; Ascendant pays Blood Debt instead; an authored extra cost (Stress / Noise / Strain) is paid on top. Also spent on upkeep for sustained / bound manifestations. Max scales with Steward tier (T1=5, T2=7, T3=10, T4=14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more."],
+    ["Reach",       "Casting one tier above your own. Surge: cast at higher tier, misfire on the higher column. Blood Debt: cast at higher tier, +1 Blood Debt, no misfire. Hermetic stance: a Working one tier up casts with no reach cost, misfire on the higher column. Two tiers above is rejected. Cosmic Linguist Discipline: −1 to −2 Blood-Debt-reach cost."],
+    ["Misfire",     "The d10 failure table (1-2 Reality Flicker → 10 Catastrophic Resonance). Stance bias: Hermetic −2, Chaotic +2, Shamanic 0, Ascendant skip. Negative shifts = milder bands. Wyrdlens Discipline: −2 to −4 additive shift. Reach pushes the column up by one tier."],
+    ["Concurrency", "How many sustained / bound manifestations you have active at once. No hard cap — soft-capped by the Clarity needed to pay each tick's upkeep. Each point of concurrency frees one entry's Clarity upkeep per tick: the Pactkeeper baseline (+1, +3 with Sealed Pact) frees pact-bound entries; technique concurrency (Many Hands, Refracted Attention) frees any sustained entry."],
+    ["Noise",       "Metaphysical residue from Chaotic casts (+2 per cast). 0–10 pool, separate from Clarity. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Shamanic, Hermetic and Ascendant generate 0 Noise. Scene Break shaves 1."],
+    ["Workings vs Forms", "Workings (instant) resolve and end; Forms (sustained / bound) persist and pay upkeep. <b>Only TCCs can manifest workings.</b> Non-TCCs are restricted to forms — they shape the world by holding it open, not by intervening directly."],
+    ["TCC Bonuses", "Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) get: +5 Clarity max, −1 Clarity per cast (never below 1), exclusive access to T0 Fiats and to Workings."],
     ["T0 Fiat",     "TCC-only spoken cue. Must begin with \"Let there be …\". No roll, no resource, no upkeep — the 'I light the candle with a thought' register, always available between proper workings. Click the ◌ Fiat button on the sheet."],
     ["Scene Break", "Lighter recovery cadence between Soma Breaks. Refills Clarity to at least half max (round up), shaves 1 Noise. Universal — anyone can take one between scenes via the ◐ Scene Break button."],
     ["Rank bonus", "The aptitude ladder's bonus: Novice +1 · Proficient +2 · Expert +3 · Master +4 · Legendary +5. When a technique says \"your rank bonus\" without naming an aptitude, use your highest rank held (floor +1)."],
@@ -4081,7 +5132,11 @@ function buildManifestationGlossaryHTML() {
 // array of { formula, type, flavor, track }. Accepts an array or a numeric-key
 // object (FormDataExtended expansion) and drops blank-formula rows.
 function ftCollectExtraDamageParts(item) {
-  return ftNormalizeDamageParts(item?.system?.damageParts);
+  const parts = ftNormalizeDamageParts(item?.system?.damageParts);
+  // Damage conversion marks on the wielder (2026-11-08, Hammer-Bright Ward) — the part's type and its track follow.
+  const owner = item?.parent ?? null;
+  if (!owner?.effects) return parts;
+  return parts.map(p => { const c = ftOutgoingDamageType(owner, p.type); return c !== p.type ? { ...p, type: c, track: ftTrackForDamage("", c) } : p; });
 }
 
 // 2026-05-29 — Does this manifestation's invoke cost apply PER USE, or once on
@@ -4091,21 +5146,60 @@ function ftCollectExtraDamageParts(item) {
 // these. Instant/per-use manifestations (a one-shot conjured bolt) still
 // default ON. Returns true = per-use (default the cost box checked).
 function ftManifestationCostIsPerUse(item) {
-  const mf = item?.system?.manifestation ?? {};
-  const tags = Array.isArray(item?.system?.tags) ? item.system.tags.map(t => String(t).toLowerCase()) : [];
-  const isWeaponForm = mf.form === "weapon" || mf.interactionModel === "weapon" || tags.includes("weapon");
-  const persists = ["persistent", "scene", "sustained"].includes(String(mf.duration ?? "").toLowerCase())
-                || ["enduring", "sustained"].includes(String(mf.stability ?? "").toLowerCase());
-  return !(isWeaponForm && persists);
+  // A Form weapon is the strikable kind (one predicate — ftIsFormWeapon, teeth P30).
+  const isWeaponForm = ftIsFormWeapon(item);
+  return !(isWeaponForm && ftStabilityPersists(item?.system?.manifestation));
+}
+// One rule for "this manifestation stays" (2026-11-08, teeth P21): sustained or bound (enduring = legacy bound).
+// The duration knob is derived from stability (P24), so stability alone decides.
+function ftStabilityPersists(mf) {
+  return ["sustained", "bound", "enduring"].includes(String(mf?.stability ?? "").toLowerCase());
+}
+// The duration knob, derived from stability (2026-11-08, teeth P24): instant → instant, sustained → scene,
+// bound → persistent. FT.MANIFESTATION_DURATIONS keys.
+function ftDurationForStability(stability) {
+  const s = String(stability ?? "").toLowerCase();
+  if (s === "sustained") return "scene";
+  if (s === "bound" || s === "enduring") return "persistent";
+  return "instant";
+}
+// How long applied states / wards last when the author didn't pick (2026-11-08, teeth P24): a persistent
+// manifestation's effects last the scene; an instant one's, one round.
+function ftAppliedDurationDefault(stability) {
+  return ["sustained", "bound", "enduring"].includes(String(stability ?? "").toLowerCase()) ? "scene" : "1-round";
 }
 
 // Once-a-scene activation for persistent Forms (2026-11-08). The scene key is the running combat, else the viewed
 // scene; a Form stamped with this key has paid its activation and the Engage dialog opens with the cost box clear.
+// Fix round 2026-11-08 (R2): the key is the SCENE id (the running combat's scene, else the viewed one) — it used to
+// switch from scene:<id> to combat:<id> when combat started, so a Form paid before the fight paid again. Legacy
+// combat:<id> stamps resolve to their combat's scene.
+function _ftSceneId() {
+  return game.combat?.scene?.id ?? canvas?.scene?.id ?? "none";
+}
 function _ftSceneKey() {
-  return game.combat?.id ? `combat:${game.combat.id}` : `scene:${canvas?.scene?.id ?? "none"}`;
+  return `scene:${_ftSceneId()}`;
 }
 function _ftFormPaidThisScene(item) {
-  return foundry.utils.getProperty(item, "flags.fourththing.formPaid") === _ftSceneKey();
+  const stamp = String(foundry.utils.getProperty(item, "flags.fourththing.formPaid") ?? "");
+  if (!stamp) return false;
+  if (stamp.startsWith("combat:")) {
+    const c = game.combats?.get?.(stamp.slice(7));
+    return !!c && (c.scene?.id ?? null) === _ftSceneId();
+  }
+  return stamp === _ftSceneKey();
+}
+// The pool a Strike spends (2026-11-08, teeth P20): an Engine Form's activation (action | bonus | reaction | none);
+// every other weapon — and every rig gun — the Action.
+function ftStrikePool(item, { rig = false } = {}) {
+  if (rig || !ftIsManifestedForm(item)) return "action";
+  return ftNormalizeManifestationData(item.system ?? {}, "weapon").activation.type;
+}
+// A Form's Strike must pay (2026-11-08, teeth P18 — "Forms can't pay zero"): every Strike when it doesn't persist,
+// else until this scene's activation is paid (formPaid). Plain weapons never must.
+function _ftStrikeMustPay(item) {
+  if (!ftIsManifestedForm(item)) return false;
+  return ftManifestationCostIsPerUse(item) || !_ftFormPaidThisScene(item);
 }
 
 // A Steward's save DC is always THEIRS (Dave 2026-11-08: "Their save DC should always be based on them, and not
@@ -4119,182 +5213,98 @@ function ftSaveDCFor(actor, cfg, tier, channel) {
 }
 function _ftStewardSetsNoDC(actor) { return !!(actor && !_ftIsFoeActor(actor)); }
 
-function ftAssessManifestationCost(actor, item, kind = "power") {
+// The cost box / Strike / Invoke assessment (2026-11-08, teeth P16/P18): tier Clarity (Forms and powers; a plain weapon
+// pays none) + the authored extra cost, each a part with its own pool. opts.mode = Invoke stance; opts.clarity overrides.
+// Returns the old single-cost shape for readers (type/value/label/autoSupported/canPay/preview) plus `parts`.
+function ftAssessManifestationCost(actor, item, kind = "power", { mode = null, clarity = null } = {}) {
   const system = item?.system ?? {};
-  const mf = system.manifestation ?? {};
   const rawSys = actor ? (actor.system?.system ?? actor.system ?? {}) : {};
-
-  let type = mf.costType ?? "none";
-  let value = Number(mf.costValue ?? 0) || 0;
-
-  if (kind === "power") {
-    const legacyClarity = Number(system.clarityRequired ?? 0) || 0;
-    const legacyNoise = Number(system.noiseGain ?? 0) || 0;
-    if ((!mf.costType || mf.costType === "none") && legacyClarity > 0) {
-      type = "clarity";
-      value = legacyClarity;
-    } else if ((!mf.costType || mf.costType === "none") && legacyNoise > 0) {
-      type = "noise";
-      value = legacyNoise;
+  const payClarity = clarity ?? (kind !== "weapon" || ftIsManifestedForm(item));
+  const spec = ftManifestationCostSpec(system, kind, { mode, actor, clarity: payClarity });
+  const parts = [];
+  if (spec.clarity > 0) {
+    const current = Number(rawSys?.magic?.clarity?.value ?? 0) || 0;
+    parts.push({ type: "clarity", value: spec.clarity, resourceLabel: "Clarity", path: "system.magic.clarity.value",
+      current, projected: Math.max(0, current - spec.clarity), max: Number(rawSys?.magic?.clarity?.max) || 5,
+      canPay: current >= spec.clarity });
+  }
+  if (spec.extra) {
+    const v = spec.extra.value;
+    if (spec.extra.type === "stress") {
+      const current = Number(rawSys?.derived?.stress?.value ?? 0) || 0;
+      parts.push({ type: "stress", value: v, resourceLabel: "Stress", path: "system.derived.stress.value",
+        current, projected: Math.max(0, current - v), max: Number(rawSys?.derived?.stress?.max) || current, canPay: current >= v });
+    } else if (spec.extra.type === "noise") {
+      const current = Number(rawSys?.magic?.noise?.value ?? 0) || 0;
+      const max = Number(rawSys?.magic?.noise?.max) || 10;
+      parts.push({ type: "noise", value: v, resourceLabel: "Noise", path: "system.magic.noise.value",
+        current, projected: Math.min(max, current + v), max, canPay: true });
+    } else if (spec.extra.type === "strain") {
+      // Strain is the exhaustion ladder (level 6 = the fall) — a cost may never push the caster into the fall.
+      const current = Math.max(0, Math.floor(Number(rawSys?.strain?.value) || 0));
+      const max = Number(FT.STRAIN_MAX) || 6;
+      parts.push({ type: "strain", value: v, resourceLabel: "Strain", path: "system.strain.value",
+        current, projected: Math.min(max, current + v), max, canPay: current + v < max });
     }
   }
-
-  // Cost floor (Dave 2026-11-08: "it can't pay zero"). A manifested Form's activation costs at
-  // least its tier's base Clarity (T1 1 · T2 2 · T3 3 · T4 5). Authored costs above the floor
-  // stand; a non-Clarity cost type stands. Guns aren't Forms (ftIsManifestedForm) — untouched.
-  // The once-a-scene cadence for persistent Forms is the Engage dialog's "apply cost" default.
-  let _floored = false;
-  if (kind === "weapon" && ftIsManifestedForm(item) && (type === "none" || type === "clarity")) {
-    const tier = Math.max(1, Math.min(4, Number(mf.tier) || 1));
-    const floor = Number(FT.MANIFESTATION_TIERS?.[tier]?.clarityCost) || 1;
-    if (type === "none" || value < floor) { type = "clarity"; value = Math.max(value, floor); _floored = true; }
-  }
-
-  const normalizedValue = type === "none" || type === "custom" ? value : Math.max(1, value || 1);
+  const first = parts[0] ?? null;
+  const canPay = parts.every(p => p.canPay);
   const assessment = {
-    type,
-    value: normalizedValue,
-    label: _floored ? `${normalizedValue} Clarity` : ftManifestationCostLabel(kind, system),
-    autoSupported: false,
+    type: first?.type ?? "none",
+    value: first?.value ?? 0,
+    label: spec.label,
+    spec,
+    parts,
+    autoSupported: parts.length > 0,
     manualOnly: false,
-    canPay: true,
-    current: null,
-    projected: null,
-    max: null,
-    resourceLabel: "",
-    path: "",
-    preview: ""
+    canPay,
+    current: first?.current ?? null,
+    projected: first?.projected ?? null,
+    max: first?.max ?? null,
+    resourceLabel: first?.resourceLabel ?? "",
+    path: first?.path ?? "",
+    preview: parts.length ? parts.map(p => `${p.resourceLabel}: ${p.current} → ${p.projected}`).join(" · ") : "No cost",
+    blockedReason: parts.filter(p => !p.canPay).map(p => p.type === "strain"
+      ? `${p.value} Strain would take you to the fall (Strain ${p.current} → ${p.current + p.value})`
+      : `need ${p.value} ${p.resourceLabel} (have ${p.current})`).join("; ")
   };
-
-  switch (type) {
-    case "clarity": {
-      const current = rawSys?.magic?.clarity?.value ?? 0;
-      const max = rawSys?.magic?.clarity?.max ?? 5;
-      assessment.autoSupported = true;
-      assessment.current = current;
-      assessment.projected = Math.max(0, current - normalizedValue);
-      assessment.max = max;
-      assessment.canPay = current >= normalizedValue;
-      assessment.resourceLabel = "Clarity";
-      assessment.path = "system.magic.clarity.value";
-      break;
-    }
-    case "noise": {
-      const current = rawSys?.magic?.noise?.value ?? 0;
-      const max = rawSys?.magic?.noise?.max ?? 10;
-      assessment.autoSupported = true;
-      assessment.current = current;
-      assessment.projected = Math.min(max, current + normalizedValue);
-      assessment.max = max;
-      assessment.canPay = true;
-      assessment.resourceLabel = "Noise";
-      assessment.path = "system.magic.noise.value";
-      break;
-    }
-    case "stress": {
-      const current = rawSys?.derived?.stress?.value;
-      const max = rawSys?.derived?.stress?.max;
-      if (Number.isFinite(current)) {
-        assessment.autoSupported = true;
-        assessment.current = current;
-        assessment.projected = Math.max(0, current - normalizedValue);
-        assessment.max = Number.isFinite(max) ? max : current;
-        assessment.canPay = current >= normalizedValue;
-        assessment.resourceLabel = "Stress";
-        assessment.path = "system.derived.stress.value";
-      } else {
-        assessment.manualOnly = true;
-      }
-      break;
-    }
-    // "burn" = the old Burn cost; Burn is folded into Surge (2026-10-29), so it
-    // PAYS banked Surge (the heat you spend to make it happen).
-    case "burn": {
-      const current = Number(rawSys?.resources?.surge?.value ?? 0);
-      if (Number.isFinite(current)) {
-        assessment.autoSupported = true;
-        assessment.current = current;
-        assessment.projected = Math.max(0, current - normalizedValue);
-        assessment.max = _ftSurgeCap(actor);
-        assessment.canPay = current >= normalizedValue;
-        assessment.resourceLabel = "Surge";
-        assessment.path = "system.resources.surge.value";
-      } else {
-        assessment.manualOnly = true;
-      }
-      break;
-    }
-    case "custom":
-      assessment.manualOnly = true;
-      break;
-    case "none":
-    default:
-      break;
-  }
-
-  if (assessment.autoSupported) {
-    assessment.preview = `${assessment.resourceLabel}: ${assessment.current} → ${assessment.projected}`;
-  } else if (assessment.manualOnly) {
-    assessment.preview = `Manual cost: ${assessment.label}`;
-  } else {
-    assessment.preview = assessment.label || "No fixed cost";
-  }
-
   return assessment;
 }
 
+// Pays every part of an assessment from the LIVE source values. Refuses (pays nothing) when any part can't be paid.
 async function ftApplyManifestationCost(actor, assessment) {
-  if (!assessment || assessment.type === "none") {
-    return { applied: false, summary: "No fixed cost" };
-  }
-  if (!assessment.autoSupported) {
-    return { applied: false, summary: assessment.preview || assessment.label || "Manual cost" };
-  }
-
-  const rawSys = actor.system?.system ?? actor.system ?? {};
-  let current = assessment.current;
-  let projected = assessment.projected;
-  let canPay = assessment.canPay;
-
-  switch (assessment.type) {
-    case "clarity": {
-      current = rawSys?.magic?.clarity?.value ?? 0;
-      projected = Math.max(0, current - assessment.value);
-      canPay = current >= assessment.value;
-      break;
+  const parts = Array.isArray(assessment?.parts) ? assessment.parts : [];
+  if (!actor || !parts.length) return { applied: false, summary: "No cost" };
+  const src = ftSourceSystem(actor) ?? (actor.system?.system ?? actor.system ?? {});
+  const updates = {};
+  const bits = [];
+  let strainGain = 0;
+  for (const p of parts) {
+    if (p.type === "clarity") {
+      const cur = Number(src?.magic?.clarity?.value ?? 0) || 0;
+      if (cur < p.value) return { applied: false, blocked: true, summary: `need ${p.value} Clarity (have ${cur})` };
+      updates["system.magic.clarity.value"] = cur - p.value; bits.push(`Clarity ${cur} → ${cur - p.value}`);
+    } else if (p.type === "stress") {
+      const cur = Number(src?.derived?.stress?.value ?? 0) || 0;
+      if (cur < p.value) return { applied: false, blocked: true, summary: `need ${p.value} Stress (have ${cur})` };
+      updates["system.derived.stress.value"] = cur - p.value; bits.push(`Stress ${cur} → ${cur - p.value}`);
+    } else if (p.type === "noise") {
+      const cur = Number(src?.magic?.noise?.value ?? 0) || 0;
+      const max = Number((actor.system?.system ?? actor.system)?.magic?.noise?.max) || 10;
+      updates["system.magic.noise.value"] = Math.min(max, cur + p.value); bits.push(`Noise ${cur} → ${Math.min(max, cur + p.value)}`);
+    } else if (p.type === "strain") {
+      const cur = Math.max(0, Math.floor(Number(src?.strain?.value) || 0));
+      if (cur + p.value >= (Number(FT.STRAIN_MAX) || 6)) return { applied: false, blocked: true, summary: `${p.value} Strain would take ${actor.name} to the fall` };
+      strainGain += p.value; bits.push(`Strain ${cur} → ${cur + p.value}`);
     }
-    case "noise": {
-      const max = rawSys?.magic?.noise?.max ?? 10;
-      current = rawSys?.magic?.noise?.value ?? 0;
-      projected = Math.min(max, current + assessment.value);
-      canPay = true;
-      break;
-    }
-    case "stress": {
-      current = rawSys?.derived?.stress?.value ?? 0;
-      projected = Math.max(0, current - assessment.value);
-      canPay = current >= assessment.value;
-      break;
-    }
-    case "burn": {   // pays Surge (see the assessment above)
-      current = Number(rawSys?.resources?.surge?.value ?? 0) || 0;
-      projected = Math.max(0, current - assessment.value);
-      canPay = current >= assessment.value;
-      break;
-    }
-    default:
-      break;
   }
-
-  if (!canPay) {
-    return { applied: false, blocked: true, summary: assessment.preview || assessment.label || "Cannot pay cost" };
+  if (Object.keys(updates).length) await actor.update(updates);
+  if (strainGain > 0) {
+    // The one sanctioned Strain write path (posts its own card, syncs the AE).
+    if (game.fourththing?.strain?.gain) await game.fourththing.strain.gain(actor, strainGain, "manifestation cost");
+    else await actor.update({ "system.strain.value": Math.max(0, Math.floor(Number(src?.strain?.value) || 0)) + strainGain });
   }
-
-  await actor.update({ [assessment.path]: projected });
-  return {
-    applied: true,
-    summary: `${assessment.resourceLabel} ${current} → ${projected}`
-  };
+  return { applied: true, summary: bits.join(" · ") };
 }
 
 // Caster-pool + caster-tier helpers (2026-05-11). Normalize the read/write
@@ -6207,11 +7217,19 @@ async function _ftSetCondition(a, c, want = true) {
 // tick) clears it. Out of combat the condition simply applies (GM clears). Used by
 // Storm's Heart and the Dreamwalker Radiant Pause (ruling DW6). Seat-safe: goes
 // through _ftApplyEffectsToTarget (conditions + flags relay to the GM).
+// Surge Anchor marker (2026-11-08, teeth P40): an enabled AE carrying flags.fourththing.surge.<flag> — "ccImmune"
+// (no new conditions land) or "forcedMoveImmune" (forced movement is refused). Written by the Surge / Bulwark anchor
+// spends and Stance Dance; read by applyManifestationStates, _ftTempCondition and resistsForcedMove.
+function _ftSurgeAnchorAE(actor, flag) {
+  return (actor?.effects ?? []).find(e => !e.disabled && !e.isSuppressed && e.flags?.fourththing?.surge?.[flag] === true) ?? null;
+}
+
 async function _ftTempCondition(target, key, rounds = 1) {
   if (!target) return false;
   const s = target.system?.system ?? target.system ?? {};
   const immune = s?.derived?.defenses?.conditionImmunities ?? [];
   if (immune.includes(key)) return false;
+  if (s?.conditions?.[key] !== true && _ftSurgeAnchorAE(target, "ccImmune")) return false;   // anchored (P40)
   const conds = s?.conditions?.[key] === true ? [] : [key];
   const combat = game.combat;
   const flags = combat?.started ? { [`tempConditions.${key}`]: { until: Number(combat.round) + rounds, combatId: combat.id } } : null;
@@ -7012,6 +8030,21 @@ Hooks.on("updateCombat", async (combat, change) => {
   }
 });
 
+// Scene-long manifestation states and wards end at the scene boundary (2026-11-08, teeth P24): Scene Break / End Scene
+// for one actor, combat end for every combatant. Reads durationKind on both AE kinds; the condition flag clears via the
+// preDeleteActiveEffect hook. Owner or GM only (the deleteCombat caller is the active GM).
+async function ftEndSceneManifestationEffects(actor) {
+  if (!actor?.effects || !(game.user?.isGM || actor.isOwner)) return 0;
+  const ids = actor.effects.filter(e => {
+    const f = e.flags?.fourththing ?? {};
+    // Marks (2026-11-08): scene-long ones end here, and a "next-turn" one too (out of combat no turn will end it).
+    return f.appliedManifestation?.durationKind === "scene" || f.manifestationEffect?.durationKind === "scene"
+      || ["scene", "next-turn"].includes(f.manifestationMark?.durationKind);
+  }).map(e => e.id);
+  if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+  return ids.length;
+}
+
 // Combat ended → drop every Burn timer/lock tied to it.
 Hooks.on("deleteCombat", async (combat) => {
   if (!game.user || game.users?.activeGM?.id !== game.user.id) return;
@@ -7020,6 +8053,8 @@ Hooks.on("deleteCombat", async (combat) => {
     const a = c?.actor;
     if (!a || seen.has(a.uuid)) continue;
     seen.add(a.uuid);
+    try { await ftEndSceneManifestationEffects(a); }   // scene-long states / wards end with the fight (teeth P24)
+    catch (e) { console.warn("[fourththing] scene effect cleanup failed", a?.name, e); }
     if (a.flags?.fourththing?.burnTimer?.combatId !== combat.id) continue;
     try { await a.unsetFlag("fourththing", "burnTimer"); }
     catch (e) { console.warn("[fourththing] heat timer cleanup failed", a?.name, e); }
@@ -7284,8 +8319,10 @@ function _ftBulwarkPath(actor) {
 
 // The nine Bulwark path spends. Cataclyst/Avalanche = eruption/momentum (offense),
 // Mountain = durability/refusal (defense). All reuse existing chokepoints — surge
-// one-shots (doomstrike/crowning-blow/sundering-blow), aegis-DR + anchor (CC/forced-
-// move immune) AEs, toggleCondition (Prone/Staggered) — no new consumers.
+// one-shots (doomstrike/crowning-blow/sundering-blow), aegis-DR + anchor AEs,
+// toggleCondition (Prone/Staggered). The anchor AE's ccImmune / forcedMoveImmune
+// marker is read by applyManifestationStates, _ftTempCondition and resistsForcedMove
+// (_ftSurgeAnchorAE, wired 2026-11-08 — before that nothing read it).
 async function _ftBulwarkPathSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the target";
@@ -8254,14 +9291,18 @@ const _FT_RELAY_FLAG_PATHS = new Set([
   "combat.pilotActionUsedThisRound",
   "combat.engineerRepairedThisRound"
 ]);
-async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = [], { flags = null } = {}) {
+// `updates` (2026-11-08, teeth P24): re-timing rows for AEs this engine created ({ _id, duration, flags… }) — the relay
+// only applies them to AEs carrying appliedManifestation / manifestationEffect / manifestationMark (a mark ends by `disabled`).
+async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = [], { flags = null, updates = null } = {}) {
   const aes  = (Array.isArray(aeList) ? aeList : []).filter(Boolean);
   const conds = Array.isArray(conditionKeys) ? conditionKeys : [];
   const flagMap = (flags && typeof flags === "object") ? flags : {};
   const flagKeys = Object.keys(flagMap);
-  if (!target || (!aes.length && !conds.length && !flagKeys.length)) return "none";
+  const aeUpd = (Array.isArray(updates) ? updates : []).filter(u => u?._id);
+  if (!target || (!aes.length && !conds.length && !flagKeys.length && !aeUpd.length)) return "none";
   if (target.isOwner) {
     try {
+      if (aeUpd.length) await target.updateEmbeddedDocuments("ActiveEffect", aeUpd);
       if (aes.length) await target.createEmbeddedDocuments("ActiveEffect", aes);
       if (conds.length || flagKeys.length) {
         const upd = {};
@@ -8274,7 +9315,7 @@ async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = [], 
   }
   if (game.users?.some?.(u => u.isGM && u.active)) {
     _ftRelayEmit({
-      t: "ft-applyEffects", targetUuid: target.uuid, aeList: aes, conditionKeys: conds, flags: flagMap
+      t: "ft-applyEffects", targetUuid: target.uuid, aeList: aes, conditionKeys: conds, flags: flagMap, updates: aeUpd
     });
     return "relay";
   }
@@ -8318,22 +9359,37 @@ function _ftReactionsDenied(actor) {
     e => !e.disabled && e.flags?.fourththing?.reactionsDenied);
 }
 
-// True when a manifestation is a pure buff/ward: no damage and a protective
-// function (or only positive numeric wards with no offensive states). Such
-// manifestations must auto-apply — never resolve an attack/save/contest against
-// the (usually allied) target. 2026-05-25 — "buffs should just buff."
+// True when a manifestation is a pure heal/buff/ward, judged by what the working actually does
+// (2026-11-08, Function retired — Dave: "flavor text that … gets in the way"): a heal roll, or
+// positive wards/resists/immunities, with no damage and no hostile states. Such manifestations must
+// auto-apply — never resolve an attack/save/contest against the (usually allied) target.
+// 2026-05-25 — "buffs should just buff."
 function _ftIsBeneficialManifestation(mf, item, dr) {
   if (dr && dr.op === "damage" && Number(dr.number) > 0) return false;
-  const fn = String(mf?.function ?? item?.system?.manifestation?.function ?? "").toLowerCase();
-  const BENEFICIAL_FNS = new Set(["protect","heal","mend","ward","shelter","bolster","bless","empower","restore","shield","guard","sustain","fortify"]);
-  if (BENEFICIAL_FNS.has(fn)) return true;
-  const eff = mf?.appliedEffects ?? item?.system?.manifestation?.appliedEffects ?? null;
-  const hasPositiveEff = !!eff && Array.isArray(eff.modifiers)
-    && eff.modifiers.some(m => m?.stat && m.op !== "-" && Number(m.value) > 0);
+  const parts = item?.system?.damageParts;
+  if (Array.isArray(parts) && parts.some(p => String(p?.formula ?? "").trim())) return false;
+  // Pool row (2026-11-08): draining Clarity / adding Noise is hostile; restoring Clarity / clearing Noise is a buff.
+  const _ps = mf?.poolShift ?? item?.system?.manifestation?.poolShift;
+  if (ftPoolShiftIsHostile(_ps)) return false;
   const st = mf?.appliedStates?.states;
   const hasStates = Array.isArray(st) ? st.length > 0
                   : (st && typeof st === "object" ? Object.values(st).some(Boolean) : false);
-  return hasPositiveEff && !hasStates && (!dr || dr.op === "none" || Number(dr.number) === 0);
+  if (hasStates) return false;
+  if (dr && dr.op === "heal" && Number(dr.number) > 0) return true;
+  if (ftPoolShiftIsBeneficial(_ps) && (!dr || dr.op === "none" || Number(dr.number) === 0)) return true;
+  const eff = mf?.appliedEffects ?? item?.system?.manifestation?.appliedEffects ?? null;
+  const hasPositiveEff = !!eff && (
+    (Array.isArray(eff.modifiers) && eff.modifiers.some(m => m?.stat && m.op !== "-" && Number(m.value) > 0)) ||
+    (Array.isArray(eff.resists) && eff.resists.length > 0) ||
+    (Array.isArray(eff.immunes) && eff.immunes.length > 0));
+  return hasPositiveEff && (!dr || dr.op === "none" || Number(dr.number) === 0);
+}
+
+// A self-range manifestation (2026-11-08): the one self signal now that Target Shape is gone. Reads the
+// range baseline ("self"); a legacy item's retired system.target "self" still counts (read-time shim).
+function ftManifestationIsSelf(item) {
+  const sys = item?.system ?? {};
+  return String(sys.range ?? "").toLowerCase() === "self" || String(sys.target ?? "").toLowerCase() === "self";
 }
 
 // True when a manifestation has anything to apply via applyManifestationStates —
@@ -8417,8 +9473,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
       if (ok) names.push(tok.actor.name);
     }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">
-      ⚓ ${names.map(n => `<b>${n}</b>`).join(" + ")} immune to forced movement / crowd-control till next round.
-      <span style="opacity:0.65;font-style:italic"> (GM honors the marker when applying CC.)</span>
+      ⚓ ${names.map(n => `<b>${n}</b>`).join(" + ")} can't be moved and take no new conditions till next round.
     </p>`;
   }
 
@@ -8555,8 +9610,10 @@ function ftOpenCastDialog(actor, item) {
   if (ftWarnIfIncapacitated(actor)) return;
   _ftWarnIfTargetDown();
   if (!actor) return;
+  // Calmed / Charmed (2026-11-08, teeth P03): checked on open and again on Invoke (targets may change in between).
+  { const _refuse = ftConditionActionRefusal(actor, item, { kind: "cast" }); if (_refuse) { ui.notifications?.warn(_refuse); return; } }
   const rawSys  = actor.system?.system ?? actor.system;
-  const intent  = item?.system?.intent   ?? "presence";
+  const intent  = ftItemIntent(item, "violence");
   const channel = item?.system?.channel  ?? "soul";
   const seph    = ftEffectiveSephirah(actor, item?.system?.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet");
   const label   = item?.name             ?? "Manifestation";
@@ -8573,20 +9630,12 @@ function ftOpenCastDialog(actor, item) {
           const selI = html.find("[name='intent']").val()   || intent;
           const selC = html.find("[name='channel']").val()  || channel;
           const selS = html.find("[name='sephirah']").val() || seph;
-          const mode = html.find("[name='castMode']:checked").val() || "hermetic";
+          const mode = html.find("[name='castMode']:checked").val() || "shamanic";
           const reachPathVal = html.find("[name='reachPath']:checked").val() || "";
           const restraint    = parseInt(html.find("[name='restraintReduction']").val()) || 0;
           const targetTokens = Array.from(game.user?.targets ?? []);
           const target       = targetTokens[0]?.actor ?? null;
-          // Cosmic Linguist Resonance Channel allocation (no-op for non-CL).
-          const resonanceSpend = {
-            resolveDc:      Math.max(0, parseInt(html.find("[name='resResolveDc']").val())      || 0),
-            damageDie:      Math.max(0, parseInt(html.find("[name='resDamageDie']").val())      || 0),
-            extendDur:      Math.max(0, parseInt(html.find("[name='resExtendDur']").val())      || 0),
-            defenseImpose:  Math.max(0, parseInt(html.find("[name='resDefenseImpose']").val())  || 0),
-            stabilize:      Math.max(0, parseInt(html.find("[name='resStabilize']").val())      || 0),
-            aggressive:     html.find("[name='resAggressive']").is(":checked") === true
-          };
+          { const _refuse = ftConditionActionRefusal(actor, item, { kind: "cast", targets: targetTokens.map(t => t.actor) }); if (_refuse) { ui.notifications?.warn(_refuse); return false; } }
           const useOverlay  = html.find("[name='wlUseOverlay']").is(":checked")  === true;
           const bankToCache = html.find("[name='dwBankToCache']").is(":checked") === true;
           const useAoeSavePrompts = html.find("[name='useAoeSavePrompts']").is(":checked") === true;
@@ -8595,7 +9644,7 @@ function ftOpenCastDialog(actor, item) {
           return castManifestation(actor, item, {
             intent: selI, channel: selC, sephirah: selS,
             label, difficulty: dc, mode, reachPath: reachPathVal,
-            target, restraintReduction: restraint, resonanceSpend,
+            target, restraintReduction: restraint,
             useOverlay, bankToCache,
             useAoeSavePrompts, aoeApplyConfirm, rollMode
           });
@@ -8609,31 +9658,41 @@ function ftOpenCastDialog(actor, item) {
 
 // ── castManifestation: full tier-aware cast flow ───────────────────────────
 // Resolves a manifestation cast end-to-end, honoring the tier ruleset:
-//   * mode (hermetic/chaos/ascendant) shifts Clarity cost, Noise gain, misfire
-//     d10 bias; ascendant pays +1 Blood Debt in place of Clarity
+//   * mode = stance (shamanic default / hermetic / chaos = "Chaotic" / ascendant) shifts Clarity cost, Noise gain,
+//     misfire d10 bias and picks the action slots (ftStanceConfig / ftInvokePools, Dave R11 2026-11-08); Clarity never
+//     drops below the tier's (ftManifestationCostSpec) and an authored extra cost (Stress / Noise / Strain) is paid on
+//     top; ascendant adds +1 Blood Debt; chaos and ascendant add one damage die to this cast; hermetic lets a Working
+//     one tier above the steward fire with no reach cost (2026-11-08)
 //   * reachPath (surge/bloodDebt) handles casting one tier above the steward
 //   * tier-scaled misfire is rolled automatically on failure (skipped if the
 //     reach was paid via Blood Debt)
-//   * sustained/bound/enduring manifestations are pushed to the active tracker
+//   * sustained/bound manifestations are pushed to the active tracker
 //     at flags.fourththing.activeManifestations so upkeep can be billed later
 async function castManifestation(actor, item, {
   intent, channel, sephirah, label = "Manifestation", difficulty = null,
-  mode = "hermetic", reachPath = "",
+  mode = "shamanic", reachPath = "",   // Shamanic is the default stance (Dave R11, 2026-11-08)
   target = null, restraintReduction = 0,
-  resonanceSpend = null,
   useOverlay = false,
   bankToCache = false,
   freeClarity = false,
+  // Dream-Cache deploy (fix round 2026-11-08, R7): spends only what a Shamanic cast spends (the Action), whatever
+  // stance was banked; the banked stance's other effects (Clarity shift, Noise, damage step) are unchanged.
+  fromCache = false,
   // Enlightenment "minor miracle": a free cast of any power up to T4, bypassing
   // access/tier gating with no Clarity/Blood-Debt cost, no Noise, no misfire/backlash.
   miracle = false,
-  useAoeSavePrompts = true,
+  // null = the item's own "Target's owner rolls the save" box (resolution.saveByPrompt) decides (teeth P36).
+  useAoeSavePrompts = null,
   // 2026-06-06 playtest direction: manifestation damage lands on an Apply
   // button by default (like melee strikes) — never silently auto-applied.
   aoeApplyConfirm = true,
   rollMode = "normal"
 } = {}) {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
+  // Intent standardized (2026-11-08): the item's own Intent (any of the six faculties) is the cast's
+  // intent and its damage faculty; a caller's intent only fills in for items without one. Violence fallback.
+  intent = item ? ftItemIntent(item, FT_FACULTY_KEYS.includes(intent) ? intent : "violence")
+                : (FT_FACULTY_KEYS.includes(intent) ? intent : "violence");
   // 2026-10-07 (item ladder): a Bound Working casts from its HOST item's charges — never Clarity; Noise/misfire still apply.
   const _wk = item ? workingCharges(actor, item) : null;
   if (_wk && !miracle) {   // review P3 (2026-10-28): a free Minor Miracle never spends the host's charge
@@ -8651,78 +9710,23 @@ async function castManifestation(actor, item, {
   // pre-fills with the tier baseline but is overrideable.
   if (difficulty == null) difficulty = ftTierCastDC(manTier);
 
-  // ── Cosmic Linguist — Resonance Channel resolve ────────────────────────────
-  // Resolves the dialog's allocation against the live pool, debits dice,
-  // bumps Strain on aggressive use, and threads the channel modifiers into
-  // downstream resolution/damage/state-apply passes. Non-CL casts (or no
-  // spend) skip silently.
-  const rsRaw = resonanceSpend ?? {};
-  const rsTotal = (Number(rsRaw.resolveDc) || 0) + (Number(rsRaw.damageDie) || 0)
-               + (Number(rsRaw.extendDur) || 0) + (Number(rsRaw.defenseImpose) || 0)
-               + (Number(rsRaw.stabilize) || 0);
-  const resAvail = Number(rawSys?.resources?.resonanceDice?.current) || 0;
-  if (rsTotal > resAvail) {
-    ui.notifications?.warn(`${actor.name}: not enough Resonance Dice (allocated ${rsTotal}, have ${resAvail}). Cast aborted.`);
-    return false;
-  }
-  const rs = {
-    resolveDc:     Number(rsRaw.resolveDc) || 0,
-    damageDie:     Number(rsRaw.damageDie) || 0,
-    extendDur:     Number(rsRaw.extendDur) || 0,
-    defenseImpose: Number(rsRaw.defenseImpose) || 0,
-    stabilize:     Number(rsRaw.stabilize) || 0,
-    aggressive:    rsRaw.aggressive === true,
-    total:         rsTotal
-  };
-  // Bump appliedStates duration N steps (capped at "until-saved").
-  const _DURATION_LADDER = ["1-round", "2-rounds", "3-rounds", "scene", "until-saved"];
-  if (rs.extendDur > 0 && mf?.appliedStates?.duration) {
-    const idx = _DURATION_LADDER.indexOf(mf.appliedStates.duration);
-    if (idx >= 0) {
-      const newIdx = Math.min(_DURATION_LADDER.length - 1, idx + rs.extendDur);
-      mf.appliedStates.duration = _DURATION_LADDER[newIdx];
-    }
+  // Self-target (2026-11-08, Target Shape retired): with no token targeted, a self-range working or a
+  // beneficial one (heal / ward / buff) lands on the caster — so a self-ward actually lands. Area
+  // workings keep their template path.
+  // A self-range working that deals damage never aims at its own caster.
+  // 2026-11-08 (six foe powers): a self-range working that deals no damage ALWAYS lands on its caster, even with a token
+  // targeted — a self ward (Frame Drift, Hammer-Bright Ward) never jumps onto whoever the GM had selected.
+  if (actor && item && mf && (!mf.area?.shape || mf.area.shape === "none")) {
+    const _selfDr = ftNormalizeDamageRoll(item.system ?? {});
+    if (ftManifestationIsSelf(item) && _selfDr.op !== "damage") target = actor;
+    else if (!target && _ftIsBeneficialManifestation(mf, item, _selfDr)) target = actor;
   }
 
-  // ── Phase F1 — Range / adjacency cast warning ───────────────────────────────
-  // Soft pre-cast check: if the manifestation has a structured rangeFt and a
-  // target was picked, compute the caster→target distance and prompt the
-  // caster to confirm if out of range. 0 = no engine check (skip silently).
-  // Tokens are required on the active scene for both sides; if either is
-  // missing we skip the check (can't measure something we can't see).
-  if (mf && Number(mf.rangeFt) > 0 && target && actor) {
-    const casterToken = actor.getActiveTokens?.()?.[0];
-    const targetToken = target.getActiveTokens?.()?.[0];
-    if (casterToken && targetToken) {
-      const dist = _ftDistanceBetweenTokens(casterToken, targetToken);
-      const allowed = Number(mf.rangeFt);
-      if (dist > allowed) {
-        // Dreamwalker — The Walking Lane: 1/round while held, reach across the
-        // band — auto-allow an out-of-range cast (the range half of "ignore one
-        // band of cover or distance"; cover stays GM-adjudicated). Marks used.
-        const wlOn   = !!actor.flags?.fourththing?.modes?.dwWalkingLane;
-        const wlUsed = !!actor.flags?.fourththing?.modes?.walkingLaneUsedRound;
-        if (wlOn && !wlUsed) {
-          await actor.update({ "flags.fourththing.modes.walkingLaneUsedRound": true });
-          await ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div class="fourththing-roll" style="border-color:#6a3a8a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8a0ff">⟁ Walking Lane</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${ftEscapeHtml(actor.name)} reaches across the band — <b>${ftEscapeHtml(item?.name ?? "manifestation")}</b> ignores range this cast (${dist.toFixed(0)} ft / ${allowed} ft engine range). 1/round.</p></div>`
-          });
-        } else {
-          const ok = await Dialog.confirm({
-            title: "Out of Range",
-            content: `<div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.2rem 0;font-size:0.84rem">
-              <div>⚠ <b>${ftEscapeHtml(item?.name ?? "Manifestation")}</b> has an engine range of <b>${allowed} ft</b>, but <b>${ftEscapeHtml(target.name)}</b> is <b>${dist.toFixed(0)} ft</b> away.</div>
-              <div style="font-size:0.78rem;opacity:0.75">Cast anyway? (The fictional range often allows GM judgment; this is a soft check.)${wlOn ? " <em>Walking Lane already used this round.</em>" : ""}</div>
-            </div>`,
-            yes: () => true,
-            no:  () => false,
-            defaultYes: false
-          });
-          if (!ok) return false;
-        }
-      }
-    }
+  // ── Range — the one check Strike uses too (2026-11-08, teeth P25: _ftCheckRange) ──
+  // A soft confirm when the picked target is beyond the manifestation's range (rangeFt; 0 = touch / self). The
+  // Walking Lane lets one through per round. Area / hex workings are checked where the template lands instead.
+  if (item && target && actor && target !== actor) {
+    if (!(await _ftCheckRange(actor, item, [target]))) return false;
   }
 
   // ── Dreamwalker — Bank to Dream-Cache (Phase C 2026-05-07) ────────────────
@@ -8743,7 +9747,7 @@ async function castManifestation(actor, item, {
       "system.resources.dreamCache.itemId": item.id,
       // 10-29: the deploy re-casts through the reach gate — carry the chosen path + mode.
       "system.resources.dreamCache.reachPath": reachPath || "",
-      "system.resources.dreamCache.mode":      mode || "hermetic"
+      "system.resources.dreamCache.mode":      mode || "shamanic"
     });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
@@ -8771,7 +9775,7 @@ async function castManifestation(actor, item, {
   const actorIsTCC = isTCC(actor);
 
   // Workings vs Forms gating — non-TCCs may only manifest persistent shapes
-  // (sustained / bound / enduring "forms"). The active "working" register
+  // (sustained / bound "forms"). The active "working" register
   // (instant resolution) is reserved for TCCs as their primary tool.
   // Items without an explicit stability are treated as legacy and pass through.
   const declaredStability = mf?.stability ?? null;
@@ -8791,76 +9795,99 @@ async function castManifestation(actor, item, {
     return false;
   }
 
+  // A Form above your tier is inert on Invoke too (2026-11-08, teeth P31) — same message as Strike, refused before any
+  // Clarity is spent. No reach (Surge / Blood Debt / Hermetic) for a Form; Workings keep the one-tier reach. Foes are
+  // GM-driven and exempt; a Minor Miracle bypasses; an item-ladder Bound Working casts from its host's charges and keeps
+  // its old reach rule.
+  if (!miracle && reachBy > 0 && item && !_wk && !_ftIsFoeActor(actor)
+      && ftManifestationModeLabel(item.system ?? {}, item.type === "weapon" ? "weapon" : "power") === "Form") {
+    ui.notifications?.warn(`${item.name} is ${FT.MANIFESTATION_TIERS?.[manTier]?.label ?? `T${manTier}`} — inert in ${actor.name}'s hands until T${manTier} (level ${ftStewardTierLevel(manTier)}).`);
+    return false;
+  }
   if (!miracle && reachBy > 1) {
     ui.notifications?.warn(`${actor.name}: T${manTier} is out of reach. Canon allows reaching only one tier above yours.`);
     return false;
   }
-  if (!miracle && reachBy === 1 && !reachPath) {
-    ui.notifications?.warn(`${actor.name}: choose Surge or Blood Debt to reach T${manTier}.`);
+  // Hermetic stance (Dave 2026-11-08, rubric "Investment overrides"): a Working exactly one tier
+  // above the caster fires with no reach cost — no Surge, no Blood Debt — and misfires normally on
+  // that tier's column. Same action, no extra turn. Forms above tier stay inert; stance never lifts them.
+  // An explicit Surge / Blood Debt reach choice is honoured as before.
+  const hermeticReach = !miracle && reachBy === 1 && mode === "hermetic"
+    && (!reachPath || reachPath === "hermetic")
+    && !!item && ftManifestationModeLabel(item.system ?? {}, item.type === "weapon" ? "weapon" : "power") !== "Form";
+  if (hermeticReach || reachPath === "hermetic") reachPath = "";
+  if (!miracle && reachBy === 1 && !reachPath && !hermeticReach) {
+    ui.notifications?.warn(`${actor.name}: choose Surge or Blood Debt to reach T${manTier} (or cast it Hermetic).`);
     return false;
   }
   if (miracle || reachBy <= 0) reachPath = ""; // a miracle reaches freely, accruing no reach cost
 
-  // Activation pool gate. Original (Phase C 2026-05-XX) honored
-  // `manifestation.activation.consumePool` on the item. Extended by Action
-  // Economy canon Phase B (2026-05-19): elites get a free bonus manifestation
-  // per round (canon §5).
+  // Activation pool gate — the STANCE picks the pools an Invoke spends (Dave R11, 2026-11-08): Shamanic the Action,
+  // Hermetic the Action AND the Bonus action, Chaotic only the Bonus action (ftInvokePools). A Reaction-authored working
+  // spends the Reaction; a Free one ("none", was consumePool false) spends nothing; Ascendant keeps the item's activation.
+  // Action Economy canon Phase B (2026-05-19): elites get a free bonus manifestation per round (canon §5) — it covers
+  // the Action part.
   const POOL_KEY_FROM_TYPE = { action: "actionUsed", bonus: "bonusUsed", reaction: "reactionUsed" };
+  const POOL_LABEL = { action: "Action", bonus: "Bonus action", reaction: "Reaction" };
   const isElite = actor?.flags?.["bbttcc-auto-link"]?.eliteTier === true;
   const bonusManiUsed = actor?.flags?.fourththing?.combat?.bonusManifestationUsedThisRound === true;
   let _useEliteBonusMani = false;
+  const _invokePools = (item && mf) ? ftInvokePools(fromCache ? "shamanic" : mode, mf) : [];
+  const _stanceLabel = ftStanceConfig(mode).label;
 
-  if (!miracle && item && mf?.activation?.consumePool) {
-    const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
-    if (mf.activation.type === "reaction" && _ftReactionsDenied(actor)) {
-      ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
-      return false;
-    }
+  // Any Reaction cast is refused under Aurablade Fury, enforced economy or not (teeth P20).
+  if (!miracle && _invokePools.includes("reaction") && _ftReactionsDenied(actor)) {
+    ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
+    return false;
+  }
+  if (!miracle && _invokePools.length) {
     // 2026-05-29 (playtest #3/#9) — per-turn "already used" lockout only binds
     // player actors in active combat. NPCs/foes are GM-driven; out of combat there
     // are no rounds. Let the cast through (chip still tracks usage on resolve).
     const _ftEnforceCastGate = _ftIsActionEconomyActive(actor);
-    if (_ftEnforceCastGate && poolKey && rawSys?.actions?.[poolKey]) {
-      // Canon §5 — Elite bonus manifestation. If an Action-type cast is
-      // blocked because actionUsed is already burned, an Elite may spend
-      // their once-per-round bonus mani instead.
-      if (poolKey === "actionUsed" && isElite && !bonusManiUsed) {
-        _useEliteBonusMani = true;
-      } else {
-        ui.notifications?.warn(mf.activation.type === "bonus"
-          ? `${actor.name}: bonus action already used this round (it refreshes at the start of your turn).`
-          : `${actor.name}: ${mf.activation.type} already used this turn.`);
+    if (_ftEnforceCastGate) {
+      const spent = [];
+      for (const p of _invokePools) {
+        if (!rawSys?.actions?.[POOL_KEY_FROM_TYPE[p]]) continue;
+        // Canon §5 — Elite bonus manifestation covers a spent Action.
+        if (p === "action" && isElite && !bonusManiUsed) { _useEliteBonusMani = true; continue; }
+        spent.push(p);
+      }
+      if (spent.length) {
+        const need = _invokePools.map(p => POOL_LABEL[p]).join(" and ");
+        ui.notifications?.warn(`${actor.name}: ${_stanceLabel} needs your ${need} — your ${spent.map(p => POOL_LABEL[p]).join(" and ")} ${spent.length > 1 ? "are" : "is"} already spent this round.${mode === "hermetic" || mode === "shamanic" ? (spent.includes("action") && !rawSys?.actions?.bonusUsed ? " Chaotic uses only the Bonus action." : "") : ""}`);
         return false;
       }
     }
   }
 
-  _ftWarnIfOutOfRange(actor, item); // playtest #1 — warn-only numeric range
-
-  const baseClarity = FT.MANIFESTATION_TIERS?.[manTier]?.clarityCost ?? 1;
-
-  // Mode shifts.
-  const modeConfig = {
-    hermetic:  { clarityShift: +1, noiseGain: 0, misfireBias: -2, ascendant: false, label: "Hermetic" },
-    chaos:     { clarityShift: -1, noiseGain: 2, misfireBias: +2, ascendant: false, label: "Chaos" },
-    ascendant: { clarityShift:  0, noiseGain: 0, misfireBias:  0, ascendant: true,  label: "Ascendant" }
-  };
-  const cfg = modeConfig[mode] ?? modeConfig.hermetic;
-  if (cfg.ascendant && stewardTier < 3) {
-    ui.notifications?.warn(`${actor.name}: Ascendant mode is T3+ only.`);
+  // Stance shifts (Dave R11, 2026-11-08 — ftStanceConfig). The Clarity cost comes from the one cost source
+  // (ftManifestationCostSpec): tier Clarity + the stance shift − the TCC discount, never below 1; Ascendant pays Blood Debt instead.
+  const cfg = ftStanceConfig(mode);
+  if (!["shamanic", "hermetic", "chaos", "ascendant"].includes(mode)) mode = "shamanic";
+  if (cfg.ascendant && !ftAscendantUnlocked(actor)) {
+    ui.notifications?.warn(`${actor.name}: ${ftAscendantLockedText()}`);
     return false;
   }
-  // 10-29: last refusing gate passed — now the bound Working's host charge is spent.
-  if (_wkSpend) await spendWorkingCharge(actor, item);
+  // Chaos / Ascendant teeth (Dave 2026-11-08): +1 damage step on the primary damage roll for THIS
+  // cast only (1d6 → 2d6: one more die of the same size). The item's stored tier and dice never change.
+  const _stanceDr = item ? ftNormalizeDamageRoll(item.system ?? {}) : null;
+  const stanceDamageStep = (mode === "chaos" || cfg.ascendant) && _stanceDr?.op === "damage" && _stanceDr.number > 0 ? 1 : 0;
 
-  // Resolve Clarity cost (mode adjusts; ascendant skips Clarity entirely;
-  // TCCs get a -1 cast discount that floors at 0 for safety).
-  // freeClarity:true bypasses the Clarity cost entirely (Phase C 2026-05-07
-  // — Dreamwalker Dream-Cache deploy fires this; Blood Debt + Noise still due).
-  const tccDiscount = actorIsTCC ? 1 : 0;
-  let clarityCost = (cfg.ascendant || freeClarity || miracle) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
+  // Resolve the cost (2026-11-08, teeth P16/P18): tier Clarity + stance − TCC discount, minimum 1 ("can't pay zero");
+  // Ascendant pays Blood Debt instead of Clarity (unchanged) — PLUS the authored extra cost (Stress / Noise / Strain).
+  // freeClarity:true bypasses the Clarity part (Dream-Cache deploy, a bound Working's host charge); a miracle is free.
+  const _costSpec = item ? ftManifestationCostSpec(item.system ?? {}, item.type === "weapon" ? "weapon" : "power", { mode, actor })
+                         : { tier: manTier, base: ftTierClarity(manTier), clarity: cfg.ascendant ? 0 : Math.max(1, ftTierClarity(manTier) + (Number(cfg.clarityShift) || 0) - (actorIsTCC ? 1 : 0)), extra: null };
+  const baseClarity = _costSpec.base;
+  const tccDiscount = (actorIsTCC && !cfg.ascendant && baseClarity + (Number(cfg.clarityShift) || 0) - 1 >= 1) ? 1 : 0;   // shown only when it bit
+  let clarityCost = (freeClarity || miracle) ? 0 : _costSpec.clarity;
   const casterPool = _ftCasterPool(actor);
   const curClarity = casterPool.current;
+  // Extra cost on top — refused up front when it can't be paid; paid with the Clarity after the roll.
+  const _extraAssess = (!miracle && _costSpec.extra && item)
+    ? (() => { const a = ftAssessManifestationCost(actor, item, item.type === "weapon" ? "weapon" : "power", { clarity: false }); return a.parts.length ? a : null; })()
+    : null;
 
   // Resolve Blood Debt cost (reach-BD + ascendant both accrue Blood Debt).
   // Discipline-aware: Reach-BD cost is reduced by getReachDiscount(actor).
@@ -8877,19 +9904,22 @@ async function castManifestation(actor, item, {
   // overcast, and misfire rules still apply. One-shot armed by the reservoir
   // dialog; consumed here whether or not the cast succeeds.
   const _dwReservoirFree = actor.flags?.fourththing?.oneShot?.dwReservoirFreeCast;
-  if (_dwReservoirFree) {
-    clarityCost = 0;
-    noiseGain = 0;
-    try { await actor.unsetFlag("fourththing", "oneShot.dwReservoirFreeCast"); } catch (_e) {}
-  }
+  if (_dwReservoirFree) { clarityCost = 0; noiseGain = 0; }
 
-  if (!cfg.ascendant && curClarity < clarityCost) {
+  if (_extraAssess && !_extraAssess.canPay) {
+    ui.notifications?.warn(`${actor.name}: ${item.name} — ${_extraAssess.blockedReason}.`);
+    return false;
+  }
+  if (curClarity < clarityCost) {
     ui.notifications?.warn(`${actor.name}: need ${clarityCost} ${casterPool.label} (have ${curClarity}).`);
     return false;
   }
+  // 10-29: last refusing gate passed — now the bound Working's host charge is spent (and the reservoir one-shot).
+  if (_wkSpend) await spendWorkingCharge(actor, item);
+  if (_dwReservoirFree) { try { await actor.unsetFlag("fourththing", "oneShot.dwReservoirFreeCast"); } catch (_e) {} }
 
   // Misfire column: reach pushes the target one tier higher than the caster.
-  const misfireTier = reachPath ? manTier : stewardTier;
+  const misfireTier = (reachPath || hermeticReach) ? manTier : stewardTier;
   const skipMisfire = miracle || reachPath === "bloodDebt" || cfg.ascendant;
 
   // Noise "Lattice attention" (2026-08-17): a loud caster's failures land harder.
@@ -8902,13 +9932,17 @@ async function castManifestation(actor, item, {
 
   const costPieces = [];
   if (clarityCost > 0) costPieces.push(`Clarity ${clarityCost}`);
+  if (_extraAssess) costPieces.push(`+ ${_costSpec.extra.label}`);
+  if (_invokePools.length) costPieces.push(`${cfg.label} — ${_invokePools.map(p => POOL_LABEL[p]).join(" + ")}`);
   if (bloodDebtCost > 0) costPieces.push(`Blood Debt +${bloodDebtCost}`);
   if (noiseGain > 0) costPieces.push(`Noise +${noiseGain}`);
   if (reachPath) costPieces.push(`Reach→T${manTier} via ${reachPath === "surge" ? "Surge" : "Blood Debt"}`);
+  if (hermeticReach) costPieces.push(`Hermetic — T${manTier} cast one tier up, no reach cost`);
+  if (stanceDamageStep) costPieces.push(`${cfg.label} — +1 damage die`);
   if (noiseMisfireShift > 0) costPieces.push(`Noise ${_ftNoiseBite(actor).label} — misfire +${noiseMisfireShift}`);
   if (_dwReservoirFree) costPieces.push(`Dream Echo Reservoir — released${_dwReservoirFree?.name ? ` (${_dwReservoirFree.name})` : ""}, no base cost`);
   if (cfg.ascendant) costPieces.push("Ascendant");
-  if (tccDiscount > 0 && !cfg.ascendant) costPieces.push(`TCC discount −${tccDiscount}`);
+  if (tccDiscount > 0 && !cfg.ascendant && clarityCost > 0) costPieces.push(`TCC discount −${tccDiscount}`);
   const costNote = costPieces.join(" · ") || "No mechanical cost";
 
   // Discipline misfire shift folds into modeMisfireBias (negative=better).
@@ -8934,6 +9968,9 @@ async function castManifestation(actor, item, {
     costNote: finalCostNote,
     signature: mf?.signature ?? "",
     thirdThing: mf?.thirdThing ?? "",
+    // Prose the GM reads (teeth P36): Fallout prints in the misfire box; the Trigger shows when the manifestation is a Reaction.
+    fallout: String(mf?.riskText ?? "").trim(),
+    trigger: mf?.activation?.type === "reaction" ? String(mf?.triggerText ?? "").trim() : "",
     misfireTier, skipMisfire,
     modeMisfireBias: totalMisfireBias,
     target, restraintReduction,
@@ -8982,65 +10019,38 @@ async function castManifestation(actor, item, {
   }
   if (item && castSuccess) {
     // Phase B 2026-05-19 — Action economy debit (elite bonus mani / standard
-    // pool). Mirrors the pre-gate above.
-    if (mf?.activation?.consumePool) {
-      const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
-      if (poolKey) {
-        if (_useEliteBonusMani) {
+    // pool). Mirrors the pre-gate above: every pool the stance spends (2026-11-08).
+    if (_invokePools.length) {
+      const _poolUpd = {};
+      for (const p of _invokePools) {
+        if (p === "action" && _useEliteBonusMani) {
           // Canon §5 — burn the elite's bonus mani instead of the action slot.
           try { await actor.update({ "flags.fourththing.combat.bonusManifestationUsedThisRound": true }); }
           catch (e) { console.warn("[fourththing] elite bonus-mani debit failed", e); }
         } else {
-          await actor.update({ [`system.actions.${poolKey}`]: true });
+          _poolUpd[`system.actions.${POOL_KEY_FROM_TYPE[p]}`] = true;
         }
       }
+      if (Object.keys(_poolUpd).length) await actor.update(_poolUpd);
     }
 
-    // Resonance Channel debit + Strain bump (CL only — no-op when total=0).
-    // Runs only on cast success so a missed cast doesn't burn the dice.
-    if (rs.total > 0 || rs.aggressive) {
-      const updates = {};
-      if (rs.total > 0) {
-        updates["system.resources.resonanceDice.current"] = Math.max(0, resAvail - rs.total);
-      }
-      if (rs.aggressive) {
-        const curStrain = Number(rawSys?.resources?.strain?.value) || 0;
-        updates["system.resources.strain.value"] = Math.min(10, curStrain + 1);
-      }
-      try { await actor.update(updates); } catch (e) { console.warn("Roll for Initiation | resonance spend update failed", e); }
-
-      // Chat announcement of channels spent — useful even when 0 dice but
-      // aggressive=true ticks Strain. Defense-impose + stabilize land here as
-      // GM-applied notes (no engine wiring yet).
-      const lines = [];
-      if (rs.resolveDc)     lines.push(`+${rs.resolveDc} target save DC`);
-      if (rs.damageDie)     lines.push(`+${rs.damageDie} damage die${rs.damageDie === 1 ? "" : "s"}`);
-      if (rs.extendDur)     lines.push(`extend duration ${rs.extendDur} step${rs.extendDur === 1 ? "" : "s"}`);
-      if (rs.defenseImpose) lines.push(`target rolls <b>3d10kl2</b> instead of 2d10x10 on save (engine-applied; channel × ${rs.defenseImpose})`);
-      if (rs.stabilize)     lines.push(`stabilized vs counter/dispel (+${rs.stabilize} to counter DC; engine-applied)`);
-      if (rs.aggressive)    lines.push(`<span style="color:#ffc8c8">+1 Strain (aggressive)</span>`);
-      if (lines.length) {
-        ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<div class="fourththing-roll" style="border-color:#5a3a8a">
-            <div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8c8ff">✦ ${ftEscapeHtml(label)} — Resonance Channels (${rs.total} die${rs.total === 1 ? "" : "s"} spent)</span></div>
-            <ul style="margin:0.3rem 0 0;padding-left:1.2rem;font-size:0.78rem;line-height:1.5">${lines.map(l => `<li>${l}</li>`).join("")}</ul>
-          </div>`
-        });
-      }
-    }
-
+    // Area (2026-11-08, teeth P27 + hex-wide): a movable template is range-checked where it lands (P25); Hex-wide
+    // places nothing and takes every token on the scene — the disposition sort below picks who it touches.
     let placedTemplate = null;
-    if (mf?.area?.shape && mf.area.shape !== "none") {
-      placedTemplate = await ftPlaceAreaTemplate(actor, mf.area);
+    const _castShape = mf?.area?.shape ?? "none";
+    const _hexWide = _castShape === "hex";
+    if (_castShape !== "none" && !_hexWide) {
+      // A self-range sphere / cylinder (Hollow Hunger, Rainbow Cascade — "each creature within 15 ft") is centred on the
+      // caster: no aiming (2026-11-08).
+      placedTemplate = await ftPlaceAreaTemplate(actor, mf.area, { rangeFt: _ftItemRangeFt(item), onCaster: ftManifestationIsSelf(item) });
     }
 
-    const wasAreaCast = !!(mf?.area?.shape && mf.area.shape !== "none");
+    const wasAreaCast = _castShape !== "none";
 
     // Candidate token list: those inside the template, or — when the template
     // caught nobody — a 2+ manual-target selection. Caster excluded, deduped by actor.
     // 10-29: by actor UUID — unlinked tokens of one stat block share an actor id.
-    let aoeTokenList = (placedTemplate
+    let aoeTokenList = (_hexWide ? _ftTokensOnScene(actor) : placedTemplate
       ? _ftTokensInTemplate(placedTemplate, { excludeActorUuids: new Set([actor.uuid]) })
       : []).filter(t => t?.actor && t.actor.uuid !== actor.uuid);
     if (aoeTokenList.length === 0 && wasAreaCast) {
@@ -9054,8 +10064,11 @@ async function castManifestation(actor, item, {
     { const seen = new Set(); aoeTokenList = aoeTokenList.filter(t => seen.has(t.actor.uuid) ? false : (seen.add(t.actor.uuid), true)); }
 
     const dr = ftNormalizeDamageRoll(item.system ?? {});
-    // Resonance Channel: extra damage dice stack onto the rolled total.
-    if (rs.damageDie > 0) dr.number = Math.max(0, dr.number + rs.damageDie);
+    // Damage conversion marks on the caster (2026-11-08, Hammer-Bright Ward: kinetic → electrical) — the track follows.
+    if (dr.op === "damage") { const _cv = ftOutgoingDamageType(actor, dr.type); if (_cv !== dr.type) { dr.type = _cv; dr.track = ftLandingTrack(dr.op, "", _cv); } }
+    // Chaos / Ascendant: one more die of the same size on this cast's primary damage roll.
+    if (stanceDamageStep) dr.number = Math.min(20, dr.number + stanceDamageStep);
+    dr.attribute = intent;   // the cast's intent is the damage faculty (2026-11-08)
 
     // Disposition filter + target picker (2026-05-29 playtest). For an area cast,
     // let the caster choose exactly who in the blast is affected — pre-checked by
@@ -9081,13 +10094,27 @@ async function castManifestation(actor, item, {
         content: `<div style="font-size:0.78rem;opacity:0.85">⚠ <b>${ftEscapeHtml(item.name)}</b> — area effect caught no targets. Resources were spent; GM may refund.</div>`
       });
     }
-    // Effective DC the TARGET faces on saves — base difficulty + resonance
-    // resolveDc bonus. Caster's cast roll is unaffected (already happened).
-    const targetSaveCastDc = difficulty + rs.resolveDc;
+    // Effective DC the TARGET faces on saves — the cast difficulty. Caster's cast roll is unaffected.
+    const targetSaveCastDc = difficulty;   // (Resonance resolveDc spend retired 2026-11-08)
     const resolution = mf?.resolution;
     // 2026-05-25 — beneficial buffs/wards auto-apply: never resolve an attack,
     // save, or contest against the (usually allied) target. "Buffs just buff."
-    const effShape = _ftIsBeneficialManifestation(mf, item, dr) ? "auto" : resolution?.shape;
+    const _castBeneficial = _ftIsBeneficialManifestation(mf, item, dr);
+    const effShape = _castBeneficial ? "auto" : resolution?.shape;
+    // One line on the cast when the beneficial override changes what was stored (2026-11-08, teeth P15).
+    // (The normalizer already folds the shape to auto — read the stored one.)
+    const _storedShape = String(item?.system?.manifestation?.resolution?.shape ?? "auto");
+    if (_castBeneficial && ["attack", "save", "contested"].includes(_storedShape)) {
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div style="font-size:0.78rem;opacity:0.85">✦ <b>${ftEscapeHtml(item.name)}</b> is a beneficial working — it lands without ${_storedShape === "attack" ? "an attack roll" : _storedShape === "save" ? "a save" : "a contest"}.</div>`
+      }).catch(() => null);
+    }
+    // Hit save (2026-11-08, teeth P10/P12): on an attack or auto shape the creator may give the target a save against
+    // the states — a pass stops them (and the Clarity / Noise row); the damage stands unless hitSaveHalf.
+    const _hitSaveOn = !_castBeneficial && resolution?.hitSave === true && (effShape === "attack" || effShape === "auto");
+    const _hitSaveCfg = _hitSaveOn ? { ...resolution, onSave: resolution.hitSaveHalf === true ? "half" : "negate" } : null;
+    const _hitSavePassLabel = resolution?.hitSaveHalf === true ? "half damage, no conditions" : "no conditions (damage stands)";
 
     // saveByPrompt — singular save-shape with the prompt flag short-circuits
     // the synchronous save + damage/state apply. Posts a chat-card Save button
@@ -9101,8 +10128,8 @@ async function castManifestation(actor, item, {
 
     if (usePromptSave) {
       await _ftPostSavePromptCard(actor, target, item, mf, dr, {
-        castDc: targetSaveCastDc, intent, channel,
-        rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
+        castDc: targetSaveCastDc, intent, channel, damageParts: ftCollectExtraDamageParts(item),
+        chain: mf?.chain?.enabled ? mf.chain : null   // arcs from the card on a failed save (teeth P28)
       });
       // Skip downstream — handled on click. Resource writes (clarity / BD /
       // active tracker) still run below since the cast itself succeeded.
@@ -9117,7 +10144,9 @@ async function castManifestation(actor, item, {
     //   0   = no damage     (attack missed, OR saved with onSave="negate")
     let damageMultiplier = 1;
     let _savedVsStates = false;   // Dave 2026-11-06: a successful save stops the conditions; onSave only sets what happens to the damage
-    if (effShape === "attack" && target) {
+    let _saveRan = false;         // a save / contest / hit save already resolved the states — applyManifestationStates must not roll again (P12)
+    if (effShape === "attack" && target && !useAoE) {
+      // Area attacks roll once against every caught target inside the AoE walk below (2026-11-08, teeth P14).
       const atk = await game.fourththing.rolls.resolveManifestationAttack(actor, target, item, resolution, {
         intent, channel
       });
@@ -9126,8 +10155,7 @@ async function castManifestation(actor, item, {
       // Skipped under AoE — per-target saves run inside the AoE walk below.
       const sav = await game.fourththing.rolls.resolveManifestationSave(actor, target, item, resolution, {
         castDc: targetSaveCastDc,
-        channel,
-        rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
+        channel
       });
       if (sav?.saved) {
         _savedVsStates = true;
@@ -9138,9 +10166,25 @@ async function castManifestation(actor, item, {
       const con = await game.fourththing.rolls.resolveManifestationContest(actor, target, item, resolution, {
         intent, channel
       });
+      _saveRan = true;
+      // A target who wins the contest = a passed save (2026-11-08, teeth P13): no states, no chain.
       if (con && !con.casterWins) {
+        _savedVsStates = true;
         if (con.onContestLoss === "negate")    damageMultiplier = 0;
         else if (con.onContestLoss === "half") damageMultiplier = 0.5;
+      }
+    }
+    if (effShape === "save" && target && !useAoE) _saveRan = true;
+    // Single-target hit save — after the attack connects (or on an auto shape), when something rides on it.
+    if (_hitSaveOn && target && !useAoE && !wasAreaCast && damageMultiplier > 0 && target.id !== actor.id
+        && (_ftHasManifestationApplicables(mf, item) || ftPoolShiftIsHostile(mf?.poolShift))) {
+      const hs = await game.fourththing.rolls.resolveManifestationSave(actor, target, item, _hitSaveCfg, {
+        castDc: targetSaveCastDc, channel, passLabel: _hitSavePassLabel
+      });
+      _saveRan = true;
+      if (hs?.saved) {
+        _savedVsStates = true;
+        if (resolution.hitSaveHalf === true) damageMultiplier = 0.5;
       }
     }
 
@@ -9152,10 +10196,24 @@ async function castManifestation(actor, item, {
       let baseRollHtml = "";
       const sys = actor.system?.system ?? actor.system;
       const attrVal = dr.attribute ? Number(sys?.attributes?.[dr.attribute]?.value) || 0 : 0;
-      const trackKey = dr.op === "heal" ? (dr.track || "integrity") : (FT.DAMAGE_TYPES?.[dr.type]?.track ?? dr.track ?? "integrity");
+      const trackKey = ftLandingTrack(dr.op, dr.track, dr.type);
+      // P08 (2026-11-08): Additional Damage Dice roll ONCE here beside the base — every target in the area takes the
+      // same locked numbers at its own multiplier (walk, save prompts and Apply-All alike).
+      const aoeParts = [];
+      if (dr.op === "damage" && dr.number > 0) {
+        for (const part of ftCollectExtraDamageParts(item)) {
+          try {
+            const pr = new Roll(String(part.formula)); await pr.evaluate();
+            const amount = Math.max(0, Math.floor(Number(pr.total) || 0));
+            if (amount > 0) aoeParts.push({ amount, type: part.type, flavor: part.flavor ?? "", track: ftTrackForDamage(part.track, part.type), formula: part.formula, roll: pr });
+          } catch (e) { console.warn("[fourththing] AoE damage part roll failed", part, e); }
+        }
+      }
+      const aoePartsLocked = aoeParts.map(p => ({ amount: p.amount, type: p.type, flavor: p.flavor, track: p.track }));
       if (dr.op !== "none" && dr.number > 0) {
         const flat = Number(dr.bonus) || 0;
-        const baseFormula = `${dr.number}${dr.die}${flat ? (flat > 0 ? ` + ${flat}` : ` - ${Math.abs(flat)}`) : ""}`;
+        const _healExtra = dr.op === "heal" ? ftHealPartsFormula(ftCollectExtraDamageParts(item)) : "";   // Additional healing dice (teeth P36)
+        const baseFormula = `${dr.number}${dr.die}${_healExtra}${flat ? (flat > 0 ? ` + ${flat}` : ` - ${Math.abs(flat)}`) : ""}`;
         const finalFormula = attrVal !== 0 ? `${baseFormula} + ${attrVal}` : baseFormula;
         const roll = new Roll(finalFormula);
         await roll.evaluate();
@@ -9164,12 +10222,12 @@ async function castManifestation(actor, item, {
         const opLabel = dr.op === "heal" ? "Healing" : "Damage";
         baseRollHtml = `<div class="fourththing-roll" style="margin-bottom:0.4rem">
           <div class="ft-roll-header"><span class="ft-roll-name">${opIcon} ${ftEscapeHtml(item.name)} — ${opLabel} (AoE base)</span></div>
-          <div class="ft-dmg-row"><span class="ft-dmg-formula">${finalFormula} = <b>${baseDmg}</b></span><span class="ft-dmg-type ${dr.type}">${ftCap(dr.type)}</span></div>
+          <div class="ft-dmg-row"><span class="ft-dmg-formula">${finalFormula} = <b>${baseDmg}</b></span><span class="ft-dmg-type ${dr.type}">${ftCap(dr.type)}</span>${aoeParts.map(p => ` <span class="ft-dmg-type ${p.type}" style="opacity:0.92">+ ${p.amount} ${ftCap(p.type)} <span style="opacity:0.6">(${ftEscapeHtml(p.formula)})</span></span>`).join("")}</div>
         </div>`;
         await ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
           content: baseRollHtml,
-          rolls: [roll]
+          rolls: [roll, ...aoeParts.map(p => p.roll)]
         });
       }
 
@@ -9178,11 +10236,12 @@ async function castManifestation(actor, item, {
       // card's owner clicks to roll their save; their card's handler applies
       // the pre-rolled baseDmg with the resulting multiplier. Skips the rest
       // of the AoE walk for damage/states (handled lazily on click).
-      if (useAoeSavePrompts && effShape === "save" && baseDmg > 0) {
+      // A states-only / pool-only save works too (teeth P36: the old baseDmg > 0 guard dropped prompts for those).
+      const _aoePrompt = useAoeSavePrompts == null ? resolution?.saveByPrompt === true : useAoeSavePrompts === true;
+      if (_aoePrompt && effShape === "save") {
         for (const aoeActor of aoeActors) {
           await _ftPostAoeSavePromptCard(actor, aoeActor, item, mf, dr, baseDmg, trackKey, {
-            castDc: targetSaveCastDc, intent, channel,
-            rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
+            castDc: targetSaveCastDc, intent, channel, lockedParts: aoePartsLocked
           });
         }
         // Skip the synchronous walk — each card resolves independently.
@@ -9191,22 +10250,39 @@ async function castManifestation(actor, item, {
         const stateLines = [];
         // Snapshot per-target damage info for the Apply All confirm path.
         const pendingDmg = [];
+        // Attack-shaped area (2026-11-08, teeth P14): ONE attack roll, compared against each caught target's own
+        // Guard / Resolve (+ allies' auras). No stand-in target, and no auto-hit when no roll happened.
+        let _aoeAtk = null;
+        if (effShape === "attack") {
+          try { _aoeAtk = await game.fourththing.rolls.resolveManifestationAttack(actor, null, item, resolution, { intent, channel, areaTargets: aoeActors }); }
+          catch (e) { console.warn("Roll for Initiation | area attack roll failed", e); }
+        }
 
         for (const aoeActor of aoeActors) {
-          let aoeMult = 1, aoeSaved = false;
+          let aoeMult = 1, aoeSaved = false, aoeMissed = false;
           if (effShape === "save") {
             const sav = await game.fourththing.rolls.resolveManifestationSave(actor, aoeActor, item, resolution, {
               castDc: targetSaveCastDc,
-              channel,
-              rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
+              channel
             });
             if (sav?.saved) { aoeSaved = true; aoeMult = (sav.onSave === "negate") ? 0 : 0.5; }
           } else if (effShape === "contested") {
             const con = await game.fourththing.rolls.resolveManifestationContest(actor, aoeActor, item, resolution, { intent, channel });
-            if (con && !con.casterWins) aoeMult = (con.onContestLoss === "negate") ? 0 : 0.5;
+            // A target win = a passed save (2026-11-08, teeth P13): no states.
+            if (con && !con.casterWins) { aoeSaved = true; aoeMult = (con.onContestLoss === "negate") ? 0 : 0.5; }
           } else if (effShape === "attack") {
-            aoeMult = damageMultiplier;
+            const _hitRes = _aoeAtk?.results?.find(r => r.target === aoeActor);
+            if (!_hitRes?.hit) { aoeMult = 0; aoeMissed = true; }
           }
+          // Hit save per caught target (attack / auto shapes) — a pass stops the states; damage per hitSaveHalf.
+          if (_hitSaveOn && aoeMult > 0 && aoeActor.id !== actor.id
+              && (_ftHasManifestationApplicables(mf, item) || ftPoolShiftIsHostile(mf?.poolShift))) {
+            const hs = await game.fourththing.rolls.resolveManifestationSave(actor, aoeActor, item, _hitSaveCfg, {
+              castDc: targetSaveCastDc, channel, passLabel: _hitSavePassLabel
+            });
+            if (hs?.saved) { aoeSaved = true; if (resolution.hitSaveHalf === true) aoeMult = 0.5; }
+          }
+          const _aoeSaveRan = effShape === "save" || effShape === "contested" || _hitSaveOn;
 
           // Damage path — when aoeApplyConfirm is OFF, apply now (current
           // behavior). When ON, snapshot for the post-walk confirm card.
@@ -9219,10 +10295,21 @@ async function castManifestation(actor, item, {
                 perTargetMultiplier: aoeMult
               });
               if (desc) dmgLines.push(desc);
+              if (dr.op === "damage") {
+                for (const part of aoePartsLocked) {
+                  const pDesc = await game.fourththing.rolls._applyDamageToActor(aoeActor, part.amount, {
+                    op: "damage", track: part.track, damageType: part.type, damageFlavor: part.flavor, perTargetMultiplier: aoeMult
+                  });
+                  if (pDesc) dmgLines.push(pDesc);
+                }
+                dmgLines.push(...await ftApplyConditionalDamage(item, aoeActor, { track: trackKey, type: dr.type, flavor: dr.flavor, multiplier: aoeMult }));
+              }
             }
           } else if (dr.op !== "none" && dr.number > 0) {
-            dmgLines.push(`${aoeActor.name}: resisted — no ${dr.op === "heal" ? "healing" : "damage"}`);
+            dmgLines.push(`${aoeActor.name}: ${aoeMissed ? "missed" : "resisted"} — no ${dr.op === "heal" ? "healing" : "damage"}`);
           }
+          // P07 (2026-11-08): the pool row — a set Clarity / Noise amount, full unless the target negated it (or passed a hit save).
+          if (aoeMult > 0 && !(_hitSaveOn && aoeSaved)) await ftApplyPoolShift(actor, aoeActor, item, mf?.poolShift, { multiplier: aoeMult });
 
           // States + wards — same multiplier gate. (Immediate when the
           // autoApplyEffects world setting is on — it governs manifestations
@@ -9231,14 +10318,14 @@ async function castManifestation(actor, item, {
           if (_ftHasManifestationApplicables(mf, item) && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
             if (aoeMult > 0 && !aoeSaved) {
               try {
-                await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc, channel });
+                await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc, channel, saveResolved: _aoeSaveRan });
                 stateLines.push(`${aoeActor.name}: states applied`);
               } catch (e) {
                 console.warn("Roll for Initiation | applyManifestationStates AoE failed", aoeActor.name, e);
                 stateLines.push(`${aoeActor.name}: error (see console)`);
               }
             } else {
-              stateLines.push(`${aoeActor.name}: resisted — no states`);
+              stateLines.push(`${aoeActor.name}: ${aoeMissed ? "missed" : "resisted"} — no states`);
             }
           }
         }
@@ -9266,13 +10353,15 @@ async function castManifestation(actor, item, {
             itemName:   item.name,
             baseDmg,
             trackKey,
+            parts: dr.op === "damage" ? aoePartsLocked : [],
             dr: { op: dr.op, type: dr.type, flavor: dr.flavor, number: dr.number, die: dr.die },
             pending: pendingDmg,
             expiresAt: Date.now() + 86400000
           };
           const lines = pendingDmg.map(p => {
             const finalDmg = Math.floor(baseDmg * p.mult);
-            return `<li>${ftEscapeHtml(p.name)} — ${finalDmg} ${ftCap(dr.type)} ${dr.op === "heal" ? "healing" : "damage"}${p.mult < 1 ? ` (×${p.mult})` : ""}</li>`;
+            const partTxt = (dr.op === "damage" ? aoePartsLocked : []).map(x => ` + ${Math.floor(x.amount * p.mult)} ${ftCap(x.type)}`).join("");
+            return `<li>${ftEscapeHtml(p.name)} — ${finalDmg} ${ftCap(dr.type)}${partTxt} ${dr.op === "heal" ? "healing" : "damage"}${p.mult < 1 ? ` (×${p.mult})` : ""}</li>`;
           }).join("");
           await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
@@ -9291,21 +10380,35 @@ async function castManifestation(actor, item, {
       // for area casts: if the template/picker resolved to nobody, the area cast
       // simply affects nobody rather than defaulting to the single targeted token.
       if (dr.op !== "none" && dr.number > 0 && damageMultiplier > 0) {
-        await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier });
+        await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier, parts: ftCollectExtraDamageParts(item) });
       }
+      // P07 (2026-11-08): the pool row — set Clarity / Noise amounts land with the hit (full, unless missed / negated).
+      // A passed hit save stops the pool row with the states (2026-11-08).
+      if (target && damageMultiplier > 0 && !(_hitSaveOn && _savedVsStates)) await ftApplyPoolShift(actor, target, item, mf?.poolShift, { multiplier: damageMultiplier });
       if (target && damageMultiplier > 0 && !_savedVsStates && _ftHasManifestationApplicables(mf, item)
           && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
         try {
-          await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc, channel });
+          await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc, channel, saveResolved: _saveRan });
         } catch (e) {
           console.warn("Roll for Initiation | applyManifestationStates failed", e);
+        }
+      }
+      // Marks (2026-11-08, six foe powers): a vow on the target, a self ward's disadvantage / retaliation / damage
+      // conversion on the caster. Gated like the states — not when the target saved or the attack missed.
+      if (ftManifestationHasMark(mf) && damageMultiplier > 0 && !_savedVsStates) {
+        if (mf.onMissRetaliation?.formula && mf.onMissRetaliation.scope === "vow-target" && (!target || target === actor)) {
+          ui.notifications?.warn(`${item.name}: target the creature the vow is spoken against, then cast.`);
+        } else {
+          try { await ftApplyManifestationMarks(actor, target, item, mf); }
+          catch (e) { console.warn("Roll for Initiation | manifestation mark failed", e); }
         }
       }
       // Phase D — Chain. Only fires after the primary actually lands
       // (damageMultiplier > 0) and when the manifestation declares chain.
       // AoE path skips chain entirely (the area template already targets a
       // group; chain is for singular-cast burst).
-      if (target && damageMultiplier > 0 && mf?.chain?.enabled) {
+      // Gated like the states: a target who saved (or won the contest) stops the chain too (2026-11-08, teeth P13).
+      if (target && damageMultiplier > 0 && !_savedVsStates && mf?.chain?.enabled) {
         try {
           await _ftFireManifestationChain(actor, target, item, mf, dr, { castDc: targetSaveCastDc });
         } catch (e) {
@@ -9333,6 +10436,11 @@ async function castManifestation(actor, item, {
     updates["system.magic.noise.value"] = Math.min(maxNoise, curNoise + noiseGain);
   }
   if (Object.keys(updates).length) await actor.update(updates);
+  // The authored extra cost (Stress / Noise / Strain) lands on top of the Clarity (2026-11-08, teeth P16).
+  if (_extraAssess) {
+    try { await ftApplyManifestationCost(actor, _extraAssess); }
+    catch (e) { console.warn("[fourththing] extra manifestation cost failed", e); }
+  }
 
   if (bloodDebtCost > 0 && game.fourththing?.bloodDebt?.add) {
     await game.fourththing.bloodDebt.add(actor, {
@@ -9343,11 +10451,16 @@ async function castManifestation(actor, item, {
     });
   }
 
-  // Active tracker: sustained/bound/enduring manifestations stay on the sheet
+  // Active tracker: sustained/bound manifestations stay on the sheet
   // until dropped or culled by upkeep.
   const stability = mf?.stability ?? "instant";
-  if (item && ["sustained", "bound", "enduring"].includes(stability) && result?.success !== false) {
-    await ftAddActiveManifestation(actor, item, { tier: manTier, stability, mode, reachPath, target, stabilizeBonus: rs.stabilize || 0 });
+  if (item && ftStabilityPersists(mf) && result?.success !== false) {
+    await ftAddActiveManifestation(actor, item, { tier: manTier, stability, mode, reachPath, target });
+    // A persistent Form paid on Invoke has paid this scene's activation too (fix round 2026-11-08, R2) — the next
+    // Strike opens with the cost box clear, the same stamp the Engage flow writes.
+    if (item.type === "weapon" && ftIsManifestedForm(item) && !ftManifestationCostIsPerUse(item)) {
+      try { await item.setFlag("fourththing", "formPaid", _ftSceneKey()); } catch (_e) {}
+    }
   }
 
   // ⚡ Phase C trigger: on-cast (2026-08-17). Class automation could already
@@ -9366,8 +10479,8 @@ async function castManifestation(actor, item, {
       mode,
       result?.success !== false ? "success" : "fail",
       result?.misfireData ? "misfire" : null,
-      reachPath ? "reach" : null,
-      reachPath ? `reach-${reachPath}` : null,
+      (reachPath || hermeticReach) ? "reach" : null,
+      reachPath ? `reach-${reachPath}` : (hermeticReach ? "reach-hermetic" : null),
       miracle ? "miracle" : null,
       `t${manTier}`,
       stability,
@@ -9405,16 +10518,18 @@ async function castManifestation(actor, item, {
       label,
       tier:        manTier,          // the manifestation's tier
       stewardTier,                   // the caster's own — differs whenever reached
-      mode,                          // hermetic | chaos | ascendant
+      mode,                          // shamanic | hermetic | chaos (Chaotic) | ascendant
       stance:      cfg?.label ?? mode,
-      reachPath:   reachPath || "",  // "" | "surge" | "bloodDebt"
-      reached:     !!reachPath,
+      reachPath:   reachPath || (hermeticReach ? "hermetic" : ""),  // "" | "surge" | "bloodDebt" | "hermetic"
+      reached:     !!reachPath || hermeticReach,
       success:     result?.success !== false,
       misfire:     result?.misfireData ?? null,
       target:      target ?? null,
-      stability,                     // instant | sustained | bound | enduring
+      stability,                     // instant | sustained | bound
       miracle:     !!miracle,
-      cost: { clarity: clarityCost, noise: noiseGain, bloodDebt: bloodDebtCost }
+      cost: { clarity: clarityCost, noise: noiseGain, bloodDebt: bloodDebtCost,
+              extra: _extraAssess ? { type: _costSpec.extra.type, value: _costSpec.extra.value } : null,
+              pools: _invokePools.slice() }
     });
   } catch (e) { console.warn("[fourththing] fourththing.manifestationCast listener threw", e); }
 
@@ -9447,9 +10562,38 @@ async function ftAddActiveManifestation(actor, item, { tier, stability, mode, re
     // here at cast time.
     stabilizeBonus: Math.max(0, Number(stabilizeBonus) || 0)
   };
+  // One entry per item (2026-11-08, teeth P21): a re-cast refreshes the entry instead of stacking a second upkeep bill.
+  const prior = existing.find(e => e.itemId === item.id);
+  if (prior) {
+    const refreshed = { ...prior, ...entry, instanceId: prior.instanceId, stabilizeBonus: Math.max(Number(prior.stabilizeBonus) || 0, entry.stabilizeBonus) };
+    await actor.setFlag("fourththing", "activeManifestations", existing.map(e => e.itemId === item.id ? refreshed : e).filter((e, i, arr) => arr.findIndex(x => x.itemId === e.itemId) === i));
+    return refreshed;
+  }
   await actor.setFlag("fourththing", "activeManifestations", [...existing, entry]);
   return entry;
 }
+
+// A persistent manifestation stops billing when its item is deleted or un-equipped (2026-11-08, teeth P21). The client
+// that made the change writes; the scene's formPaid stamp is cleared so the next Engage pays the activation again.
+async function _ftDropActiveForItem(item) {
+  const actor = item?.parent;
+  if (!actor || actor.documentName !== "Actor") return;
+  const existing = actor.getFlag?.("fourththing", "activeManifestations") ?? [];
+  const kept = existing.filter(e => e.itemId !== item.id);
+  if (kept.length !== existing.length) await actor.setFlag("fourththing", "activeManifestations", kept);
+}
+Hooks.on("deleteItem", (item, _opts, userId) => {
+  if (userId !== game.user?.id) return;
+  _ftDropActiveForItem(item).catch(e => console.warn("[fourththing] active manifestation drop failed", e));
+});
+Hooks.on("updateItem", (item, change, _opts, userId) => {
+  // Weapons carry their equip state on flags.fourththing.equipped as well as system.equipped (fix round 2026-11-08, R6).
+  const _unequip = foundry.utils.getProperty(change, "system.equipped") === false
+    || foundry.utils.getProperty(change, "flags.fourththing.equipped") === false;
+  if (userId !== game.user?.id || !_unequip) return;
+  _ftDropActiveForItem(item).catch(e => console.warn("[fourththing] active manifestation drop failed", e));
+  if (foundry.utils.getProperty(item, "flags.fourththing.formPaid")) item.unsetFlag("fourththing", "formPaid").catch(() => {});
+});
 
 async function ftDropActiveManifestation(actor, instanceId) {
   const existing = actor.getFlag("fourththing", "activeManifestations") ?? [];
@@ -9467,19 +10611,54 @@ async function ftDropActiveManifestation(actor, instanceId) {
 // Returns null for none / custom / unset / unparseable → caller uses the flat
 // tier-Clarity baseline. Clarity is a SPEND (deduct, drop-if-insufficient);
 // stress / noise ACCRUE (add toward max, never drop the form); burn drains Surge.
+// 2026-11-08 (teeth P23, Dave: "floor tiered"): keys pick only resource + cadence ("clarity-scene"); the amount is
+// derived from tier at billing time (ftUpkeepAmount). A legacy "<n>-<resource>-<cadence>" key still parses and keeps its
+// number as `amount` (Clarity bills the higher of it and the tier). The old Surge ("burn") key reads as the baseline —
+// Surge is not a cost resource.
+// A stored key → one of FT.MAINTENANCE_COSTS (legacy "1-clarity-scene" → "clarity-scene"; Surge / unknown → none).
+function ftMaintenanceKeyCanonical(key) {
+  const k = String(key ?? "").toLowerCase().trim();
+  if (FT.MAINTENANCE_COSTS?.[k]) return k;
+  const spec = _ftParseMaintenanceKey(k);
+  return spec ? `${spec.resource}-${spec.cadence}` : "none";
+}
 function _ftParseMaintenanceKey(key) {
   const k = String(key ?? "").toLowerCase().trim();
   if (!k || k === "none" || k === "custom") return null;
-  const m = k.match(/^(\d+)-(clarity|stress|noise|burn)-(scene|round)$/);
+  const m = k.match(/^(?:(\d+)-)?(clarity|stress|noise)-(scene|round)$/);
   if (!m) return null;
-  return { resource: m[2], amount: Math.max(0, parseInt(m[1], 10) || 0), cadence: m[3] };
+  return { resource: m[2], amount: m[1] ? Math.max(0, parseInt(m[1], 10) || 0) : 0, cadence: m[3] };
+}
+// What one tick of keyed upkeep bills: Clarity = max(authored, tier); Stress / Noise = tier.
+function ftUpkeepAmount(spec, tier) {
+  const t = Math.max(1, Math.min(4, Number(tier) || 1));
+  if (!spec) return t;
+  return spec.resource === "clarity" ? Math.max(Number(spec.amount) || 0, t) : t;
+}
+// The Active strip's upkeep line (2026-11-08, teeth P21) — what ftChargeUpkeep will actually bill for this entry.
+function ftUpkeepHint(actor, entry) {
+  const item = actor?.items?.get?.(entry?.itemId) ?? null;
+  const spec = _ftParseMaintenanceKey(item?.system?.manifestation?.maintenanceKey);
+  const tier = Number(entry?.tier) || 1;
+  const scale = Math.max(0, Number(getUpkeepScale(actor)) || 1);
+  if (spec) {
+    let amt = ftUpkeepAmount(spec, tier);
+    if (spec.resource === "clarity") amt = Math.max(0, Math.ceil(amt * scale));
+    const res = spec.resource === "noise" ? `+${amt} Noise` : `${amt} ${ftCap(spec.resource)}`;
+    return `${res} / ${spec.cadence === "round" ? "round" : "scene"}`;
+  }
+  const amt = Math.max(0, Math.ceil(tier * scale));
+  const st = String(entry?.stability ?? "");
+  if (st === "sustained") return `${amt} Clarity / scene`;
+  if (st === "bound" || st === "enduring") return `${amt} Clarity / Soma Break`;
+  return "";
 }
 
 // Bill upkeep for a single cadence tick. cadence ∈ {"round","scene","soma"}.
 // KEY-AUTHORITATIVE (user decision 2026-05-26): a form with an authored
 // maintenanceKey bills exactly that resource/amount on its own cadence; a form
 // with none/custom/legacy bills the canon flat tier-Clarity at its stability
-// cadence (sustained→scene, bound/enduring→soma). Clarity drains the caster pool
+// cadence (sustained→scene, bound→soma; a legacy "enduring" entry bills as bound). Clarity drains the caster pool
 // (drop the form if it can't pay); stress and burn (Surge) drain, floor 0; noise accrues toward max.
 async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
   if (!actor) return { billed: [], dropped: [] };
@@ -9513,7 +10692,9 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
     if (spec) {
       if (spec.cadence !== cadence) continue;   // keyed forms bill only on their own cadence
       resource = spec.resource;
-      amount = resource === "clarity" ? Math.max(0, Math.ceil(spec.amount * upkeepScale)) : spec.amount;
+      // Floor tiered (2026-11-08, teeth P23): Clarity = max(authored, tier); Stress / Noise = tier.
+      const _amt = ftUpkeepAmount(spec, entry.tier);
+      amount = resource === "clarity" ? Math.max(0, Math.ceil(_amt * upkeepScale)) : _amt;
     } else {
       // Baseline (none / custom / legacy): flat tier-Clarity at the stability cadence.
       const st = entry.stability;
@@ -9581,299 +10762,34 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
   return { billed, dropped };
 }
 
-function buildManifestationCostBoxHTML(assessment, { inputName = "applyCost", defaultChecked = true } = {}) {
-  if (!assessment || assessment.type === "none") {
+function buildManifestationCostBoxHTML(assessment, { inputName = "applyCost", defaultChecked = true, locked = false } = {}) {
+  if (!assessment || !assessment.parts?.length) {
     return `
 <div class="ft-manifest-costbox">
   <div class="ft-prev-label">Cost</div>
-  <div class="ft-prev-align-note">No fixed cost.</div>
+  <div class="ft-prev-align-note">No cost.</div>
 </div>`;
   }
 
-  // 2026-05-29 — Persistent weapon-form manifestations pay their invoke cost
-  // once when manifested, not per swing. The caller passes defaultChecked=false
-  // for those so the box defaults OFF (no more un-ticking every round); the
-  // note explains, and the player can still tick it for the initial manifest.
-  const persistentNote = defaultChecked
-    ? ""
-    : `<div class="ft-prev-align-note" style="opacity:0.8">Persistent weapon — its invoke cost is paid once when manifested, not per strike. Tick to charge it now (e.g. first manifest).</div>`;
-  const checkbox = assessment.autoSupported
-    ? `<label class="ft-manifest-cost-toggle"><input type="checkbox" name="${inputName}" ${defaultChecked ? "checked" : ""}/> Auto-apply ${ftEscapeHtml(assessment.label)}</label>${persistentNote}`
-    : "";
-  const statusClass = assessment.autoSupported && !assessment.canPay ? " blocked" : "";
+  // 2026-11-08 (teeth P18): a Form pays its tier Clarity (+ any extra cost) — every Strike when it is Instant, once a
+  // scene when it persists. Until this scene's activation is paid the box is locked on (`locked`); after that it
+  // defaults off and can be ticked to pay again.
+  const persistentNote = locked
+    ? `<div class="ft-prev-align-note" style="opacity:0.8">A Form can't strike for free — this cost is paid on this Strike.</div>`
+    : (defaultChecked ? "" : `<div class="ft-prev-align-note" style="opacity:0.8">Already paid this scene — a persistent Form pays once a scene. Tick to pay again.</div>`);
+  const checkbox = `<label class="ft-manifest-cost-toggle"><input type="checkbox" name="${inputName}" ${(defaultChecked || locked) ? "checked" : ""} ${locked ? "disabled data-locked=\"1\"" : ""}/> Pay ${ftEscapeHtml(assessment.label)}</label>${persistentNote}`;
+  const statusClass = !assessment.canPay ? " blocked" : "";
 
   return `
 <div class="ft-manifest-costbox${statusClass}">
   <div class="ft-prev-label">Cost</div>
   <div class="ft-manifest-chip-row">
     <span class="ft-manifest-chip">${ftEscapeHtml(assessment.label)}</span>
-    ${assessment.autoSupported ? `<span class="ft-manifest-chip">${ftEscapeHtml(assessment.preview)}</span>` : ""}
-    ${assessment.manualOnly ? `<span class="ft-manifest-chip">Track manually</span>` : ""}
+    <span class="ft-manifest-chip">${ftEscapeHtml(assessment.preview)}</span>
   </div>
-  <div class="ft-prev-align-note">${ftEscapeHtml(
-    assessment.autoSupported
-      ? (assessment.canPay ? "This can be applied automatically after the roll." : "You cannot currently pay this cost automatically.")
-      : (assessment.manualOnly ? "This cost is narrative or uses a resource the engine cannot safely infer here." : "No automatic cost application for this manifestation.")
-  )}</div>
+  <div class="ft-prev-align-note">${ftEscapeHtml(assessment.canPay ? "Paid automatically after the roll." : `You can't pay this now: ${assessment.blockedReason}.`)}</div>
   ${checkbox}
 </div>`;
-}
-
-function buildManifestationWizardHTML(actor, { kind = "power", starter = "" } = {}) {
-  const rawSys = actor.system?.system ?? actor.system;
-  const starterCfg = ftManifestationStarterConfig(starter, kind);
-  const wizardKind = starterCfg?.kind ?? kind;
-  const defaults = foundry.utils.mergeObject(
-    ftManifestationDefaults(wizardKind),
-    foundry.utils.deepClone(starterCfg?.defaults ?? {}),
-    { inplace: false }
-  );
-  const guide = ftManifestationGuide(rawSys?.magic?.sephirah ?? "tiferet");
-  const mkOpts = (map, current) => Object.entries(map).map(([k, v]) =>
-    `<option value="${k}"${k === current ? " selected" : ""}>${v.label}</option>`
-  ).join("");
-
-  const guideBlock = `
-    <div class="ft-manifest-dialog-guide" style="border-color:${guide.color}55;background:${guide.color}14">
-      <div class="ft-manifest-dialog-title">Create Manifestation</div>
-      <div class="ft-manifest-dialog-domain">${guide.label} resonance · ${guide.domain}</div>
-      <div class="ft-manifest-dialog-copy">Bring a new piece of imagination into the world. Start with what it is, what it does, and what makes it strange. The old language of Working and Form still exists, but you do not need to solve that first.</div>
-      <div class="ft-manifest-guide-body">
-        <span class="ft-manifest-chip">${starterCfg?.label ?? (wizardKind === "weapon" ? "Stable" : "Ephemeral")}</span>
-        <span class="ft-manifest-chip">${starterCfg?.helper ?? "Choose whether the manifestation mainly happens or mainly stays."}</span>
-      </div>
-      <ul class="ft-manifest-dialog-list">
-        ${guide.prompts.map(p => `<li>${p}</li>`).join("")}
-      </ul>
-    </div>`;
-
-  const coachBlock = buildManifestationCoachHTML(actor, {
-    kind: wizardKind,
-    system: {
-      sephirah: rawSys?.magic?.sephirah ?? "tiferet",
-      manifestation: defaults
-    }
-  });
-
-  if (wizardKind === "weapon") {
-    return `
-<div class="ft-cast-dialog ft-manifest-dialog">
-  ${guideBlock}
-  ${coachBlock}
-  <div class="ft-manifest-dialog-section">
-    <div class="ft-prev-label">What are you making?</div>
-    <div class="ft-prev-align-note">Describe the manifestation in plain language first. Poetry can come after clarity.</div>
-  </div>
-  <div class="ft-cast-grid">
-    <div class="ft-cast-field"><label>Name</label><input type="text" name="name" placeholder="e.g. Thorn Verdict"/></div>
-    <div class="ft-cast-field"><label>Expression</label><select name="manifestForm">${mkOpts(FT.MANIFESTATION_FORMS, defaults.form)}</select></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Concept</label><textarea name="concept" rows="2" placeholder="What are you bringing into the world?"></textarea></div>
-
-    <div class="ft-cast-field"><label>Function</label><select name="manifestFunction">${mkOpts(FT.MANIFESTATION_FUNCTIONS, defaults.function)}</select></div>
-    <div class="ft-cast-field"><label>Stability</label><select name="manifestStability">${mkOpts(ftStabilityOptionsForActor(actor), defaults.stability)}</select></div>
-    <div class="ft-cast-field"><label>Interaction Model</label><select name="manifestInteraction">${mkOpts(FT.MANIFESTATION_INTERACTIONS, defaults.interactionModel)}</select></div>
-    <div class="ft-cast-field"><label>Form Type</label>
-      <select name="category">
-        <option value="melee" selected>Melee</option>
-        <option value="ranged">Ranged</option>
-        <option value="thrown">Thrown</option>
-        <option value="unarmed">Unarmed</option>
-      </select>
-    </div>
-
-    <div class="ft-cast-field"><label>Intent</label><select name="intent">${mkOpts(FT.INTENTS, "violence")}</select></div>
-    <div class="ft-cast-field"><label>Skill</label>
-      <select name="skill">
-        <option value="brawl">Brawl</option>
-        <option value="melee" selected>Melee</option>
-        <option value="firearms">Firearms</option>
-        <option value="athletics">Athletics</option>
-        <option value="stealth">Stealth</option>
-      </select>
-    </div>
-    <div class="ft-cast-field"><label>Damage Formula</label><input type="text" name="damageFormula" value="2d6"/></div>
-    <div class="ft-cast-field"><label>Damage Type</label><select name="damageType">${mkOpts(FT.DAMAGE_TYPES, "kinetic")}</select></div>
-    <div class="ft-cast-field"><label>Track</label>
-      <select name="damageTrack">
-        <option value="integrity" selected>Integrity</option>
-        <option value="stress">Stress</option>
-        <option value="radiation">Radiation</option>
-      </select>
-    </div>
-    <div class="ft-cast-field"><label>Short Range</label><input type="number" name="rangeShort" value="1" min="0"/></div>
-    <div class="ft-cast-field"><label>Long Range</label><input type="number" name="rangeLong" value="1" min="0"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Target / Reach</label><input type="text" name="targetText" placeholder="One foe, a doorway, a circle around you, whoever carries the vow..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Range / Area Notes</label><input type="text" name="rangeAreaText" placeholder="Near, 3 / 6, the room, the threshold, a carried object..."/></div>
-
-    <div class="ft-cast-field"><label>Duration Baseline</label><select name="duration">${mkOpts(FT.MANIFESTATION_DURATIONS, defaults.duration)}</select></div>
-    <div class="ft-cast-field"><label>Scale</label><select name="scale">${mkOpts(FT.MANIFESTATION_SCALES, defaults.scale)}</select></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Duration / Trigger</label><input type="text" name="durationText" placeholder="Until dawn, for one exchange, while the vow is spoken..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Trigger</label><input type="text" name="triggerText" placeholder="When the bearer is touched by fear, when the threshold is crossed..."/></div>
-
-    <div class="ft-cast-field"><label>Cost Type</label><select name="costType">${mkOpts(FT.MANIFESTATION_COSTS, defaults.costType)}</select></div>
-    <div class="ft-cast-field"><label>Cost Value</label><input type="number" name="costValue" value="${defaults.costValue ?? 0}" min="0"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Surge, 1 Stress per scene, Clarity 2 and the blade remembers your shame..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Maintenance Cost</label><input type="text" name="maintenanceCost" value="${ftEscapeHtml(defaults.maintenanceCost ?? "")}" placeholder="Leave blank if it does not keep costing anything."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Risk / Fallout</label><input type="text" name="riskText" placeholder="What can go wrong, fray, attract notice, or scar the caster?"/></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>Signature</label><input type="text" name="signature" placeholder="What tells people this could only have come from you?"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Third Thing</label><input type="text" name="thirdThing" placeholder="The one eerie detail that makes this more than a generic spell or item."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Path / Doctrine / Resonance</label><input type="text" name="pathResonance" placeholder="What belief, oath, appetite, wound, or philosophy gives this manifestation its logic?"/></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>What does this clearly allow in the fiction?</label><textarea name="fictionalPermission" rows="2" placeholder="What should everyone at the table understand this manifestation can absolutely do?"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Mechanical Hook</label><input type="text" name="mechanicalHook" placeholder="Bonus, condition, damage, movement, protection, reveal, pressure..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>GM Calibration</label><textarea name="gmCalibration" rows="2" placeholder="What should the GM help tune for fairness, spectacle, or consequence?"></textarea></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>Effect / Use Notes</label><textarea name="effect" rows="3" placeholder="What does this manifestation do beyond its raw damage profile?"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Flavor</label><textarea name="flavor" rows="2" placeholder="Texture, symbolism, attitude, or visual language"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Tags</label><input type="text" name="tags" placeholder="comma-separated, e.g. thorned, ceremonial, echo-forged"/></div>
-  </div>
-</div>`;
-  }
-
-  return `
-<div class="ft-cast-dialog ft-manifest-dialog">
-  ${guideBlock}
-  ${coachBlock}
-  <div class="ft-manifest-dialog-section">
-    <div class="ft-prev-label">What are you making?</div>
-    <div class="ft-prev-align-note">Start with intent, not taxonomy. Ask what appears, what it changes, and what makes it weirdly yours.</div>
-  </div>
-  <div class="ft-cast-grid">
-    <div class="ft-cast-field"><label>Name</label><input type="text" name="name" placeholder="e.g. Mercy Lattice"/></div>
-    <div class="ft-cast-field"><label>Expression</label><select name="manifestForm">${mkOpts(FT.MANIFESTATION_FORMS, defaults.form)}</select></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Concept</label><textarea name="concept" rows="2" placeholder="What are you bringing into the world?"></textarea></div>
-
-    <div class="ft-cast-field"><label>Function</label><select name="manifestFunction">${mkOpts(FT.MANIFESTATION_FUNCTIONS, defaults.function)}</select></div>
-    <div class="ft-cast-field"><label>Stability</label><select name="manifestStability">${mkOpts(ftStabilityOptionsForActor(actor), defaults.stability)}</select></div>
-    <div class="ft-cast-field"><label>Interaction Model</label><select name="manifestInteraction">${mkOpts(FT.MANIFESTATION_INTERACTIONS, defaults.interactionModel)}</select></div>
-    <div class="ft-cast-field"><label>Intent</label><select name="intent">${mkOpts(FT.INTENTS, "presence")}</select></div>
-    <div class="ft-cast-field"><label>Channel</label><select name="channel">${mkOpts(FT.CHANNELS, "soul")}</select></div>
-    <div class="ft-cast-field"><label>Sephirah</label><select name="sephirah">${mkOpts(ftSephirothFor(rawSys?.magic?.sephirah), rawSys?.magic?.sephirah ?? "tiferet")}</select></div>
-    <div class="ft-cast-field"><label>Style</label><select name="mode">${mkOpts(FT.MODES, "hermetic")}</select></div>
-
-    <div class="ft-cast-field"><label>Activation</label>
-      <select name="activation">
-        <option value="action" selected>Action</option>
-        <option value="bonus">Bonus</option>
-        <option value="reaction">Reaction</option>
-        <option value="ritual">Ritual</option>
-      </select>
-    </div>
-    <div class="ft-cast-field"><label>Target Shape</label>
-      <select name="target">
-        <option value="self">Self</option>
-        <option value="single" selected>Single</option>
-        <option value="burst">Burst</option>
-        <option value="area">Area</option>
-        <option value="faction">Faction</option>
-      </select>
-    </div>
-    <div class="ft-cast-field"><label>Range Baseline</label>
-      <select name="range">
-        <option value="self">Self</option>
-        <option value="touch">Touch</option>
-        <option value="near" selected>Near</option>
-        <option value="far">Far</option>
-        <option value="sight">Sight</option>
-        <option value="hex">Hex-scale</option>
-      </select>
-    </div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Target / Reach</label><input type="text" name="targetText" placeholder="One foe, the room, everyone who hears the hymn, the doorway you are touching..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Range / Area Notes</label><input type="text" name="rangeAreaText" placeholder="Near, touch, the room, sightline, a hex, whoever crosses the ward..."/></div>
-
-    <div class="ft-cast-field"><label>Duration Baseline</label><select name="duration">${mkOpts(FT.MANIFESTATION_DURATIONS, defaults.duration)}</select></div>
-    <div class="ft-cast-field"><label>Scale</label><select name="scale">${mkOpts(FT.MANIFESTATION_SCALES, defaults.scale)}</select></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Duration / Trigger</label><input type="text" name="durationText" placeholder="Until dawn, for one exchange, while the singer continues..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Trigger</label><input type="text" name="triggerText" placeholder="When the vow is broken, when fear enters the room, when the bearer lies..."/></div>
-
-    <div class="ft-cast-field"><label>Cost Type</label><select name="costType">${mkOpts(FT.MANIFESTATION_COSTS, defaults.costType)}</select></div>
-    <div class="ft-cast-field"><label>Cost Value</label><input type="number" name="costValue" value="${defaults.costValue ?? 1}" min="0"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Clarity, 2 Noise, 1 Surge and the room remembers you..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Maintenance Cost</label><input type="text" name="maintenanceCost" value="${ftEscapeHtml(defaults.maintenanceCost ?? "")}" placeholder="Leave blank if it does not keep costing anything."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Risk / Fallout</label><input type="text" name="riskText" placeholder="What can go wrong, fray, attract notice, or scar the caster?"/></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>Signature</label><input type="text" name="signature" placeholder="What tells people this could only have come from you?"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Third Thing</label><input type="text" name="thirdThing" placeholder="The one eerie detail that makes this more than a stock effect."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Path / Doctrine / Resonance</label><input type="text" name="pathResonance" placeholder="What path, doctrine, or obsession does this expression belong to?"/></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>What does this clearly allow in the fiction?</label><textarea name="fictionalPermission" rows="2" placeholder="What should everybody at the table understand this manifestation can absolutely do?"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Mechanical Hook</label><input type="text" name="mechanicalHook" placeholder="Bonus, condition, damage, movement, protection, reveal, pressure..."/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>GM Calibration</label><textarea name="gmCalibration" rows="2" placeholder="Scope, duration, collateral weirdness, what breaks it, who resists it..."></textarea></div>
-
-    <div class="ft-cast-field ft-cast-span-2"><label>Effect Formula</label><input type="text" name="damage" placeholder="Optional — e.g. 2d6 or 1d8+presence"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Description</label><textarea name="effect" rows="3" placeholder="What changes in the world when you invoke this?"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Flavor</label><textarea name="flavor" rows="2" placeholder="Texture, symbolism, attitude, or visual language"></textarea></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Tags</label><input type="text" name="tags" placeholder="comma-separated, e.g. mirrored, restorative, hush"/></div>
-  </div>
-</div>`;
-}
-
-function readManifestationWizardValues(html, kind = "power") {
-  const get = (name) => html.find(`[name='${name}']`).val();
-  const getNum = (name, fallback = 0) => {
-    const raw = Number(get(name));
-    return Number.isFinite(raw) ? raw : fallback;
-  };
-  const tags = String(get("tags") ?? "")
-    .split(",")
-    .map(t => t.trim())
-    .filter(Boolean);
-
-  const base = {
-    name: String(get("name") ?? "").trim(),
-    concept: String(get("concept") ?? "").trim(),
-    form: String(get("manifestForm") ?? (kind === "weapon" ? "weapon" : "sigil")),
-    function: String(get("manifestFunction") ?? (kind === "weapon" ? "harm" : "transform")),
-    stability: String(get("manifestStability") ?? (kind === "weapon" ? "bound" : "instant")),
-    interactionModel: String(get("manifestInteraction") ?? (kind === "weapon" ? "weapon" : "event")),
-    duration: String(get("duration") ?? (kind === "weapon" ? "scene" : "instant")),
-    durationText: String(get("durationText") ?? "").trim(),
-    triggerText: String(get("triggerText") ?? "").trim(),
-    scale: String(get("scale") ?? "personal"),
-    targetText: String(get("targetText") ?? "").trim(),
-    rangeAreaText: String(get("rangeAreaText") ?? "").trim(),
-    costType: String(get("costType") ?? (kind === "power" ? "clarity" : "none")),
-    costValue: getNum("costValue", kind === "power" ? 1 : 0),
-    costText: String(get("costText") ?? "").trim(),
-    maintenanceCost: String(get("maintenanceCost") ?? "").trim(),
-    riskText: String(get("riskText") ?? "").trim(),
-    signature: String(get("signature") ?? "").trim(),
-    thirdThing: String(get("thirdThing") ?? "").trim(),
-    pathResonance: String(get("pathResonance") ?? "").trim(),
-    fictionalPermission: String(get("fictionalPermission") ?? "").trim(),
-    gmCalibration: String(get("gmCalibration") ?? "").trim(),
-    mechanicalHook: String(get("mechanicalHook") ?? "").trim(),
-    effect: String(get("effect") ?? "").trim(),
-    flavor: String(get("flavor") ?? "").trim(),
-    tags
-  };
-
-  if (kind === "weapon") {
-    return {
-      ...base,
-      category: String(get("category") ?? "melee"),
-      intent: String(get("intent") ?? "violence"),
-      skill: String(get("skill") ?? "melee"),
-      damageFormula: String(get("damageFormula") ?? "2d6"),
-      damageType: String(get("damageType") ?? "kinetic"),
-      damageTrack: String(get("damageTrack") ?? "integrity"),
-      rangeShort: getNum("rangeShort", 1),
-      rangeLong: getNum("rangeLong", 1)
-    };
-  }
-
-  return {
-    ...base,
-    intent: String(get("intent") ?? "presence"),
-    channel: String(get("channel") ?? "soul"),
-    sephirah: String(get("sephirah") ?? "tiferet"),
-    mode: String(get("mode") ?? "hermetic"),
-    activation: String(get("activation") ?? "action"),
-    target: String(get("target") ?? "single"),
-    range: String(get("range") ?? "near"),
-    damage: String(get("damage") ?? "").trim()
-  };
 }
 
 // ── Sheet → compendium export ──────────────────────────────────────────────
@@ -10003,41 +10919,39 @@ async function _ftDoExportToCompendium(item, packId) {
 }
 
 function createManifestationItemData(actor, kind = "power", values = {}) {
-  const tags = Array.from(new Set([
-    ...(values.tags ?? []),
-    values.form,
-    values.function,
-    values.stability,
-    values.interactionModel
-  ].filter(Boolean)));
+  // Tags are the author's own (2026-11-08, teeth P30): the stability key is no longer unioned in — "is this a Form" is
+  // the Engine's flag (ftIsFormWeapon), not a tag.
+  const tags = Array.from(new Set([...(values.tags ?? [])].filter(Boolean)));
+  // Area (teeth P27): Cube retired → sphere. Cones, lines and hex-wide take no range (P25); an area never chains (P28).
+  const _areaIn = (values.area && typeof values.area === "object") ? { ...values.area } : values.area;
+  if (_areaIn?.shape === "cube") _areaIn.shape = "sphere";
+  const _areaShape = String(_areaIn?.shape ?? "none");
+  const _rangeFtIn = ["cone", "line", "hex"].includes(_areaShape) ? 0 : Math.max(0, Math.min(999, Math.floor(Number(values.rangeFt) || 0)));
+  const _chainIn = ftNormalizeChainConfig(values.chain ?? {});
+  if (_areaShape !== "none") _chainIn.enabled = false;
 
   const manifestation = foundry.utils.mergeObject(
     ftManifestationDefaults(kind),
     {
       tier: Number(values.tier) >= 1 && Number(values.tier) <= 4 ? Number(values.tier) : 1,
-      family: kind === "weapon" ? "form" : "working",
       concept: values.concept,
-      form: values.form,
-      function: values.function,
-      stability: values.stability,
-      interactionModel: values.interactionModel,
-      costType: values.costType,
-      costValue: values.costValue,
+      // Enduring folded into Bound (2026-11-08).
+      stability: values.stability === "enduring" ? "bound" : values.stability,
+      // Extra cost on top of tier Clarity (teeth P16/P18): stress / noise / strain 1–10, else none.
+      costType: ftExtraCostOf({ costType: values.costType, costValue: values.costValue })?.type ?? "none",
+      costValue: ftExtraCostOf({ costType: values.costType, costValue: values.costValue })?.value ?? 0,
       costText: values.costText,
-      duration: values.duration,
+      duration: ftDurationForStability(values.stability ?? (kind === "weapon" ? "bound" : "instant")),   // derived (teeth P24)
       durationText: values.durationText,
       triggerText: values.triggerText,
-      scale: values.scale,
       targetText: values.targetText,
       rangeAreaText: values.rangeAreaText,
       // Free text only rides with the "custom" key (or a legacy item with no key) — otherwise the chip
       // showed text the upkeep engine never billed (2026-10-29).
       maintenanceCost: (!values.maintenanceKey || String(values.maintenanceKey).toLowerCase() === "custom") ? values.maintenanceCost : "",
-      // Phase F2 — Structured maintenance key. Falls back to "none" when the
-      // wizard didn't surface the field (legacy callers / pre-F2 items).
-      maintenanceKey:  FT.MAINTENANCE_COSTS?.[String(values.maintenanceKey ?? "").toLowerCase()]
-                          ? String(values.maintenanceKey).toLowerCase()
-                          : (values.maintenanceKey === "" ? "" : "none"),
+      // Phase F2 — Structured maintenance key (resource + cadence since 2026-11-08, teeth P23; a legacy
+      // "<n>-<resource>-<cadence>" key is written as its resource + cadence). Falls back to "none".
+      maintenanceKey:  values.stability === "instant" ? "none" : ftMaintenanceKeyCanonical(values.maintenanceKey),
       riskText: values.riskText,
       pathResonance: values.pathResonance,
       fictionalPermission: values.fictionalPermission,
@@ -10051,9 +10965,13 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // objects. appliedStates.states arrives as either an array (legacy /
       // direct stamping) or an object map (wizard checkbox harvest); the
       // normalizer coerces either to a clean array.
-      area:          values.area,
-      activation:    values.activation_block,
-      resolution:    values.resolution,
+      area:          _areaIn,
+      // One activation field (2026-11-08, teeth P20) — consumePool folded into type "none", Ritual dropped.
+      activation:    { type: ftNormalizeManifestationData({ manifestation: { activation: values.activation_block ?? {} } }, kind).activation.type },
+      // attackVs / mode / statesOnFail retired 2026-11-08 (teeth P05 / P10) — never written back.
+      // A plain (foe) weapon kept plain by the Engine keeps its save-first mode (fix round 2026-11-08, E2).
+      resolution:    (values.resolution && typeof values.resolution === "object")
+        ? (({ attackVs: _av, mode: _md, statesOnFail: _sf, ...rest }) => (values._keepResolutionMode === true && _md === "save" ? { ...rest, mode: _md } : rest))(values.resolution) : values.resolution,
       // Stored as the canonical array — the weapon Strike and chain-carry gates read
       // `states.length`, which a {key:true} map never has (2026-10-29).
       appliedStates: ftAppliedStatesToArray(values.appliedStates),
@@ -10061,19 +10979,24 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // grids on resists/immunes, indexed slots on modifiers); normalize to
       // canonical arrays here so downstream consumers get a single shape.
       appliedEffects: ftNormalizeAppliedEffects(values.appliedEffects ?? {}),
-      // Phase D — Chain config. Normalize coerces enabled bool + clamps.
-      chain: ftNormalizeChainConfig(values.chain ?? {}),
+      // Phase D — Chain config. Normalize coerces enabled bool + clamps; off with an area (teeth P28).
+      chain: _chainIn,
       // Phase E — Conditional damage rows. Empty rows / unknown vsType filtered.
       conditionalDamage: ftNormalizeConditionalDamage(values.conditionalDamage ?? []),
-      // Phase F1 — Structured range (engine check). Clamp + non-negative.
-      rangeFt: Math.max(0, Math.min(999, Math.floor(Number(values.rangeFt) || 0))),
-      // 2026-10-01 — edit mode: blocks the wizard has no step for ride through
-      // from the overlay instead of resetting to defaults on save.
-      ...(values.opCost && typeof values.opCost === "object" ? { opCost: foundry.utils.deepClone(values.opCost) } : {}),
-      ...(values.save   && typeof values.save   === "object" ? { save:   foundry.utils.deepClone(values.save) }   : {})
+      // Clarity / Noise pool row — set amounts, −4..4 each (2026-11-08).
+      poolShift: ftNormalizePoolShift(values.poolShift),
+      // The one authored range (teeth P25): feet, 0 = touch / self. A Form's system.range follows it.
+      rangeFt: _rangeFtIn,
+      // (legacy `save` block retired 2026-11-08 — the overlay folds it into resolution)
     },
     { inplace: false }
   );
+  // Marks (2026-11-08): the Engine has no controls for them yet — write them only when the caller passes them, so an Engine
+  // edit of a foe power (Spark Vow, Frame Drift, Hammer-Bright Ward) merges over the stored vow / ward instead of blanking it.
+  if (values.onMissRetaliation !== undefined) manifestation.onMissRetaliation = ftNormalizeMissRetaliation(values.onMissRetaliation); else delete manifestation.onMissRetaliation;
+  if (values.attackersDisadvantage !== undefined) manifestation.attackersDisadvantage = values.attackersDisadvantage === true; else delete manifestation.attackersDisadvantage;
+  if (values.damageConvert !== undefined) manifestation.damageConvert = ftNormalizeDamageConvert(values.damageConvert); else delete manifestation.damageConvert;
+  if (values.markDuration !== undefined) manifestation.markDuration = ["next-turn", "scene"].includes(String(values.markDuration)) ? String(values.markDuration) : ""; else delete manifestation.markDuration;
 
   if (kind === "weapon") {
     return {
@@ -10086,18 +11009,20 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       flags: { fourththing: { manifested: true } },
       system: {
         category: values.category || "melee",
-        intent: values.intent || "violence",
+        intent: ftItemIntent({ intent: values.intent }, "violence"),
         skill: values.skill || "melee",
         damage: {
-          formula: values.damageFormula || "1d6",
-          attribute: values.damageAttribute || values.intent || "violence",
+          // An empty formula stays empty (fix round 2026-11-08, E3) — a ward / buff Form has no damage and reads as
+          // beneficial; only a caller that never passed one gets the 1d6 default.
+          formula: typeof values.damageFormula === "string" ? values.damageFormula : "1d6",
           type: values.damageType || "kinetic",
-          track: values.damageTrack || "integrity"
+          // Track derives from the damage type (2026-11-08) — stored for older readers, never chosen.
+          track: ftTrackForDamage("", values.damageType || "kinetic")
         },
-        range: {
-          short: Number.isFinite(Number(values.rangeShort)) ? Number(values.rangeShort) : 1,
-          long: Number.isFinite(Number(values.rangeLong)) ? Number(values.rangeLong) : 1
-        },
+        // Derived from rangeFt (teeth P25) — squares, touch = 1; the Engine no longer asks for Short / Long.
+        range: ftFormRangeFromFt(_rangeFtIn),
+        // Nonlethal is a visible box (teeth P30) — never a "mercy" tag.
+        nonlethal: values.nonlethal === true,
         damageParts: ftNormalizeDamageParts(values.damageParts ?? []),
         tags,
         effect: values.effect || "",
@@ -10107,39 +11032,29 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
     };
   }
 
-  const clarityRequired = values.costType === "clarity" ? (Number(values.costValue ?? 1) || 1) : 0;
-  const noiseGain = values.costType === "noise" ? (Number(values.costValue ?? 1) || 1) : 0;
-
   // Wizard V2 may pass a structured damageRoll. Falls back to defaults (op:none)
   // so legacy callers don't break.
   const damageRoll = ftNormalizeDamageRoll({ damageRoll: values.damageRoll ?? null });
+  damageRoll.attribute = "";   // the faculty add is the item's Intent, read at cast time (2026-11-08)
 
   return {
     name: values.name || "New Manifestation",
     type: "power",
     img: values.img || "icons/svg/aura.svg",
     system: {
-      intent: values.intent || "presence",
+      intent: ftItemIntent({ intent: values.intent }, "presence"),
       channel: values.channel || "soul",
       sephirah: values.sephirah || ftEffectiveSephirah(actor, actor?.system?.magic?.sephirah ?? "tiferet"),
-      mode: values.mode || "hermetic",
-      clarityRequired,
-      noiseGain,
-      // Legacy STRING field. Wizard V2 state inherits manifestation.activation
-      // (an object) under `activation` from the defaults — never write that
-      // here; fall back to the structured block's type (2026-10-01).
-      activation: (typeof values.activation === "string" && values.activation)
-        ? values.activation
-        : (["action", "bonus", "reaction", "ritual"].includes(values.activation_block?.type) ? values.activation_block.type : "action"),
-      target: values.target || "single",
-      range: values.range || "near",
-      damage: values.damage || "",
+      // The legacy top-level `system.activation` string is retired (2026-11-08, teeth P20) — manifestation.activation.type only.
+      // The Range Baseline (`system.range` "near" / "far" …) is retired too (teeth P25) — manifestation.rangeFt is the range.
+      // The flat `damage` string ("Effect Formula") is retired 2026-11-08 — dice live in damageRoll;
+      // ftNormalizeDamageRoll still lifts a legacy string at read time.
       damageRoll,
       damageParts: ftNormalizeDamageParts(values.damageParts ?? []),
       effect: values.effect || "",
       flavor: values.flavor || "",
       tags,
-      category: "manifestation",
+      // (power `category: "manifestation"` dropped 2026-11-08, teeth P34 — nothing read it)
       manifestation
     }
   };
@@ -10297,54 +11212,8 @@ async function openManifestationStarterDialog(actor) {
   });
 }
 
-async function openManifestationWizard(actor, { kind = "power", starter = "" } = {}) {
-  // Non-TCC gate — defense-in-depth alongside the cast-time check. If a
-  // non-TCC reaches the wizard via a Working/Ephemeral entry point (direct
-  // button, macro, etc.), redirect them to the Ritual starter and notify.
-  if (!isTCC(actor) && (starter === "ephemeral" || starter === "working")) {
-    ui.notifications?.info(`${actor.name}: only TCCs may author Workings. Routing to Ritual / Ongoing — your manifestations persist as Forms.`);
-    starter = "ritual";
-    kind = "power";
-  }
-
-  const starterCfg = ftManifestationStarterConfig(starter, kind);
-  const wizardKind = starterCfg?.kind ?? kind;
-  const titleLabel = starterCfg?.label ?? (wizardKind === "weapon" ? "Stable" : "Ephemeral");
-  return new Promise((resolve) => {
-    new Dialog({
-      title: `Manifestation Engine — ${titleLabel}`,
-      content: buildManifestationWizardHTML(actor, { kind: wizardKind, starter }),
-      buttons: {
-        create: {
-          icon: wizardKind === "weapon" ? "<i class='fas fa-sword'></i>" : "<i class='fas fa-magic'></i>",
-          label: "Create Manifestation",
-          callback: async (html) => {
-            const values = readManifestationWizardValues(html, wizardKind);
-            const itemData = createManifestationItemData(actor, wizardKind, values);
-            const created = await actor.createEmbeddedDocuments("Item", [itemData]);
-            if (created?.[0]) created[0].sheet.render(true);
-            resolve(created?.[0] ?? null);
-          }
-        },
-        cancel: {
-          label: "Cancel",
-          callback: () => resolve(null)
-        }
-      },
-      default: "create"
-    }, {
-      // Make the wizard a real authoring surface: wide, tall, resizable,
-      // and scrollable when the form spills past the available height.
-      classes: ["fourththing", "ft-manifestation-wizard-window"],
-      width: 760,
-      height: 820,
-      resizable: true
-    }).render(true);
-  });
-}
-
 // ─── Manifestation Wizard V2 — stepwise authoring (Phase 1, 2026-05-06) ─────
-// Parallel to openManifestationWizard. Same data flow into
+// The only manifestation authoring surface (the V1 single-page wizard was removed 2026-11-08). Same data flow into
 // createManifestationItemData; wraps the field set into 7 paginated steps
 // with delegated nav. No occult CSS yet — Phase 3 territory. Phase 2 (smart
 // cascading defaults + live preview) is planned but not in this pass.
@@ -10375,7 +11244,7 @@ const _FT_WIZ_V2_SIGILS = {
 function _ftWizV2Steps(kind) {
   const base = [
     { id: "concept",    label: "Concept",          render: _ftWizV2RenderConcept,   validate: (s) => s.name?.trim() ? { ok: true } : { ok: false, errors: ["Name is required to create the manifestation."] } },
-    { id: "form",       label: "Form & Function",  render: _ftWizV2RenderForm },
+    { id: "form",       label: "Kind & Stability", render: _ftWizV2RenderForm },
     { id: "targeting",  label: "Targeting",        render: _ftWizV2RenderTargeting },
     { id: "effect",     label: "Effect",           render: kind === "weapon" ? _ftWizV2RenderEffectWeapon : _ftWizV2RenderEffectPower },
     { id: "resolution", label: "Resolution",       render: _ftWizV2RenderResolution },
@@ -10386,6 +11255,16 @@ function _ftWizV2Steps(kind) {
 }
 
 // ── Helper builders ────────────────────────────────────────────────────────
+// Heal-track select (fix round 2026-11-08, E8): a legacy Clarity / Noise heal shows as a selected, disabled
+// "(legacy — use the Clarity & Noise row)" option, so saving never silently rewrites it to Integrity.
+function _ftWizV2HealTrackSel(track) {
+  const t = String(track ?? "").toLowerCase();
+  if (t === "clarity" || t === "noise") {
+    const opts = Object.entries(FT_HEAL_TRACKS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+    return `<select name="damageRoll.track"><option value="${t}" selected disabled>${ftCap(t)} (legacy — use the Clarity &amp; Noise row)</option>${opts}</select>`;
+  }
+  return _ftWizV2Sel("damageRoll.track", FT_HEAL_TRACKS, FT_HEAL_TRACKS[t] ? t : "integrity");
+}
 function _ftWizV2Sel(name, map, current, { tooltip = "" } = {}) {
   let opts = Object.entries(map).map(([k, v]) => {
     const label = (typeof v === "string") ? v : (v?.label ?? k);
@@ -10431,19 +11310,29 @@ function _ftWizV2FacultiesMap() {
 // Authored tooltip copy for the five conceptual fields. Surfaced via
 // data-tooltip on the field label; Foundry wraps long text automatically.
 const _FT_WIZ_V2_FIELD_TIPS = {
-  expression: "The shape it takes in the world — what your manifestation IS. Sigil / Field / Echo (incorporeal), Vestment / Weapon / Tool / Construct (objects), Rite (ceremony), Body-shift (your form), Gate (threshold). Seeds Interaction Model and Scale defaults on the next step.",
-  function: "What it DOES to the world. Harm = damage. Protect = shield / buff. Heal = mend a creature (healing dice). Reveal = sight / knowledge. Move = push / pull / teleport. Repair = fix an object / structure. Command = compel a target (save). Transform = change a thing. Bind = restrain. Cascades the most downstream — damage roll, resolution shape, and starter conditions are auto-filled from this pick.",
-  stability: "How long the STRUCTURE of the manifestation persists. Instant = resolves and vanishes (TCC-only 'working'). Sustained = lasts the scene with upkeep. Bound = tethered to an anchor object or place until destroyed. Enduring = self-sustaining, no upkeep. Non-TCC paths only author stable Forms (sustained / bound / enduring).",
-  interactionModel: "How the world ENGAGES with this thing — its surface in the fiction. Event (no surface), Weapon (strikable → attack roll), Tool / Worn / Structure (object), Companion (autonomous), Zone (area → save), Mark (label on target → save), Transformation (changes target's form → save). Cascades into resolution shape.",
-  scale: "Footprint — who and where it touches. Personal = one target / body. Scene = a room or group. Faction = one organization or alliance. Hex = a region on the campaign map. Faction and Hex are campaign-level; leave alone unless this is a Rite or Operation."
+  // Expression / Function / Interaction Model / Scale retired 2026-11-08 — the Engine builds from what the
+  // manifestation does (damage, states, wards, area, range), not from labels.
+  itemKind: "Wielded = a weapon Form: it gets a Strike (attack roll) on the sheet and in combat. Invoked = a power: you cast it.",
+  stability: "How long it lasts, and what it costs to keep. Instant = resolves and is gone (Trad Caster Classes only). Sustained = lasts the scene; pays its tier in Clarity when the scene ends. Bound = lasts across scenes; pays its tier in Clarity at each Soma Break. An upkeep picked on the Cost step replaces that baseline. Forms that can't pay drop."
 };
 
-function _ftWizV2RenderConcept(state) {
+function _ftWizV2RenderConcept(state, { actor } = {}) {
+  // Path / Doctrine lens chips (teeth P36): the same coach the item sheets show, from the actor's class / subclass.
+  let lensHtml = "";
+  try {
+    const { pathLenses, doctrineLenses } = ftCollectManifestationLenses(actor);
+    const lenses = [...pathLenses.slice(0, 1), ...doctrineLenses.slice(0, 1)];
+    if (lenses.length) {
+      lensHtml = `<div class="ft-wiz-v2-lenses" style="margin:0.2rem 0 0.5rem;font-size:0.76rem;line-height:1.45">${
+        lenses.map(l => `<span class="ft-manifest-coach-chip ${pathLenses.includes(l) ? "lens" : "doctrine"}">${ftEscapeHtml(l.label)}</span>`).join(" ")
+      }<div style="opacity:0.75;margin-top:0.25rem">${lenses.flatMap(l => l.prompts.slice(0, 2)).map(p => ftEscapeHtml(p)).join(" ")}</div></div>`;
+    }
+  } catch (_e) { lensHtml = ""; }
   return `
     <p class="ft-wiz-v2-coach">Bring a new piece of imagination into the world. Start with what it is, what it does, and what makes it strange.</p>
+    ${lensHtml}
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Name</label>${_ftWizV2Txt("name", state.name, "e.g. Thorn Verdict")}</div>
-      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.expression)}">Expression <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("form", FT.MANIFESTATION_FORMS, state.form)}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Concept</label>${_ftWizV2Area("concept", state.concept, "What are you bringing into the world?", 2)}</div>
     </div>`;
 }
@@ -10451,70 +11340,112 @@ function _ftWizV2RenderConcept(state) {
 function _ftWizV2RenderForm(state, { actor }) {
   // No actor = GM library / compendium authoring — offer every stability (2026-10-29).
   const stabilityMap = actor ? ftStabilityOptionsForActor(actor) : FT.MANIFESTATION_STABILITIES;
+  // Item kind picks the item TYPE (weapon vs power). An existing item can't change type, so edit mode shows it read-only.
+  const kindOpts = { weapon: { label: "Wielded — a weapon you Strike with" }, power: { label: "Invoked — a power you cast" } };
+  const kindField = state._editing
+    ? `<div class="ft-wiz-v2-readonly" style="padding:0.3rem 0;opacity:0.85">${ftEscapeHtml(kindOpts[state._kind === "weapon" ? "weapon" : "power"].label)}</div>`
+    : _ftWizV2Sel("itemKind", kindOpts, state.itemKind ?? state._kind);
   return `
-    <p class="ft-wiz-v2-coach">How does it act on the world, and how long does it stay?</p>
+    <p class="ft-wiz-v2-coach">Is it wielded or invoked, and how long does it stay?</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.function)}">Function <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("function", FT.MANIFESTATION_FUNCTIONS, state.function)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.itemKind)}">Kind <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${kindField}</div>
       <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.stability)}">Stability <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("stability", stabilityMap, state.stability)}</div>
-      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.interactionModel)}">Interaction Model <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("interactionModel", FT.MANIFESTATION_INTERACTIONS, state.interactionModel)}</div>
-      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.scale)}">Scale <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("scale", FT.MANIFESTATION_SCALES, state.scale)}</div>
     </div>`;
 }
 
 function _ftWizV2RenderTargeting(state) {
-  const areaShape = state.area?.shape ?? "none";
+  let areaShape = state.area?.shape ?? "none";
+  if (areaShape === "cube") areaShape = "sphere";   // Cube retired (2026-11-08, teeth P27)
   const chain = state.chain ?? {};
-  const chainEnabled = chain.enabled === true;
   const aoeActive = areaShape !== "none";
-  // Chain doesn't compose with AoE — AoE targets via template, chain targets
-  // via per-secondary pick. Surface a hint when both are configured rather
-  // than blocking the author (lets them turn one off explicitly).
-  const conflictNote = aoeActive && chainEnabled
-    ? `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.76rem;margin:0.3rem 0 0">⚠ Area shape and chain are both configured. The cast path runs AoE; chain is skipped when an Area template is placed.</p>`
-    : "";
+  // An area manifestation never chains (2026-11-08, teeth P28) — the box is off and locked while an area is set.
+  const chainEnabled = !aoeActive && chain.enabled === true;
+  // Cones and lines start at you; Hex-wide covers the scene — none of them use a range (teeth P25).
+  const rangeless = ["cone", "line", "hex"].includes(areaShape);
+  const rangeField = rangeless
+    ? `<div class="ft-wiz-v2-readonly" style="padding:0.3rem 0;opacity:0.85">${areaShape === "hex" ? "Hex-wide — no range" : "Starts at you — no range"}</div><input type="hidden" name="rangeFt" value="0"/>`
+    : _ftWizV2Num("rangeFt", state.rangeFt ?? 0, { min: 0, max: 999 });
+  const sizeField = areaShape === "hex"
+    ? `<div class="ft-wiz-v2-readonly" style="padding:0.3rem 0;opacity:0.85">The whole scene</div><input type="hidden" name="area.size" value="0"/>`
+    : _ftWizV2Num("area.size", areaShape === "none" ? (state.area?.size ?? 0) : Math.max(5, Number(state.area?.size) || 0), { min: areaShape === "none" ? 0 : 5, max: 600 });
+  const chainLock = aoeActive ? " disabled" : "";
   return `
     <p class="ft-wiz-v2-coach">Who or what does it touch, and across how much space?</p>
     <div class="ft-cast-grid">
       <div class="ft-cast-field ft-cast-span-2"><label>Target / Reach</label>${_ftWizV2Txt("targetText", state.targetText, "One foe, a doorway, a circle around you...")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Range / Area Notes</label>${_ftWizV2Txt("rangeAreaText", state.rangeAreaText, "Near, 3 / 6, the room, a carried object...")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Engine-side range in feet for cast warnings. 0 = no check (free-text only). Common: 5 = touch / adjacent, 30 = short, 60 = medium, 120 = long.">Range (ft) — engine check <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Num("rangeFt", state.rangeFt ?? 0, { min: 0, max: 999 })}</div>
-      <div class="ft-cast-field"><label>Area shape</label>${_ftWizV2Sel("area.shape", { none: "None", cone: "Cone", sphere: "Sphere", line: "Line", cube: "Cube", cylinder: "Cylinder" }, areaShape)}</div>
-      <div class="ft-cast-field"><label>Area size (ft)</label>${_ftWizV2Num("area.size", state.area?.size, { min: 0, max: 120 })}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="How far it reaches, in feet — the range every Invoke and Strike checks (a soft check: you can go ahead past it, the GM's call). 0 = touch, or yourself. Common: 30 short, 60 medium, 120 long. A sphere or cylinder's centre must sit within it.">Range (ft) <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${rangeField}</div>
+      <div class="ft-cast-field"><label data-tooltip="None = one target. Sphere / Cylinder: a circle you place within range (size = radius). Cone (53°) and Line (5 ft wide) start at you (size = length). Hex-wide: everyone on the scene — harmful ones hit every non-friendly token, helpful ones every friendly token; no template.">Area shape <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("area.shape", ftAreaShapeOptions(), areaShape)}</div>
+      <div class="ft-cast-field"><label>${ftEscapeHtml(areaShape === "none" ? "Area size (ft)" : ftAreaSizeLabel(areaShape))}</label>${sizeField}</div>
     </div>
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Chain to Secondary Targets</div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Chain-lightning pattern. After the primary target resolves, the cast prompts you to pick up to N additional enemies within range. Each secondary takes a separate roll of the chain formula (auto-applied — no per-target save). Inherits the primary's damage type unless overridden. Conditions and Buffs &amp; Wards can optionally carry to secondaries.</p>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Chain-lightning pattern. When the primary target is hit (or fails its save), you pick up to N more non-friendly tokens within the chain range of it. Each secondary takes its own roll of the chain formula, in full — the primary's save never halves it. Uses the primary's damage type unless you pick one. Conditions and Buffs &amp; Wards can carry to the secondaries; each secondary rolls its own save against carried conditions.${aoeActive ? " <b>An area manifestation can't chain — set Area shape to None to chain.</b>" : ""}</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.enabled", chainEnabled)}<span>Enable chain</span></label></div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.enabled", chainEnabled).replace("<input", `<input${chainLock}`)}<span>Enable chain</span></label></div>
       <div class="ft-cast-field"><label>Max secondaries</label>${_ftWizV2Num("chain.count", chain.count ?? 3, { min: 1, max: 8 })}</div>
       <div class="ft-cast-field"><label>Range (ft from primary)</label>${_ftWizV2Num("chain.range", chain.range ?? 30, { min: 5, max: 120 })}</div>
       <div class="ft-cast-field"><label>Chain damage formula</label>${_ftWizV2Txt("chain.damageFormula", chain.damageFormula ?? "1d6", "1d6")}</div>
       <div class="ft-cast-field"><label>Chain damage type</label>${_ftWizV2Sel("chain.damageType", { "": "— inherit primary —", ...FT.DAMAGE_TYPES }, chain.damageType ?? "")}</div>
-      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.carryConditions", chain.carryConditions === true)}<span>Conditions carry</span></label></div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.carryConditions", chain.carryConditions === true)}<span>Conditions carry (each secondary saves)</span></label></div>
       <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.carryEffects", chain.carryEffects === true)}<span>Buffs &amp; Wards carry</span></label></div>
-    </div>${conflictNote}`;
+    </div>`;
 }
 
 // Conditions Applied — the states grid + duration / save fields. Shared by the power AND
 // weapon Effect steps (2026-11-08, Dave: the Form path had no grid, so a Strike's states
 // could only be ticked on the item sheet, outside the Magnitude score).
+// Per-shape states coach (teeth P36): says exactly when the ticked states land, from the Resolution the item has now.
+function _ftWizV2StatesCoach(state) {
+  const r = state.resolution ?? {};
+  const fac = ftCap(r.saveAttribute || "body");
+  const later = "(set on the Resolution step)";
+  if (state._kind === "weapon") {
+    return r.hitSave === true
+      ? `States land on a hit, then the target rolls a ${fac} save — a pass shrugs them off${r.hitSaveHalf === true ? " and halves the damage" : "; the damage still lands"}.`
+      : `States land on every hit — no save. Add a save on the Resolution step to give the target a way out.`;
+  }
+  if (_ftWizV2StateIsBeneficial(state)) return "A beneficial working lands on every target it reaches — no roll.";
+  switch (r.shape) {
+    case "attack":    return r.hitSave === true
+      ? `States land on a hit, and only if the target then fails a ${fac} save ${later}.`
+      : `States land on every target your attack hits ${later}.`;
+    case "save":      return `States land only when the target fails its ${fac} save — any pass, even a half-damage one, stops them ${later}.`;
+    case "contested": return `States land only when you win the contest — a target win stops them, like a passed save ${later}.`;
+    default:          return `States land on every target the working reaches — no roll ${later}.`;
+  }
+}
+
 function _ftWizV2RenderStatesBlock(state, { coach } = {}) {
   const ap = state.appliedStates ?? {};
   const stateMap = ap.states ?? {};
   // Render checkbox grid for FT.CONDITIONS. Use `appliedStates.states.<key>`
   // as the form name; createManifestationItemData converts the resulting
   // object map to an array of selected keys.
-  const condChecks = Object.entries(FT.CONDITIONS ?? {}).map(([key, cfg]) => {
-    const checked = stateMap?.[key] === true || (Array.isArray(stateMap) && stateMap.includes(key));
+  // Only authorable states (2026-11-08, teeth P04): engine-owned ones (Dying, Strain, water / sky / radiation / Darkness
+  // ladders…) and any entry flagged applicable:false are not offered.
+  const _isChecked = (key) => stateMap?.[key] === true || (Array.isArray(stateMap) && stateMap.includes(key));
+  const condChecks = Object.entries(ftAuthorableConditions()).map(([key, cfg]) => {
+    const checked = _isChecked(key);
     return `<label class="ft-wiz-v2-cond-chip" data-tooltip="${ftEscapeHtml(cfg.desc ?? "")}" style="border-color:${cfg.color}66">
       <input type="checkbox" name="appliedStates.states.${key}" ${checked ? "checked" : ""}/>
       <span class="ft-wiz-v2-cond-dot" style="background:${cfg.color}"></span>
       <span class="ft-wiz-v2-cond-label">${cfg.label}</span>
     </label>`;
   }).join("");
+  // Per-state shake-off faculty (2026-11-08, teeth P40): with Save each round on, each ticked state may roll its own
+  // faculty instead of the one above (saveAttributeOverrides). Blank = the one above.
+  const _ovr = (ap.saveAttributeOverrides && typeof ap.saveAttributeOverrides === "object") ? ap.saveAttributeOverrides : {};
+  const _ovrKeys = ap.saveEachRound ? Object.keys(ftAuthorableConditions()).filter(_isChecked) : [];
+  const overrideRows = _ovrKeys.length ? `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.4rem;font-size:0.78rem">Shake-off faculty per state</div>
+    <div class="ft-cast-grid">${_ovrKeys.map(k => `
+      <div class="ft-cast-field"><label style="color:${FT.CONDITIONS[k].color}">◈ ${FT.CONDITIONS[k].label}</label>${_ftWizV2Sel(`appliedStates.saveAttributeOverrides.${k}`, { "": "— same as above —", ..._ftWizV2FacultiesMap() }, _ovr[k] ?? "")}</div>`).join("")}
+    </div>` : "";
   // A Steward never sets a DC (2026-11-08): the ladder is shown, the Fixed option is a foe-only authoring tool.
+  const _apDcLabel = state._kind === "weapon" ? "11 + tier×2 + your higher of Mind or Soul" : "Ladder (11 + tier×2 + channel)";
   const dcFields = state._stewardDc
-    ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">11 + tier×2 + your channel — set by you, not by the working</span></div>`
-    : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
+    ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">${_apDcLabel} — set by you, not by the ${state._kind === "weapon" ? "Form" : "working"}</span></div>`
+    : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": _apDcLabel, fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
       ${ap.saveDcMode === "fixed" ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("appliedStates.saveDcFixed", ap.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}`;
   const saveSubFields = ap.saveEachRound ? `
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("appliedStates.saveAttribute", _ftWizV2FacultiesMap(), ap.saveAttribute ?? "body")}</div>
@@ -10522,13 +11453,13 @@ function _ftWizV2RenderStatesBlock(state, { coach } = {}) {
   ` : "";
   return `
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditions Applied</div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">${coach ?? "Pick states the working inflicts. Applied only when resolution lands (full or half). Tooltips show effects."} Every state counts toward the Magnitude tier.</p>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">${ftEscapeHtml(coach ?? _ftWizV2StatesCoach(state))} Tooltips say what each state does. Every state counts toward the tier.</p>
     <div class="ft-wiz-v2-cond-grid">${condChecks}</div>
     <div class="ft-cast-grid" style="margin-top:0.4rem">
-      <div class="ft-cast-field"><label>Duration</label>${_ftWizV2Sel("appliedStates.duration", { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" }, ap.duration ?? "1-round")}</div>
-      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off</span></label></div>
+      <div class="ft-cast-field"><label data-tooltip="How long the conditions AND the wards stick. 'From stability' = one round for an Instant working, the scene for a Sustained or Bound one. Scene-long effects end at Scene Break or when the fight ends. 'Until saved' always rolls a save each round.">Applied for <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("appliedStates.duration", { "": `From stability (${ftAppliedDurationDefault(state.stability) === "scene" ? "scene" : "1 round"})`, "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved (rolls each round)" }, ap.duration ?? "")}</div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${ap.duration === "until-saved" ? `<input type="checkbox" checked disabled/><input type="hidden" name="appliedStates.saveEachRound" value="true"/>` : _ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off${ap.duration === "until-saved" ? " (always, for Until saved)" : ""}</span></label></div>
       ${saveSubFields}
-    </div>`;
+    </div>${overrideRows}`;
 }
 
 function _ftWizV2RenderEffectPower(state) {
@@ -10537,7 +11468,7 @@ function _ftWizV2RenderEffectPower(state) {
     <p class="ft-wiz-v2-coach">Does the working harm, heal, or transform without measurable damage? Configure the structured damage/heal roll the cast path will roll on success — and which conditions land alongside it.</p>
     <div class="ft-wiz-v2-subhead">Intent &amp; Channel</div>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label data-tooltip="What the working is FOR — Violence, Intrigue, or Presence. The cast rolls Intent + Channel, and the pair sets your Sephirah alignment bonus. Before this field every Engine-made power cast with Presence (2026-10-29).">Intent <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("intent", FT.INTENTS, state.intent ?? "presence")}</div>
+      <div class="ft-cast-field"><label data-tooltip="The faculty this working uses — any of the six. The cast rolls Intent + Channel, the damage or heal roll adds Intent, and the pair sets your Sephirah alignment bonus.">Intent <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("intent", FT.FACULTIES, state.intent ?? "presence")}</div>
       <div class="ft-cast-field"><label data-tooltip="Which faculty powers this working — Body, Mind, or Soul. Drives the caster's alignment bonus and the contested-cast attribute. Always editable later on the item sheet.">Channel <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("channel", FT.CHANNELS, state.channel ?? "soul")}</div>
     </div>
     <div class="ft-wiz-v2-subhead">Damage / Heal Roll</div>
@@ -10545,15 +11476,31 @@ function _ftWizV2RenderEffectPower(state) {
       <div class="ft-cast-field"><label>Operation</label>${_ftWizV2Sel("damageRoll.op", { none: "None (no roll)", damage: "Damage", heal: "Heal" }, dr.op ?? "none")}</div>
       <div class="ft-cast-field"><label>Number of dice</label>${_ftWizV2Num("damageRoll.number", dr.number, { min: 0, max: 20 })}</div>
       <div class="ft-cast-field"><label>Die</label>${_ftWizV2Sel("damageRoll.die", { d4: "d4", d6: "d6", d8: "d8", d10: "d10", d12: "d12", d20: "d20", d10x10: "d10 (exploding)" }, dr.die ?? "d6")}</div>
-      <div class="ft-cast-field"><label>Faculty bonus</label>${_ftWizV2Sel("damageRoll.attribute", { "": "— none —", ..._ftWizV2FacultiesMap() }, dr.attribute ?? "")}</div>
-      <div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageRoll.type", FT.DAMAGE_TYPES, dr.type ?? "kinetic")}</div>
-      <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageRoll.track", { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" }, dr.track ?? "integrity")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Damage flavor</label>${_ftWizV2FlavorField("damageRoll.flavor", dr.type ?? "kinetic", dr.flavor)}</div>
+      <div class="ft-cast-field" data-tooltip="The roll adds the caster's Intent faculty — set Intent above. No separate choice (2026-11-08)."><label>Faculty add</label><div style="padding:0.25rem 0;opacity:0.8">+ Intent</div></div>
+      ${dr.op === "heal" ? "" : `<div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageRoll.type", FT.DAMAGE_TYPES, dr.type ?? "kinetic")}</div>`}
+      ${dr.op === "heal" ? `<div class="ft-cast-field" data-tooltip="Heals only: which bar the heal fills. Damage always lands on the bar its type sets — Psychic / Qliphothic → Stress, Radiation → Radiation, everything else → Integrity. Clarity and Noise move by set amounts in the pool row below."><label>Heal track <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2HealTrackSel(dr.track)}</div>` : ""}
+      ${dr.op === "heal" ? "" : `<div class="ft-cast-field ft-cast-span-2"><label>Damage flavor</label>${_ftWizV2FlavorField("damageRoll.flavor", dr.type ?? "kinetic", dr.flavor)}</div>`}
     </div>
+    ${_ftWizV2RenderPoolShiftBlock(state)}
     ${_ftWizV2RenderStatesBlock(state)}
     ${_ftWizV2RenderEffectsBlock(state)}
     ${_ftWizV2RenderConditionalDamageBlock(state)}
     ${_ftWizV2RenderDamagePartsBlock(state)}`;
+}
+
+// Clarity / Noise pool row (2026-11-08, Dave P07: "valid attack and buff targets, but they should only be affected by
+// set amounts, not rolled"). Fixed 1–4 each; lands with the hit; a half save doesn't halve it, a negate stops it.
+const FT_POOL_SHIFT_CLARITY_OPTS = { "0": "—", "-1": "Drain 1", "-2": "Drain 2", "-3": "Drain 3", "-4": "Drain 4", "1": "Restore 1", "2": "Restore 2", "3": "Restore 3", "4": "Restore 4" };
+const FT_POOL_SHIFT_NOISE_OPTS   = { "0": "—", "1": "Add 1", "2": "Add 2", "3": "Add 3", "4": "Add 4", "-1": "Clear 1", "-2": "Clear 2", "-3": "Clear 3", "-4": "Clear 4" };
+function _ftWizV2RenderPoolShiftBlock(state) {
+  const ps = ftNormalizePoolShift(state.poolShift);
+  return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Clarity &amp; Noise</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">A set amount, never rolled, landing with the hit. Draining Clarity or adding Noise is an attack on Resolve; restoring Clarity or clearing Noise is a buff. A save that halves damage doesn't halve this — only a save that negates stops it. Rigs have neither pool.</p>
+    <div class="ft-cast-grid">
+      <div class="ft-cast-field"><label>Clarity</label>${_ftWizV2Sel("poolShift.clarity", FT_POOL_SHIFT_CLARITY_OPTS, String(ps.clarity))}</div>
+      <div class="ft-cast-field"><label>Noise</label>${_ftWizV2Sel("poolShift.noise", FT_POOL_SHIFT_NOISE_OPTS, String(ps.noise))}</div>
+    </div>`;
 }
 
 // Phase C — Buffs & Wards. Sub-section under Step 4 that authors numeric
@@ -10600,7 +11547,7 @@ function _ftWizV2RenderEffectsBlock(state) {
   }).join("");
   return `
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Buffs &amp; Wards</div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Active-effect outcomes the target gains on a successful resolution. Numeric mods land on derived defenses (Guard/Evasion/Resolve) or Initiative, surfacing as a visible AE on the target. Resists halve matching damage; immunities zero it. Each adds to magnitude budget — the tier suggester counts these alongside damage and conditions.</p>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Active-effect outcomes the target gains on a successful resolution. Numeric mods land on Guard, Resolve or Initiative, surfacing as a visible AE on the target. Resists halve matching damage; immunities zero it. Each adds to magnitude budget — the tier suggester counts these alongside damage and conditions.</p>
     <div style="font-size:0.78rem;font-weight:600;opacity:0.85;margin-bottom:0.3rem">Stat Modifiers</div>
     ${modRow("m0")}${modRow("m1")}${modRow("m2")}
     <div style="font-size:0.78rem;font-weight:600;opacity:0.85;margin:0.5rem 0 0.3rem">Damage Resist / Immune</div>
@@ -10620,23 +11567,24 @@ function _ftWizV2RenderEffectWeapon(state) {
   return `
     <p class="ft-wiz-v2-coach">How does this manifested form harm? Combat-style attack profile.</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label>Form Type</label>${_ftWizV2Sel("category", { melee: "Melee", ranged: "Ranged", thrown: "Thrown", unarmed: "Unarmed" }, state.category ?? "melee")}</div>
-      <div class="ft-cast-field"><label>Intent</label>${_ftWizV2Sel("intent", FT.INTENTS, state.intent ?? "violence")}</div>
+      <div class="ft-cast-field"><label data-tooltip="Melee and Unarmed flank, get +2 against a Prone target and can be your reaction weapon. Ranged and Thrown take −2 against a Prone target. Picking one suggests its Skill (Unarmed → Brawl, Ranged / Thrown → Firearms, Melee → Melee).">Form Type <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("category", { melee: "Melee", ranged: "Ranged", thrown: "Thrown", unarmed: "Unarmed" }, state.category ?? "melee")}</div>
+      <div class="ft-cast-field"><label data-tooltip="The faculty this Form attacks with and adds to its damage — any of the six. Weapons default to Violence.">Intent</label>${_ftWizV2Sel("intent", FT.FACULTIES, state.intent ?? "violence")}</div>
       <div class="ft-cast-field"><label>Skill</label>${_ftWizV2Sel("skill", { brawl: "Brawl", melee: "Melee", firearms: "Firearms", athletics: "Athletics", stealth: "Stealth" }, state.skill ?? "melee")}</div>
       <div class="ft-cast-field"><label>Damage formula</label>${_ftWizV2Txt("damageFormula", state.damageFormula ?? "1d6", "1d6")}</div>
       <div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageType", FT.DAMAGE_TYPES, state.damageType ?? "kinetic")}</div>
-      <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageTrack", { integrity: "Integrity", stress: "Stress", radiation: "Radiation" }, state.damageTrack ?? "integrity")}</div>
-      <div class="ft-cast-field"><label>Short Range</label>${_ftWizV2Num("rangeShort", state.rangeShort ?? 1, { min: 0, max: 999 })}</div>
-      <div class="ft-cast-field"><label>Long Range</label>${_ftWizV2Num("rangeLong", state.rangeLong ?? 1, { min: 0, max: 999 })}</div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="A nonlethal Form never drops a target below 1 Integrity — it knocks them out of the fight, it doesn't kill.">${_ftWizV2Chk("nonlethal", state.nonlethal === true)}<span>Nonlethal</span></label></div>
     </div>
-    ${_ftWizV2RenderStatesBlock(state, { coach: "States the Form inflicts on a hit. The target rolls the save at resolution; a pass shrugs it off." })}
+    <p style="font-size:0.72rem;opacity:0.65;margin:0.2rem 0 0;font-style:italic">Range is set on the Targeting step (0 = touch).</p>
+    <p style="font-size:0.72rem;opacity:0.65;margin:0.2rem 0 0;font-style:italic">Damage lands on the bar its type sets — Psychic / Qliphothic → Stress, Radiation → Radiation, everything else → Integrity.</p>
+    ${_ftWizV2RenderPoolShiftBlock(state)}
+    ${_ftWizV2RenderStatesBlock(state)}
     ${_ftWizV2RenderEffectsBlock(state)}
     ${_ftWizV2RenderConditionalDamageBlock(state)}
     ${_ftWizV2RenderDamagePartsBlock(state)}`;
 }
 
 // Phase E — Conditional Damage. Shared between power Step 4 and weapon Step 4.
-// Up to 3 rows of { vsType creature-type select, bonusFormula text }. The
+// Up to 4 rows (the normalizer cap) of { vsType creature-type select, bonusFormula text }. The
 // bonus is rolled at apply time (inside applyDamageFromButton) when the
 // target's creature type matches. Damage type/track inherit from the primary
 // so resist/immune shadowing computes once on the combined hit.
@@ -10657,8 +11605,8 @@ function _ftWizV2RenderConditionalDamageBlock(state) {
   };
   return `
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditional Damage <span style="font-weight:400;font-size:0.78rem;opacity:0.65">(vs creature type)</span></div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice that roll when the target matches a creature type. Use for "+1d6 vs Undead", "+2d6 vs Outsider" style effects. Damage type and track inherit from the primary — the bonus stacks onto the same hit so resist/immune shadowing applies once. Set the target's creature type via <code>actor.flags.fourththing.creatureType</code> (string or array).</p>
-    ${rowHtml("c0")}${rowHtml("c1")}${rowHtml("c2")}`;
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice that roll when the target matches a creature type. Use for "+1d6 vs Undead", "+2d6 vs Outsider" style effects. Damage type (and so the bar it hits) inherits from the primary; it lands on every path — Apply, area, save prompts, chain — and a half save halves it. Set the target's creature type via <code>actor.flags.fourththing.creatureType</code> (string or array).</p>
+    ${rowHtml("c0")}${rowHtml("c1")}${rowHtml("c2")}${rowHtml("c3")}`;
 }
 
 // 2026-05-29 — Additional Damage Dice. Up to 3 rows of { formula, type, track,
@@ -10672,97 +11620,175 @@ function _ftWizV2RenderDamagePartsBlock(state) {
   const rowMap = (rows && typeof rows === "object" && !Array.isArray(rows))
     ? rows
     : Object.fromEntries((Array.isArray(rows) ? rows : []).map((r, i) => [`p${i}`, r]));
-  const TRACK_OPTS = { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" };
+  // A heal's extra dice join the heal roll (teeth P36): no type or flavor, and the block says so.
+  const isHeal = state._kind !== "weapon" && state.damageRoll?.op === "heal";
   const rowHtml = (slot) => {
     const r = rowMap[slot] ?? {};
+    if (isHeal) return `
+      <div class="ft-cast-grid" style="grid-template-columns:0.8fr 2fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Dice</label>${_ftWizV2Txt(`damageParts.${slot}.formula`, r.formula ?? "", "1d6")}</div>
+        <input type="hidden" name="damageParts.${slot}.type" value="${ftEscapeHtml(String(r.type ?? "kinetic"))}"/><input type="hidden" name="damageParts.${slot}.flavor" value="${ftEscapeHtml(String(r.flavor ?? ""))}"/>
+      </div>`;
     return `
-      <div class="ft-cast-grid" style="grid-template-columns:0.8fr 1fr 0.9fr 1fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
+      <div class="ft-cast-grid" style="grid-template-columns:0.8fr 1fr 1fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Dice</label>${_ftWizV2Txt(`damageParts.${slot}.formula`, r.formula ?? "", "1d6")}</div>
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Type</label>${_ftWizV2Sel(`damageParts.${slot}.type`, FT.DAMAGE_TYPES, r.type ?? "kinetic")}</div>
-        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Track</label>${_ftWizV2Sel(`damageParts.${slot}.track`, TRACK_OPTS, r.track ?? "integrity")}</div>
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Flavor</label>${_ftWizV2FlavorField(`damageParts.${slot}.flavor`, r.type ?? "kinetic", r.flavor)}</div>
       </div>`;
   };
+  if (isHeal) return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Additional healing dice</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice added to the heal roll — same bar, no faculty add. Leave a row's Dice blank to skip it.</p>
+    ${rowHtml("p0")}${rowHtml("p1")}${rowHtml("p2")}`;
   return `
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Additional Damage Dice</div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice rolled on every hit, in addition to the main damage — each with its own type &amp; track so the target's resists/immunities apply per type. These count toward the suggested Tier (see Soul &amp; Review). Leave a row's Dice blank to skip it.</p>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice rolled on every hit, cast and save, in addition to the main damage — no faculty add, halved with it on a half save. Each row has its own type (its type sets the bar it hits) so the target's resists/immunities apply per type. These count toward the suggested Tier (see Soul &amp; Review). Leave a row's Dice blank to skip it.</p>
     ${rowHtml("p0")}${rowHtml("p1")}${rowHtml("p2")}`;
+}
+
+// Engine state readers for the Resolution step (2026-11-08, teeth P05 / P15): the derived defense and the
+// beneficial-working test, from the Engine's in-progress state (object-map parts / states / wards).
+function _ftWizV2StateDamageRoll(state) {
+  if (state._kind === "weapon") return String(state.damageFormula ?? "").trim() ? { op: "damage", number: 1, type: state.damageType ?? "kinetic", track: "" } : { op: "none", number: 0 };
+  const dr = state.damageRoll ?? {};
+  return { op: dr.op ?? "none", number: Number(dr.number) || 0, type: dr.type ?? "kinetic", track: dr.track ?? "" };
+}
+function _ftWizV2StateIsBeneficial(state) {
+  try {
+    const parts = Object.values(state.damageParts ?? {}).filter(p => p && typeof p === "object");
+    const mf = { appliedStates: state.appliedStates ?? {}, appliedEffects: ftNormalizeAppliedEffects(state.appliedEffects ?? {}), poolShift: state.poolShift };
+    return _ftIsBeneficialManifestation(mf, { system: { damageParts: parts } }, _ftWizV2StateDamageRoll(state));
+  } catch (_e) { return false; }
+}
+function _ftWizV2StateDefense(state) {
+  const dr = _ftWizV2StateDamageRoll(state);
+  if (dr.op === "damage" && dr.number > 0) return ftDefenseForDamage(dr.track, dr.type);
+  if (ftPoolShiftIsHostile(state.poolShift)) return "resolve";
+  return ftDefenseForDamage(dr.track, dr.type);
+}
+// The hit-save block (attack / auto shapes, and every Form): the creator MAY give the target a save against the states.
+function _ftWizV2RenderHitSave(state, r) {
+  const isWeapon = state._kind === "weapon";
+  const on = r.hitSave === true;
+  const dcLabel = isWeapon ? "11 + tier×2 + your higher of Mind or Soul" : "Ladder (11 + tier×2 + channel)";
+  const dcField = state._stewardDc
+    ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">${dcLabel} — set by you, not by the ${isWeapon ? "Form" : "working"}</span></div>`
+    : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": isWeapon ? `Standard (${dcLabel})` : dcLabel, fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
+      ${(r.saveDcMode === "fixed") ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("resolution.saveDcFixed", r.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}`;
+  return `
+    <div class="ft-cast-grid" style="margin-top:0.4rem">
+      <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="Off: on a hit the conditions simply land. On: the target rolls a save after the hit — a pass stops the conditions (and the Clarity / Noise row); the damage still lands unless you tick half damage.">${_ftWizV2Chk("resolution.hitSave", on)}<span>Target gets a save against the conditions</span></label></div>
+      ${on ? `
+      <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("resolution.saveAttribute", _ftWizV2FacultiesMap(), r.saveAttribute ?? "body")}</div>
+      ${dcField}
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("resolution.hitSaveHalf", r.hitSaveHalf === true)}<span>Half damage on a save</span></label></div>
+      ${isWeapon
+        ? `<div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="On: a Save button card goes to the target's owner. Off: the GM's seat rolls the save at once.">${_ftWizV2Chk("resolution.saveByPrompt", r.saveByPrompt === true)}<span>Target's owner rolls the save (chat-card button)</span></label></div>`
+        : `<div class="ft-cast-field ft-cast-span-2"><span style="opacity:0.7;font-size:0.76rem">The GM's seat rolls this save as the working lands.</span></div>`}` : ""}
+    </div>`;
 }
 
 function _ftWizV2RenderResolution(state) {
   const r = state.resolution ?? {};
+  const isWeapon = state._kind === "weapon";
+  const def = ftCap(_ftWizV2StateDefense(state));
+  // Beneficial workings always land (2026-11-08, teeth P15) — the shape is locked to Auto.
+  if (_ftWizV2StateIsBeneficial(state)) {
+    return `
+    <p class="ft-wiz-v2-coach">Auto — beneficial working. A heal, ward or buff with no harm in it lands on its target without an attack, save or contest, on a cast and on a Strike alike.</p>
+    <input type="hidden" name="resolution.shape" value="auto"/>`;
+  }
+  // A Form always rolls to hit (2026-11-08, teeth P10) — no save-first, no contest.
+  if (isWeapon) {
+    return `
+    <p class="ft-wiz-v2-coach">A Form always rolls to hit: Intent + Skill against the target's ${def} (its damage type sets which). On a hit it deals its damage and lands its conditions.</p>
+    <input type="hidden" name="resolution.shape" value="attack"/>
+    ${_ftWizV2RenderHitSave(state, r)}`;
+  }
   const shape = r.shape ?? "auto";
   const dr = state.damageRoll ?? {};
-  const noDamage = state._kind === "weapon"
-    ? !String(state.damageFormula ?? "").trim()
-    : (dr.op === "none" || !Number(dr.number));
-  const dmgWarning = (shape !== "auto" && noDamage)
-    ? `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.78rem;margin:0.4rem 0">⚠ Step 4 has no damage roll configured — Resolution gates damage, so an attack/save/contested shape currently has nothing to gate. Consider Auto or revisit Step 4.</p>`
+  const noDamage = (dr.op === "none" || !Number(dr.number));
+  const dmgWarning = ((shape === "save" || shape === "contested") && noDamage && !_ftHasManifestationApplicables({ appliedStates: state.appliedStates, appliedEffects: ftNormalizeAppliedEffects(state.appliedEffects ?? {}) }, null) && !ftPoolShiftIsHostile(state.poolShift))
+    ? `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.78rem;margin:0.4rem 0">⚠ The Effect step has no damage, conditions or Clarity / Noise row — there is nothing for this roll to stop. Consider Auto or revisit the Effect step.</p>`
     : "";
   const subAttack = shape === "attack" ? `
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label>Attack vs</label>${_ftWizV2Sel("resolution.attackVs", FT.DEFENSES, r.attackVs ?? "evasion")}</div>
+      <div class="ft-cast-field"><label>Attack vs</label><span class="ft-wiz-v2-ro" style="opacity:0.85;font-size:0.82rem" data-tooltip="Set by the damage type: Stress damage (and draining Clarity / adding Noise) attacks Resolve, everything else attacks Guard.">${def}</span></div>
     </div>` : "";
+  const subHitSave = (shape === "attack" || shape === "auto") ? _ftWizV2RenderHitSave(state, r) : "";
   const subSave = shape === "save" ? `
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("resolution.saveAttribute", _ftWizV2FacultiesMap(), r.saveAttribute ?? "body")}</div>
       ${state._stewardDc
-        ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">11 + tier×2 + your channel — set by you, not by the working</span></div>`
-        : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
+        ? `<div class="ft-cast-field"><label>Save DC</label><span class="ft-wiz-v2-ro" style="opacity:0.8;font-size:0.82rem">Ladder (11 + tier×2 + channel) — set by you, not by the working</span></div>`
+        : `<div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Ladder (11 + tier×2 + channel)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
       ${(r.saveDcMode === "fixed") ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("resolution.saveDcFixed", r.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}`}
-      <div class="ft-cast-field"><label>On save</label>${_ftWizV2Sel("resolution.onSave", { negate: "Negate damage", half: "Half damage" }, r.onSave ?? "half")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="If on, the cast posts a Save button chat card instead of the GM auto-rolling — target's owner clicks to roll their own save. Singular-target only; AoE always GM-side.">${_ftWizV2Chk("resolution.saveByPrompt", r.saveByPrompt === true)}<span>Prompt target to roll save (chat-card button)</span></label></div>
+      <div class="ft-cast-field"><label data-tooltip="A pass always stops the conditions; this sets what happens to the damage.">On a pass</label>${_ftWizV2Sel("resolution.onSave", { negate: "No damage", half: "Half damage" }, r.onSave ?? "half")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="On: posts a Save card per target (single or area) for its owner to roll. Off: the GM's seat rolls every save at once. The cast dialog starts from this and can flip it for one cast.">${_ftWizV2Chk("resolution.saveByPrompt", r.saveByPrompt === true)}<span>Target's owner rolls the save (chat-card button)</span></label></div>
     </div>` : "";
   const subContest = shape === "contested" ? `
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Caster bonus</label>${_ftWizV2Sel("resolution.contestCasterAttribute", { "intent+channel": "Intent + Channel (default)", ..._ftWizV2FacultiesMap() }, r.contestCasterAttribute ?? "intent+channel")}</div>
       <div class="ft-cast-field"><label>Target attribute</label>${_ftWizV2Sel("resolution.contestTargetAttribute", _ftWizV2FacultiesMap(), r.contestTargetAttribute ?? "body")}</div>
-      <div class="ft-cast-field"><label>On target win</label>${_ftWizV2Sel("resolution.onContestLoss", { negate: "Negate damage", half: "Half damage" }, r.onContestLoss ?? "negate")}</div>
+      <div class="ft-cast-field"><label data-tooltip="A target win (ties go to the target) always stops the conditions, like a passed save; this sets what happens to the damage.">On a target win</label>${_ftWizV2Sel("resolution.onContestLoss", { negate: "No damage", half: "Half damage" }, r.onContestLoss ?? "negate")}</div>
     </div>` : "";
   return `
-    <p class="ft-wiz-v2-coach">When the cast lands, what makes the effect <em>actually</em> hit?  Cast-fail fires misfire (unchanged); this picks the second-roll shape that gates the damage.</p>
+    <p class="ft-wiz-v2-coach">When the cast lands, what decides whether it takes hold? A failed cast still misfires; this picks the second roll, if any.</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field ft-cast-span-2"><label>Resolution shape</label>${_ftWizV2Sel("resolution.shape", { auto: "Auto-apply (no second roll)", attack: "Attack — caster vs target defense", save: "Save — target rolls vs cast DC", contested: "Contested — both roll, higher wins" }, shape)}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label>Resolution shape</label>${_ftWizV2Sel("resolution.shape", { auto: "Auto — lands on a successful cast (no second roll)", attack: `Attack — Intent + Channel vs the target's ${def}`, save: "Save: target rolls vs the save DC — a pass stops the conditions", contested: "Contested — both roll; a target win stops the conditions" }, shape)}</div>
     </div>
-    ${subAttack}${subSave}${subContest}${dmgWarning}`;
+    ${subAttack}${subHitSave}${subSave}${subContest}${dmgWarning}`;
 }
 
-function _ftWizV2RenderCost(state) {
+function _ftWizV2RenderCost(state, { actor = null } = {}) {
   const a = state.activation_block ?? {};
-  // Phase F2 — Maintenance cost is now a dropdown driven by FT.MAINTENANCE_COSTS.
-  // The free-text `maintenanceCost` field is preserved as a "custom notes"
-  // overlay — only visible when the key is "custom" (or when legacy items
-  // have text but no key set). That preserves authoring intent for the rare
-  // bespoke upkeep without breaking back-compat.
-  // Legacy text with no key reads as "custom"; the note row shows whenever there is text so it can be cleared.
-  const mKey = state.maintenanceKey || (state.maintenanceCost ? "custom" : "none");
-  const showCustom = mKey === "custom" || !!state.maintenanceCost;
+  const kind = (state._kind ?? state.itemKind) === "weapon" ? "weapon" : "power";
+  const stab = String(state.stability ?? "instant");
+  // The tier this will SAVE as (fix round 2026-11-08, E7) — the scored tier, not the stale state.tier.
+  const _costTier = _ftWizV2CostTier(state, actor);
+  // 2026-11-08 (teeth P16/P18/P20/P21/P23/P24): the cost is tier Clarity + an optional extra (Stress / Noise / Strain),
+  // shown read-only from the one cost source; activation is the only action field; duration derives from stability;
+  // upkeep picks resource + cadence (amount = tier). Legacy text with no key reads as "custom".
+  const spec = ftManifestationCostSpec({ manifestation: { tier: _costTier, stability: stab, costType: state.costType, costValue: state.costValue } }, kind);
+  const floorNote = kind === "weapon"
+    ? (["sustained", "bound"].includes(stab)
+        ? `A Form pays at least ${spec.base} Clarity — once a scene while it persists (the first Strike each scene).`
+        : `A Form pays at least ${spec.base} Clarity on every Strike.`)
+    : `Every Invoke pays ${spec.base} Clarity before stance. ${FT_STANCE_COST_NOTE}.`;
+  const actOpts = kind === "weapon"
+    ? { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free (no action)" }
+    : { action: "Stance decides (Action / Bonus)", reaction: "Reaction", none: "Free (no action)" };
+  const actTip = kind === "weapon"
+    ? "Which action a Strike with this Form spends. The stance never applies to a Strike."
+    : "An Invoke's stance picks the action it uses (Shamanic: Action · Chaotic: Bonus action · Hermetic: both). Reaction and Free override the stance.";
+  const actCur = (kind === "power" && (a.type ?? "action") === "bonus") ? "action" : (a.type ?? "action");
+  const mKeyRaw = state.maintenanceKey || (state.maintenanceCost ? "custom" : "none");
+  const instant = stab === "instant";
+  const mKey = instant ? "none" : mKeyRaw;
+  const showCustom = !instant && (mKey === "custom" || !!state.maintenanceCost);
   const customRow = showCustom
-    ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom maintenance note</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. 1 Surge the first scene, then 1 Clarity each scene after...")}</div>`
+    ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom upkeep note (the engine bills the baseline)</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. the blade asks for a story about the last thing it cut...")}</div>`
     : "";
+  const durLabel = ftLabelFromMap(FT.MANIFESTATION_DURATIONS, ftDurationForStability(stab), ftCap(ftDurationForStability(stab)));
   return `
-    <p class="ft-wiz-v2-coach">What does it cost, when do you spend that, and how long does it run?</p>
+    <p class="ft-wiz-v2-coach">What does it cost, which action does it take, and what keeps it running?</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label>Cost type</label>${_ftWizV2Sel("costType", FT.MANIFESTATION_COSTS, state.costType)}</div>
-      <div class="ft-cast-field"><label>Cost value</label>${_ftWizV2Num("costValue", state.costValue, { min: 0, max: 99 })}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Cost (free text)</label>${_ftWizV2Txt("costText", state.costText, "1 Surge, 1 Stress per scene, Clarity 2 and the blade remembers your shame...")}</div>
-      <div class="ft-cast-field"><label>Activation</label>${_ftWizV2Sel("activation_block.type", { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free / passive" }, a.type ?? "action")}</div>
-      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("activation_block.consumePool", a.consumePool !== false)}<span>Consume pool on cast</span></label></div>
-      <div class="ft-cast-field"><label>Duration baseline</label>${_ftWizV2Sel("duration", FT.MANIFESTATION_DURATIONS, state.duration)}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Duration / Trigger</label>${_ftWizV2Txt("durationText", state.durationText, "Until dawn, for one exchange, while the vow is spoken...")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Trigger</label>${_ftWizV2Txt("triggerText", state.triggerText, "When the bearer is touched by fear, when the threshold is crossed...")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Ongoing upkeep — what the manifestation costs each round/scene to stay running. Pick a structured option (engine-readable) or 'custom' to author your own.">Maintenance cost <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("maintenanceKey", FT.MAINTENANCE_COSTS, mKey)}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><div class="ft-prev-align-note"><b>${ftEscapeHtml(spec.label)}</b> — ${ftEscapeHtml(floorNote)}</div></div>
+      <div class="ft-cast-field"><label data-tooltip="Charged on top of the tier's Clarity, every time the Clarity is charged.">Extra cost</label>${_ftWizV2Sel("costType", FT.MANIFESTATION_COSTS, FT.MANIFESTATION_COSTS[state.costType] ? state.costType : "none")}</div>
+      <div class="ft-cast-field"><label>Amount</label>${_ftWizV2Num("costValue", Math.max(0, Math.min(10, Number(state.costValue) || 0)), { min: 0, max: 10 })}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label>In the fiction</label>${_ftWizV2Txt("costText", state.costText, "a cut across the palm, the room remembers you, the blade asks for a name...")}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(actTip)}">Activation <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("activation_block.type", actOpts, actCur)}</div>
+      <div class="ft-cast-field"><label data-tooltip="Set by Stability: Instant resolves; Sustained lasts the scene; Bound lasts across scenes.">Lasts</label><div class="ft-prev-align-note">${ftEscapeHtml(durLabel)} (from Stability)</div></div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Flavour for how long it lasts in the story. How long it lasts in play comes from Stability.">Duration (in the fiction)</label>${_ftWizV2Txt("durationText", state.durationText, "Until dawn, for one exchange, while the vow is spoken...")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Narrative only — the GM decides when it fires. Shown on the cast card when Activation is Reaction.">Trigger (narrative, GM calls it)</label>${_ftWizV2Txt("triggerText", state.triggerText, "When the bearer is touched by fear, when the threshold is crossed...")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="What it costs to keep it running. The amount is the tier (Clarity: never less than the tier). Baseline = tier Clarity at the stability's cadence: Sustained at the end of each scene, Bound at each Soma Break.">Upkeep <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${instant
+        ? `<input type="hidden" name="maintenanceKey" value="none"/><div class="ft-prev-align-note">None — an Instant manifestation has no upkeep.</div>`
+        : _ftWizV2Sel("maintenanceKey", FT.MAINTENANCE_COSTS, mKey)}</div>
       ${customRow}
-      <div class="ft-cast-field ft-cast-span-2"><label>Risk / fallout</label>${_ftWizV2Txt("riskText", state.riskText, "What can go wrong, fray, attract notice, or scar the caster?")}</div>
     </div>`;
 }
 
-// ── Magnitude v1.1 — tier suggester ────────────────────────────────────────
-// Per RFI Manifestation Magnitude v1.1: tier = footprint, but mechanical
-// magnitude (damage / area / state weight / fixed-DC) has its own per-tier
-// budget. The suggester scores each input independently and returns the
-// HIGHEST tier required (any single factor pushes the whole working up).
-// Used by Step 7 to surface "Suggested tier: T2" with a one-click apply.
+// ── Magnitude — die averages + the formula reader the Rubric v1.2 scorer (below) uses ──
 const _FT_WIZ_V2_DIE_AVG = { d4: 2.5, d6: 3.5, d8: 4.5, d10: 5.5, d12: 6.5, d20: 10.5, d10x10: 6.1 };
 
 // 2026-10-29 — one average-of-formula reader for every magnitude factor. Sums each
@@ -10786,209 +11812,234 @@ function _ftWizV2FormulaAvg(formula) {
   }
   return hit ? total : null;
 }
-function _ftWizV2DamageBand(total) {
-  if (total <= 4)  return 1;
-  if (total <= 8)  return 2;
-  if (total <= 12) return 3;
-  return 4;
-}
 
-// Damage Major anchors: T1 1d6 (~3.5), T2 2d6 (~7), T3 3d6 (~10.5), T4 5d6 (~17.5).
-// Snap to the highest tier whose anchor we don't exceed; flag overshoot at T4.
-// 2026-10-29 — one factor for everything that lands on every hit: the primary roll
-// (a weapon's damageFormula, a power's structured damageRoll + flat bonus) PLUS the
-// Additional Damage Dice rows — summed, then banded, so extra dice add to the primary
-// instead of being tiered on their own and lost to a max().
-function _ftWizV2DamageBudgetTier(state) {
-  const isWeapon = state?._kind === "weapon";
+// ── Rubric v1.2 — the Magnitude points budget (Dave 2026-11-08) ───────────────────────────────────────────────────────
+// "A system of weights and costs": what a manifestation does adds points, what its wielder pays on top takes points off,
+// and the net sets the tier — 0–3 T1 · 4–5 T2 · 6–7 T3 · 8+ T4 — then the floors (a chain is at least T2, a hex-wide
+// working is T4). Every input is read through the runtime's own readers (ftNormalizeManifestationData,
+// ftNormalizeDamageRoll, ftNormalizeDamageParts, ftStrikeResolution, _ftItemRangeFt, ftExtraCostOf,
+// _ftIsBeneficialManifestation, ftNormalizeAppliedEffects, ftNormalizeConditionalDamage …), so the score reads exactly
+// what a cast or a Strike will do. The faculty add (Intent) is never scored. Doc: RFI_Manifestation_Magnitude_v1.2.md.
+//   ftManifestationMagnitude(itemLike, kind, owner) → { tier, net, sum, floor, breakdown: [{ points, note, floor? }] }
+const FT_MAGNITUDE_MAJOR_STATES = ["burning", "restrained", "blinded", "charmed", "compelled", "surprise", "stunned"];
+function ftMagnitudeStateWeight(key) { return FT_MAGNITUDE_MAJOR_STATES.includes(String(key)) ? 2 : 1; }
+// Dice average → points: 2 per 3.5 (one d6), rounded, at least 1 when anything rolls (1d6 2 · 2d6 4 · 3d6 6 · 4d6 8).
+function ftMagnitudeDicePoints(avg) { const a = Number(avg) || 0; return a > 0 ? Math.max(1, Math.round(a / 3.5 * 2)) : 0; }
+// Range and area share one ladder (Dave R02 / R03: "30 radius should be baseline like range"): ≤30 ft 0 · 31–120 ft 1 ·
+// beyond 120 ft 2.
+function ftMagnitudeReachPoints(ft) { const n = Number(ft) || 0; return n <= 30 ? 0 : n <= 120 ? 1 : 2; }
+function ftMagnitudeTierForNet(net) { const n = Number(net) || 0; return n <= 3 ? 1 : n <= 5 ? 2 : n <= 7 ? 3 : 4; }
+// One breakdown row as text: "+2 damage 1d6 (avg 3.5)", "−1 pays 2 Stress", "floor T2 — a chain".
+function ftMagnitudeLineText(row) {
+  if (row?.floor) return `floor T${row.floor} — ${row.note}`;
+  const p = Number(row?.points) || 0;
+  return `${p > 0 ? "+" : p < 0 ? "−" : "±"}${Math.abs(p)} ${row?.note ?? ""}`;
+}
+function ftManifestationMagnitude(itemLike, kind = null, owner = undefined) {
+  const k = (kind ?? (itemLike?.type === "weapon" ? "weapon" : "power")) === "weapon" ? "weapon" : "power";
+  const own = owner === undefined ? (itemLike?.parent ?? null) : (owner ?? null);
+  const sys = itemLike?.system ?? {};
+  // A plain view for the shared predicates — never the live Document, so scoring never stamps a Form flag.
+  const item = { type: itemLike?.type ?? k, name: itemLike?.name ?? "", system: sys, flags: itemLike?.flags ?? {}, _source: itemLike?._source ?? null, parent: own };
+  const mf = ftNormalizeManifestationData(sys, k);
+  const isWeapon = k === "weapon";
+  const isForm = isWeapon && ftIsFormWeapon(item, { stamp: false });
+  const rows = [];
+  let sum = 0, floor = 1;
+  const add = (points, note) => { const p = Math.trunc(Number(points) || 0); if (!p) return; sum += p; rows.push({ points: p, note }); };
+  const dieAvg = (die) => _FT_WIZ_V2_DIE_AVG[die] ?? 3.5;
+  const signed = (n) => Number(n) ? (n > 0 ? `+${n}` : `${n}`) : "";
+
+  // ── Damage / healing: primary + Additional Damage Dice (+ a foe's rider damage), by average ──
+  const flatFormula = isWeapon ? String(sys.damage?.formula ?? "").trim() : "";
+  const dr = ftNormalizeDamageRoll(sys);
+  // The beneficial test reads a weapon's flat damage as a damage roll (as the normalizer and _ftStrikeIsBeneficial do).
+  const drB = (isWeapon && flatFormula) ? { op: "damage", number: 1 } : dr;
+  const beneficial = _ftIsBeneficialManifestation(mf, item, drB);
+  let avg = 0, healing = false;
   const bits = [];
-  let total = 0, opLabel = "Damage";
   if (isWeapon) {
-    const avg = _ftWizV2FormulaAvg(state.damageFormula);
-    if (avg && avg > 0) { total += avg; bits.push(String(state.damageFormula).trim()); }
-  } else {
-    const dr = state?.damageRoll;
-    if (dr && (dr.op === "damage" || dr.op === "heal") && Number(dr.number) > 0) {
-      const avg = Number(dr.number) * (_FT_WIZ_V2_DIE_AVG[dr.die] ?? 3.5) + (Number(dr.bonus) || 0);
-      total += avg;
-      if (dr.op === "heal") opLabel = "Healing";
-      bits.push(`${dr.number}${dr.die}${Number(dr.bonus) ? (dr.bonus > 0 ? `+${dr.bonus}` : dr.bonus) : ""}`);
+    const a = _ftWizV2FormulaAvg(flatFormula);
+    if (a > 0) { avg += a; bits.push(flatFormula); }
+  } else if ((dr.op === "damage" || dr.op === "heal") && dr.number > 0) {
+    avg += dr.number * dieAvg(dr.die) + (Number(dr.bonus) || 0);
+    healing = dr.op === "heal";
+    bits.push(`${dr.number}${dr.die}${signed(Number(dr.bonus) || 0)}`);
+  }
+  // Extra dice roll beside a Strike's damage or a power's damage roll, and join a power's heal (P08 / P36); a power with
+  // no roll never rolls them, so they don't score there.
+  const parts = ftNormalizeDamageParts(sys.damageParts);
+  if (parts.length && (isWeapon || (dr.op !== "none" && dr.number > 0))) {
+    for (const p of parts) { const a = _ftWizV2FormulaAvg(p.formula); if (a > 0) { avg += a; bits.push(p.formula); } }
+  }
+  // A foe weapon's on-hit rider damage (manifestation.riderDamage) lands with the hit — scored as damage.
+  const rd = mf.riderDamage;
+  if (rd && Number(rd.number) > 0) {
+    avg += Number(rd.number) * dieAvg(rd.die) + (Number(rd.bonus) || 0);
+    bits.push(`rider ${rd.number}${rd.die ?? "d6"}${signed(Number(rd.bonus) || 0)}`);
+  }
+  if (avg > 0) add(ftMagnitudeDicePoints(avg), `${healing ? "healing" : "damage"} ${bits.join(" + ")} (avg ${avg.toFixed(1)})`);
+
+  // ── Clarity / Noise set amounts (poolShift, P07): 1 per point moved ──
+  { const ps = ftNormalizePoolShift(mf.poolShift); const n = Math.abs(ps.clarity) + Math.abs(ps.noise);
+    if (n) add(n, `${ftPoolShiftLabel(ps)} (set amount)`); }
+
+  // ── Area and range ──
+  const shape = mf.area?.shape ?? "none";
+  if (shape === "hex") {
+    floor = Math.max(floor, 4);
+    rows.push({ points: 0, floor: 4, note: "hex-wide — everyone on the scene" });
+  } else if (shape !== "none") {
+    const sz = Number(mf.area.size) || 0;
+    add(ftMagnitudeReachPoints(sz), `${shape} ${sz} ft${["cone", "line"].includes(shape) ? " long" : " radius"}`);
+  }
+  // Cones, lines and hex-wide take no range (P25); a sphere / cylinder centre does.
+  if (!["cone", "line", "hex"].includes(shape)) {
+    const r = _ftItemRangeFt(item);
+    add(ftMagnitudeReachPoints(r), `range ${r >= 999 ? "unlimited" : `${r} ft`}`);
+  }
+
+  // ── How it resolves: who gets a roll against it ──
+  // Weapons strike (ftStrikeResolution): a Form rolls to hit, its creator may add a save; a foe weapon may save first or
+  // carry an on-hit rider save. Powers: Auto (no roll), Attack (± a hit save), Save / Contested (the target rolls).
+  let statesSaved = false, rollsToHit = false, noRollAtAll = false;
+  if (isWeapon) {
+    const sr = ftStrikeResolution(item);
+    if (!beneficial) {
+      if (sr.saveFirst) statesSaved = true;
+      else { rollsToHit = true; statesSaved = sr.hitSave || sr.rider; }
+    }
+  } else if (!beneficial) {
+    const shp = mf.resolution.shape;
+    const hs = mf.resolution.hitSave === true;
+    if (shp === "save" || shp === "contested") statesSaved = true;
+    else if (shp === "attack") { rollsToHit = true; statesSaved = hs; }
+    else { statesSaved = hs; noRollAtAll = !hs; }
+  }
+
+  // ── Conditions ──
+  const states = Array.isArray(mf.appliedStates?.states) ? mf.appliedStates.states : [];
+  const stateW = states.reduce((s, key) => s + ftMagnitudeStateWeight(key), 0);
+  if (states.length) {
+    const names = states.map(key => FT.CONDITIONS?.[key]?.label ?? ftCap(key)).join(", ");
+    if (statesSaved) add(Math.ceil(stateW / 2), `${names} — the target gets a save (half of ${stateW})`);
+    else add(stateW, names);
+    const dur = mf.appliedStates.duration;
+    if (dur === "scene" || dur === "until-saved") add(1, `conditions last ${dur === "scene" ? "the scene" : "until saved"}`);
+    if (mf.appliedStates.saveEachRound) add(-1, "save each round to shake them off");
+    if (rollsToHit && !statesSaved) add(1, "conditions land on a hit with no save");
+  }
+  // Harm that lands with no roll at all (Auto, not beneficial — P39).
+  if (noRollAtAll) {
+    const eff0 = ftNormalizeAppliedEffects(mf.appliedEffects);
+    const harmful = (dr.op === "damage" && dr.number > 0) || states.length > 0 || ftPoolShiftIsHostile(mf.poolShift)
+      || eff0.modifiers.some(m => m.op === "-");
+    if (harmful) add(1, "lands with no roll at all (Auto)");
+  }
+
+  // ── Wards / buffs ──
+  {
+    const eff = ftNormalizeAppliedEffects(mf.appliedEffects);
+    const pts = eff.modifiers.reduce((s, m) => s + (Number(m.value) || 0), 0);
+    const n = Math.ceil(pts / 2) + eff.resists.length + 2 * eff.immunes.length;
+    if (n) {
+      const bitsW = [];
+      if (pts) bitsW.push(eff.modifiers.map(m => `${FT_EFFECT_MOD_LABELS[m.stat] ?? ftCap(m.stat)} ${m.op === "-" ? "−" : "+"}${m.value}`).join(", "));
+      if (eff.resists.length) bitsW.push(`resist ${eff.resists.join(", ")}`);
+      if (eff.immunes.length) bitsW.push(`immune ${eff.immunes.join(", ")}`);
+      add(n, `wards: ${bitsW.join("; ")}`);
     }
   }
-  const parts = state?.damageParts;
-  const src = Array.isArray(parts) ? parts : (parts && typeof parts === "object" ? Object.values(parts) : []);
-  let n = 0;
-  for (const p of src) {
-    const avg = _ftWizV2FormulaAvg(p?.formula);
-    if (avg == null) continue;
-    n++; total += avg;
+
+  // ── Chain (an area never chains — the normalizer turns it off) ──
+  if (mf.chain?.enabled) {
+    const ch = mf.chain;
+    const per = _ftWizV2FormulaAvg(ch.damageFormula) ?? 3.5;
+    // Carried conditions count their weight ONCE (fix round 2026-11-08, S4 — the approved spec), not half.
+    const carried = (ch.carryConditions && stateW) ? stateW : 0;
+    add(ftMagnitudeDicePoints(ch.count * per) + carried, `chain ×${ch.count} ${ch.damageFormula} (avg ${(ch.count * per).toFixed(1)})${carried ? " + carried conditions" : ""}`);
+    floor = Math.max(floor, 2);
+    rows.push({ points: 0, floor: 2, note: "a chain" });
   }
-  if (n) bits.push(`${n} extra die row${n > 1 ? "s" : ""}`);
-  if (!(total > 0)) return { tier: 0, note: null };
-  const tier = _ftWizV2DamageBand(total);
-  const overshoot = total > 18 ? " (above T4 anchor)" : "";
-  return { tier, note: `${opLabel} ${bits.join(" + ")} (avg ${total.toFixed(1)})${overshoot} → T${tier}` };
-}
 
-// Area anchors — relaxed 2026-11-08 with the range band (Dave: "Relax the area band too"; v1.1 made every
-// AoE at least T2, so a 15-ft flash read T3 and a 30-ft lantern T4). Bursts (sphere/cylinder/cube/burst):
-// T1 ≤10 ft · T2 ≤20 · T3 ≤30 · T4 beyond. Lines/cones: T1 ≤15 ft · T2 ≤30 · T3 ≤60 · T4 beyond.
-function _ftWizV2AreaBudgetTier(area) {
-  if (!area || area.shape === "none" || !(Number(area.size) > 0)) return { tier: 0, note: null };
-  const sz = Number(area.size);
-  const longShape = ["cone", "line"].includes(String(area.shape));
-  const [t1, t2, t3] = longShape ? [15, 30, 60] : [10, 20, 30];
-  const tier = sz <= t1 ? 1 : sz <= t2 ? 2 : sz <= t3 ? 3 : 4;
-  return { tier, note: `${area.shape} ${sz}ft → T${tier}` };
-}
-
-// Range anchors — relaxed 2026-11-08 (Dave: "There need to be Tier 1 ranged manifestations"; under the
-// v1.1 band of T1 = touch every thrown blade and pistol scored T2). T1 ≤30 ft, T2 ≤60 ft, T3 ≤120 ft, T4 beyond.
-function _ftWizV2RangeBudgetTier(rangeFt) {
-  const r = Number(rangeFt) || 0;
-  if (r <= 0) return { tier: 0, note: null };
-  const tier = r <= 30 ? 1 : r <= 60 ? 2 : r <= 120 ? 3 : 4;
-  return { tier, note: `range ${r}ft → T${tier}` };
-}
-
-// Footprint (Magnitude v1.1: "Tier = footprint") — Personal T1 · Scene T2 · Faction T3 · Hex T4.
-function _ftWizV2ScaleBudgetTier(scale) {
-  const tier = FT_MANIFESTATION_SCALE_TO_TIER[String(scale ?? "")] ?? 0;
-  if (tier <= 1) return { tier: 0, note: null };
-  return { tier, note: `scale ${FT.MANIFESTATION_SCALES?.[scale]?.label ?? scale} → T${tier}` };
-}
-
-// Applied-states weight: 1 short-duration state = T1; longer or multi-state
-// climbs the ladder. saveEachRound softens (target can shake out → -1 weight),
-// scene / until-saved without a recurring save stiffens (+1 weight).
-function _ftWizV2StatesBudgetTier(ap) {
-  if (!ap) return { tier: 0, note: null };
-  const keys = Array.isArray(ap.states)
-    ? ap.states.filter(Boolean)
-    : (ap.states && typeof ap.states === "object"
-        ? Object.entries(ap.states).filter(([, v]) => v === true).map(([k]) => k)
-        : []);
-  if (!keys.length) return { tier: 0, note: null };
-  const dur = ap.duration ?? "1-round";
-  const longLasting = (dur === "scene" || dur === "until-saved");
-  let weight = keys.length;
-  if (longLasting)            weight += 1;
-  if (ap.saveEachRound === true) weight -= 1;
-  let tier;
-  if      (weight <= 1) tier = 1;
-  else if (weight <= 2) tier = 2;
-  else if (weight <= 4) tier = 3;
-  else                  tier = 4;
-  const tag = `${keys.length} state${keys.length > 1 ? "s" : ""}, ${dur}${ap.saveEachRound ? ", save-each-round" : ""}`;
-  return { tier, note: `${tag} → T${tier}` };
-}
-
-// Fixed DC overrides: standard = 11 + tier×2 + channel faculty (ftFormulaSaveDC; ~15 at
-// T1 for a faculty-2 caster). Bands sit on that ladder: ≤15 T1, ≤17 T2, ≤19 T3, else T4.
-// Reads both resolution.save and appliedStates.save fixed-DC fields; takes the max.
-function _ftWizV2DcBudgetTier(state) {
-  const r  = state.resolution ?? {};
-  const ap = state.appliedStates ?? {};
-  const dcs = [];
-  if (r.shape === "save" && r.saveDcMode === "fixed" && Number(r.saveDcFixed) > 0) dcs.push(Number(r.saveDcFixed));
-  if (ap.saveDcMode === "fixed" && Number(ap.saveDcFixed) > 0)                       dcs.push(Number(ap.saveDcFixed));
-  if (!dcs.length) return { tier: 0, note: null };
-  const dc = Math.max(...dcs);
-  let tier;
-  if      (dc <= 15) tier = 1;
-  else if (dc <= 17) tier = 2;
-  else if (dc <= 19) tier = 3;
-  else               tier = 4;
-  return { tier, note: `fixed DC ${dc} → T${tier}` };
-}
-
-// Phase C — Buffs & Wards budget, on the Magnitude v1.1 armor ladder (2026-10-29):
-// total stat points across mods, T1 ≤2 points · T2 ≤4 points + ≤1 resist ·
-// T3 ≤6 points + ≤2 resists + ≤1 immune · T4 beyond.
-function _ftWizV2EffectsBudgetTier(eff) {
-  if (!eff) return { tier: 0, note: null };
-  const modsSrc = (eff.modifiers && typeof eff.modifiers === "object" && !Array.isArray(eff.modifiers))
-    ? Object.values(eff.modifiers)
-    : (Array.isArray(eff.modifiers) ? eff.modifiers : []);
-  const mods = modsSrc.filter(m => m && m.stat && Number(m.value) > 0);
-  const countTrue = (src) => {
-    if (Array.isArray(src)) return src.filter(Boolean).length;
-    if (src && typeof src === "object") return Object.values(src).filter(v => v === true).length;
-    return 0;
-  };
-  const resistN = countTrue(eff.resists);
-  const immuneN = countTrue(eff.immunes);
-  const points  = mods.reduce((s, m) => s + (Number(m.value) || 0), 0);
-  if (!points && !resistN && !immuneN) return { tier: 0, note: null };
-  let tier;
-  if      (points <= 2 && !resistN && !immuneN)    tier = 1;
-  else if (points <= 4 && resistN <= 1 && !immuneN) tier = 2;
-  else if (points <= 6 && resistN <= 2 && immuneN <= 1) tier = 3;
-  else                                              tier = 4;
-  const parts = [];
-  if (mods.length)  parts.push(`${points} point${points === 1 ? "" : "s"} over ${mods.length} stat${mods.length > 1 ? "s" : ""}`);
-  if (resistN)      parts.push(`${resistN} resist`);
-  if (immuneN)      parts.push(`${immuneN} immune`);
-  return { tier, note: `${parts.join(", ")} → T${tier}` };
-}
-
-// Phase D — Chain magnitude. Approximates expected total chain damage as
-// count × avg(formula). Brackets: ≤5→T1, ≤12→T2, ≤22→T3, else T4 — enough
-// headroom for "3 × 1d6" (≈10.5, T2) up through "5 × 2d8" (≈45, T4).
-function _ftWizV2ChainBudgetTier(chain) {
-  if (!chain?.enabled) return { tier: 0, note: null };
-  const count = Math.max(1, Math.floor(Number(chain.count) || 3));
-  const formula = String(chain.damageFormula ?? "1d6");
-  const avgPerHit = _ftWizV2FormulaAvg(formula) ?? 3;
-  const total = count * avgPerHit;
-  let tier;
-  if      (total <= 5)  tier = 1;
-  else if (total <= 12) tier = 2;
-  else if (total <= 22) tier = 3;
-  else                  tier = 4;
-  return { tier, note: `chain ×${count} ${formula} (≈${total.toFixed(1)}) → T${tier}` };
-}
-
-// Phase E — Conditional damage magnitude. Each row contributes avg(formula)
-// halved (conditional only fires when type matches, so worth less than the
-// primary damage's full weight). Brackets ≤2→T1, ≤5→T2, ≤10→T3, else T4.
-function _ftWizV2ConditionalDamageBudgetTier(rows) {
-  const src = Array.isArray(rows)
-    ? rows
-    : (rows && typeof rows === "object" ? Object.values(rows) : []);
-  const validTypes = new Set(Object.keys(FT.CREATURE_TYPES ?? {}));
-  let total = 0;
-  let n = 0;
-  for (const r of src) {
-    if (!r?.vsType || !validTypes.has(String(r.vsType).toLowerCase())) continue;
-    const f = String(r.bonusFormula ?? "").trim();
-    if (!f) continue;
-    n++;
-    total += (_ftWizV2FormulaAvg(f) ?? 3) * 0.5;  // conditional → half-weight vs primary
+  // ── Conditional damage (vs creature type): half its dice points ──
+  {
+    const cd = ftNormalizeConditionalDamage(mf.conditionalDamage);
+    const pts = cd.reduce((s, r) => s + ftMagnitudeDicePoints(_ftWizV2FormulaAvg(r.bonusFormula) ?? 3.5), 0);
+    if (pts) add(Math.ceil(pts / 2), `vs ${cd.map(r => `${r.vsType} ${r.bonusFormula}`).join(", ")} (half of ${pts})`);
   }
-  if (!n) return { tier: 0, note: null };
-  let tier;
-  if      (total <= 2)  tier = 1;
-  else if (total <= 5)  tier = 2;
-  else if (total <= 10) tier = 3;
-  else                  tier = 4;
-  return { tier, note: `${n} conditional row${n>1?"s":""} (weight ${total.toFixed(1)}) → T${tier}` };
+
+  // ── Marks (2026-11-08, six foe powers): miss retaliation is conditional damage — half its dice points; attacks against
+  // the bearer at disadvantage +1; a damage-type conversion is flavour with teeth only against resists — 0 ──
+  {
+    const r = mf.onMissRetaliation;
+    if (r?.formula) {
+      const pts = ftMagnitudeDicePoints(_ftWizV2FormulaAvg(r.formula) ?? 3.5);
+      add(Math.ceil(pts / 2), `${r.scope === "self" ? "each attack that misses it costs the attacker" : "vow — the target's next miss costs it"} ${r.formula} ${r.type} (half of ${pts}, it needs a miss)`);
+    }
+    if (mf.attackersDisadvantage === true) add(1, "attacks against it roll at disadvantage");
+  }
+
+  // ── Activation: a Bonus-action or Reaction Strike / a Reaction working (P20 / R08) ──
+  // Only an Engine Form strikes with its own activation (ftStrikePool). A power scores what its author picked, whatever
+  // the stance does at cast time (fix round 2026-11-08, S4 — the approved spec: Bonus +1 like Reaction).
+  {
+    const act = isWeapon ? (isForm ? mf.activation.type : "action") : (["reaction", "bonus"].includes(mf.activation.type) ? mf.activation.type : "action");
+    if (act === "bonus") add(1, isWeapon ? "strikes as a Bonus action" : "cast as a Bonus action");
+    if (act === "reaction") add(1, isWeapon ? "strikes as a Reaction" : "cast as a Reaction");
+  }
+
+  // ── Fixed save DC: only on foe-owned or unowned items (a Steward's DC is always the ladder — P02 / R12) ──
+  if (!_ftStewardSetsNoDC(own)) {
+    const res = mf.resolution, ap = mf.appliedStates;
+    let resSave = statesSaved || res.hitSave === true;
+    if (isWeapon) { const sr = ftStrikeResolution(item); resSave = sr.saveFirst || sr.rider || sr.hitSave; }
+    const dcs = [];
+    if (resSave && res.saveDcMode === "fixed") dcs.push(Number(res.saveDcFixed) || 0);
+    if (states.length && ap.saveEachRound && ap.saveDcMode === "fixed") dcs.push(Number(ap.saveDcFixed) || 0);
+    if (dcs.length) {
+      const dc = Math.max(...dcs);
+      add(dc <= 15 ? 0 : dc <= 17 ? 1 : dc <= 19 ? 2 : 3, `fixed save DC ${dc}`);
+    }
+  }
+
+  // ── Costs: a Signature is "Extra" (R10); an authored extra cost on top of the tier's Clarity buys down (R04/R09) ──
+  if (mf.isSignature === true) add(-2, "Signature — 2 free points");
+  {
+    const ex = ftExtraCostOf(mf);   // Stress / Noise / Strain only — Surge never counts
+    if (ex) {
+      const buy = Math.min(3, ex.type === "stress" ? Math.floor(ex.value / 2) : ex.value);
+      add(-buy, `pays ${ex.label} on top of its Clarity${buy === 3 && (ex.type === "stress" ? Math.floor(ex.value / 2) : ex.value) > 3 ? " (buy-down capped at 3)" : ""}`);
+    }
+  }
+
+  const net = Math.max(0, sum);
+  const tier = Math.max(ftMagnitudeTierForNet(net), floor);
+  return { tier, net, sum, floor, breakdown: rows };
 }
 
-function _ftWizV2SuggestTier(state) {
-  const factors = [
-    _ftWizV2DamageBudgetTier(state),
-    _ftWizV2AreaBudgetTier(state.area),
-    _ftWizV2RangeBudgetTier(state.rangeFt),
-    _ftWizV2ScaleBudgetTier(state.scale),
-    _ftWizV2StatesBudgetTier(state.appliedStates),
-    _ftWizV2EffectsBudgetTier(state.appliedEffects),
-    _ftWizV2ChainBudgetTier(state.chain),
-    _ftWizV2ConditionalDamageBudgetTier(state.conditionalDamage),
-    _ftWizV2DcBudgetTier(state)
-  ].filter(f => f.tier > 0);
-  const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
-  return { tier, breakdown: factors };
+// The Engine's readout: the wizard state is turned into the item it would save (createManifestationItemData — the same
+// writer the finish uses) and scored like any item, so the Review step, the finish and a sheet edit agree.
+// owner = the actor it is for (a Steward never scores a fixed DC); none = unowned pack / world authoring.
+function _ftWizV2SuggestTier(state, { owner = null } = {}) {
+  const kind = (state?._kind ?? state?.itemKind) === "weapon" ? "weapon" : "power";
+  try {
+    const data = createManifestationItemData(null, kind, state ?? {});
+    if (state?._signatureLock === true) data.system.manifestation.isSignature = true;
+    return ftManifestationMagnitude(data, kind, owner);
+  } catch (e) {
+    console.warn("Roll for Initiation | magnitude score failed", e);
+    return null;   // fix round 2026-11-08 (S3): callers skip the tier write on null rather than reading T1
+  }
+}
+
+// The tier the Engine will save (fix round 2026-11-08, E7): the scored tier; a scoring error, or a plain weapon kept
+// plain (E2), falls back to the stored state.tier.
+function _ftWizV2CostTier(state, actor = null) {
+  const keep = Math.max(1, Math.min(4, Number(state?.tier) || 1));
+  if (state?._kind === "weapon" && state?._weaponIsForm === false && state?._convertToForm !== true) return keep;
+  const sug = _ftWizV2SuggestTier(state, { owner: actor ?? null });
+  return (sug && sug.tier != null) ? Math.max(1, Math.min(4, Number(sug.tier) || 1)) : keep;
 }
 
 function _ftWizV2TierLabel(n) {
@@ -11000,42 +12051,120 @@ function _ftWizV2TierLabel(n) {
 // still call it a Tier 1 manifestation." The Magnitude score used to be a banner with an
 // opt-in button; the item sheet never re-scored. Now every save — Engine finish or sheet
 // edit — writes manifestation.tier from the magnitude of what was actually built.
-//   ftManifestationMagnitudeTier(itemLike, kind) → 1..4 from { system } data (a Document,
-//     toObject() output, or a merged update preview).
+//   ftManifestationMagnitudeTier(itemLike, kind, owner = itemLike.parent) → 1..4 from { system } data (a Document,
+//     toObject() output, or a merged update preview), scored by the Rubric v1.2 points budget (ftManifestationMagnitude).
+//     owner decides the fixed-DC row: a Steward's DC is the ladder (0), a foe's / an unowned item's fixed DC scores.
 //   ftIsManifestedForm(item) → a weapon the Engine made (flags.fourththing.manifested).
 //     Guns carry the same normalized manifestation block, so the flag is the only tell.
 //   ftStewardTierLevel(tier) → the level that unlocks a tier (the "inert until" message).
-function ftManifestationMagnitudeTier(itemLike, kind) {
-  const k = kind ?? (itemLike?.type === "weapon" ? "weapon" : "power");
-  const state = {
-    _kind: k,
-    appliedStates: { states: {} },
-    appliedEffects: { modifiers: {}, resists: {}, immunes: {} },
-    conditionalDamage: {},
-    damageParts: {}
-  };
-  try { _ftWizV2OverlayFromItem(state, itemLike, k); }
-  catch (e) { console.warn("Roll for Initiation | magnitude tier overlay failed", e); return 1; }
-  const sug = _ftWizV2SuggestTier(state);
-  return Math.max(1, Math.min(4, Number(sug?.tier) || 1));
+function ftManifestationMagnitudeTier(itemLike, kind, owner = itemLike?.parent) {
+  try {
+    const m = ftManifestationMagnitude(itemLike, kind, owner ?? null);
+    if (!m || m.tier == null) return null;
+    return Math.max(1, Math.min(4, Number(m.tier) || 1));
+  } catch (e) { console.warn("Roll for Initiation | magnitude tier failed", e); return null; }   // fix round (S3): null = don't write
 }
-function ftIsManifestedForm(item) {
-  return item?.type === "weapon" && foundry.utils.getProperty(item, "flags.fourththing.manifested") === true;
+// The compact "why" for both item sheets (powers and Engine Forms): the stored tier, what it scores now, each line.
+function ftManifestationMagnitudeSheetContext(item) {
+  try {
+    if (!item?.system?.manifestation) return null;
+    const isW = item.type === "weapon";
+    if (isW && !ftIsFormWeapon(item, { stamp: false })) return null;
+    const m = ftManifestationMagnitude(item, isW ? "weapon" : "power", item.parent ?? null);
+    const stored = Math.max(1, Math.min(4, Number(item.system.manifestation.tier) || 1));
+    const foe = !!item.parent && _ftIsFoeActor(item.parent);
+    const lbl = (t) => `T${t}`;
+    const drift = m.tier !== stored
+      ? (foe ? ` — a foe keeps its authored ${lbl(stored)}` : ` — saved as ${lbl(stored)}; the next edit to what it does re-tiers it`)
+      : "";
+    return {
+      summary: `⚖ ${lbl(stored)} · scores ${m.net} point${m.net === 1 ? "" : "s"} → ${lbl(m.tier)}${drift}`,
+      drift: m.tier !== stored,
+      lines: m.breakdown.map(ftMagnitudeLineText),
+      scale: "0–3 points T1 · 4–5 T2 · 6–7 T3 · 8+ T4 (a chain is at least T2; hex-wide is T4). A Signature gets 2 free points."
+    };
+  } catch (e) { console.warn("Roll for Initiation | magnitude sheet context failed", e); return null; }
+}
+function ftIsManifestedForm(item) { return ftIsFormWeapon(item); }
+// Nonlethal weapon (2026-11-08, teeth P30): the system.nonlethal box; a legacy mercy / nonlethal tag reads as ticked.
+function ftWeaponIsNonlethal(item) {
+  if (item?.type !== "weapon") return false;
+  if (item.system?.nonlethal === true) return true;
+  const tags = Array.isArray(item.system?.tags) ? item.system.tags : [];
+  return tags.some(t => ["mercy", "nonlethal"].includes(String(t).toLowerCase()));
+}
+
+// ONE definition of "this weapon is a Form" (2026-11-08, teeth P30) — used by the Strike gates, cost, tier, the
+// Manifestations tab (RfiItems.is.isManifestation), the vault (bbttcc-banks isRealManifestation) and the macros.
+// A weapon item is a Form when the Engine stamped it (flags.fourththing.manifested). Weapons made before the stamp
+// read through a legacy heuristic — an authored concept or signature, a real authored cost (costType not none), or a
+// manifestation / bound / path: tag — never a graded arm or a Bound Working host (item-ladder gear). A heuristic match
+// stamps the flag (owner or GM, once) so every reader agrees from then on; preCreateItem / preUpdateItem stamp too.
+// Note (C7 reconcile): the LABEL "Form" (ftManifestationModeLabel) also covers a Bound power — that is about how a
+// manifestation behaves; this predicate is about which weapons are manifestations at all. Powers are never "Form weapons".
+function _ftFormWeaponHeuristic(item) {
+  if (item?.type !== "weapon") return false;
+  const fl = item?.flags?.fourththing ?? {};
+  if (fl.grade || fl.working || fl.npcAuto || fl.rigGear) return false;
+  // A foe's weapon is never guessed into a Form (its save-first / rider strike and free swings stay as authored) — only
+  // an explicit stamp makes one. (C7 assumption, 2026-11-08.)
+  try { if (item?.parent && _ftIsFoeActor(item.parent)) return false; } catch (_e) {}
+  const sys = item?._source?.system ?? item?.system ?? {};
+  const mf = sys.manifestation ?? {};
+  // A concept that is just the effect text is the sheet's old backfill (teeth P30), not authorship.
+  const _concept = String(mf.concept ?? "").trim();
+  if ((_concept && _concept !== String(sys.effect ?? "").trim()) || String(mf.signature ?? "").trim()) return true;
+  const ct = String(mf.costType ?? "none").toLowerCase();
+  if (ct && ct !== "none") return true;
+  const tags = (Array.isArray(sys.tags) ? sys.tags : []).map(t => String(t).toLowerCase());
+  return tags.some(t => t === "manifestation" || t === "bound" || t.startsWith("path:"));
+}
+function ftIsFormWeapon(item, { stamp = true } = {}) {
+  if (item?.type !== "weapon") return false;
+  if (foundry.utils.getProperty(item, "flags.fourththing.manifested") === true) return true;
+  if (!_ftFormWeaponHeuristic(item)) return false;
+  // Stamp a live, editable document once (never a pack entry or plain data) — fire and forget.
+  try {
+    if (stamp && item?.documentName === "Item" && item.id && !item.pack && (item.isOwner || game.user?.isGM)
+        && !(globalThis.__ftFormStampQueued ??= new Set()).has(item.uuid)) {
+      globalThis.__ftFormStampQueued.add(item.uuid);
+      Promise.resolve().then(() => item.update({ "flags.fourththing.manifested": true }, { ftFormStamp: true }))
+        .catch(e => console.warn("[fourththing] Form stamp failed", item.name, e));
+    }
+  } catch (_e) {}
+  return true;
 }
 function ftStewardTierLevel(tier) {
   return ({ 1: 1, 2: 6, 3: 11, 4: 16 })[Math.max(1, Math.min(4, Number(tier) || 1))];
 }
 // The fields whose edit changes magnitude. A description or icon edit never re-tiers.
 const FT_MAGNITUDE_PATHS = [
-  "system.damage", "system.damageParts", "system.damageRoll",
+  "system.damage", "system.damageParts", "system.damageRoll", "system.range",
   "system.manifestation.appliedStates", "system.manifestation.appliedEffects",
-  "system.manifestation.area", "system.manifestation.rangeFt", "system.manifestation.scale",
-  "system.manifestation.chain", "system.manifestation.conditionalDamage", "system.manifestation.resolution"
+  "system.manifestation.area", "system.manifestation.rangeFt",
+  "system.manifestation.chain", "system.manifestation.conditionalDamage", "system.manifestation.resolution",
+  // Rubric v1.2 (2026-11-08): the pool row, the activation, Signature status, the extra cost, a foe's rider damage, and
+  // stability (it sets how long the conditions last when "Applied for" is left to follow it).
+  "system.manifestation.poolShift", "system.manifestation.activation", "system.manifestation.isSignature",
+  "system.manifestation.costType", "system.manifestation.costValue", "system.manifestation.riderDamage",
+  "system.manifestation.stability",
+  // Marks (2026-11-08): miss retaliation (half its dice points), attackers' disadvantage (+1), damage conversion (0).
+  "system.manifestation.onMissRetaliation", "system.manifestation.attackersDisadvantage", "system.manifestation.damageConvert"
 ];
 function _ftUpdateTouchesMagnitude(changes) {
   const flat = foundry.utils.flattenObject(changes ?? {});
   const keys = Object.keys(flat);
   return FT_MAGNITUDE_PATHS.some(p => keys.some(k => k === p || k.startsWith(p + ".")));
+}
+
+// The Signature box (teeth P29): the GM marks Signatures; a player gets one only from a Signature slot (sigLock).
+function _ftWizV2SignatureToggle(state) {
+  const what = "fills one of your Signature slots (one per tier). Its tier comes from what it does — and a Signature gets 2 free points of magnitude, so it scores 2 points lower than the same build unsigned — capped at your tier. It never levels itself; when your tier rises, grow it from its slot";
+  let box, note;
+  if (state._signatureLock) { box = `<input type="checkbox" name="isSignature" checked disabled/>`; note = `this ${what}`; }
+  else if (game.user?.isGM) { box = _ftWizV2Chk("isSignature", state.isSignature); note = "GM only — fills one of the owner's Signature slots (one per tier). Its tier comes from what it does, with 2 free points of magnitude, capped at the owner's tier — it never levels itself"; }
+  else { box = `<input type="checkbox" ${state.isSignature ? "checked" : ""} disabled/>`; note = "set by the GM, or by making it from a Signature slot on the Manifestations tab"; }
+  return `<label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;cursor:${box.includes("disabled") ? "default" : "pointer"}">${box}<span>Signature manifestation <small style="opacity:0.6">— ${note}</small></span></label>`;
 }
 
 function _ftWizV2RenderSoulAndReview(state, { actor }) {
@@ -11044,55 +12173,41 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
   const summary = [
     state.name ? `<b>${ftEscapeHtml(state.name)}</b>` : `<i>Unnamed</i>`,
     // Item-sourced values in edit mode — escaped (2026-10-29).
-    state.form ? ftEscapeHtml(String(FT.MANIFESTATION_FORMS?.[state.form]?.label ?? state.form)) : null,
-    state.function ? ftEscapeHtml(String(FT.MANIFESTATION_FUNCTIONS?.[state.function]?.label ?? state.function)) : null,
-    state.stability ? ftEscapeHtml(String(FT.MANIFESTATION_STABILITIES?.[state.stability]?.label ?? state.stability)) : null,
-    state.scale ? ftEscapeHtml(String(FT.MANIFESTATION_SCALES?.[state.scale]?.label ?? state.scale)) : null
+    state.stability ? ftEscapeHtml(String(FT.MANIFESTATION_STABILITIES?.[state.stability]?.label ?? state.stability)) : null
   ].filter(Boolean).join(" · ");
   // A weapon's damage lives in damageFormula, not the power-only damageRoll (2026-10-29).
   const fxRaw = state._kind === "weapon"
     ? (String(state.damageFormula ?? "").trim()
-        ? `${state.damageFormula} ${state.damageType ?? "kinetic"} → ${state.damageTrack ?? "integrity"}`
+        ? `${state.damageFormula} ${state.damageType ?? "kinetic"} → ${ftTrackForDamage("", state.damageType ?? "kinetic")}`
         : "no roll")
     : ((dr.op && dr.op !== "none" && dr.number > 0)
-        ? `${dr.op === "heal" ? "heal " : ""}${dr.number}${dr.die ?? "d6"}${Number(dr.bonus) ? (dr.bonus > 0 ? ` + ${dr.bonus}` : ` - ${Math.abs(dr.bonus)}`) : ""}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} ${dr.type ?? "kinetic"} → ${dr.track ?? "integrity"}`
+        ? `${dr.op === "heal" ? "heal " : ""}${dr.number}${dr.die ?? "d6"}${Number(dr.bonus) ? (dr.bonus > 0 ? ` + ${dr.bonus}` : ` - ${Math.abs(dr.bonus)}`) : ""}${state.intent ? ` + ${ftCap(state.intent)}` : ""} ${dr.type ?? "kinetic"} → ${ftLandingTrack(dr.op, dr.track, dr.type ?? "kinetic")}`
         : "no roll");
-  const fxBits = ftEscapeHtml(fxRaw);
+  const _psLabel = ftPoolShiftLabel(state.poolShift);   // Clarity / Noise set amounts (2026-11-08)
+  const fxBits = ftEscapeHtml(_psLabel ? `${fxRaw} · ${_psLabel}` : fxRaw);
   const resBits = ftEscapeHtml(String((r.shape && r.shape !== "auto") ? r.shape : "auto-apply"));
   const upkeep = (state.maintenanceKey && state.maintenanceKey !== "none" && state.maintenanceKey !== "custom")
     ? (FT.MAINTENANCE_COSTS?.[state.maintenanceKey]?.label ?? state.maintenanceKey)
     : String(state.maintenanceCost ?? "").trim();
-  const upfront = (state.costType && state.costType !== "none" && Number(state.costValue) > 0)
-    ? `${state.costValue} ${state.costType}` : (state.costText || "");
-  const costBits = [upfront, upkeep ? `upkeep: ${upkeep}` : ""].filter(Boolean).join(" · ") || "no fixed cost";
+  // The one cost source (2026-11-08, teeth P16/P18): "T2: 2 Clarity + 1 Stress"; the fiction line is separate.
+  const upfront = ftManifestationCostSpec({ manifestation: { tier: _ftWizV2CostTier(state, actor), stability: state.stability, costType: state.costType, costValue: state.costValue } },
+    (state._kind ?? state.itemKind) === "weapon" ? "weapon" : "power").label;
+  const costBits = [upfront, state.stability === "instant" ? "" : (upkeep ? `upkeep: ${upkeep}` : "upkeep: baseline (tier Clarity)"), state.costText ? `in the fiction: ${state.costText}` : ""].filter(Boolean).join(" · ");
 
-  // Magnitude v1.1 suggestion banner. Highlights only when the configured
-  // tier diverges from what the inputs warrant, otherwise shows a green ✓.
-  const sug = _ftWizV2SuggestTier(state);
-  // A Signature can't sit above its steward's tier — the finish clamps it, so the banner says so
-  // instead of offering a tier that silently comes back lower (2026-10-29).
-  if (state._signatureLock && actor) {
-    const cap = ftStewardTier(actor);
-    if (sug.tier > cap) {
-      sug.breakdown.push({ tier: cap, note: `Signature capped at your tier (${_ftWizV2TierLabel(cap)}) — it rises as you do` });
-      sug.tier = cap;
-    }
-  }
-  const cur = Number(state.tier ?? 1) || 1;
-  const matches = sug.tier === cur;
-  const bColor = matches ? "rgba(120,200,140,0.55)" : "rgba(232,200,74,0.6)";
-  const bBg    = matches ? "rgba(120,200,140,0.08)" : "rgba(232,200,74,0.08)";
-  const headline = matches
-    ? `Magnitude check ✓ — current tier <b>${_ftWizV2TierLabel(cur)}</b> matches Magnitude v1.1 budget.`
-    : `Magnitude suggests <b>${_ftWizV2TierLabel(sug.tier)}</b> (you've configured for <b>${_ftWizV2TierLabel(cur)}</b>).`;
-  const breakdownHtml = sug.breakdown.length
-    ? `<ul style="margin:0.3rem 0 0;padding-left:1.2rem;font-size:0.74rem;line-height:1.5;opacity:0.85">${
-        sug.breakdown.map(f => `<li>${ftEscapeHtml(f.note)}</li>`).join("")
-      }</ul>`
-    : `<div style="margin-top:0.3rem;opacity:0.6;font-style:italic;font-size:0.74rem">No magnitude inputs configured — minimum tier T1.</div>`;
-  const applyBtn = matches
-    ? ""
-    : `<button type="button" data-wiz-action="apply-tier" data-tier="${sug.tier}" class="ft-wiz-v2-apply-tier" style="margin-top:0.4rem;padding:0.25rem 0.6rem;font-size:0.78rem">Set tier to ${_ftWizV2TierLabel(sug.tier)}</button>`;
+  // Tier readout (teeth P29, 2026-11-08): tier is derived — nothing to pick or apply. The banner says what the
+  // item saves as and why (_ftWizV2TierBreakdownHtml prints the Rubric v1.2 points, line by line, and the net).
+  // A Signature that scores above its steward's tier is shown in amber: the finish refuses it.
+  const sug = _ftWizV2SuggestTier(state, { owner: actor ?? null });
+  const saveTier = _ftWizV2CostTier(state, actor);   // scored tier; a scoring error / a weapon kept plain → stored (fix round)
+  const _sigNow = state._signatureLock === true || state.isSignature === true;
+  const sigCap = (_sigNow && actor) ? ftStewardTier(actor) : null;
+  const overCap = sigCap != null && saveTier > sigCap;
+  const bColor = overCap ? "rgba(232,200,74,0.6)" : "rgba(120,200,140,0.55)";
+  const bBg    = overCap ? "rgba(232,200,74,0.08)" : "rgba(120,200,140,0.08)";
+  const headline = overCap
+    ? `<span style="color:#e8c84a">Scores <b>${_ftWizV2TierLabel(saveTier)}</b>, above your <b>${_ftWizV2TierLabel(sigCap)}</b>.</span> A Signature can't sit above your tier — ${game.user?.isGM && !state._signatureLock ? "a player's save would be refused (the GM may save it)" : "ease the dice, states, area or range and it saves"}.`
+    : `Saves as <b>${_ftWizV2TierLabel(saveTier)}</b>${sigCap != null ? ` <span style="opacity:0.7">(your Signature cap is ${_ftWizV2TierLabel(sigCap)})</span>` : ""}.`;
+  const breakdownHtml = _ftWizV2TierBreakdownHtml(sug);
 
   const iconImg = state.img || "icons/svg/aura.svg";
   // ME-1 (2026-05-26) — optional "also save a copy to my library" toggle. Shown
@@ -11116,15 +12231,16 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
         </div>
       </div>
       <div class="ft-cast-field ft-cast-span-2"><label>Signature</label>${_ftWizV2Txt("signature", state.signature, "What tells people this could only have come from you?")}</div>
-      <label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;cursor:${state._signatureLock ? "default" : "pointer"}">${state._signatureLock ? `<input type="checkbox" name="isSignature" checked disabled/>` : _ftWizV2Chk("isSignature", state.isSignature)}<span>Signature manifestation <small style="opacity:0.6">— ${state._signatureLock ? "this slot is one of your Signatures (ruling 14): it rises with you at every tier" : "auto-levels its tier in tandem with you whenever you tier up"}</small></span></label>
+      ${_ftWizV2SignatureToggle(state)}
       <div class="ft-cast-field ft-cast-span-2"><label>Third Thing</label>${_ftWizV2Txt("thirdThing", state.thirdThing, "The one eerie detail that makes this more than a stock effect.")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Path / Doctrine / Resonance</label>${_ftWizV2Txt("pathResonance", state.pathResonance, "What belief, oath, appetite, wound, or philosophy gives this its logic?")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Prose only — the coach reads your Path and Doctrine from your sheet, not from here.">Path / Doctrine</label>${_ftWizV2Txt("pathResonance", state.pathResonance, "The Path and Doctrine it belongs to, e.g. Pactkeeper — steward of living communities")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Colour for the GM — printed in the misfire box when a cast or strike misfires. Never billed.">Fallout (GM colour)</label>${_ftWizV2Txt("riskText", state.riskText, "What can go wrong, fray, attract notice, or scar the caster?")}</div>
     </div>
     <div class="ft-wiz-v2-summary" style="margin-top:0.6rem;padding:0.6rem;border:1px solid rgba(232,200,74,0.3);border-radius:4px;background:rgba(232,200,74,0.05)">
       <div style="font-size:0.82rem;font-weight:600;color:#e8c84a;margin-bottom:0.3rem">Review</div>
       <div style="font-size:0.78rem;line-height:1.5;opacity:0.9">
         ${summary || "<i>(insufficient detail)</i>"}<br>
-        <span style="opacity:0.7">Tier:</span> ${_ftWizV2TierLabel(cur)}<br>
+        <span style="opacity:0.7">Tier:</span> ${_ftWizV2TierLabel(saveTier)}<br>
         <span style="opacity:0.7">Effect:</span> ${fxBits}<br>
         <span style="opacity:0.7">Resolution:</span> ${resBits}<br>
         <span style="opacity:0.7">Cost:</span> ${ftEscapeHtml(String(costBits))}
@@ -11132,14 +12248,36 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
     </div>
     ${libToggle}
     <div class="ft-wiz-v2-tier-suggest" style="margin-top:0.6rem;padding:0.6rem;border:1px solid ${bColor};border-radius:4px;background:${bBg}">
-      <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem">⚖ Magnitude (v1.1)</div>
+      <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem">⚖ Tier (from what it does)</div>
       <div style="font-size:0.78rem;line-height:1.4">${headline}</div>
       ${breakdownHtml}
-      ${applyBtn}
     </div>`;
 }
 
+// The "why" list under the tier readout: every Rubric v1.2 line with its points, then the net and the band
+// ({ tier, net, breakdown: [{ points, note, floor? }] } from ftManifestationMagnitude).
+function _ftWizV2TierBreakdownHtml(sug) {
+  const rows = Array.isArray(sug?.breakdown) ? sug.breakdown : [];
+  const net = Math.max(0, Number(sug?.net) || 0);
+  const tier = Math.max(1, Math.min(4, Number(sug?.tier) || 1));
+  const scale = `<div style="margin-top:0.25rem;font-size:0.72rem;opacity:0.6;font-style:italic">0–3 points T1 · 4–5 T2 · 6–7 T3 · 8+ T4 — a chain is at least T2, hex-wide is T4. Paying Stress, Noise or Strain on top buys points back (Stress at half, at most 3); a Signature gets 2 free points.</div>`;
+  if (!rows.length) return `<div style="margin-top:0.3rem;opacity:0.6;font-style:italic;font-size:0.74rem">Nothing here adds magnitude — 0 points, it saves as T1.</div>${scale}`;
+  return `<ul class="ft-wiz-v2-tier-why" style="margin:0.3rem 0 0;padding-left:1.2rem;font-size:0.74rem;line-height:1.5;opacity:0.85">${
+    rows.map(r => `<li>${ftEscapeHtml(ftMagnitudeLineText(r))}</li>`).join("")
+  }</ul><div style="margin-top:0.25rem;font-size:0.76rem"><b>Net ${net} point${net === 1 ? "" : "s"}</b> → ${_ftWizV2TierLabel(tier)}</div>${scale}`;
+}
+
 // ── Shell + nav ────────────────────────────────────────────────────────────
+// One-line notice for a weapon that isn't a manifestation (fix round 2026-11-08, E2). The checkbox is harvested like any
+// field (state._convertToForm); a foe's weapon gets no checkbox — it is never converted.
+function _ftWizV2PlainWeaponNotice(state) {
+  if (state?._kind !== "weapon" || !state?._editing || state._weaponIsForm !== false) return "";
+  if (state._weaponFoe) return `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.78rem;margin:0 0 0.4rem">⚠ This is a foe's weapon, not a manifestation — saving here keeps it a plain weapon with its own attack or save.</p>`;
+  return `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.78rem;margin:0 0 0.4rem">⚠ This weapon isn't a manifestation — saving here makes it a Form.
+    <label style="display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.4rem"><input type="checkbox" name="_convertToForm" ${state._convertToForm === true ? "checked" : ""}/> Make it a Form</label>
+    <span style="opacity:0.75">(left clear, it saves as a plain weapon)</span></p>`;
+}
+
 function _ftWizV2RenderShell(actor, state, STEPS) {
   const i = state._currentStep;
   const step = STEPS[i];
@@ -11171,7 +12309,7 @@ function _ftWizV2RenderShell(actor, state, STEPS) {
       </div>
       <div class="ft-wiz-v2-stepper">${indicatorParts.join("")}</div>
       <div class="ft-wiz-v2-preview" data-tooltip="Live summary of what you've built so far. Updates as you navigate.">${previewHtml}</div>
-      <div class="ft-wiz-v2-body" data-step-id="${step.id}">${stepHtml}</div>
+      <div class="ft-wiz-v2-body" data-step-id="${step.id}">${_ftWizV2PlainWeaponNotice(state)}${stepHtml}</div>
       <div class="ft-wiz-v2-cascade-note"></div>
       <div class="ft-wiz-v2-errors"></div>
       <div class="ft-wiz-v2-nav">
@@ -11216,129 +12354,37 @@ function _ftWizV2Harvest(root, state) {
 // overwrite a user-touched field. The default-comparison alone isn't enough
 // because earlier cascades can move fields off-default — `_touched` is the
 // authoritative "user picked this" marker (set only by harvest).
+// Expression / Function / Interaction Model retired 2026-11-08 (Dave: "flavor text that I think
+// complicate and get in the way") — their branches went with them. Damage, resolution and states are
+// authored directly on their own steps; Stability still seeds the duration baseline.
 const _FT_WIZ_V2_CASCADES = {
-  function: {
-    harm: {
-      "intent":                "violence",
-      "damageRoll.op":         "damage",
-      "damageRoll.number":     2,
-      "damageRoll.die":        "d6",
-      "damageRoll.attribute":  "violence",
-      "damageRoll.type":       "kinetic",
-      "damageRoll.track":      "integrity",
-      "resolution.shape":      "attack",
-      "resolution.attackVs":   "evasion"
-    },
-    protect: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "auto"
-    },
-    heal: {
-      // Heal = mend a CREATURE. Healing dice land via the existing heal op
-      // (Apply Healing button / auto-apply to allies). Repair stays the
-      // object/structure-fixing cousin. (Playtest 2026-06-06: Shadow Courier
-      // wanted a healing intent for an item manifestation.)
-      "damageRoll.op":         "heal",
-      "damageRoll.number":     2,
-      "damageRoll.die":        "d6",
-      "damageRoll.attribute":  "presence",
-      "damageRoll.track":      "integrity",
-      "resolution.shape":      "auto"
-    },
-    reveal: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "auto"
-    },
-    move: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "contested",
-      "resolution.contestCasterAttribute": "intent+channel",
-      "resolution.contestTargetAttribute": "body",
-      "resolution.onContestLoss":          "negate"
-    },
-    repair: {
-      "damageRoll.op":         "heal",
-      "damageRoll.number":     2,
-      "damageRoll.die":        "d8",
-      "damageRoll.attribute":  "presence",
-      "damageRoll.track":      "integrity",
-      "resolution.shape":      "auto"
-    },
-    command: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "soul",
-      "resolution.saveDcMode":    "cast-dc",
-      "resolution.onSave":        "negate",
-      "appliedStates.states.compelled": true,
-      "appliedStates.duration":         "until-saved",
-      "appliedStates.saveEachRound":    true,
-      "appliedStates.saveAttribute":    "soul"
-    },
-    transform: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "body",
-      "resolution.saveDcMode":    "cast-dc",
-      "resolution.onSave":        "negate"
-    },
-    bind: {
-      "damageRoll.op":         "none",
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "body",
-      "resolution.saveDcMode":    "cast-dc",
-      "resolution.onSave":        "negate",
-      "appliedStates.states.restrained": true,
-      "appliedStates.duration":          "until-saved",
-      "appliedStates.saveEachRound":     true,
-      "appliedStates.saveAttribute":     "body"
-    }
+  // Form Type suggests its Skill (2026-11-08, teeth P34 — ftWeaponCategoryTraits): never over a Skill you picked.
+  category: {
+    melee:   { skill: "melee" },
+    unarmed: { skill: "brawl" },
+    ranged:  { skill: "firearms" },
+    thrown:  { skill: "firearms" }
   },
-  interactionModel: {
-    weapon: {
-      "damageRoll.op":         "damage",
-      "resolution.shape":      "attack",
-      "resolution.attackVs":   "evasion"
-    },
-    zone: {
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "body"
-    },
-    mark: {
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "soul"
-    },
-    transformation: {
-      "resolution.shape":      "save",
-      "resolution.saveAttribute": "body",
-      "resolution.onSave":        "negate"
-    }
-  },
+  // Duration is derived from stability (2026-11-08, teeth P24 — the normalizer sets it); Instant has no upkeep (P21).
+  // No maintenance text: key "none" + Sustained = the engine's tier×Clarity baseline (2026-10-29).
   stability: {
-    instant:   { duration: "instant" },
-    // No maintenance text: key "none" + Sustained = the engine's tier×Clarity baseline (2026-10-29).
+    instant:   { duration: "instant", maintenanceKey: "none" },
     sustained: { duration: "scene" },
-    bound:     { duration: "persistent" },
-    enduring:  { duration: "persistent" }
+    bound:     { duration: "persistent" }
   }
 };
 
-// WHICH faculty resists is decided by what the manifestation DOES (Function),
-// not by its surface — so a Function's save attribute outranks the generic
-// Interaction Model suggestion. Shape (attack vs save) still follows the surface:
-// Harm + Zone stays an area save. Before this, Command → save Soul was clobbered
-// by Zone → save Body in the same pass: the cast rolled Body while the per-round
-// save stayed Soul (trailer shoot 2026-10-09).
-const _FT_WIZ_V2_CASCADE_RANK = { function: 2 };
-const _FT_WIZ_V2_RANKED_FIELDS = new Set(["resolution.saveAttribute"]);
+// Rank lets a more specific trigger keep a field another trigger also seeds. Only one trigger
+// remains (stability), so nothing is ranked today; the hook stays for future cascades.
+const _FT_WIZ_V2_CASCADE_RANK = {};
+const _FT_WIZ_V2_RANKED_FIELDS = new Set();
 function _ftWizV2ApplyCascade(state, changedPaths) {
   state._touched ??= new Set();
   state._cascadeBy ??= {};
   state._cascadePrev ??= {};
   const writes = [];
   // 2026-10-29 — a trigger that changed first takes back what its OLD value wrote (untouched
-  // fields only): Command → Harm used to leave Compelled, until-saved and the Soul save behind,
-  // and the stale Function rank kept blocking Interaction Model's save attribute.
+  // fields only), so a changed pick never leaves its old seeds behind.
   for (const path of changedPaths) {
     const rules = _FT_WIZ_V2_CASCADES[path];
     if (!rules) continue;
@@ -11374,9 +12420,6 @@ function _ftWizV2ApplyCascade(state, changedPaths) {
 function _ftWizV2BuildPreview(state) {
   const bits = [];
   if (state.name) bits.push(`<b>${ftEscapeHtml(state.name)}</b>`);
-  if (state.function && FT.MANIFESTATION_FUNCTIONS?.[state.function]) {
-    bits.push(FT.MANIFESTATION_FUNCTIONS[state.function].label.toLowerCase());
-  }
   if (state.stability && FT.MANIFESTATION_STABILITIES?.[state.stability]) {
     bits.push(FT.MANIFESTATION_STABILITIES[state.stability].label.toLowerCase());
   }
@@ -11390,9 +12433,12 @@ function _ftWizV2BuildPreview(state) {
     bits.push(`heal ${esc(dr.number)}${esc(dr.die ?? "d8")}`);
   }
   const r = state.resolution ?? {};
-  if (r.shape === "attack")         bits.push(`attack vs ${esc(ftCap(r.attackVs ?? "evasion"))}`);
-  else if (r.shape === "save")      bits.push(`save: ${esc(ftCap(r.saveAttribute ?? "body"))}`);
-  else if (r.shape === "contested") bits.push(`contest vs ${esc(ftCap(r.contestTargetAttribute ?? "body"))}`);
+  const _pvBenef = _ftWizV2StateIsBeneficial(state);
+  const _pvShape = _pvBenef ? "auto" : (state._kind === "weapon" ? "attack" : r.shape);
+  if (_pvShape === "attack")         bits.push(`attack vs ${esc(ftCap(_ftWizV2StateDefense(state)))}`);
+  else if (_pvShape === "save")      bits.push(`save: ${esc(ftCap(r.saveAttribute ?? "body"))}`);
+  else if (_pvShape === "contested") bits.push(`contest vs ${esc(ftCap(r.contestTargetAttribute ?? "body"))}`);
+  if (!_pvBenef && r.hitSave === true && (_pvShape === "attack" || _pvShape === "auto")) bits.push(`${esc(ftCap(r.saveAttribute ?? "body"))} save stops the states${r.hitSaveHalf === true ? ", halves the damage" : ""}`);
   // Applied states — pull selected condition keys from the wizard's object
   // map (or array if pre-stamped). Show up to 3 + count overflow.
   const ap = state.appliedStates ?? {};
@@ -11408,9 +12454,7 @@ function _ftWizV2BuildPreview(state) {
     const saveTag = ap.saveEachRound ? ` <span style="color:#a0d4ff">↻</span>` : "";
     bits.push(`${labels.join(", ")}${more}${durTag ? ` (${durTag})` : ""}${saveTag}`);
   }
-  if (state.costType && state.costType !== "none" && Number(state.costValue) > 0) {
-    bits.push(`${esc(state.costValue)} ${esc(state.costType)}`);
-  }
+  { const _ex = ftExtraCostOf({ costType: state.costType, costValue: state.costValue }); if (_ex) bits.push(`+${esc(_ex.label)}`); }
   if (!bits.length) return `<span style="opacity:0.5;font-style:italic">your manifestation will sketch itself here as you go…</span>`;
   return bits.join(` <span style="opacity:0.4">·</span> `);
 }
@@ -11425,23 +12469,38 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
   const mf  = sys.manifestation ?? {};
   state.name = item?.name ?? state.name;
   state.img  = item?.img ?? state.img;
-  const copyMf = ["tier","concept","form","function","stability","interactionModel",
-    "costType","costValue","costText","duration","durationText","triggerText","scale",
+  // Expression / Function / Interaction Model / Scale retired 2026-11-08 — never copied back in.
+  const copyMf = ["tier","concept","stability",
+    "costType","costValue","costText","duration","durationText","triggerText",
     "targetText","rangeAreaText","maintenanceCost","maintenanceKey","riskText","pathResonance",
     "fictionalPermission","gmCalibration","mechanicalHook","signature","isSignature","thirdThing"];
   for (const k of copyMf) if (mf[k] !== undefined) state[k] = mf[k];
+  if (state.stability === "enduring") state.stability = "bound";   // Enduring folded into Bound (2026-11-08)
+  // Extra cost + upkeep read through the 2026-11-08 shims (teeth P16/P23): clarity / burn / custom costs → none,
+  // legacy upkeep keys → resource + cadence.
+  { const _ex = ftExtraCostOf(mf); state.costType = _ex?.type ?? "none"; state.costValue = _ex?.value ?? 0; }
+  if (state.maintenanceKey && state.maintenanceKey !== "custom") state.maintenanceKey = ftMaintenanceKeyCanonical(state.maintenanceKey);
   if (Number(mf.rangeFt)) state.rangeFt = Number(mf.rangeFt);
   if (mf.area)       state.area = foundry.utils.deepClone(mf.area);
   if (mf.activation) state.activation_block = foundry.utils.deepClone(mf.activation);
   if (mf.resolution) state.resolution = foundry.utils.deepClone(mf.resolution);
-  // 2026-10-01 — chain / OP cost / save / conditional damage were never copied,
-  // so saving an edit wrote the defaults over them.
+  { const _ls = ftLegacySaveToResolution(mf); if (_ls) state.resolution = _ls; }   // legacy save block (2026-11-08)
+  // Fix round 2026-11-08 (E1): a Form's resolution is read NORMALIZED, so a legacy save / contested shape comes back as
+  // the hit save it plays as (and is saved that way) instead of being lost. A plain weapon keeps its raw block (a foe's
+  // save-first mode, its rider save) — the Engine never rewrites it unless the author converts it (E2). A power's
+  // legacy mode "save" shows as the Save shape it plays as.
+  if (kind === "weapon" && ftIsFormWeapon(item, { stamp: false })) {
+    state.resolution = foundry.utils.deepClone(ftNormalizeManifestationData(sys, "weapon").resolution);
+  } else if (kind !== "weapon" && state.resolution?.mode === "save") {
+    state.resolution = { ...state.resolution, shape: "save" };
+  }
+  // 2026-10-01 — chain / conditional damage were never copied,
+  // so saving an edit wrote the defaults over them. (opCost retired 2026-11-08.)
   if (mf.chain)  state.chain  = foundry.utils.deepClone(mf.chain);
-  if (mf.opCost) state.opCost = foundry.utils.deepClone(mf.opCost);
-  if (mf.save)   state.save   = foundry.utils.deepClone(mf.save);
   const cdArr = Array.isArray(mf.conditionalDamage) ? mf.conditionalDamage
     : (mf.conditionalDamage && typeof mf.conditionalDamage === "object" ? Object.values(mf.conditionalDamage) : []);
   state.conditionalDamage = Object.fromEntries(cdArr.map((r, i) => [`c${i}`, { vsType: r?.vsType ?? "", bonusFormula: r?.bonusFormula ?? "" }]));
+  state.poolShift = ftNormalizePoolShift(mf.poolShift);
   state.tags   = Array.isArray(sys.tags) ? [...sys.tags] : (state.tags ?? []);
   state.effect = sys.effect ?? state.effect ?? "";
   state.flavor = sys.flavor ?? state.flavor ?? "";
@@ -11459,41 +12518,39 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
   state.appliedEffects = {
     modifiers: Object.fromEntries(mods.map((m, i) => [`m${i}`, { stat: m.stat, op: m.op, value: m.value }])),
     resists:   Object.fromEntries((Array.isArray(eff.resists) ? eff.resists : []).map(k => [k, true])),
-    immunes:   Object.fromEntries((Array.isArray(eff.immunes) ? eff.immunes : []).map(k => [k, true]))
+    immunes:   Object.fromEntries((Array.isArray(eff.immunes) ? eff.immunes : []).map(k => [k, true])),
+    condition: FT_WARD_CONDITIONS.includes(String(eff.condition ?? "")) ? String(eff.condition ?? "") : ""
   };
+  // Marks (2026-11-08) — no Engine controls yet; carried through an edit so the save keeps them (and Review scores them).
+  state.onMissRetaliation     = ftNormalizeMissRetaliation(mf.onMissRetaliation);
+  state.attackersDisadvantage = mf.attackersDisadvantage === true;
+  state.damageConvert         = ftNormalizeDamageConvert(mf.damageConvert);
+  state.markDuration          = ["next-turn", "scene"].includes(String(mf.markDuration ?? "")) ? String(mf.markDuration) : "";
   // 2026-05-29 — Additional damage dice: array → p0/p1/… indexed slots so the
   // engine repopulates the rows when editing an existing manifestation.
   const dpArr = Array.isArray(sys.damageParts)
     ? sys.damageParts
     : (sys.damageParts && typeof sys.damageParts === "object" ? Object.values(sys.damageParts) : []);
   state.damageParts = Object.fromEntries(dpArr.map((p, i) => [`p${i}`, {
-    formula: p?.formula ?? "", type: p?.type ?? "kinetic", track: p?.track ?? "integrity", flavor: p?.flavor ?? ""
+    formula: p?.formula ?? "", type: p?.type ?? "kinetic", flavor: p?.flavor ?? ""   // track derives from type (2026-11-08)
   }]));
   if (kind === "weapon") {
     state.category     = sys.category ?? "melee";
     state.skill        = sys.skill ?? "melee";
     state.damageFormula= sys.damage?.formula ?? "";
     state.damageType   = sys.damage?.type ?? "kinetic";
-    state.damageTrack  = sys.damage?.track ?? "integrity";
-    if (sys.damage?.attribute) state.damageAttribute = sys.damage.attribute;
-    state.rangeShort   = sys.range?.short ?? 1;
-    state.rangeLong    = sys.range?.long ?? 1;
+    state.nonlethal    = sys.nonlethal === true || (Array.isArray(sys.tags) && sys.tags.some(t => ["mercy", "nonlethal"].includes(String(t).toLowerCase())));
+    // Activation read through the normalizer like a power's (fix round 2026-11-08, E5) — so the Cost step's pick is the
+    // one written back (a raw block could carry consumePool / legacy keys that override it).
+    state.activation_block = { type: ftNormalizeManifestationData(sys, "weapon").activation.type };
   } else {
     state.channel    = sys.channel ?? state.channel;
     state.sephirah   = sys.sephirah ?? state.sephirah;
-    state.mode       = sys.mode ?? state.mode;
-    state.target     = sys.target ?? state.target;
-    state.range      = sys.range ?? state.range;
-    state.damage     = sys.damage ?? "";
     // ftNormalizeDamageRoll also lifts legacy `system.damage` dice ("2d6") into the structured roll (2026-10-29).
     state.damageRoll  = ftNormalizeDamageRoll(sys);
-    // Legacy string activation ("ritual", "bonus") — the save path writes it back as-is (2026-10-29).
-    if (typeof sys.activation === "string" && sys.activation) state.activation = sys.activation;
-    // Legacy clarityRequired/noiseGain only stand in when the manifestation has no cost of its own —
-    // the sheet edits costType/costValue independently, so they win (2026-10-29).
-    const hasMfCost = mf.costType && mf.costType !== "none";
-    if (!hasMfCost && Number(sys.clarityRequired) > 0)   { state.costType = "clarity"; state.costValue = Number(sys.clarityRequired); }
-    else if (!hasMfCost && Number(sys.noiseGain) > 0)    { state.costType = "noise";   state.costValue = Number(sys.noiseGain); }
+    // Legacy string activation retired (2026-11-08, teeth P20): read once into the structured block when the item
+    // never stored one; never written back.
+    state.activation_block = { type: ftNormalizeManifestationData(sys, "power").activation.type };
   }
 }
 
@@ -11516,7 +12573,8 @@ function _ftAlphaCtx() {
 
 /** SIGNATURES (ruling 14, 2026-10-17: "the Manifestation Engine, for players, should be ONLY for signature effects,
  *  one per tier; they level up with you"). A Signature = a manifestation with system.manifestation.isSignature === true
- *  (ft-progression already raises its tier with the steward on every tier-up). Slots = the steward's current tier:
+ *  (its tier is derived from what it does and capped at the steward's tier; a tier-up raises the cap, never the item —
+ *  teeth P29, 2026-11-08). Slots = the steward's current tier:
  *  Tier I → 1, Tier II → 2 … Each slot opens the wizard in signature mode; nothing else opens it on an Alpha seat. */
 function ftStewardTier(actor) {
   const sys = actor?.system?.system ?? actor?.system ?? {};
@@ -11559,7 +12617,11 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   if (existingItem) { kind = existingItem.type === "weapon" ? "weapon" : "power"; starter = ""; }
   // Mirror the non-TCC gate from the legacy wizard. Skipped for actor-less
   // GM authoring (targetFolder mode) — the GM can author any starter shape.
-  if (actor && !isTCC(actor) && (starter === "ephemeral" || starter === "working")) {
+  // Fix round 2026-11-08 (E9): no starter (a Signature slot's Make) falls back to "working" — an Instant default a
+  // non-TCC can't author — so it redirects too, silently (nothing was picked).
+  if (actor && !existingItem && !isTCC(actor) && starter === "" && kind === "power") {
+    starter = "ritual";
+  } else if (actor && !isTCC(actor) && (starter === "ephemeral" || starter === "working")) {
     ui.notifications?.info(`${actor.name}: only TCCs may author Workings. Routing to Ritual / Ongoing — your manifestations persist as Forms.`);
     starter = "ritual";
     kind = "power";
@@ -11578,7 +12640,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   );
   const state = foundry.utils.deepClone(defaults);
   state.name = "";
-  state.activation_block = defaults.activation ? foundry.utils.deepClone(defaults.activation) : { type: "action", consumePool: true };
+  state.activation_block = defaults.activation ? foundry.utils.deepClone(defaults.activation) : { type: "action" };
   state.damageRoll = ftDamageRollDefaults();
   // Wizard form harvests `appliedStates.states.<condKey> = bool` from the
   // checkbox grid — coerce the array-shape default to an object map so
@@ -11609,21 +12671,39 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     try { _ftWizV2OverlayFromItem(state, existingItem, wizardKind); }
     catch (e) { console.warn("Roll for Initiation | wizard edit-overlay failed", e); }
   }
+  // A weapon that isn't a Form (fix round 2026-11-08, E2): the Engine only re-saves it as a Form when the author ticks
+  // the box in the notice; a foe's weapon is never converted and keeps its own resolution (save-first mode included).
+  if (existingItem?.type === "weapon") {
+    state._weaponIsForm  = ftIsFormWeapon(existingItem, { stamp: false });
+    state._weaponFoe     = !!(existingItem.parent && _ftIsFoeActor(existingItem.parent));
+    state._convertToForm = false;
+    state._origResolution = foundry.utils.deepClone(existingItem._source?.system?.manifestation?.resolution ?? null);
+    state._origTier = Number(existingItem._source?.system?.manifestation?.tier) || null;
+  }
   if (sigLock) { state.isSignature = true; state._signatureLock = true; }
+  // Form step defaults (2026-11-08): set so the Form Type → Skill suggestion can tell a picked Skill from the default.
+  state.category ??= "melee";
+  state.skill    ??= ftWeaponCategoryTraits(state.category).skillFallback;
+  state.nonlethal ??= false;
+  // A legacy item's range (power Range Baseline / Form Short-Long) shows as the number it really reaches (teeth P25),
+  // so saving keeps it. Edit mode only — the scorer (ftManifestationMagnitude) reads the same _ftItemRangeFt, so the score never moves.
+  if (existingItem && !(Number(existingItem.system?.manifestation?.rangeFt) > 0) && _ftItemRangeFt(existingItem) > 5) state.rangeFt = _ftItemRangeFt(existingItem);
+  if (state.area?.shape === "cube") state.area = { ...state.area, shape: "sphere" };
 
   let STEPS = _ftWizV2Steps(wizardKind);
+  state.itemKind = wizardKind;
   state._kind = wizardKind;   // the magnitude / review readers branch on it (2026-10-29)
   state._stewardDc = _ftStewardSetsNoDC(actor);   // a Steward never types a save DC (2026-11-08); foes and pack authoring may
 
   // The starter only picks the opening posture — the item TYPE follows what the
   // author actually builds. A "weapon" item is a strikable Form; anything else
-  // (Zone, Mark, Companion, Event…) is a power. Without this a non-TCC's Stable
-  // start stayed a melee `weapon` whatever Form & Function said (trailer shoot
-  // 2026-10-09: a Command · Zone · Scene build saved as a 2d6 kinetic strike).
+  // is a power. Without this a non-TCC's Stable start stayed a melee `weapon`
+  // whatever the author built (trailer shoot 2026-10-09). The Kind select on the
+  // Kind & Stability step decides (Interaction Model retired 2026-11-08).
   // Edit mode keeps the existing item's type — a document can't change type.
   const syncKind = () => {
     if (existingItem) return;
-    const k = state.interactionModel === "weapon" ? "weapon" : "power";
+    const k = state.itemKind === "weapon" ? "weapon" : "power";
     if (k === wizardKind) return;
     wizardKind = k;
     state._kind = k;
@@ -11738,15 +12818,6 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
             }
           }).render(true);
           return; // Don't fall through to nav re-render.
-        } else if (action === "apply-tier") {
-          // Magnitude v1.1 banner click. Stamp suggested tier + mark touched
-          // so the cascade engine can't overwrite it on later nav.
-          const newTier = Number(ev.target.closest("[data-tier]")?.dataset?.tier);
-          if (Number.isFinite(newTier) && newTier >= 1 && newTier <= 4) {
-            state.tier = newTier;
-            state._touched ??= new Set();
-            state._touched.add("tier");
-          }
         } else if (action === "next") {
           const cur = STEPS[state._currentStep];
           if (cur.validate) {
@@ -11777,8 +12848,12 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           try {
             // The open-time slot check can be stale — another wizard on the same slot may have
             // finished first (2026-10-29).
-            if (sigLock && actor && !existingItem && ftSignatureSlots(actor).free <= 0) {
-              ui.notifications?.warn(`${actor.name} has no open Signature slot left — nothing was created.`);
+            // Players only get a Signature through a free slot (teeth P29): a slot-opened create, or a non-GM save that
+            // would turn an item into a Signature, is refused when every slot is taken. The GM may over-fill.
+            const _wasSig = existingItem?.system?.manifestation?.isSignature === true;
+            const _sigSave = sigLock || state.isSignature === true;
+            if (actor && _sigSave && !_wasSig && (sigLock || !game.user?.isGM) && ftSignatureSlots(actor).free <= 0) {
+              ui.notifications?.warn(`${actor.name} has no open Signature slot left — nothing was ${existingItem ? "saved" : "created"}.`);
               unlock();
               return;
             }
@@ -11787,12 +12862,24 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
               state.resolution    = { ...(state.resolution ?? {}),    saveDcMode: "cast-dc" };
               state.appliedStates = { ...(state.appliedStates ?? {}), saveDcMode: "cast-dc" };
             }
-            // Tier is derived from magnitude, never picked (Dave 2026-11-08). The Review banner is a readout.
-            {
-              const sug = _ftWizV2SuggestTier(state);
-              state.tier = Math.max(1, Math.min(4, Number(sug?.tier) || 1));
+            // A plain weapon stays plain unless the author ticked "Make it a Form" (fix round 2026-11-08, E2): it keeps its
+            // own resolution (a foe's save-first mode included) and its stored tier, and gets no Form stamp.
+            const _plainWeapon = existingItem?.type === "weapon" && state._weaponIsForm === false;
+            const _convertForm = _plainWeapon && !state._weaponFoe && state._convertToForm === true;
+            const _keepPlain   = _plainWeapon && !_convertForm;
+            if (_keepPlain) {
+              if (state._origResolution) state.resolution = foundry.utils.deepClone(state._origResolution);
+              state._keepResolutionMode = true;
             }
-            if (sigLock && actor) {
+            // Tier is derived from magnitude, never picked (Dave 2026-11-08). The Review banner is a readout. A scoring
+            // error (null) keeps the tier the state already carries (fix round, S3); a plain weapon keeps its stored tier.
+            if (_keepPlain) {
+              if (state._origTier) state.tier = Math.max(1, Math.min(4, state._origTier));
+            } else {
+              const sug = _ftWizV2SuggestTier(state, { owner: actor ?? null });
+              if (sug && sug.tier != null) state.tier = Math.max(1, Math.min(4, Number(sug.tier) || 1));
+            }
+            if (actor && (sigLock || (state.isSignature === true && !game.user?.isGM))) {
               // A Signature is always a Signature, and never outruns its steward's tier (ruling 14).
               // It used to be clamped silently; with a derived tier that would hide the overshoot, so refuse.
               state.isSignature = true;
@@ -11808,7 +12895,29 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
             // Skips all the create branches; preserves the item's _id / location.
             let created = null;
             if (existingItem) {
-              await existingItem.update({ name: itemData.name, img: itemData.img, system: itemData.system });
+              // Retired keys go on save (2026-11-08, teeth P20): consumePool (folded into activation.type) and a power's
+              // legacy system.activation string — left in place they would override the type just chosen.
+              const _retire = {};
+              if (existingItem._source?.system?.manifestation?.activation && "consumePool" in existingItem._source.system.manifestation.activation) _retire["system.manifestation.activation.-=consumePool"] = null;
+              if (typeof existingItem._source?.system?.activation === "string") _retire["system.-=activation"] = null;
+              // The power Range Baseline is retired (teeth P25): rangeFt was shown at the real number, so the legacy label
+              // goes — except "self", which still marks a self manifestation (rangeFt 0).
+              const _legRange = existingItem._source?.system?.range;
+              if (existingItem.type === "power" && typeof _legRange === "string" && !(["self", "personal"].includes(_legRange.toLowerCase()) && !(Number(itemData.system?.manifestation?.rangeFt) > 0))) _retire["system.-=range"] = null;
+              if (existingItem.type === "power" && existingItem._source?.system?.category === "manifestation") _retire["system.-=category"] = null;
+              // Retired resolution keys (fix round 2026-11-08, E6): the legacy save block, attackVs, statesOnFail, and
+              // resolution.mode — the mode only on a non-foe item that is (or becomes) a Form or a power; a foe's or a
+              // plain weapon's save-first mode stays.
+              const _srcMf  = existingItem._source?.system?.manifestation ?? {};
+              const _srcRes = (_srcMf.resolution && typeof _srcMf.resolution === "object") ? _srcMf.resolution : null;
+              if ("save" in _srcMf) _retire["system.manifestation.-=save"] = null;
+              if (_srcRes && "attackVs" in _srcRes)     _retire["system.manifestation.resolution.-=attackVs"] = null;
+              if (_srcRes && "statesOnFail" in _srcRes) _retire["system.manifestation.resolution.-=statesOnFail"] = null;
+              if (_srcRes && "mode" in _srcRes && !_keepPlain && !(existingItem.parent && _ftIsFoeActor(existingItem.parent))) _retire["system.manifestation.resolution.-=mode"] = null;
+              // The Engine's Form stamp (teeth P30): a Form saved by the Engine stays a Form; a plain weapon only becomes
+              // one when the author ticked "Make it a Form" (E2) — never a foe's.
+              if (existingItem.type === "weapon" && !_keepPlain) _retire["flags.fourththing.manifested"] = true;
+              await existingItem.update({ name: itemData.name, img: itemData.img, system: itemData.system, ..._retire }, _keepPlain ? { ftNoFormStamp: true } : {});
               created = existingItem;
               ui.notifications?.info(`Updated "${existingItem.name}" via the Manifestation Engine.`);
               resolved = true;
@@ -11889,9 +12998,30 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
       // between a constrained dropdown (thermal/chemical) and a freeform box.
       wizRoot.addEventListener("change", (ev) => {
         const sel = ev.target;
-        if (!sel || sel.tagName !== "SELECT") return;
+        if (!sel) return;
         const nm = sel.getAttribute("name") || "";
-        if (nm !== "damageRoll.type" && !/^damageParts\.[^.]+\.type$/.test(nm)) return;
+        // Resolution step (2026-11-08, teeth P10/P12): the shape picks its sub-fields; the hit-save box shows its own.
+        // Save each round + the state chips (2026-11-08, teeth P40) show / hide the per-state shake-off faculty rows.
+        const _resToggle = (sel.tagName === "SELECT" && nm === "resolution.shape") || (sel.type === "checkbox" && nm === "resolution.hitSave")
+          || (sel.type === "checkbox" && (nm === "appliedStates.saveEachRound" || (nm.startsWith("appliedStates.states.") && !!state.appliedStates?.saveEachRound)));
+        // Area shape relabels the size, locks chain and range for cone / line / hex; Form Type suggests its Skill (2026-11-08, C7).
+        if (sel.tagName === "SELECT" && (nm === "area.shape" || nm === "category")) {
+          const _ch = _ftWizV2Harvest(wizRoot, state);
+          if (nm === "category") _ftWizV2ApplyCascade(state, _ch);
+          if (nm === "area.shape") {
+            const _sh = state.area?.shape ?? "none";
+            if (["cone", "line", "hex"].includes(_sh)) state.rangeFt = 0;
+            if (_sh !== "none") { state.chain = { ...(state.chain ?? {}), enabled: false }; if (_sh !== "hex") state.area.size = Math.max(5, Number(state.area.size) || 0); }
+          }
+          const fresh = _ftWizV2RenderShell(actor, state, STEPS);
+          const tmp = document.createElement("div");
+          tmp.innerHTML = fresh;
+          wizRoot.innerHTML = tmp.firstElementChild?.innerHTML ?? "";
+          return;
+        }
+        if (!_resToggle && sel.tagName !== "SELECT") return;
+        // damageRoll.op too (2026-11-08): the Heal track field shows only for a heal.
+        if (!_resToggle && nm !== "damageRoll.type" && nm !== "damageRoll.op" && !/^damageParts\.[^.]+\.type$/.test(nm)) return;
         _ftWizV2Harvest(wizRoot, state);
         const fresh = _ftWizV2RenderShell(actor, state, STEPS);
         const tmp = document.createElement("div");
@@ -11904,20 +13034,23 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
 
 // ─── Sprint B: Combat constants ───────────────────────────────────────────────
 
+// Every state an author can tick on a manifestation does something in the field (2026-11-08, teeth P03 — Dave: "Yes"
+// to these bites). The descriptions say exactly what the engine does. `applicable: false` on an entry hides it from the
+// Engine grid and both item-sheet grids (ftConditionAuthorable) — use it only for a state the engine can't enforce.
 FT.CONDITIONS = {
-  staggered:  { label: "Staggered",  color: "#f2994a", desc: "Movement halved; −2 to attack rolls."                },
-  scarred:    { label: "Scarred",    color: "#9b59b6", desc: "Paradox mark; −1 Clarity until end of scene."        },
-  calmed:     { label: "Calmed",     color: "#4a90d9", desc: "Cannot take violent actions willingly."              },
-  blinded:    { label: "Blinded",    color: "#546e7a", desc: "Attack rolls at disadvantage; cannot target far."    },
-  prone:      { label: "Prone",      color: "#78909c", desc: "Melee attacks against you +2; ranged −2."            },
-  shaken:     { label: "Shaken",     color: "#e8c84a", desc: "−2 to Resolve checks; Stress costs +1."             },
-  burning:    { label: "Burning",    color: "#c03030", desc: "1d4 Integrity damage at start of each turn."         },
-  restrained: { label: "Restrained", color: "#3dd6c0", desc: "Cannot move; Evasion reduced to base 10."           },
-  charmed:    { label: "Charmed",    color: "#e07ec6", desc: "Cannot take hostile action against the source; source has reroll-lowest on social checks against you." },
-  compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
+  staggered:  { label: "Staggered",  color: "#f2994a", desc: "Your movement is halved at the start of your turn; −2 to your attack rolls." },
+  scarred:    { label: "Scarred",    color: "#9b59b6", desc: "Paradox mark: your max Clarity is 1 lower while it lasts." },
+  calmed:     { label: "Calmed",     color: "#4a90d9", desc: "You can't Strike, and you can't Invoke a working that deals damage. Healing and helping still work." },
+  blinded:    { label: "Blinded",    color: "#546e7a", desc: "Your Strikes roll 3d10 and keep the worst 2." },
+  prone:      { label: "Prone",      color: "#78909c", desc: "Strikes against you: melee +2, ranged −2." },
+  shaken:     { label: "Shaken",     color: "#e8c84a", desc: "−2 to your Resolve checks, and your Resolve is 2 lower against Strikes." },
+  burning:    { label: "Burning",    color: "#c03030", desc: "1d4 Integrity damage at the start of each of your turns." },
+  restrained: { label: "Restrained", color: "#3dd6c0", desc: "You can't move on your turn (movement 0), and attacks against you get +2." },
+  charmed:    { label: "Charmed",    color: "#e07ec6", desc: "You can't Strike the one who charmed you, or Invoke a hostile working at them." },
+  compelled:  { label: "Compelled",  color: "#7d3cff", desc: "At the start of each of your turns the GM gets a card naming who compelled you and their directive. Spend at least one action toward it; the GM rules on the rest." },
   incapacitated: { label: "Incapacitated", color: "#6a3a8a", desc: "Stress reduced to 0. You cannot act. Roll Getting It Together at the start of each of your turns: 3 successes → back up at 1 Stress. 3 failures → out for the fight." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. You can't act. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
-  surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
+  surprise:   { label: "Surprised",  color: "#cc7a00", desc: "If it is on you when your turn starts in round 1, that turn's Action, Bonus action and Reaction are spent. It clears at your next turn start after round 1." },
   // Imposed (techniques ruling R5, 2026-09-21): the target's next attack roll or
   // defense check is made with 3d10 keep-lowest-2 (no explosions). Consumed by
   // that roll; safety-expires at the start of the target's second turn-start
@@ -11961,10 +13094,72 @@ FT.CONDITIONS = {
   // FT.DARKNESS_BITE below (single source of truth). Every band costs AND
   // grants — the dark is a stage, not a fail-state.
   darknessShadowed:  { ladder: true, label: "Shadowed",  color: "#8a7bb8", img: "icons/svg/blind.svg",  desc: "Darkness 3+. Presence gains from repairs −1. You perceive dark doors and dormant sparks in dark hexes; +1 vs Qliphothic fear/charm." },
-  darknessUmbral:    { ladder: true, label: "Umbral",    color: "#6a4fa3", img: "icons/svg/eye.svg",    desc: "Darkness 5+. Max Clarity −2; lawful factions react poorly. Qliphothic resistance; you may gather fragments; Chaos-mode misfire softened one step." },
+  darknessUmbral:    { ladder: true, label: "Umbral",    color: "#6a4fa3", img: "icons/svg/eye.svg",    desc: "Darkness 5+. Max Clarity −2; lawful factions react poorly. Qliphothic resistance; you may gather fragments; Chaotic misfire softened one step." },
   darknessNadir:     { ladder: true, label: "Nadir",     color: "#472a78", img: "icons/svg/terror.svg", desc: "Darkness 8+. −2 on Soul-defense rolls; Mal turns unreliable about you; allies' auras do not reach you. +2 Intent inside dark hexes; Greater Qliphoth parley becomes possible." },
   darknessThreshold: { ladder: true, label: "Threshold", color: "#1b0f33", img: "icons/svg/skull.svg",  desc: "Darkness 10. Each scene: Soul save DC 15 or act on your worst un-faced fragment. You may knock at Daath." }
 };
+
+// Engine-owned states (2026-11-08, teeth P04): set by their own engines — Last Stand, Getting It Together, the water /
+// sky / orbit scenes, Strain, radiation and Darkness (the `ladder` entries) — never authored on a manifestation. Ticking
+// Dying on a working used to stack Last Stand failures with no Last Stand roll (a kill path). They stay in FT.CONDITIONS
+// and on the actor sheet's toggles; only the applied-states pickers and the authored-states normalizer drop them.
+// Imposed and Surprised stay pickable (both enforced).
+// (A function, not a top-level const, so a load-time caller never meets it in the TDZ.)
+function ftEngineOwnedConditions() { return ["incapacitated", "dying", "submerged", "drowning", "crushing", "airborne", "falling", "vacuum"]; }
+function ftConditionAuthorable(key) {
+  const c = FT.CONDITIONS?.[key];
+  return !!c && !c.ladder && c.applicable !== false && !ftEngineOwnedConditions().includes(key);
+}
+// The conditions an author may tick on a manifestation, as a { key: cfg } map (Engine grid + both item sheets).
+function ftAuthorableConditions() {
+  return Object.fromEntries(Object.entries(FT.CONDITIONS ?? {}).filter(([k]) => ftConditionAuthorable(k)));
+}
+// The actors who put condition `key` on `actor` — the AE's appliedManifestation.source, else its origin (an item origin
+// resolves to its owner). A condition toggled by hand has no AE and so no source.
+function ftConditionSources(actor, key) {
+  const out = [];
+  for (const e of (actor?.effects ?? [])) {
+    if (e.disabled || e.flags?.fourththing?.condition !== key) continue;
+    const uuid = e.flags?.fourththing?.appliedManifestation?.source ?? e.origin;
+    if (!uuid) continue;
+    let doc = null;
+    try { doc = fromUuidSync(uuid); } catch (_e) { doc = null; }
+    const src = doc?.documentName === "Actor" ? doc : (doc?.actor ?? doc?.parent ?? null);
+    out.push({ uuid, actor: src?.documentName === "Actor" ? src : null, effect: e, itemName: e.flags?.fourththing?.appliedManifestation?.itemName ?? null, directive: e.flags?.fourththing?.appliedManifestation?.directive ?? null });
+  }
+  return out;
+}
+const _ftSameActor = (a, b) => !!a && !!b && (a === b || a.uuid === b.uuid || (a.id && a.id === b.id));
+// Calmed / Charmed refusal (2026-11-08, teeth P03). Returns the refusal text, or null when the action may go ahead.
+//   kind "strike": Calmed refuses every non-beneficial Strike; Charmed refuses one aimed at the charm's source.
+//   kind "cast":   Calmed refuses a working that deals damage; Charmed refuses a hostile working aimed at the source.
+// `targets` = target actors (defaults to the user's targets). Called by ftOpenEngageDialog / ftOpenCastDialog.
+function ftConditionActionRefusal(actor, item, { kind = "strike", targets = null } = {}) {
+  if (!actor || !item) return null;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const conds = sys?.conditions ?? {};
+  if (conds.calmed !== true && conds.charmed !== true) return null;
+  let hostile = true, damaging = true;
+  try {
+    if (kind === "strike") { hostile = !_ftStrikeIsBeneficial(item); damaging = hostile; }
+    else {
+      const dr = ftNormalizeDamageRoll(item.system ?? {});
+      const parts = item.system?.damageParts;
+      damaging = (dr.op === "damage" && Number(dr.number) > 0) || (Array.isArray(parts) && parts.some(p => String(p?.formula ?? "").trim()));
+      hostile = !_ftIsBeneficialManifestation(item.system?.manifestation ?? {}, item, dr);
+    }
+  } catch (_e) { /* treat as hostile */ }
+  if (conds.calmed === true && damaging) {
+    return kind === "strike" ? `${actor.name} is Calmed and can't Strike.` : `${actor.name} is Calmed and can't Invoke a working that deals damage.`;
+  }
+  if (conds.charmed === true && hostile) {
+    const tgts = (targets ?? Array.from(game.user?.targets ?? []).map(t => t.actor)).filter(Boolean);
+    const src = ftConditionSources(actor, "charmed").map(s => s.actor).filter(Boolean);
+    const hit = tgts.find(t => src.some(s => _ftSameActor(s, t)));
+    if (hit) return `${actor.name} is Charmed by ${hit.name} and can't ${kind === "strike" ? "Strike" : "turn a hostile working on"} them.`;
+  }
+  return null;
+}
 
 // ── Radiation Sickness — mechanical bite ────────────────────────────────────
 // The single source of truth for what RADIATION DOES. Thresholds mirror the
@@ -12271,6 +13466,25 @@ function _ftAliasEnergyDamage(type, flavor) {
   if (f === "base" || f === "alkaline" || f === "caustic")          return { type: "chemical",   flavor: "base" };
   // electrical (thunder/lightning/shock) and bare/unknown energy → flat electrical.
   return { type: "electrical", flavor: "" };
+}
+
+// Hit-flavor aliasing for every type (2026-11-08, teeth P36): a type with a constrained flavor set (thermal, chemical)
+// only ever carries one of its keys — "fire" / "flame" / "heat" / "burn" → hot, "ice" / "frost" → cold, "alkaline" /
+// "caustic" → base; anything else on a constrained type drops to type-only (resists of the whole type still catch it).
+// Unconstrained types keep their freeform tag. Used by the damage normalizers and by ftDefenseMatches at apply time.
+function _ftHitFlavorAliases() { return {   // a function, not a top-level const (TDZ-safe for early callers)
+  thermal:  { hot: "hot", fire: "hot", flame: "hot", flames: "hot", heat: "hot", burn: "hot", burning: "hot", scald: "hot",
+              cold: "cold", ice: "cold", frost: "cold", freeze: "cold", freezing: "cold", chill: "cold" },
+  chemical: { acid: "acid", acidic: "acid", corrosive: "acid", base: "base", alkaline: "base", caustic: "base", lye: "base" }
+}; }
+function ftAliasHitFlavor(type, flavor) {
+  const t = String(type ?? "").toLowerCase();
+  const raw = String(flavor ?? "").trim();
+  if (!raw) return "";
+  if (!FT.DAMAGE_FLAVORS?.[t]) return raw;
+  const f = raw.toLowerCase();
+  if (FT.DAMAGE_FLAVORS[t][f]) return f;
+  return _ftHitFlavorAliases()[t]?.[f] ?? "";
 }
 
 // Build the defense-editor row list: every top-level damage type, plus its
@@ -12849,7 +14063,7 @@ function ftComputeDefenses(actor, sys) {
 function ftDefenseMatches(entries, hitType, hitFlavor) {
   if (!Array.isArray(entries) || !hitType) return false;
   const t = String(hitType).toLowerCase();
-  const f = hitFlavor ? String(hitFlavor).toLowerCase() : "";
+  const f = hitFlavor ? String(ftAliasHitFlavor(t, hitFlavor)).toLowerCase() : "";   // a "fire" thermal hit matches a thermal:hot resist
   for (const e of entries) {
     if (!e || e.type !== t) continue;
     if (!e.flavor) return true;         // type-only entry always matches
@@ -13405,7 +14619,8 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
                                clarity, noise, alignMod, total, difficulty, success,
                                misfireData, diceResults, terrainLabel,
                                explosionDice = [], surgeBanked = 0, doubleTen = false,
-                               costNote = "", signature = "", thirdThing = "" }) {
+                               costNote = "", signature = "", thirdThing = "",
+                               fallout = "", trigger = "" }) {
   const sephData = FT.SEPHIROTH[ftSephKey(sephirah)] ?? { label: sephirah, color: "#888" };
   const ic = FT.INTENT_COLORS[intent]   ?? "#888";
   const cc = FT.CHANNEL_COLORS[channel] ?? "#888";
@@ -13441,15 +14656,17 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
     <div class="ft-misfire-box">
       <span class="ft-misfire-label">⚡ Misfire ${misfireData.rolled} — ${misfireData.name}</span>
       <p class="ft-misfire-desc">${misfireData.desc}</p>
+      ${fallout ? `<p class="ft-misfire-desc" style="opacity:0.85"><b>Fallout (GM colour):</b> ${ftEscapeHtml(fallout)}</p>` : ""}
     </div>` : "";
 
   const terrainPill = terrainLabel
     ? `<span class="ft-terrain-pill">⬡ ${terrainLabel}</span>`
     : "";
 
-  const metaBlock = (costNote || signature || thirdThing) ? `
+  const metaBlock = (costNote || signature || thirdThing || trigger) ? `
     <div class="ft-manifest-chat-meta">
       ${costNote ? `<div><b>Cost:</b> ${ftEscapeHtml(costNote)}</div>` : ""}
+      ${trigger ? `<div><b>Trigger (narrative, GM calls it):</b> ${ftEscapeHtml(trigger)}</div>` : ""}
       ${signature ? `<div><b>Signature:</b> ${ftEscapeHtml(signature)}</div>` : ""}
       ${thirdThing ? `<div><b>Third Thing:</b> ${ftEscapeHtml(thirdThing)}</div>` : ""}
     </div>` : "";
@@ -13490,13 +14707,13 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
 // dialog, sheet, and chat cards share the same one-liners. Full reference
 // lives in the Bad Eden Documentation > Manifestation Glossary journal.
 const FT_KNOB_TIPS = {
-  clarity:     "Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5/7/10/14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more.",
+  clarity:     "Clarity — focus pool. Every cast pays its tier (T1=1 / T2=2 / T3=3 / T4=4); Hermetic and Chaotic +1, TCCs −1, never below 1; Ascendant pays Blood Debt instead; an authored extra cost (Stress / Noise / Strain) on top. Also spent on upkeep for sustained / bound manifestations. Max scales with Steward tier (5/7/10/14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more.",
   reach:       "Reach — casting one tier above your own. Surge: misfire on the higher column. Blood Debt: +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline reduces Blood-Debt-reach cost.",
-  misfire:     "Misfire — d10 failure table (1-2 mild → 10 catastrophic). Hermetic shifts d10 −2, Chaos +2, Ascendant skips. Reach pushes the column up by one tier. Wyrdlens Discipline shifts the d10 down (better outcomes).",
-  concurrency: "Concurrency — count of sustained / bound / enduring manifestations active at once. No hard cap; soft-capped by Clarity needed to pay each tick's upkeep. Each point frees one entry's Clarity upkeep per tick — the Pactkeeper baseline frees pact-bound entries, technique concurrency frees any sustained entry.",
-  noise:       "Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool, and it doesn't drop on its own; Scene Break shaves 1. Hermetic and Ascendant generate 0. BITE: every point is a flat −1 to your own cast rolls, and the band adds more — Humming (3+) −1 to Intrigue checks; Loud (5+) −2 and misfires roll one band worse; Screaming (8+) −3 and two bands worse, with Corruption / Lattice attention live at the GM's discretion.",
+  misfire:     "Misfire — d10 failure table (1-2 mild → 10 catastrophic). Hermetic shifts d10 −2, Chaotic +2, Shamanic 0, Ascendant skips. Reach (Surge or Hermetic) pushes the column up by one tier. Wyrdlens Discipline shifts the d10 down (better outcomes).",
+  concurrency: "Concurrency — count of sustained / bound manifestations active at once. No hard cap; soft-capped by Clarity needed to pay each tick's upkeep. Each point frees one entry's Clarity upkeep per tick — the Pactkeeper baseline frees pact-bound entries, technique concurrency frees any sustained entry.",
+  noise:       "Noise — metaphysical residue from Chaotic casts (+2 per cast). 0–10 pool, and it doesn't drop on its own; Scene Break shaves 1. Shamanic, Hermetic and Ascendant generate 0. BITE: every point is a flat −1 to your own cast rolls, and the band adds more — Humming (3+) −1 to Intrigue checks; Loud (5+) −2 and misfires roll one band worse; Screaming (8+) −3 and two bands worse, with Corruption / Lattice attention live at the GM's discretion.",
   bloodDebt:   "Blood Debt — separate ledger that catches up later. Accrued by Blood-Debt-reach (+1) and Ascendant casts (+1). High Blood Debt has narrative consequences set by the GM.",
-  workings:    "Workings vs Forms — Workings (instant) resolve and end. Forms (sustained / bound / enduring) persist and pay upkeep. Only Trad Caster Classes can manifest workings; non-TCCs are restricted to forms.",
+  workings:    "Workings vs Forms — Workings (instant) resolve and end. Forms (sustained / bound) persist and pay upkeep. Only Trad Caster Classes can manifest workings; non-TCCs are restricted to forms.",
   tccDiscount: "TCC discount — Trad Caster Classes pay 1 less Clarity per cast (floor 0). Stacks with mode shifts. Surfaces in the cost note when it fires.",
   lesser:      "Fiat (T0) — TCC-only spoken cue. Must begin with \"Let there be …\". No roll, no resource, no upkeep. The 'I light the candle with a thought' register. Always available.",
   sceneBreak:  "Scene Break — light recovery cadence. Refills Clarity to at least half max (round up), shaves 1 Noise. Universal — anyone can take one between scenes."
@@ -13520,11 +14737,12 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   const manTier = mf ? Math.max(1, Math.min(4, Number(mf.tier) || 1)) : stewardTier;
   const tierInfo = FT.MANIFESTATION_TIERS[manTier] ?? FT.MANIFESTATION_TIERS[1];
   const baseClarity = tierInfo.clarityCost;
-  const opCost = mf?.opCost ?? { pool: "", value: 0 };
   const bloodDebt = Number(sys?.bloodDebt?.value) || 0;
   const reachNeeded = manTier > stewardTier;
   const reachBy = manTier - stewardTier;
   const reachPossible = reachBy === 1; // Canon: reach only one tier above yours.
+  // Hermetic reach is for Workings only — a Form above tier stays inert (2026-11-08).
+  const _castIsWorking = !!item && ftManifestationModeLabel(item.system ?? {}, item.type === "weapon" ? "weapon" : "power") !== "Form";
   const stability = mf?.stability ?? "instant";
   const stabilityLabel = FT.MANIFESTATION_STABILITIES?.[stability]?.label ?? ftCap(stability);
 
@@ -13533,24 +14751,49 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
       `<option value="${k}"${k === current ? " selected" : ""}>${v.label}</option>`
     ).join("");
 
+  // Stances (Dave R11, 2026-11-08). Shamanic is the default. Each radio says what it costs and which action slots it
+  // uses; a stance whose slots are already spent this round is disabled (castManifestation refuses it too).
+  const _econ = _ftIsActionEconomyActive(actor);
+  const _acts = sys?.actions ?? {};
+  const _poolKey = { action: "actionUsed", bonus: "bonusUsed", reaction: "reactionUsed" };
+  const _poolLbl = { action: "Action", bonus: "Bonus action", reaction: "Reaction" };
+  const _stanceOpt = (key, text, extraDisabled = false, extraNote = "") => {
+    const pools = mf ? ftInvokePools(key, mf) : ftStanceConfig(key).pools ?? ["action"];
+    const spent = _econ ? pools.filter(p => _acts[_poolKey[p]]) : [];
+    const clar = item ? ftManifestationCostSpec(item.system ?? {}, item.type === "weapon" ? "weapon" : "power", { mode: key, actor }).clarity : baseClarity;
+    const dis = extraDisabled || spent.length > 0;
+    const uses = pools.length ? `uses your ${pools.map(p => _poolLbl[p]).join(" and ")}` : "free — no action";
+    return `<label class="ft-mode-opt${dis ? " is-disabled" : ""}"><input type="radio" name="castMode" value="${key}" ${key === _defStance ? "checked" : ""} ${dis ? "disabled" : ""}/>
+        <b>${ftStanceConfig(key).label}</b> <span>${clar} Clarity · ${text} · ${uses}${spent.length ? ` · <em>${spent.map(p => _poolLbl[p]).join(" and ")} spent</em>` : ""}${extraNote}</span></label>`;
+  };
+  // Default: Shamanic, unless its slot is spent and Chaotic's isn't.
+  const _stanceFree = (key) => !_econ || (mf ? ftInvokePools(key, mf) : (ftStanceConfig(key).pools ?? ["action"])).every(p => !_acts[_poolKey[p]]);
+  const _ascUnlocked = ftAscendantUnlocked(actor);
+  const _defStance = _stanceFree("shamanic") ? "shamanic" : (_stanceFree("chaos") ? "chaos" : "shamanic");
   const modeBlock = `
   <div class="ft-cast-field ft-cast-span-2">
-    <label title="${FT_KNOB_TIPS.misfire}">Mode (stance) — affects Clarity, Noise &amp; Misfire</label>
+    <label title="${FT_KNOB_TIPS.misfire}">Stance — affects Clarity, Noise, Misfire and which actions it uses</label>
     <div class="ft-mode-row">
-      <label class="ft-mode-opt"><input type="radio" name="castMode" value="hermetic" checked/>
-        <b>Hermetic</b> <span>+1 Clarity · no Noise · misfire d10 −2 · +1 action setup</span></label>
-      <label class="ft-mode-opt"><input type="radio" name="castMode" value="chaos"/>
-        <b>Chaos</b> <span>−1 Clarity · +2 Noise · misfire d10 +2 · fast</span></label>
-      <label class="ft-mode-opt"><input type="radio" name="castMode" value="ascendant" ${stewardTier < 3 ? "disabled" : ""}/>
-        <b>Ascendant</b> <span>+1 Blood Debt (in place of Clarity) · no Noise · no misfire${stewardTier < 3 ? " · <em>T3+ only</em>" : ""}</span></label>
+      ${_stanceOpt("shamanic", "0 Noise · normal misfire")}
+      ${_stanceOpt("hermetic", "0 Noise · misfire d10 −2 · can cast a Working one tier above you with no reach cost")}
+      ${_stanceOpt("chaos", "+2 Noise · misfire d10 +2 · +1 damage die this cast · Umbral: softer misfire, +1 Darkness")}
+      ${_stanceOpt("ascendant", "+1 Blood Debt · 0 Noise · no misfire · +1 damage die this cast", !_ascUnlocked, !_ascUnlocked ? ` · <em>${ftAscendantLockedText()}</em>` : "")}
     </div>
   </div>`;
 
-  const reachBlock = reachNeeded ? (reachPossible ? `
+  // A Form above your tier is inert (teeth P31): no reach radios — the cast is refused with the Strike's message.
+  const _formInert = reachNeeded && !!item && !_castIsWorking && !_ftIsFoeActor(actor);
+  const reachBlock = _formInert ? `
+  <div class="ft-cast-field ft-cast-span-2 ft-reach-block ft-reach-fail">
+    <label title="${FT_KNOB_TIPS.reach}">Inert</label>
+    <p class="ft-prev-align-note" style="color:#ff8a8a">This Form is T${manTier}; you are T${stewardTier}. A Form above your tier is inert in your hands until T${manTier} (level ${ftStewardTierLevel(manTier)}) — no Surge or Blood Debt reach.</p>
+  </div>` : reachNeeded ? (reachPossible ? `
   <div class="ft-cast-field ft-cast-span-2 ft-reach-block">
     <label title="${FT_KNOB_TIPS.reach}">Reach — this is <b>T${manTier}</b>, you are <b>T${stewardTier}</b></label>
     <div class="ft-mode-row">
-      <label class="ft-mode-opt"><input type="radio" name="reachPath" value="surge" checked/>
+      ${_castIsWorking ? `<label class="ft-mode-opt"><input type="radio" name="reachPath" value="hermetic" checked/>
+        <b>Hermetic</b> <span>no reach cost — needs the Hermetic stance above; misfire rolls on the T${manTier} column</span></label>` : ""}
+      <label class="ft-mode-opt"><input type="radio" name="reachPath" value="surge" ${_castIsWorking ? "" : "checked"}/>
         <b>Surge</b> <span>cast at T${manTier}; on failure, misfire rolls on the T${manTier} column</span></label>
       <label class="ft-mode-opt"><input type="radio" name="reachPath" value="bloodDebt" ${bloodDebt >= 0 ? "" : "disabled"}/>
         <b>Blood Debt</b> <span>+1 Blood Debt; clean cast at T${manTier}, no misfire</span></label>
@@ -13561,15 +14804,8 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     <p class="ft-prev-align-note" style="color:#ff8a8a">This is T${manTier} — more than one tier above your T${stewardTier}. You cannot reach this far.</p>
   </div>`) : "";
 
-  const opCostNote = (manTier === 4 && opCost?.value > 0)
-    ? `<div class="ft-prev-align-note"><b>Domain cost:</b> ${opCost.value} ${ftCap(opCost.pool || "op")} marks</div>`
-    : (manTier === 4 ? `<div class="ft-prev-align-note" style="color:#ff8a8a">T4 manifestation has no declared <code>opCost</code>. GM will adjudicate faction cost.</div>` : "");
-
-  // Cosmic Linguist — Resonance Channel section. Only renders when the
-  // caster is CL with at least 1 Resonance Die available. Each channel
-  // accepts dice (clamped to currently-available pool); aggressive use ticks
-  // Strain. Defense-impose + stabilize land as chat-announced GM-applied
-  // hooks for now (engine-side wiring is follow-on work).
+  // T4 Domain cost (opCost) retired 2026-11-08 — Dave: T4 costs the Steward like T1–T3.
+  // Cosmic Linguist Resonance Channels block removed 2026-11-08 (folded into Surge 2026-05-28).
   // AoE opts (Phase D 2026-05-08). Surfaced only when the manifestation
   // declares an area shape — otherwise the toggles are inert.
   const _hasArea = (() => {
@@ -13583,11 +14819,17 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     const mf = ftNormalizeManifestationData(item.system, item.type === "weapon" ? "weapon" : "power");
     return mf?.resolution?.shape === "save";
   })();
+  // Seeded from the item's "Target's owner rolls the save" box (teeth P36); the caster can still flip it per cast.
+  const _promptSeed = (() => {
+    if (!item?.system) return false;
+    const mf = ftNormalizeManifestationData(item.system, item.type === "weapon" ? "weapon" : "power");
+    return mf?.resolution?.saveByPrompt === true;
+  })();
   const aoeBlock = _hasArea ? `
   <div class="ft-cast-field ft-cast-span-2 ft-aoe-opts-block" data-tooltip="AoE controls — only visible when the manifestation declares an area shape.">
     ${_hasSaveShape ? `<label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d4ff;margin-bottom:0.2rem">
-      <input type="checkbox" name="useAoeSavePrompts" checked/>
-      <span>⚖ Prompt each target for their save (instead of GM-side rolls)</span>
+      <input type="checkbox" name="useAoeSavePrompts"${_promptSeed ? " checked" : ""}/>
+      <span>⚖ Post a Save card to each target's owner (off: the GM's seat rolls every save)</span>
     </label>` : ""}
     <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
       <input type="checkbox" name="aoeApplyConfirm" checked/>
@@ -13621,23 +14863,6 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     </label>
   </div>` : "";
 
-  const resonance = sys?.resources?.resonanceDice ?? { current: 0, max: 0 };
-  const resonanceBlock = (resonance.current > 0) ? `
-  <div class="ft-cast-field ft-cast-span-2 ft-cl-resonance-block" data-tooltip="Cosmic Linguist — Resonance Channels. Each die spent stacks one channel benefit on this cast. Aggressive use ticks Strain (forcing contradiction or misaligned power).">
-    <label style="color:#c8c8ff">✦ Resonance Channels — <b>${resonance.current}</b> / ${resonance.max} dice available</label>
-    <div class="ft-cast-grid" style="margin-top:0.3rem">
-      <div class="ft-cast-field" data-tooltip="+1 to the target's save/contest DC per die spent. Caster's cast roll is unaffected — only the target's resistance bar."><label>+Resolve DC</label><input type="number" name="resResolveDc" value="0" min="0" max="${resonance.current}"/></div>
-      <div class="ft-cast-field" data-tooltip="Append +1 damage die per die spent (same die size as the manifestation's damage roll)."><label>+Damage die</label><input type="number" name="resDamageDie" value="0" min="0" max="${resonance.current}"/></div>
-      <div class="ft-cast-field" data-tooltip="Bump the appliedStates duration one step per die (1-round → 2-rounds → 3-rounds → scene → until-saved)."><label>+Duration step</label><input type="number" name="resExtendDur" value="0" min="0" max="${resonance.current}"/></div>
-      <div class="ft-cast-field" data-tooltip="GM-applied: target rolls 3d10kl2 instead of 2d10x10 on a chosen defense for this cast. Announced in chat — apply at GM table."><label>Defense impose</label><input type="number" name="resDefenseImpose" value="0" min="0" max="${resonance.current}"/></div>
-      <div class="ft-cast-field" data-tooltip="GM-applied: this cast is stabilized vs counter/dispel. Announced in chat."><label>Stabilize</label><input type="number" name="resStabilize" value="0" min="0" max="${resonance.current}"/></div>
-      <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="Forcing contradiction or misaligned power: +1 Strain on this cast (caps 10).">
-        <input type="checkbox" name="resAggressive"/>
-        <span>Aggressive (+1 Strain on cast)</span>
-      </label></div>
-    </div>
-  </div>` : "";
-
   // Inline stat strip (playtest 2026-06-06) — vitals at the moment of casting.
   const _castStripChips = ftItemStatStrip(item);
   const _castStatStrip = _castStripChips.length
@@ -13651,7 +14876,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   <div class="ft-cast-header-row">
     <span class="ft-manifest-chip ft-tier-pill ft-tier-${manTier}">T${manTier} · ${tierInfo.label.replace(/^T\d\s/, "")}</span>
     <span class="ft-manifest-chip">${stabilityLabel}</span>
-    <span class="ft-manifest-chip" title="${FT_KNOB_TIPS.clarity}">Base ${baseClarity} Clarity</span>
+    <span class="ft-manifest-chip" title="${FT_KNOB_TIPS.clarity}">${ftEscapeHtml(item ? ftManifestationCostLabel(item.type === "weapon" ? "weapon" : "power", item.system ?? {}, { item }) : `T${manTier}: ${baseClarity} Clarity`)}</span>
     <span class="ft-manifest-chip ft-footprint">${tierInfo.footprint}</span>
   </div>
   ${_castStatStrip}
@@ -13659,8 +14884,8 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   <div class="ft-cast-grid">
     ${modeBlock}
     ${reachBlock}
-    <div class="ft-cast-field"><label>Intent</label>
-      <select name="intent">${mkOpts(FT.INTENTS, intent)}</select></div>
+    <div class="ft-cast-field" data-tooltip="${item ? "Set on the manifestation — it rolls and deals damage with this faculty." : "The faculty you roll with."}"><label>Intent</label>
+      <select name="intent"${item ? " disabled" : ""}>${mkOpts(FT.FACULTIES, intent)}</select></div>
     <div class="ft-cast-field"><label>Channel</label>
       <select name="channel">${mkOpts(FT.CHANNELS, channel)}</select></div>
     ${(() => { const _locked = !!ftStewardSephirah(actor);
@@ -13704,11 +14929,9 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
            − ${noise} <em>(Noise)</em>
     </div>
   </div>
-  ${opCostNote}
   ${aoeBlock}
   ${overlayBlock}
   ${dreamCacheBlock}
-  ${resonanceBlock}
   ${(signature || thirdThing) ? `
   <div class="ft-manifest-costbox">
     <div class="ft-prev-label">Identity of the manifestation</div>
@@ -13721,7 +14944,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
 function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 attrVal, skillVal, total, success,
                                 diceResults, damageFormula, damageType,
-                                damageFlavor = "",
+                                damageFlavor = "", damageTrack = "",
                                 damageFacultyMod = 0, damageBaseFormula = "",
                                 damageRolledTotal = 0, damageDiceTooltip = "",
                                 rolledParts = [],
@@ -13792,7 +15015,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
               data-formula="${applyFormula}"
               data-damage-type="${ftEscapeHtml(damageType ?? "")}"
               data-damage-flavor="${ftEscapeHtml(damageFlavor ?? "")}"
-              data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"${partsData}
+              data-track="${ftTrackForDamage(damageTrack, damageType)}"${partsData}
               data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}"
               data-ignore-resists="${ignoreResists ? "1" : "0"}"
               data-nonlethal="${nonlethal ? "1" : "0"}">
@@ -13845,20 +15068,19 @@ function buildAttackDialogHTML(actor, item) {
   const targetDerived = (targetActor?.system?.system ?? targetActor?.system)?.derived ?? {};
   const targetDefenses = {
     guard:    Number(targetDerived.guard?.value)    || 0,
-    evasion:  Number(targetDerived.evasion?.value)  || 0,
     resolve:  Number(targetDerived.resolve?.value)  || 0
   };
 
   // Phase 3 — flanking. Count same-disposition allies within reach of target;
-  // bonus = ally count (so 1 ally → +1, 2 allies → +2). Only applies for
-  // melee category — ranged shots don't get the same coordination benefit.
-  const isMelee = String(item?.system?.category ?? "").toLowerCase() === "melee";
+  // bonus = ally count (so 1 ally → +1, 2 allies → +2). Melee and Unarmed only
+  // (ftWeaponCategoryTraits) — ranged and thrown shots don't get the coordination benefit.
+  const isMelee = ftWeaponCategoryTraits(item?.system?.category).isMelee;
   const flank = (isMelee && targetActor) ? ftCountFlankers(actor, targetActor) : { count: 0, names: [] };
   const flankBonus = flank.count;
 
   // Weapon-driven defaults: skill via alias resolver (legacy "ranged"→firearms),
-  // intent from authored field, target defense from category (ranged→evasion).
-  const intent       = item?.system?.intent ?? "violence";
+  // intent from authored field, target defense from the damage (Stress → Resolve, else Guard — ftAttackDefenseFor).
+  const intent       = ftItemIntent(item, "violence");   // any of six; drives attack AND damage (2026-11-08)
   const resolvedSkill = ftResolveWeaponSkill(actor, item?.system?.skill, item?.system?.category);
   const preferredDefense = ftWeaponTargetDefense(item);
 
@@ -13870,7 +15092,8 @@ function buildAttackDialogHTML(actor, item) {
 
   // Defense options carry data-target-* so the render hook can live-fill the
   // value field when the user picks a different defense in the dropdown.
-  const defOpts = Object.entries(FT.DEFENSES).map(([k, v]) => {
+  // Guard or Resolve only (2026-11-08, teeth P05 — Evasion is retired as an attack target); defaults to the derived one.
+  const defOpts = Object.entries(FT.DEFENSES).filter(([k]) => k === "guard" || k === "resolve").map(([k, v]) => {
     const ownVal = derived[k]?.value ?? "?";
     const tgtVal = targetActor ? (targetDefenses[k] ?? "?") : null;
     const display = targetActor ? `${v.label} (target ${tgtVal} · self ${ownVal})` : `${v.label} (${ownVal})`;
@@ -13899,12 +15122,14 @@ function buildAttackDialogHTML(actor, item) {
     const label = v?.label || _ftSkillMasterLookup[k] || ftCap(String(k).replace(/_/g, " "));
     return `<option value="${k}" ${k === resolvedSkill ? "selected" : ""}>${label}</option>`;
   }).join("");
-  const intentOpts = Object.entries(FT.INTENTS).map(([k, v]) =>
+  const intentOpts = Object.entries(FT.FACULTIES).map(([k, v]) =>
     `<option value="${k}" ${k === intent ? "selected" : ""}>${v.label}</option>`
   ).join("");
   const costAssessment = item ? ftAssessManifestationCost(actor, item, "weapon") : null;
-  // A persistent Form pays once a scene: the box is pre-ticked until this scene's activation is paid (2026-11-08).
-  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost", defaultChecked: ftManifestationCostIsPerUse(item) || (ftIsManifestedForm(item) && !_ftFormPaidThisScene(item)) }) : "";
+  // A Form pays its tier Clarity (+ extra) every Strike when Instant, once a scene when it persists — locked on until
+  // paid (2026-11-08, teeth P18). A plain weapon's authored extra cost defaults on (the player may untick it).
+  const _mustPay = !!item && _ftStrikeMustPay(item);
+  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost", defaultChecked: _mustPay || ftManifestationCostIsPerUse(item), locked: _mustPay }) : "";
   const signature = item?.system?.manifestation?.signature ?? "";
   const thirdThing = item?.system?.manifestation?.thirdThing ?? "";
   const stewardTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
@@ -13912,7 +15137,7 @@ function buildAttackDialogHTML(actor, item) {
   const targetBanner = targetActor
     ? `<div class="ft-prev-align-note" style="margin:0 0 0.5rem;font-size:0.82rem">
          <b>Target:</b> ${ftEscapeHtml(targetActor.name)} —
-         G${targetDefenses.guard} · E${targetDefenses.evasion} · R${targetDefenses.resolve}
+         Guard ${targetDefenses.guard} · Resolve ${targetDefenses.resolve}
        </div>`
     : `<div class="ft-prev-align-note" style="margin:0 0 0.5rem;font-size:0.82rem;opacity:0.65">
          <b>Target:</b> none — defense values default to self.
@@ -13933,13 +15158,21 @@ function buildAttackDialogHTML(actor, item) {
       ).join("")}</div>`
     : "";
 
+  // A beneficial Form skips the attack (2026-11-08, teeth P15) — say so before Engage is pressed.
+  const benefBanner = (item && _ftStrikeIsBeneficial(item))
+    ? `<div class="ft-prev-align-note" style="margin:0 0 0.5rem;font-size:0.82rem;border-left:3px solid #5fb35f;padding:0.3rem 0.55rem">
+         <b style="color:#7fd07f">✦ Beneficial</b> — no attack roll. Its heal, wards and buffs land on your target${targetActor ? "" : " (with nothing targeted, on you)"}.
+       </div>`
+    : "";
+
   return `
 <div class="ft-cast-dialog" data-ft-flank-bonus="${flankBonus}">
   ${statStrip}
   ${targetBanner}
+  ${benefBanner}
   ${flankBanner}
   <div class="ft-cast-grid">
-    <div class="ft-cast-field"><label>Intent</label><select name="intent">${intentOpts}</select></div>
+    <div class="ft-cast-field" data-tooltip="Set on the weapon — it attacks and deals damage with this faculty."><label>Intent</label><select name="intent"${item ? " disabled" : ""}>${intentOpts}</select></div>
     <div class="ft-cast-field"><label>Skill</label><select name="skill">${skillOpts}</select></div>
     <div class="ft-cast-field"><label>Target defense</label><select name="defense">${defOpts}</select></div>
     <div class="ft-cast-field"><label>Defense value</label>
@@ -15583,7 +16816,11 @@ Hooks.once("init", function () {
     constants: FT,
     // Derived tier (2026-11-08): magnitudeTier(itemLike, kind) scores an item the way the Engine's
     // Review step does; isForm(item) = an Engine-made weapon; tierLevel(t) = the level that unlocks t.
-    manifestation: { magnitudeTier: ftManifestationMagnitudeTier, isForm: ftIsManifestedForm, tierLevel: ftStewardTierLevel },
+    manifestation: { magnitudeTier: ftManifestationMagnitudeTier, magnitude: ftManifestationMagnitude, magnitudeLine: ftMagnitudeLineText, isForm: ftIsManifestedForm, tierLevel: ftStewardTierLevel,
+      // 2026-11-08 (six foe powers + Ascendant): marks, miss retaliation, damage conversion, the Ascendant unlock.
+      applyMarks: ftApplyManifestationMarks, onMissRetaliation: ftOnMissRetaliation, outgoingDamageType: ftOutgoingDamageType,
+      attackedAtDisadvantage: ftAttackedAtDisadvantage, expireTurnStartMarks: ftExpireTurnStartMarks,
+      ascendantUnlocked: ftAscendantUnlocked, ASCENDANT_ENLIGHTENMENT: FT_ASCENDANT_ENLIGHTENMENT },
     items:   RfiItems,
     craft:   RfiCrafting,
     harvest: RfiHarvest,
@@ -16404,7 +17641,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
   game.fourththing.rolls.magicTest = async function (actor, {
     intent, channel, sephirah, label = "Manifestation", difficulty = 15,
-    costNote = "", signature = "", thirdThing = "",
+    costNote = "", signature = "", thirdThing = "", fallout = "", trigger = "",
     misfireTier, skipMisfire = false, modeMisfireBias = 0,
     target = null, restraintReduction = 0,
     item = null,
@@ -16464,7 +17701,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     // Sprint C: terrain resonance bonus
-    const terrain       = getTerrainMagicModifiers(actor);
+    const terrain       = getTerrainMagicModifiers(actor, sephirah);   // the cast's resolved sefirah (teeth P35)
     const terrainAlign  = terrain.alignBonus  ?? 0;
     const terrainNoise  = terrain.noiseBonus  ?? 0;
     const totalAlign    = alignMod + terrainAlign;
@@ -16591,7 +17828,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                                     total, difficulty, success, misfireData, diceResults,
                                     terrainLabel: terrain.terrainLabel,
                                     explosionDice, surgeBanked: explosions, doubleTen,
-                                    costNote, signature, thirdThing }) + restraintNote + (_castRadPen > 0
+                                    costNote, signature, thirdThing, fallout, trigger }) + restraintNote + (_castRadPen > 0
         ? `<p style="font-size:0.78rem;color:#7ec850;margin:0.2rem 0 0">☢ Radiation: −${_castRadPen} to cast</p>`
         : "") + (aeContribs.length
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${
@@ -16632,23 +17869,32 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // ── Roll: manifestation attack (post-cast resolution) ─────────────────────
   // Fires AFTER a successful cast check when the manifestation declares
   // resolution.shape="attack". 2d10x10 + intent + channel + AE adds vs the
-  // target's static defense (Guard/Evasion/Resolve). Misses skip the damage
+  // target's static defense (Guard or Resolve, from the damage). Misses skip the damage
   // path (narrative miss only). Misfire NEVER fires from this roll — cast-fail
   // and target-resist are intentionally distinct outcomes:
   //   cast fails  → misfire (Tree pushed back)
   //   attack misses → narrative glance (working manifested but didn't land)
+  // areaTargets (2026-11-08, teeth P14): an attack-shaped AREA cast rolls ONCE with no single target and compares that
+  // total against each caught target's own Guard / Resolve (+ allies' auras) — returns { total, results: [{ target,
+  // hit, defenseValue }] } and posts one card listing every hit and miss. A miss takes nothing.
   game.fourththing.rolls.resolveManifestationAttack = async function (actor, target, item, resolution = {}, {
-    intent = "intrigue", channel = "presence"
+    intent = "intrigue", channel = "presence", areaTargets = null
   } = {}) {
-    if (!actor || !target) return { hit: false, reason: "missing-actor-or-target" };
+    const _area = Array.isArray(areaTargets) ? areaTargets.filter(Boolean) : null;
+    if (!actor || (!target && !_area)) return { hit: false, reason: "missing-actor-or-target" };
     const sys  = actor.system?.system  ?? actor.system  ?? {};
-    const tSys = target.system?.system ?? target.system ?? {};
 
-    // Binary defenses (2026-11-07): an authored Guard / Resolve stands; "evasion" (the old default) and anything else resolve
-    // from the manifestation's damage track — Integrity → Guard, Stress → Resolve.
-    const _mfDmg = item?.system?.damageRoll ?? item?.system?.damage ?? {};
-    const attackVs = ["guard", "resolve"].includes(resolution.attackVs) ? resolution.attackVs : ftDefenseForDamage(_mfDmg.track, _mfDmg.type);
-    const defenseValue = (Number(tSys?.derived?.[attackVs]?.value) || 10) + auraDefenseBonus(target, attackVs);   // + allies' auras (2026-10-07)
+    // The defense is derived from the damage (2026-11-08, teeth P05 — Dave: "Migrate to guard. Fully derived"):
+    // Stress damage → Resolve, everything else → Guard; pool-row-only harm → Resolve. Never authored.
+    const attackVs = ftAttackDefenseFor(item);
+    // Restrained (2026-11-08, teeth P03): attacks against a Restrained target get +2 — taken off its defense here so an
+    // area roll (one total, many defenses) treats each target on its own.
+    const _restrainedOf = (t) => ((t?.system?.system ?? t?.system ?? {})?.conditions?.restrained === true) ? 2 : 0;
+    const _defOf = (t) => {
+      const ts = t?.system?.system ?? t?.system ?? {};
+      return (Number(ts?.derived?.[attackVs]?.value) || 10) + auraDefenseBonus(t, attackVs) - _restrainedOf(t);   // + allies' auras (2026-10-07)
+    };
+    const defenseValue = target ? _defOf(target) : null;
 
     // Base from SOURCE (2026-10-01) — the AE sweep below is the single
     // application of passives; AE-applied actor.system counted them twice.
@@ -16682,20 +17928,25 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const _maCbSum = _maCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
     for (const b of _maCb) aeContribs.push({ src: b.source, label: "attack", value: Number(b.bonus) || 0 });
     const totalBonus = intentVal + channelVal + aeIntent + aeChannel + _maCbSum;
-    const formula    = `${_ftXd10(actor)} + ${totalBonus}`;
+    // A single target under a Frame Drift mark (attackersDisadvantage, 2026-11-08): 3d10 keep lowest 2, no explosions.
+    // An area roll is one total against many defenses, so it rolls normally.
+    const _tgtMarkDis = !_area && !!target && ftAttackedAtDisadvantage(target);
+    const formula    = _tgtMarkDis ? `3d10kl2 + ${totalBonus}` : `${_ftXd10(actor)} + ${totalBonus}`;
     const roll       = new Roll(formula);
     await roll.evaluate();
 
     const dieResults    = roll.dice?.[0]?.results ?? [];
-    const explosions    = Math.max(0, dieResults.length - 2);
-    const baseDice      = dieResults.slice(0, 2).map(r => r.result);
-    const explosionVals = dieResults.slice(2).map(r => r.result);
+    // Disadvantage (3d10kl2) keeps two of three and never explodes — the third die is a drop, not an explosion.
+    const explosions    = _tgtMarkDis ? 0 : Math.max(0, dieResults.length - 2);
+    const baseDice      = _tgtMarkDis ? dieResults.filter(r => r.active !== false).map(r => r.result) : dieResults.slice(0, 2).map(r => r.result);
+    const explosionVals = _tgtMarkDis ? [] : dieResults.slice(2).map(r => r.result);
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
     consumeBankedBonus(actor, _maCb).catch(() => {});
 
     const total = roll.total;
-    const hit   = total >= defenseValue;
+    const areaResults = _area ? _area.map(t => { const dv = _defOf(t); return { target: t, defenseValue: dv, hit: total >= dv }; }) : null;
+    const hit   = _area ? areaResults.some(r => r.hit) : total >= defenseValue;
 
     const surgeNote = explosions > 0
       ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`
@@ -16709,16 +17960,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const headerColor = hit ? "#4fc3ff" : "#ff7b7b";   // CVD-safe: blue = success, coral = failure (words carry it too)
     const headerLabel = hit ? "HIT"     : "MISS";
+    const _areaList = areaResults
+      ? `<ul style="margin:0.2rem 0 0;padding-left:1.2rem;font-size:0.78rem">${areaResults.map(r => `<li>${ftEscapeHtml(r.target.name)} — ${ftCap(attackVs)} ${r.defenseValue}: <b>${r.hit ? "hit" : "miss"}</b></li>`).join("")}</ul>`
+      : "";
     const html = `<div class="fourththing-roll">
-      <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">⚔ ${ftEscapeHtml(item?.name ?? "Manifestation")} — ${headerLabel} vs ${ftEscapeHtml(target.name)}</span></div>
+      <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">⚔ ${ftEscapeHtml(item?.name ?? "Manifestation")} — ${areaResults ? `attack vs ${areaResults.length} in the area (${areaResults.filter(r => r.hit).length} hit)` : `${headerLabel} vs ${ftEscapeHtml(target.name)}`}</span></div>
       <div class="ft-result-row ${hit ? "ft-success" : "ft-failure"}">
         <span class="ft-total">${total}</span>
-        <span class="ft-outcome">vs ${ftCap(attackVs)} ${defenseValue}</span>
-      </div>
+        <span class="ft-outcome">${areaResults ? `vs each target's ${ftCap(attackVs)}` : `vs ${ftCap(attackVs)} ${defenseValue}`}</span>
+      </div>${_areaList}
       <p style="font-size:0.78rem;opacity:0.85;margin:0.2rem 0 0">
-        Roll: ${baseDice.join(", ")}${explodeTail} + ${totalBonus} (${ftCap(intent)} + ${ftCap(channel)})${surgeNote}
+        Roll: ${baseDice.join(", ")}${explodeTail} + ${totalBonus} (${ftCap(intent)} + ${ftCap(channel)})${surgeNote}${_tgtMarkDis ? ` · <span style="color:#ff9b9b">disadvantage — ${ftEscapeHtml(target.name)} is hard to pin down (3d10 keep lowest 2)</span>` : ""}
       </p>
       ${hit ? "" : `<p style="font-size:0.78rem;opacity:0.7;margin:0.2rem 0 0;font-style:italic">The working manifested, but the moment glanced off. (No misfire — cast was clean.)</p>`}
+      ${(areaResults ?? (target ? [{ target }] : [])).some(r => _restrainedOf(r.target)) ? `<p style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Restrained: +2 to the attack against ${(areaResults ?? [{ target }]).filter(r => _restrainedOf(r.target)).map(r => ftEscapeHtml(r.target.name)).join(", ")} (shown as defense −2)</p>` : ""}
       ${aeNote}
     </div>`;
 
@@ -16727,42 +17982,25 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       flavor:  html
     });
 
-    return { hit, total, defenseValue, explosions };
+    // Miss retaliation marks (2026-11-08): each target this attack missed — Spark Vow on the attacker, Frame Drift on the
+    // one missed.
+    try {
+      const _missed = areaResults ? areaResults.filter(r => !r.hit).map(r => r.target) : (!hit && target ? [target] : []);
+      for (const m of _missed) await ftOnMissRetaliation(actor, m);
+    } catch (e) { console.warn("[fourththing] manifestation miss retaliation failed", e); }
+
+    return { hit, total, defenseValue, explosions, attackVs, results: areaResults };
   };
 
-  // ── Roll: manifestation save (post-cast resolution) ───────────────────────
-  // Fires AFTER a successful cast check when the manifestation declares
-  // resolution.shape="save". Target rolls 2d10x10 + saveAttribute (with AE
-  // adds on the target's side) vs the cast DC (or a fixed override). On
-  // success, the caller halves or negates the damage application per the
-  // resolution.onSave field. Misfire NEVER fires from this roll — same canon
-  // as attack-shape (cast-fail and target-resist are distinct outcomes).
-  //
-  // Pilot model (2026-05-05): GM auto-rolls FOR the target. Future flag
-  // `saveByPrompt: true` will route to a target-clicks-button chat card.
-  game.fourththing.rolls.resolveManifestationSave = async function (actor, target, item, resolution = {}, {
-    castDc = 15,
-    channel = null,
-    rollOverride = null
-  } = {}) {
-    if (!actor || !target) return { saved: false, reason: "missing-actor-or-target" };
-    const sys = target.system?.system ?? target.system ?? {};
-
-    const validAttrs = ["violence", "intrigue", "presence", "body", "mind", "soul"];
-    const saveAttr   = validAttrs.includes(resolution.saveAttribute) ? resolution.saveAttribute : "body";
-    const dcMode     = resolution.saveDcMode === "fixed" ? "fixed" : "cast-dc";
-    // Non-fixed mode = the formula ladder. Tier from the item's manifestation
-    // block when present; otherwise back-derived from the tiered cast DC.
-    const _mfTier    = Number((item?.system?.system ?? item?.system)?.manifestation?.tier)
-      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
-    const dc         = ftSaveDCFor(actor, resolution, _mfTier, channel);   // a Steward's DC is the ladder, never a typed number (2026-11-08)
-    const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
-
-    // Base from the target's SOURCE (2026-10-01) — the AE sweep below adds
-    // the passives exactly once.
-    const attrVal = Number(ftSourceSystem(target)?.attributes?.[saveAttr]?.value) || 0;
-
-    // AE adds on the SAVE attribute (target side, since target is rolling).
+  // ── Target-side resist roll (2026-11-08, teeth P13) ───────────────────────
+  // The one roll a manifestation's TARGET makes to resist it — a save or its side of a contest — with the full
+  // modifier pipeline: AE adds on the faculty, Surge one-shots (Iron Word auto-pass, wrath / cinder formula mods),
+  // Aurablade Dread disadvantage + Resolve auto-succeed, the caster's CL Sentence, Imposed (consumed), Darkness
+  // (Soul) and Strain penalties, defense / save rerolls, and Surge banked from explosions. _ftTargetResistFinish
+  // settles the outcome: Human Adaptive flips a failure, on-save-success / on-save-fail triggers, Hard Lessons,
+  // Pressure Tested and the Aurablade use count. The caller posts the card, then consumes the Surge one-shots.
+  const _ftTargetResistRoll = async (caster, target, attr, { rollOverride = null } = {}) => {
+    const attrVal = Number(ftSourceSystem(target)?.attributes?.[attr]?.value) || 0;
     const aeContribs = [];
     let aeAttr = 0;
     for (const effect of target.appliedEffects ?? []) {
@@ -16772,99 +18010,66 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (change.type !== "add" || !change.key?.endsWith(".value")) continue;
         const v = Number(change.value) || 0;
         if (!v) continue;
-        if (change.key === `system.attributes.${saveAttr}.value`) {
-          aeAttr += v;
-          aeContribs.push({ src, label: saveAttr, value: v });
-        }
+        if (change.key === `system.attributes.${attr}.value`) { aeAttr += v; aeContribs.push({ src, label: attr, value: v }); }
       }
     }
-
-    // Surge one-shots on the TARGET (the actor rolling the save). Iron Word
-    // auto-passes; wrath-cascade / cinderwake mutate the formula.
-    const _saveSurge = _ftReadSurgeOneShots(target, { context: "save" });
-
-    // Aurablade one-shots on the TARGET (the actor rolling the save):
-    //  · Dread "Disadvantage on Saves" AE → force 3d10kl2 (persists 1 round).
-    //  · Resolve "Auto-Succeed One Save" → auto-pass if the save attr matches.
-    const _abDisSaves = (target.appliedEffects ?? target.effects ?? []).some(
-      e => !e.disabled && e.flags?.fourththing?.aurablade?.disSavesAll);
-    const _abAutoSave = target.flags?.fourththing?.aurablade?.oneShot?.autoSucceedSave;
-    const _abAutoHit  = !!_abAutoSave && Array.isArray(_abAutoSave.attrs)
-      && _abAutoSave.attrs.includes(saveAttr) && (Number(_abAutoSave.uses) || 0) > 0;
-
+    // Surge one-shots on the TARGET (the roller). Iron Word auto-passes; wrath-cascade / cinderwake mutate the formula.
+    const saveSurge = _ftReadSurgeOneShots(target, { context: "save" });
+    // Aurablade on the TARGET: Dread "Disadvantage on Saves" AE → 3d10kl2; Resolve "Auto-Succeed One Save" (attr match).
+    const abDisSaves = (target.appliedEffects ?? target.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.aurablade?.disSavesAll);
+    const abAutoSave = target.flags?.fourththing?.aurablade?.oneShot?.autoSucceedSave;
+    const abAutoHit  = !!abAutoSave && Array.isArray(abAutoSave.attrs) && abAutoSave.attrs.includes(attr) && (Number(abAutoSave.uses) || 0) > 0;
     const totalBonus = attrVal + aeAttr;
-    // CL Resonance Channel defenseImpose OR Aurablade Dread → 3d10kl2 (3 dice,
-    // keep lowest 2) instead of 2d10x10. Worse expected total, no explosions.
-    // Cosmic Linguist — The Sentence: while the caster holds the stance, the
-    // primary target rolls its save vs the caster's manifestation at disadvantage
-    // ("bound by name"). Caster = `actor` here. Simplification: applies to all of
-    // the caster's manifestation saves while held, not a single named target.
-    const _clSentence = !!actor?.flags?.fourththing?.modes?.clSentence;
+    // Cosmic Linguist — The Sentence: while the caster holds the stance, its targets resist at disadvantage.
+    const clSentence = !!caster?.flags?.fourththing?.modes?.clSentence;
     // Imposed (techniques R5, 2026-09-21): forces 3d10kl2 on this defense check; consumed by it.
-    const _imposedSave = !!game.fourththing.impose?.isImposed?.(target);
-    if (_imposedSave) { try { await game.fourththing.impose.consume(target, "defense"); } catch (_e) {} }
-    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence || _imposedSave) ? "3d10kl2" : rollOverride;
-    // Descent D2 — Nadir+ personal Darkness bites Soul-defense rolls
-    // (FT.DARKNESS_BITE.soulSavePenalty, spec §1.2). Target side: the roller.
-    const _dkSavePen = saveAttr === "soul" ? (Number(_ftDarknessBite(target)?.soulSavePenalty) || 0) : 0;
-    const _strainSavePen = _ftStrainBite(target).rollPenalty;
-    const totalBonusEff = totalBonus - _dkSavePen - _strainSavePen;
-    let formula      = effOverride === "3d10kl2"
-      ? `3d10kl2 + ${totalBonusEff}`
-      : `${_ftXd10(target)} + ${totalBonusEff}`;
-    // 3d10kl2 path doesn't explode, so wrath/cinder modifiers are skipped.
-    if (effOverride !== "3d10kl2") {
-      formula = _ftApplySurgeRollMods(formula, _saveSurge);
-    }
-    const roll       = new Roll(formula);
+    const imposed = !!game.fourththing.impose?.isImposed?.(target);
+    if (imposed) { try { await game.fourththing.impose.consume(target, "defense"); } catch (_e) {} }
+    const effOverride = (rollOverride === "3d10kl2" || abDisSaves || clSentence || imposed) ? "3d10kl2" : rollOverride;
+    // Descent D2 — Nadir+ personal Darkness bites Soul-defense rolls; Strain bites every roll.
+    const dkPen = attr === "soul" ? (Number(_ftDarknessBite(target)?.soulSavePenalty) || 0) : 0;
+    const strainPen = _ftStrainBite(target).rollPenalty;
+    const totalBonusEff = totalBonus - dkPen - strainPen;
+    let formula = effOverride === "3d10kl2" ? `3d10kl2 + ${totalBonusEff}` : `${_ftXd10(target)} + ${totalBonusEff}`;
+    if (effOverride !== "3d10kl2") formula = _ftApplySurgeRollMods(formula, saveSurge);
+    const roll = new Roll(formula);
     await roll.evaluate();
-
-    // Techniques R4 (2026-09-21): "defense" / "save" reroll grants on the TARGET
-    // (Anchor Point, Grave Calm, Darkness Hardened, Ironclad Training, Hard
-    // Lessons, banked rerolls …). Skipped on the 3d10kl2 path — keep-lowest
-    // pools don't reroll.
-    let _defRerollNote = "";
+    // Techniques R4: "defense" / "save" reroll grants on the TARGET. Skipped on keep-lowest pools.
+    let rerollNote = "";
     if (effOverride !== "3d10kl2") {
       try {
-        const _defGrants = collectRerolls(target, { context: "defense", attribute: saveAttr });
-        const _defRes    = await _ftApplyRerollsSafe(roll, _defGrants);
-        await consumeAidReroll(target, _defRes.applied);
-        if (_defRes.applied.length) {
-          _defRerollNote = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${_defRes.applied.map(a => `${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})`).join(", ")}</p>`;
+        const grants = collectRerolls(target, { context: "defense", attribute: attr });
+        const res    = await _ftApplyRerollsSafe(roll, grants);
+        await consumeAidReroll(target, res.applied);
+        if (res.applied.length) {
+          rerollNote = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${res.applied.map(a => `${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})`).join(", ")}</p>`;
         }
       } catch (_e) { console.warn("Roll for Initiation | defense reroll grants failed", _e); }
     }
-
     const dieResults    = roll.dice?.[0]?.results ?? [];
     const explosions    = Math.max(0, dieResults.length - 2);
     const baseDice      = dieResults.slice(0, 2).map(r => r.result);
     const explosionVals = dieResults.slice(2).map(r => r.result);
-
-    // Target banks Surge from explosions — they're the active roller.
-    if (explosions > 0) await _ftBankSurge(target, explosions);
-
-    const total = roll.total;
-    // Human Adaptive — "when you fail a saving throw, choose to succeed" (1/SB
-    // one-shot armed on the saver). Only flips an actual failure; consumed then.
-    const _adaptive = !!target.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave;
-    const _adaptiveApplies = _adaptive && !(_saveSurge.ironWord || _abAutoHit) && total < dc;
-    if (_adaptiveApplies) {
+    if (explosions > 0) await _ftBankSurge(target, explosions);   // the target is the active roller
+    const notesHtml = `${imposed ? `<p style="font-size:0.74rem;color:#b04a8a;margin:0.15rem 0 0">Imposed — rolled 3d10 keep-lowest-2.</p>` : ""}${strainPen ? `<p style="font-size:0.74rem;color:#c47a3a;margin:0.15rem 0 0">Strain −${strainPen}</p>` : ""}${rerollNote}`;
+    return { roll, total: roll.total, totalBonus, baseDice, explosionVals, explosions, aeContribs, saveSurge, abAutoSave, abAutoHit, notesHtml };
+  };
+  const _ftTargetResistFinish = async (caster, target, attr, r, rawPass, { channel = null, dc = null } = {}) => {
+    // Human Adaptive — "when you fail a saving throw, choose to succeed" (1/SB one-shot). Only flips a failure.
+    const adaptive = !!target.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave;
+    const adaptiveApplies = adaptive && !(r.saveSurge.ironWord || r.abAutoHit) && !rawPass;
+    if (adaptiveApplies) {
       try { await target.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); }
       catch (_e) { /* non-owner — clears on round commit */ }
     }
-    // Iron Word OR Aurablade Resolve OR Human Adaptive auto-succeed: override DC.
-    const saved = (_saveSurge.ironWord || _abAutoHit || _adaptiveApplies) ? true : (total >= dc);
-    // 2026-10-07 (regimen pass 7): the saver's on-save-fail / on-save-success triggers (payload target = the caster).
-    try { await fireTriggers(target, saved ? "on-save-success" : "on-save-fail", { tags: [saveAttr, channel].filter(Boolean), scope: "self", target: actor, total, dc }); } catch (_e) {}
-    // Hard Lessons (technique): a failed defense check arms reroll-lowest on the
-    // defense checks you make before the end of your next turn (round-scoped —
-    // collectRerolls reads the flag; nothing to clear).
+    const saved = (r.saveSurge.ironWord || r.abAutoHit || adaptiveApplies) ? true : !!rawPass;
+    try { await fireTriggers(target, saved ? "on-save-success" : "on-save-fail", { tags: [attr, channel].filter(Boolean), scope: "self", target: caster, total: r.total, dc }); } catch (_e) {}
+    // Hard Lessons (technique): a failed defense check arms reroll-lowest until the end of your next turn.
     if (!saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_hard_lessons")) {
       try { await target.setFlag("fourththing", "hardLessons", { round: Number(game.combat?.round ?? 0), at: Date.now() }); } catch (_e) {}
     }
-    // Pressure Tested (technique): succeed on a defense check → bank a
-    // reroll-lowest (the "ignore the effect entirely" fork stays with the GM).
-    // Once per Scene Break (perUse scene cadence).
+    // Pressure Tested (technique): succeed on a defense check → bank a reroll-lowest. Once per Scene Break.
+    let note = "";
     if (saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_pressure_tested")
         && !target.flags?.fourththing?.perUse?.bbttcc_feat_pressure_tested) {
       try {
@@ -16874,72 +18079,98 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           "flags.fourththing.aidBanked": _pb,
           "flags.fourththing.perUse.bbttcc_feat_pressure_tested": { cad: "scene", sceneId: canvas?.scene?.id ?? "none", round: Number(game.combat?.round ?? 0), day: new Date().toDateString(), at: Date.now() }
         });
-        _defRerollNote += `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Pressure Tested — a reroll is banked for ${ftEscapeHtml(target.name)}'s next roll (or the GM lets them ignore the effect).</p>`;
+        note = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Pressure Tested — a reroll is banked for ${ftEscapeHtml(target.name)}'s next roll (or the GM lets them ignore the effect).</p>`;
       } catch (_e) {}
     }
-    if (_abAutoHit) {
-      const _left = (Number(_abAutoSave.uses) || 1) - 1;
-      if (_left > 0) await target.update({ "flags.fourththing.aurablade.oneShot.autoSucceedSave.uses": _left });
-      else           await target.update({ "flags.fourththing.aurablade.oneShot.-=autoSucceedSave": null });
+    if (r.abAutoHit) {
+      const left = (Number(r.abAutoSave.uses) || 1) - 1;
+      if (left > 0) await target.update({ "flags.fourththing.aurablade.oneShot.autoSucceedSave.uses": left });
+      else          await target.update({ "flags.fourththing.aurablade.oneShot.-=autoSucceedSave": null });
     }
+    return { saved, note };
+  };
 
-    const surgeNote = explosions > 0
-      ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`
+  // ── Roll: manifestation save (post-cast resolution) ───────────────────────
+  // Fires AFTER a successful cast check when the manifestation declares
+  // resolution.shape="save" (or a hit save — resolution.hitSave). Target rolls 2d10x10 + saveAttribute with the full
+  // target-side pipeline (_ftTargetResistRoll) vs ftSaveDCFor. On a pass the caller stops the states and halves or
+  // negates the damage per resolution.onSave. Misfire NEVER fires from this roll — cast-fail and target-resist are
+  // distinct outcomes. `passLabel` overrides the card's "on a pass" words (a hit save: "no conditions").
+  game.fourththing.rolls.resolveManifestationSave = async function (actor, target, item, resolution = {}, {
+    castDc = 15,
+    channel = null,
+    rollOverride = null,
+    passLabel = null
+  } = {}) {
+    if (!actor || !target) return { saved: false, reason: "missing-actor-or-target" };
+
+    const validAttrs = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+    const saveAttr   = validAttrs.includes(resolution.saveAttribute) ? resolution.saveAttribute : "body";
+    // Non-fixed mode = the formula ladder. Tier from the item's manifestation
+    // block when present; otherwise back-derived from the tiered cast DC.
+    const _mfTier    = Number((item?.system?.system ?? item?.system)?.manifestation?.tier)
+      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
+    const dc         = ftSaveDCFor(actor, resolution, _mfTier, channel);   // a Steward's DC is the ladder, never a typed number (2026-11-08)
+    const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
+
+    const r = await _ftTargetResistRoll(actor, target, saveAttr, { rollOverride });
+    const total = r.total;
+    const fin = await _ftTargetResistFinish(actor, target, saveAttr, r, total >= dc, { channel, dc });
+    const saved = fin.saved;
+
+    const surgeNote = r.explosions > 0
+      ? ` <span style="color:#e8c84a;font-weight:600">+${r.explosions} Surge banked</span>`
       : "";
-    const explodeTail = explosionVals.length
-      ? ` <span style="color:#e8c84a">+ ${explosionVals.join(", ")}</span>`
+    const explodeTail = r.explosionVals.length
+      ? ` <span style="color:#e8c84a">+ ${r.explosionVals.join(", ")}</span>`
       : "";
-    const aeNote = aeContribs.length
-      ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</p>`
+    const aeNote = r.aeContribs.length
+      ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${r.aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</p>`
       : "";
 
     const headerColor      = saved ? "#4fc3ff" : "#ff7b7b";
     const headerLabel      = saved ? "RESISTED" : "FAILED SAVE";
     const consequenceLabel = saved
-      ? (onSave === "negate" ? "no effect" : "halved")
+      ? (passLabel ?? (onSave === "negate" ? "no effect" : "half damage, no conditions"))
       : "full effect";
 
     const html = `<div class="fourththing-roll">
       <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">🛡 ${ftEscapeHtml(target.name)} — ${ftCap(saveAttr)} save vs ${ftEscapeHtml(item?.name ?? "Manifestation")}: ${headerLabel}</span></div>
-      ${_imposedSave ? `<p style="font-size:0.74rem;color:#b04a8a;margin:0.15rem 0 0">Imposed — rolled 3d10 keep-lowest-2.</p>` : ""}${_strainSavePen ? `<p style="font-size:0.74rem;color:#c47a3a;margin:0.15rem 0 0">Strain −${_strainSavePen}</p>` : ""}${_defRerollNote}
+      ${r.notesHtml}${fin.note}
       <div class="ft-result-row ${saved ? "ft-success" : "ft-failure"}">
         <span class="ft-total">${total}</span>
         <span class="ft-outcome">vs DC ${dc} → ${consequenceLabel}</span>
       </div>
       <p style="font-size:0.78rem;opacity:0.85;margin:0.2rem 0 0">
-        Roll: ${baseDice.join(", ")}${explodeTail} + ${totalBonus} (${ftCap(saveAttr)})${surgeNote}
+        Roll: ${r.baseDice.join(", ")}${explodeTail} + ${r.totalBonus} (${ftCap(saveAttr)})${surgeNote}
       </p>
       ${aeNote}
-      ${_ftSurgeBoostBanner(_saveSurge)}
+      ${_ftSurgeBoostBanner(r.saveSurge)}
     </div>`;
 
-    await roll.toMessage({
+    await r.roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: target }),
       flavor:  html
     });
 
     // Consume Surge one-shots on save (iron-word, wrath, cinder).
-    await _ftConsumeSurgeOneShots(target, _saveSurge, { context: "save" });
+    await _ftConsumeSurgeOneShots(target, r.saveSurge, { context: "save" });
 
-    return { saved, total, dc, onSave, explosions };
+    return { saved, total, dc, onSave, explosions: r.explosions };
   };
 
   // ── Roll: manifestation contest (post-cast resolution) ────────────────────
-  // Both sides roll 2d10x10 + their respective bonus; higher total wins. Ties
-  // go to the target (defensive bias — "your working tried, theirs held"). On
-  // target win, damage halves or negates per resolution.onContestLoss. Both
-  // sides bank Surge from their own explosions. Misfire NEVER fires from this
-  // roll — same canon as attack and save.
+  // Both sides roll 2d10x10 + their bonus; higher total wins, ties go to the target (defensive bias). A target win is
+  // a passed save (2026-11-08, teeth P13 — Dave: "Yes same rules"): no states, no chain; the damage halves or
+  // negates per resolution.onContestLoss. Both sides use the full modifier pipeline: the caster's AE adds, flat
+  // attack bonuses (collectCheckBonuses, context attack) and Strain; the target's side is _ftTargetResistRoll (the
+  // save's pipeline — Iron Word / Aurablade / Adaptive count as winning). Misfire NEVER fires from this roll.
   //
-  // Caster bonus: "intent+channel" shorthand uses both cast attributes; any
-  // single faculty name (e.g. "violence") uses just that one. AE adds on the
-  // chosen attribute(s) are walked for both sides.
+  // Caster bonus: "intent+channel" shorthand uses both cast attributes; any single faculty name uses just that one.
   game.fourththing.rolls.resolveManifestationContest = async function (actor, target, item, resolution = {}, {
     intent = "intrigue", channel = "presence"
   } = {}) {
     if (!actor || !target) return { casterWins: false, reason: "missing-actor-or-target" };
-    const cSys = actor.system?.system  ?? actor.system  ?? {};
-    const tSys = target.system?.system ?? target.system ?? {};
 
     const validAttrs = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 
@@ -16955,7 +18186,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const onContestLoss = ["negate", "half"].includes(resolution.onContestLoss) ? resolution.onContestLoss : "negate";
 
     // ─ Caster's roll ────────────────────────────────────────────────────────
-    // Bases from SOURCE on both sides (2026-10-01) — the AE sweeps add passives once.
+    // Bases from SOURCE (2026-10-01) — the AE sweep adds passives once.
     const _cSrc = ftSourceSystem(actor);
     const cBaseAttr = cKeys.reduce((sum, k) => sum + (Number(_cSrc?.attributes?.[k]?.value) || 0), 0);
     const cAEContribs = [];
@@ -16975,9 +18206,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         }
       }
     }
-    const cBonus  = cBaseAttr + cAE;
+    // Flat attack bonuses (passives.checkBonus context attack, auras, banked) and Strain — as on an attack (2026-11-08).
+    const _cCb = collectCheckBonuses(actor, { context: "attack", attribute: cKeys[0] ?? intent, target });
+    const _cCbSum = _cCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+    for (const b of _cCb) cAEContribs.push({ src: b.source, label: "attack", value: Number(b.bonus) || 0 });
+    const _cStrain = _ftStrainBite(actor).rollPenalty;
+    if (_cStrain) cAEContribs.push({ src: "Strain", label: "roll", value: -_cStrain });
+    const cBonus  = cBaseAttr + cAE + _cCbSum - _cStrain;
     const cRoll   = new Roll(`${_ftXd10(actor)} + ${cBonus}`);
     await cRoll.evaluate();
+    consumeBankedBonus(actor, _cCb).catch(() => {});
     const cDie    = cRoll.dice?.[0]?.results ?? [];
     const cExplos = Math.max(0, cDie.length - 2);
     const cBase   = cDie.slice(0, 2).map(r => r.result);
@@ -16985,35 +18223,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (cExplos > 0) await _ftBankSurge(actor, cExplos);
     const cTotal = cRoll.total;
 
-    // ─ Target's roll ────────────────────────────────────────────────────────
-    const tBaseAttr = Number(ftSourceSystem(target)?.attributes?.[tKey]?.value) || 0;
-    const tAEContribs = [];
-    let tAE = 0;
-    for (const effect of target.appliedEffects ?? []) {
-      if (effect.disabled) continue;
-      const src = effect.parent?.name ?? effect.name ?? "Passive";
-      for (const change of effect.changes ?? []) {
-        if (change.type !== "add" || !change.key?.endsWith(".value")) continue;
-        const v = Number(change.value) || 0;
-        if (!v) continue;
-        if (change.key === `system.attributes.${tKey}.value`) {
-          tAE += v;
-          tAEContribs.push({ src, label: tKey, value: v });
-        }
-      }
-    }
-    const tBonus  = tBaseAttr + tAE;
-    const tRoll   = new Roll(`${_ftXd10(target)} + ${tBonus}`);
-    await tRoll.evaluate();
-    const tDie    = tRoll.dice?.[0]?.results ?? [];
-    const tExplos = Math.max(0, tDie.length - 2);
-    const tBase   = tDie.slice(0, 2).map(r => r.result);
-    const tTail   = tDie.slice(2).map(r => r.result);
-    if (tExplos > 0) await _ftBankSurge(target, tExplos);
-    const tTotal = tRoll.total;
-
-    // Tie → target wins. Strict greater-than for caster.
-    const casterWins = cTotal > tTotal;
+    // ─ Target's roll — the save's full pipeline ────────────────────────────
+    const tr = await _ftTargetResistRoll(actor, target, tKey);
+    const tTotal = tr.total;
+    // Tie → target wins. Iron Word / Aurablade auto-succeed / Human Adaptive win it outright, as on a save.
+    const tFin = await _ftTargetResistFinish(actor, target, tKey, tr, tTotal >= cTotal, { channel, dc: cTotal });
+    const casterWins = !tFin.saved;
 
     // ─ Combined chat card ───────────────────────────────────────────────────
     const renderSide = (label, base, tail, bonus, total, attrLabel, explos, aeContribs) => {
@@ -17037,27 +18252,31 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const headerLabel = casterWins ? "CASTER WINS" : "TARGET RESISTS";
     const consequence = casterWins
       ? "full effect"
-      : (onContestLoss === "negate" ? "no effect" : "halved");
+      : (onContestLoss === "negate" ? "no effect" : "half damage, no conditions");
+    const _tAuto = !casterWins && tTotal < cTotal;   // won by Iron Word / Aurablade / Adaptive, not the dice
 
     const html = `<div class="fourththing-roll">
       <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">🤝 ${ftEscapeHtml(item?.name ?? "Manifestation")} — Contested vs ${ftEscapeHtml(target.name)}: ${headerLabel}</span></div>
       <div class="ft-result-row ${casterWins ? "ft-success" : "ft-failure"}">
         <span class="ft-total">${cTotal} vs ${tTotal}</span>
-        <span class="ft-outcome">→ ${consequence}${cTotal === tTotal ? " (tie → target)" : ""}</span>
+        <span class="ft-outcome">→ ${consequence}${cTotal === tTotal ? " (tie → target)" : ""}${_tAuto ? " (resisted outright)" : ""}</span>
       </div>
       ${renderSide(actor.name, cBase, cTail, cBonus, cTotal, cKeyLabels, cExplos, cAEContribs)}
-      ${renderSide(target.name, tBase, tTail, tBonus, tTotal, ftCap(tKey), tExplos, tAEContribs)}
+      ${renderSide(target.name, tr.baseDice, tr.explosionVals, tr.totalBonus, tTotal, ftCap(tKey), tr.explosions, tr.aeContribs)}
+      ${tr.notesHtml}${tFin.note}
+      ${_ftSurgeBoostBanner(tr.saveSurge)}
     </div>`;
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       content: html,
-      rolls:   [cRoll, tRoll]
+      rolls:   [cRoll, tr.roll]
     });
+    await _ftConsumeSurgeOneShots(target, tr.saveSurge, { context: "save" });
 
     return {
       casterWins, casterTotal: cTotal, targetTotal: tTotal,
-      onContestLoss, casterExplosions: cExplos, targetExplosions: tExplos
+      onContestLoss, casterExplosions: cExplos, targetExplosions: tr.explosions
     };
   };
 
@@ -17098,6 +18317,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                   <div class="ft-misfire-box standalone">
                     <span class="ft-misfire-label">⚡ Misfire ${biased}${totalShift !== 0 ? ` <span style="opacity:0.5">(d10 ${roll.total})</span>` : ""} — ${result.name} <span style="opacity:0.6">(T${result.tier})</span></span>
                     <p class="ft-misfire-desc">${result.desc}</p>
+                    ${String(item?.system?.manifestation?.riskText ?? "").trim() ? `<p class="ft-misfire-desc" style="opacity:0.85"><b>Fallout (GM colour):</b> ${ftEscapeHtml(String(item.system.manifestation.riskText).trim())}</p>` : ""}
                     ${shiftNote}
                   </div></div>`
     });
@@ -17110,7 +18330,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   game.fourththing.rolls.attackTest = async function (actor, {
     intent = "violence", skill = "melee", defense = "guard",
     defenseValue = 14, label = "Strike", damageFormula = "", damageType = "kinetic",
-    damageFlavor = "",
+    damageFlavor = "", damageTrack = "",
     damageParts = [],
     costNote = "", signature = "", thirdThing = "",
     target = null, restraintReduction = 0,
@@ -17119,6 +18339,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     rollMode = "normal",
     itemUuid = ""
   } = {}) {
+    // Intent = attack AND damage faculty (2026-11-08): any of the six, Violence when unset/unknown.
+    intent = FT_FACULTY_KEYS.includes(String(intent ?? "").toLowerCase()) ? String(intent).toLowerCase() : "violence";
+    // Damage conversion marks on the striker (2026-11-08, Hammer-Bright Ward: kinetic → electrical) — the primary and every
+    // additional part; the landing track follows the new type.
+    {
+      const _cv = ftOutgoingDamageType(actor, damageType);
+      if (_cv !== damageType) { damageType = _cv; damageTrack = ftTrackForDamage("", _cv); }
+      if (Array.isArray(damageParts) && damageParts.length) damageParts = damageParts.map(p => {
+        if (!p || typeof p !== "object") return p;
+        const pc = ftOutgoingDamageType(actor, p.type);
+        return pc !== p.type ? { ...p, type: pc, track: ftTrackForDamage("", pc) } : p;
+      });
+    }
     // ⚠ SOURCE reads (2026-08-15). `actor.system` is AE-applied for this
     // DataModel-less system (see ftSourceSystem), and the aeAttr/aeSkill sweep
     // below adds the same passives AGAIN — every AE bonus was landing twice on
@@ -17216,10 +18449,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // 2026-11-08: Prone target — "melee attacks against you +2; ranged −2"; Shaken target — "−2 to Resolve checks" (its Resolve as a target).
     const _tgtSysP = target ? ((target.system?.system ?? target.system) ?? {}) : {};
     let _tgtCat = ""; try { _tgtCat = String((itemUuid ? fromUuidSync(itemUuid) : null)?.system?.category ?? "").toLowerCase(); } catch (_eCat) {}
-    const _proneMod = (_tgtSysP?.conditions?.prone === true) ? (_tgtCat === "ranged" ? -2 : 2) : 0;
+    const _proneMod = (_tgtSysP?.conditions?.prone === true) ? (ftWeaponCategoryTraits(_tgtCat).isRanged ? -2 : 2) : 0;   // ranged + thrown −2 (teeth P34)
+    // Restrained target (2026-11-08, teeth P03): attacks against it get +2.
+    const _restrainedMod = (_tgtSysP?.conditions?.restrained === true) ? 2 : 0;
     const _shakenDef = (_tgtSysP?.conditions?.shaken === true && String(defense).toLowerCase() === "resolve") ? 2 : 0;
     if (_shakenDef) defenseValue = Math.max(0, (Number(defenseValue) || 0) - _shakenDef);
-    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen - _staggerPen + _proneMod;
+    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen - _staggerPen + _proneMod + _restrainedMod;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -17228,18 +18463,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // disadvantage each add a die too (keep best / worst 2). Explosions follow
     // the existing rule: only a normal-mode roll for a Surge-enabled actor
     // explodes; advantage/disadvantage stay clean (no surge), as before.
-    // Underwater: water resists projectiles — a RANGED KINETIC attack (firearms/
-    // archery/thrown all resolve to the firearms skill) rolls at disadvantage.
-    // Scene-based on the attacker. Melee, manifestations, and other types unaffected.
+    // Underwater: water resists projectiles — a RANGED KINETIC attack (a ranged / thrown Form Type, or the firearms
+    // skill) rolls at disadvantage. Scene-based on the attacker. Melee and other types unaffected.
     const _rangedKineticUnderwater =
       String(damageType).toLowerCase() === "kinetic" &&
-      String(skill).toLowerCase() === "firearms" &&
+      (String(skill).toLowerCase() === "firearms" || ftWeaponCategoryTraits(_tgtCat).isRanged) &&
       _ftEnvOf(actor) === "underwater";
     // Imposed (techniques R5, 2026-09-21): the condition forces 3d10kl2 on this
     // attack and is consumed by it.
     const _imposedAttack = !!game.fourththing.impose?.isImposed?.(actor);
     if (_imposedAttack) { try { await game.fourththing.impose.consume(actor, "attack"); } catch (_e) {} }
-    let   _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater || _imposedAttack });
+    // Attacks against a Frame-Drifted target (a mark with attackersDisadvantage, 2026-11-08) roll 3d10 keep lowest 2.
+    const _tgtMarkDis = !!target && ftAttackedAtDisadvantage(target);
+    let   _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater || _imposedAttack || _tgtMarkDis });
     // Round 4 (2026-11-06): Snap Strike promises advantage, so it adds a real die and keeps the best 2. It was a reroll-lowest that
     // showed nothing when the new die was no better, and did nothing at all beside a Proficient reroll. It keeps the roll's explosions,
     // and it cancels disadvantage instead of adding a die.
@@ -17390,10 +18626,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // armed on the attacker). The defender doesn't know the attacker, so we
     // decide it here (attacker known) and stamp the Apply-Damage button; consume
     // only on a hit, since it rides "next DAMAGING hit".
-    // AR10 (2026-10-26): a weapon tagged `mercy` / `nonlethal` (Mercy Driver, Gilded Atonement Blade, Apology Knife) always strikes
-    // nonlethal — the Apply button holds Integrity at 1 (the existing nonlethal path), no one-shot needed.
+    // AR10 (2026-10-26): a nonlethal weapon (Mercy Driver, Gilded Atonement Blade, Apology Knife) always strikes nonlethal —
+    // the Apply button holds Integrity at 1 (the existing nonlethal path), no one-shot needed. 2026-11-08 (teeth P30): the
+    // visible system.nonlethal box decides; a legacy `mercy` / `nonlethal` tag still reads as it until the
+    // teeth-phaseA-range-area-forms macro ticks the box.
     let _mercyWeapon = false;
-    try { const _mi = itemUuid ? fromUuidSync(itemUuid) : null; const _mt = Array.isArray(_mi?.system?.tags) ? _mi.system.tags : []; _mercyWeapon = _mi?.type === "weapon" && _mt.some(t => ["mercy", "nonlethal"].includes(String(t).toLowerCase())); } catch (_e) { _mercyWeapon = false; }
+    try { _mercyWeapon = ftWeaponIsNonlethal(itemUuid ? fromUuidSync(itemUuid) : null); } catch (_e) { _mercyWeapon = false; }
     const _nonlethalHit = success && (!!actor.flags?.fourththing?.aurablade?.oneShot?.nonlethalNextHit || _mercyWeapon);
     if (_nonlethalHit) {
       try { await actor.update({ "flags.fourththing.aurablade.oneShot.-=nonlethalNextHit": null }); }
@@ -17488,7 +18726,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           const amount = Math.max(0, Math.floor(Number(pr.total) || 0));
           const dice = (pr.dice || []).flatMap(d => (d.results || []).map(r => r.result));
           rolledParts.push({
-            amount, type: part.type, flavor: part.flavor ?? "", track: part.track,
+            amount, type: part.type, flavor: part.flavor ?? "", track: ftTrackForDamage(part.track, part.type),
             formula: String(part.formula), tooltip: dice.length ? `[${dice.join(" · ")}]` : ""
           });
         } catch (e) { console.warn("[fourththing] extra damage part roll failed", part, e); }
@@ -17509,7 +18747,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       skill, dc: Number(defenseValue), total,
       damageFormula:     finalDamageFormula || "",   // rolled on invoke (miss didn't pre-roll)
       damageBaseFormula: damageFormula, damageFacultyMod,
-      damageType, damageFlavor,
+      damageType, damageFlavor, damageTrack,
       targetUuid:    target?.uuid ?? "",
       itemUuid,
       ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists   // 2026-10-26: npcAuto.ignoreResists (Yesodium-Bolt)
@@ -17518,7 +18756,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       ? `<button class="ft-legendary-invoke" data-message-id="" style="margin-top:0.35rem;background:#3a1f3a;color:#eb9beb;border:1px solid #eb5757;padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer">✨ Invoke Legendary (1/scene) — ${Number(defenseValue) <= 20 ? "auto-succeed" : "+10"}</button>`
       : "";
 
-    await roll.toMessage({
+    const _strikeMsg = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flags: _legendaryCtx ? { fourththing: { legendaryStrikeContext: _legendaryCtx } } : {},
       flavor:  buildAttackChatHTML({
@@ -17528,7 +18766,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         damageFormula: success ? finalDamageFormula : "",
         damageFacultyMod, damageBaseFormula: damageFormula,
         damageRolledTotal, damageDiceTooltip,
-        damageType, damageFlavor, rolledParts: success ? rolledParts : [],
+        damageType, damageFlavor, damageTrack, rolledParts: success ? rolledParts : [],
         costNote, signature, thirdThing,
         itemUuid, ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists, nonlethal: _nonlethalHit,
         radPenalty: _radPen
@@ -17538,6 +18776,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#f2994a;margin:0.2rem 0 0">◈ Blinded: 3d10 keep worst 2</p>`
         : "") + (_proneMod
         ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Target Prone: ${_proneMod > 0 ? "+" : ""}${_proneMod} to the attack</p>`
+        : "") + (_restrainedMod
+        ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Target Restrained: +${_restrainedMod} to the attack</p>`
         : "") + (_shakenDef
         ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Target Shaken: Resolve −${_shakenDef}</p>`
         : "") + (flankMod > 0
@@ -17549,16 +18789,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         : "") + (() => {
           // Foe rider save DC (owner ruling 2026-08-22, "no edits"): monster
           // ability prose carries hand-written DCs nothing machine-reads. A
-          // foe's successful strike card now computes the rider DC on the same
-          // ladder players use — 11 + tier×2 + intent — superseding the stale
-          // prose numbers with zero data edits.
+          // foe's successful strike card prints the DC the rider save actually
+          // rolls against (2026-11-08, teeth P11): ftSaveDCFor — the stat
+          // block's fixed DC when it has one, else 11 + tier×2 + max(Mind, Soul).
           try {
             if (!success || !foeTierBonus) return "";
             const it = itemUuid ? fromUuidSync(itemUuid) : null;
             const prose = String(it?.system?.effect ?? "");
             if (!/\bDC\b|\brolls? vs\b|\bsave\b/i.test(prose)) return "";
-            const riderDc = 11 + tierVal * 2 + attrVal;
-            return `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">⚖ Rider save DC (formula): <b>${riderDc}</b> = 11 + tier ${tierVal}×2 + ${ftCap(intent)} ${attrVal}</p>`;
+            const _rRes = it?.system?.manifestation?.resolution ?? {};
+            const _rTier = Number(it?.system?.manifestation?.tier) || tierVal;
+            const riderDc = ftSaveDCFor(actor, _rRes, _rTier, null);
+            const _rFixed = _rRes.saveDcMode === "fixed" && Number(_rRes.saveDcFixed) > 0;
+            return `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">⚖ Rider save DC: <b>${riderDc}</b>${_rFixed ? " (stat block)" : ` = 11 + tier ${_rTier}×2 + the higher of Mind or Soul`}</p>`;
           } catch (_e) { return ""; }
         })() + (aeContribs.length
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${
@@ -17602,29 +18845,77 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         await game.fourththing.npcAuto?.onStruck?.(_hitTgt, actor, _hitItem);   // the defender's retaliation rules
       } catch (e) { console.warn("[fourththing] npc automation on-hit failed", e); }
 
-      // Auto-apply weapon-strike effects on a hit (playtest #6). Conditions/AEs
-      // land immediately instead of waiting for the Apply Damage click. Damage
-      // itself still uses the Apply button. applyManifestationStates de-dupes per
-      // (target,item), so the later Apply-Damage path is a harmless no-op — no
-      // double-stack. GM-resolved via the function's own owner-or-relay write.
+      // Auto-apply weapon-strike effects on a hit (playtest #6). Conditions/AEs land immediately instead of waiting for
+      // the Apply Damage click; damage itself still uses the Apply button. What happened to the states is stamped on
+      // this strike card per target (_ftStampStrikeStates, 2026-11-08 teeth P12) and the Apply Damage weapon branch
+      // reads it — it never re-lands states on a target that saved, or while a save card is still waiting.
+      // GM-resolved via the function's own owner-or-relay write.
       try {
         if (game.settings?.get?.("fourththing", "autoApplyEffects") && itemUuid) {
           const _strikeItem = await fromUuid(itemUuid);
           const _strikeMf   = _strikeItem?.system?.manifestation;
           const _strikeTgt  = target?.actor ?? target;
-          // ON-HIT SAVE RIDER (2026-10-06, NPC Pack automation): "on a hit, Body DC 13 or Prone" — the weapon's
-          // manifestation carries resolution.saveAttribute (+ fixed DC); instead of landing the states outright, the
-          // target gets the standard save-prompt card (states on a failed save; optional rider damage in
-          // manifestation.riderDamage, halved/negated by resolution.onSave). Save-FIRST weapons never reach here.
-          // Round 4 (2026-11-06): the builder leaves saveAttribute on every weapon, so a plain Strike with nothing riding on it posted an empty save
-          // that claimed "halved" over a card whose damage it never touched. No rider damage and no states = no save.
-          const _riderStakes = !!_strikeMf?.riderDamage?.number || (!!_strikeMf && _ftHasManifestationApplicables(_strikeMf, _strikeItem));
-          if (_strikeItem?.type === "weapon" && _strikeMf?.resolution?.saveAttribute && _strikeMf.resolution.mode !== "save" && _strikeTgt && _riderStakes) {
-            const _riderDr = _strikeMf.riderDamage?.number ? _strikeMf.riderDamage : { op: "none" };
-            await _ftPostSavePromptCard(actor, _strikeTgt, _strikeItem, _strikeMf, _riderDr, { castDc: Number(defenseValue) || 15, intent });
-          } else if (_strikeItem?.type === "weapon" && _strikeMf && _strikeTgt &&
-              _ftHasManifestationApplicables(_strikeMf, _strikeItem)) {
-            await game.fourththing.applyManifestationStates(actor, _strikeTgt, _strikeItem, _strikeMf, { castDc: Number(defenseValue) || 15 });
+          const _sr = _strikeItem?.type === "weapon" ? ftStrikeResolution(_strikeItem) : null;
+          const _strikePool = ftNormalizePoolShift(_strikeMf?.poolShift);
+          const _hasPool = !!(_strikePool.clarity || _strikePool.noise);
+          const _riderStakes = !!_strikeMf?.riderDamage?.number || _hasPool || (!!_strikeMf && _ftHasManifestationApplicables(_strikeMf, _strikeItem));
+          // The save DC is the striker's (2026-11-08, teeth P10/P11): ftSaveDCFor — a foe's fixed DC, else 11 + tier×2 +
+          // max(Mind, Soul) (weapons carry no channel). Never the target's defense value.
+          const _strikeDc = _sr ? ftSaveDCFor(actor, _sr.saveCfg, Number(_strikeMf?.tier) || 1, null) : 15;
+          // Chain from a Form's hit (2026-11-08, teeth P28): gated like the states — not on a save that stopped them;
+          // a pending save card arcs it on a failed save. Stamped so Apply Damage never arcs a second time.
+          const _strikeNmf = (_sr?.isForm && _strikeItem) ? ftNormalizeManifestationData(_strikeItem.system ?? {}, "weapon") : null;
+          const _chainOn = !!_strikeNmf?.chain?.enabled;
+          const _chainDr = { type: damageType, track: ftTrackForDamage(damageTrack, damageType), flavor: damageFlavor };
+          const _arcChain = async () => {
+            if (!_chainOn || _ftStrikeChained(_strikeMsg)) return;
+            try { await _ftFireManifestationChain(actor, _strikeTgt, _strikeItem, _strikeNmf, _chainDr, { castDc: _strikeDc }); await _ftStampStrikeChained(_strikeMsg); }
+            catch (e) { console.warn("[fourththing] strike chain failed", e); }
+          };
+          if (_sr && _strikeTgt && _riderStakes && _sr.isForm && _sr.hitSave) {
+            // FORM HIT SAVE (2026-11-08, teeth P10 — Dave: "It should be possible to allow for a saving throw if the creator
+            // adds one"): the target rolls the creator's save; a pass stops the states and the pool row, the damage stands
+            // (or halves on the Apply button when "half damage on a save" is ticked).
+            const _hsMf = { ..._strikeMf, resolution: _sr.saveCfg };
+            if (_sr.saveCfg.saveByPrompt === true) {
+              await _ftPostSavePromptCard(actor, _strikeTgt, _strikeItem, _hsMf, { op: "none" }, { castDc: _strikeDc, intent, strikeMessageId: _strikeMsg?.id ?? null, hitSave: true,
+                chain: _chainOn ? _strikeNmf.chain : null, chainDr: _chainDr });
+              await _ftStampStrikeStates(_strikeMsg, _strikeTgt.uuid, "pending");
+            } else {
+              const _hs = await game.fourththing.rolls.resolveManifestationSave(actor, _strikeTgt, _strikeItem, _sr.saveCfg, {
+                castDc: _strikeDc, passLabel: _sr.hitSaveHalf ? "half damage, no conditions" : "no conditions (damage stands)"
+              });
+              if (_hs?.saved) {
+                await _ftStampStrikeStates(_strikeMsg, _strikeTgt.uuid, _sr.hitSaveHalf ? "saved-half" : "saved");
+              } else {
+                if (_ftHasManifestationApplicables(_strikeMf, _strikeItem))
+                  await game.fourththing.applyManifestationStates(actor, _strikeTgt, _strikeItem, _strikeMf, { castDc: _strikeDc, saveResolved: true });
+                if (_hasPool) await ftApplyPoolShift(actor, _strikeTgt, _strikeItem, _strikePool, { multiplier: 1 });
+                await _ftStampStrikeStates(_strikeMsg, _strikeTgt.uuid, "failed");
+                await _arcChain();
+              }
+            }
+          } else if (_sr && _strikeTgt && _riderStakes && !_sr.isForm && _sr.rider) {
+            // ON-HIT SAVE RIDER (2026-10-06, NPC Pack automation): "on a hit, Body DC 13 or Prone" — a foe weapon's
+            // resolution.saveAttribute (+ fixed DC): the target gets the standard save-prompt card (states on a failed
+            // save; optional rider damage in manifestation.riderDamage, halved/negated by resolution.onSave). Save-FIRST
+            // weapons never reach here. Round 4 (2026-11-06): no rider damage and no states = no save.
+            // Rider damage adds the strike's Intent faculty like every other damage path (2026-11-08, ftItemIntent).
+            const _riderDr = _strikeMf.riderDamage?.number
+              ? { ..._strikeMf.riderDamage, op: _strikeMf.riderDamage.op || "damage", attribute: ftItemIntent(_strikeItem, intent) }
+              : { op: "none" };
+            await _ftPostSavePromptCard(actor, _strikeTgt, _strikeItem, _strikeMf, _riderDr, { castDc: _strikeDc, intent, strikeMessageId: _strikeMsg?.id ?? null });
+            await _ftStampStrikeStates(_strikeMsg, _strikeTgt.uuid, "pending");
+          } else if (_sr && _strikeMf && _strikeTgt) {
+            // States land with the hit. A Form never rolls a save it wasn't given (saveResolved); another weapon keeps
+            // the legacy bare-states save (applyManifestationStates' own gate).
+            let _landed = null;
+            if (_ftHasManifestationApplicables(_strikeMf, _strikeItem))
+              _landed = await game.fourththing.applyManifestationStates(actor, _strikeTgt, _strikeItem, _strikeMf, { castDc: _strikeDc, saveResolved: _sr.isForm });
+            // P07 (2026-11-08): a Form's pool row (set Clarity / Noise amounts) lands on the hit.
+            if (_hasPool && !_landed?.saved) await ftApplyPoolShift(actor, _strikeTgt, _strikeItem, _strikePool, { multiplier: 1 });
+            if (_landed) await _ftStampStrikeStates(_strikeMsg, _strikeTgt.uuid, _landed.saved ? "saved" : "landed");
+            if (_sr.isForm && !_landed?.saved) await _arcChain();
           }
         }
       } catch (e) { console.warn("[fourththing] auto-apply weapon effects on hit failed", e); }
@@ -17637,6 +18928,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         await fireTriggers(actor, "on-attack-miss", { tags: _missTags, scope: "self", target: _missTgt });
         if (_missTgt) await fireTriggers(_missTgt, "on-missed-by", { tags: _missTags, scope: "self", target: actor, squares: ftSquaresBetween(_missTgt, actor) });
       } catch (e) { console.warn("[fourththing] on-attack-miss triggers failed", e); }
+      // Miss retaliation marks (2026-11-08): Spark Vow on the attacker, Frame Drift on the one missed.
+      try { if (target) await ftOnMissRetaliation(actor, target?.actor ?? target); }
+      catch (e) { console.warn("[fourththing] miss retaliation failed", e); }
     }
     return { roll, success };
   };
@@ -17674,6 +18968,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // call this and skip the move when it returns true.
   game.fourththing.resistsForcedMove = async function (actor, { reason = "forced movement", squares = 1 } = {}) {
     if (!actor) return false;
+    // Surge Anchor marker (2026-11-08, teeth P40) — not consumed; lasts as long as its AE.
+    const _anc = _ftSurgeAnchorAE(actor, "forcedMoveImmune");
+    if (_anc) {
+      try {
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll" style="border-color:#7a8a9a"><div class="ft-roll-header"><span class="ft-roll-name">⚓ Anchored</span></div><p style="margin:0.2rem 0;font-size:0.78rem">${ftEscapeHtml(actor.name)} cannot be moved — ${ftEscapeHtml(reason)} refused (${ftEscapeHtml(_anc.name ?? "Anchor")}).</p></div>`
+        });
+      } catch (_e) {}
+      return true;
+    }
     if (await game.fourththing.consumeBulwarkAnchor?.(actor, { reason })) return true;
     // 2026-10-07 (regimen pass 7): on-forced-movement triggers (kind resist-forced-movement) and aura shrug-off.
     try {
@@ -17760,6 +19065,22 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         baseDmg: _amt, op, track, damageType, damageFlavor, ignoreResists, nonlethal
       });
       return `${actor.name}: ${op === "heal" ? "+" : ""}${_amt}${damageType ? ` ${damageType}` : ""} ${op === "heal" ? "healing" : "damage"} — sent to GM`;
+    }
+
+    // Clarity / Noise pools (2026-11-08, P07): a set amount, never resisted, never halved by armor or one-shots.
+    // Damage drains Clarity / adds Noise; heal restores Clarity / clears Noise. Clamped 0..max. Rigs have neither.
+    if (track === "clarity" || track === "noise") {
+      if (actor.type === "rig") return `${actor.name}: a rig has no ${track === "clarity" ? "Clarity" : "Noise"} — nothing happens`;
+      const _pm = Math.max(0, (Number.isFinite(perTargetMultiplier) && perTargetMultiplier >= 0) ? perTargetMultiplier : 1);
+      const _amt = Math.max(0, Math.floor((Number(baseDmg) || 0) * _pm));
+      const _src = ftSourceSystem(actor)?.magic?.[track] ?? {};
+      const _der = (actor.system?.system ?? actor.system)?.magic?.[track] ?? {};
+      const _cur = Math.max(0, Number(_src.value ?? _der.value) || 0);
+      const _max = Math.max(0, Number(_der.max ?? _src.max ?? (track === "noise" ? 10 : 5)) || 0);
+      const _down = (track === "clarity") ? op !== "heal" : op === "heal";
+      const _next = Math.max(0, Math.min(_max, _down ? _cur - _amt : _cur + _amt));
+      if (_next !== _cur) await actor.update({ [`system.magic.${track}.value`]: _next });
+      return `${actor.name}: ${track === "clarity" ? "Clarity" : "Noise"} ${_cur} → ${_next}`;
     }
 
     // Retire legacy broad "energy" → energy-family type+flavor at the universal
@@ -18219,10 +19540,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {
     const formula       = btn.dataset.formula;
-    const track         = btn.dataset.track ?? "integrity";
     const damageType    = String(btn.dataset.damageType   ?? "").toLowerCase();
     const damageFlavor  = String(btn.dataset.damageFlavor ?? "").toLowerCase();
     const op            = String(btn.dataset.op ?? "damage").toLowerCase();
+    // Track derives from the damage type (2026-11-08); a heal keeps the card's track.
+    const track         = ftLandingTrack(op, btn.dataset.track ?? "integrity", damageType);
+    // The card's save multiplier (×0.5 on a half save) — conditional riders scale with it (P09, 2026-11-08).
+    const cardMult      = (btn.dataset.multiplier !== undefined && Number.isFinite(Number(btn.dataset.multiplier)))
+      ? Math.max(0, Number(btn.dataset.multiplier)) : 1;
     const itemUuid      = btn.dataset.itemUuid ?? "";
     const ignoreResists = btn.dataset.ignoreResists === "1";
     const nonlethal     = btn.dataset.nonlethal === "1";
@@ -18264,10 +19589,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // predates the field or the item has been deleted since the cast/strike.
     const sourceItem = itemUuid ? await (foundry.utils?.fromUuid ?? fromUuid)?.(itemUuid).catch(() => null) : null;
     const sourceMf   = sourceItem?.system?.manifestation ?? null;
-    const cdRows     = Array.isArray(sourceMf?.conditionalDamage) ? sourceMf.conditionalDamage : [];
     const isWeapon   = sourceItem?.type === "weapon";
     const targetCount = bakedTargets ? bakedTargets.length : targets.size;
     let firstTarget = null;
+    let firstTargetSaved = false;
+    const _strikeSr = isWeapon ? ftStrikeResolution(sourceItem) : null;
 
     for (const token of applyTargets) {
       const actor = token.actor;
@@ -18279,9 +19605,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ui.notifications.warn(`This card has already been applied to ${actor.name}.`);
         continue;
       }
+      // What the strike's hit did to this target's states (2026-11-08, teeth P12 — _ftStampStrikeStates). A pending
+      // save on a Form that halves on a save must be rolled first; a saved-half target takes half.
+      const _statesStamp = _applyMsg?.flags?.fourththing?.statesResolved?.[_applyKey] ?? null;
+      if (isWeapon && _statesStamp === "pending" && _strikeSr?.isForm && _strikeSr.hitSaveHalf) {
+        ui.notifications.warn(`${actor.name} hasn't rolled the save yet — it decides whether this damage halves. Roll the save card first.`);
+        continue;
+      }
+      const _hsMult = (isWeapon && _statesStamp === "saved-half") ? 0.5 : 1;
       if (_applyMsg?.isOwner) { try { await _applyMsg.setFlag("fourththing", `appliedTo.${_applyKey}`, Date.now()); } catch (e) { console.warn("[fourththing] apply stamp failed", e); } }
       else if (_applyMsg) _ftRelayEmit({ t: "ft-cardApplied", messageId: _applyMsg.id, key: _applyKey });
-      if (!firstTarget) firstTarget = actor;
+      if (!firstTarget) { firstTarget = actor; firstTargetSaved = _statesStamp === "saved" || _statesStamp === "saved-half"; }
       // 2026-05-19 — Players don't own enemy rigs/bosses. 2026-10-01 — the
       // per-call GM relay now lives in _applyDamageToActor itself (by uuid),
       // so this button no longer short-circuits: a player's click relays the
@@ -18293,7 +19627,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         continue;
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
-        op, track, damageType, damageFlavor, perTargetMultiplier: 1, ignoreResists, nonlethal
+        op, track, damageType, damageFlavor, perTargetMultiplier: _hsMult, ignoreResists, nonlethal
       });
       if (desc) ui.notifications.info(desc);
 
@@ -18303,51 +19637,28 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
         if (amt <= 0) continue;
         const pType  = String(part.type ?? "").toLowerCase();
-        const pTrack = String(part.track || FT.DAMAGE_TYPES?.[pType]?.track || "integrity");
+        const pTrack = ftLandingTrack(op, part.track, pType);   // damage: from its type; heal: as authored (2026-11-08)
         const pDesc = await game.fourththing.rolls._applyDamageToActor(actor, amt, {
           op, track: pTrack, damageType: pType, damageFlavor: String(part.flavor ?? "").toLowerCase(),
-          perTargetMultiplier: 1, ignoreResists, nonlethal
+          perTargetMultiplier: _hsMult, ignoreResists, nonlethal
         });
         if (pDesc) ui.notifications.info(pDesc);
       }
 
-      // Phase E — conditional damage rows. After the primary hit lands,
-      // check the target's creature types vs each row's vsType. Matching
-      // rows roll their bonus formula and apply as a follow-up hit using
-      // the SAME damage type/track so resist/immune shadowing applies
-      // consistently. Single chat card per matching row keeps the trail
-      // visible without spamming when nothing matches.
-      if (cdRows.length && op === "damage") {
-        const tgtTypes = new Set(ftActorCreatureTypes(actor));
-        for (const row of cdRows) {
-          if (!tgtTypes.has(row.vsType)) continue;
-          try {
-            const bRoll = await new Roll(row.bonusFormula).evaluate({ async: true });
-            const bonusTotal = Math.max(0, Math.floor(Number(bRoll.total) || 0));
-            if (bonusTotal > 0) {
-              const bDesc = await game.fourththing.rolls._applyDamageToActor(actor, bonusTotal, {
-                op: "damage", track, damageType, damageFlavor, perTargetMultiplier: 1
-              });
-              const typeLabel = FT.CREATURE_TYPES[row.vsType]?.label ?? ftCap(row.vsType);
-              await ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({ actor: sourceItem?.parent ?? null }),
-                content: `<div class="fourththing-roll" style="border-color:#e8c84a">
-                  <div class="ft-roll-header"><span class="ft-roll-name">✦ ${ftEscapeHtml(sourceItem?.name ?? "Source")} — conditional bonus vs ${ftEscapeHtml(typeLabel)}</span></div>
-                  <p style="margin:0.2rem 0;font-size:0.82rem"><b>${ftEscapeHtml(row.bonusFormula)}</b> = ${bonusTotal} → ${ftEscapeHtml(bDesc || actor.name)}</p>
-                </div>`
-              });
-            }
-          } catch (e) {
-            console.warn("[fourththing] conditional damage roll failed", row, e);
-          }
-        }
+      // Phase E — conditional damage rows (vs creature type), one helper for every apply path (P09, 2026-11-08):
+      // same type/track as the primary, scaled by the card's save multiplier.
+      if (op === "damage" && sourceItem) {
+        await ftApplyConditionalDamage(sourceItem, actor, { track, type: damageType, flavor: damageFlavor, multiplier: cardMult * _hsMult });
       }
 
       // Phase E — weapon parity. Manifestation casts already fired
       // applyManifestationStates + chain at cast time, so we only do it here
       // for weapon strikes (item.type === "weapon"). Synthesizes a damageRoll
       // shape for chain's damage-type inheritance.
-      if (isWeapon && sourceMf && sourceItem.parent) {
+      // 2026-11-08 (teeth P12): only when the hit didn't already settle them — a stamped target (landed / saved /
+      // pending / failed) is skipped, so a passed save is never undone here. Unstamped (auto-apply off, an older card)
+      // goes through applyManifestationStates' own save gate (a Form's hit save, a legacy bare-states save).
+      if (isWeapon && sourceMf && sourceItem.parent && !_statesStamp) {
         const caster = sourceItem.parent;
         try {
           const hasStates  = ftAppliedStatesToArray(sourceMf.appliedStates)?.states?.length;
@@ -18357,7 +19668,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
             sourceMf.appliedEffects.immunes?.length
           );
           if (hasStates || hasEffects) {
-            await game.fourththing.applyManifestationStates(caster, actor, sourceItem, sourceMf, { castDc: 15 });
+            const _apDc = ftSaveDCFor(caster, _strikeSr?.saveCfg ?? {}, Number(sourceMf?.tier) || 1, null);
+            const _apMf = (_strikeSr?.isForm) ? { ...sourceMf, resolution: { ...(sourceMf.resolution ?? {}), shape: "attack", hitSave: _strikeSr.hitSave, saveAttribute: _strikeSr.saveAttribute || "body" } } : sourceMf;
+            await game.fourththing.applyManifestationStates(caster, actor, sourceItem, _apMf, { castDc: _apDc, saveResolved: !!(_strikeSr?.isForm && !_strikeSr.hitSave) });
           }
         } catch (e) {
           console.warn("[fourththing] weapon states-on-apply failed", e);
@@ -18368,12 +19681,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Phase E — chain fires ONCE per Apply, anchored to the first target. Only
     // for weapons (manifestation cast path already fires chain) AND only when
     // a single target is selected (multi-target Apply is ambiguous for chain).
-    if (isWeapon && sourceMf?.chain?.enabled && firstTarget && targetCount === 1) {
+    // A target who saved stops the chain, as on a cast (2026-11-08, teeth P13).
+    // 2026-11-08 (teeth P28): read through the normalizer (an area weapon never chains), and skipped when the strike's
+    // hit (or its save card) already arced — the strike card carries statesResolved.chain = "chained".
+    const _chainMsg = game.messages?.get(btn.closest("[data-message-id]")?.dataset?.messageId);
+    const _applyNmf = isWeapon ? ftNormalizeManifestationData(sourceItem?.system ?? {}, "weapon") : null;
+    if (isWeapon && _applyNmf?.chain?.enabled && firstTarget && targetCount === 1 && !firstTargetSaved && !_ftStrikeChained(_chainMsg)) {
       const caster = sourceItem.parent;
       if (caster) {
         try {
           const dr = { type: damageType, track, flavor: damageFlavor };
-          await _ftFireManifestationChain(caster, firstTarget, sourceItem, sourceMf, dr, { castDc: 15 });
+          await _ftFireManifestationChain(caster, firstTarget, sourceItem, { ..._applyNmf, appliedStates: sourceMf?.appliedStates ?? _applyNmf.appliedStates }, dr, { castDc: ftSaveDCFor(caster, _strikeSr?.saveCfg ?? {}, Number(sourceMf?.tier) || 1, null) });
+          if (_chainMsg) await _ftStampStrikeChained(_chainMsg);
         } catch (e) {
           console.warn("[fourththing] weapon chain-on-apply failed", e);
         }
@@ -18391,8 +19710,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   game.fourththing.actions = game.fourththing.actions ?? {};
 
   // Manifestation Wizard V2 — canonical entry point. All in-tree callers
-  // now route through V2 (six callsites flipped 2026-05-06). Legacy
-  // openManifestationWizard is kept defined but unreferenced for now.
+  // route through V2. The legacy V1 wizard was deleted 2026-11-08.
   game.fourththing.wizardV2 = openManifestationWizardV2;
 
   // castManifestation — exposed for module-level callers (Phase C 2026-05-07,
@@ -18460,7 +19778,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (args.adjacentOnly !== false && ftSquaresBetween(actor, target) > (Number(args.reachSquares) || 1)) return { ok: false, reason: `${target.name} is out of reach` };
       await actor.update({ "system.actions.reactionUsed": true });
       const tt = target.getActiveTokens?.()[0]; if (tt) ftSetUserTargets([tt]);
-      ftOpenEngageDialog(actor, item, { skipActionGate: true });
+      ftOpenEngageDialog(actor, item, { skipActionGate: true, rangeConfirm: false });
       return { ok: true, summary: `${actor.name} — reaction Strike vs ${target.name} (${item.name})` };
     },
     /** bonus-strike-or-dash (Round 4, 2026-11-06): spend the Bonus action on one weapon attack (with a banked reroll) or the Dash. A refusal keeps the feature's charge. */
@@ -18494,7 +19812,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (!game.user.targets?.size) return { ok: false, reason: "target someone first. Your charge is kept" };
       if (args.reroll !== false) await game.fourththing.aid.bank(actor, { from: actor.name, source, context: "attack", note: args.note || source });
       await actor.update({ "system.actions.bonusUsed": true });
-      ftOpenEngageDialog(actor, item, { skipActionGate: true });
+      ftOpenEngageDialog(actor, item, { skipActionGate: true, rangeConfirm: false });
       return { ok: true, summary: `${actor.name} — bonus attack with ${item.name}${args.reroll !== false ? ", rerolling its lowest die" : ""}` };
     }
   };
@@ -18507,14 +19825,25 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // 10-29: what an item costs to use — "action" | "bonus" | "reaction" | "free" | "mixed" | null.
   // Powers / form-weapons: the manifestation activation castManifestation gates on (Action by default);
   // plain weapons: the Engage strike's Action; features: the dispatch paths' own rule (actionCostOf).
+  // 2026-11-08 (teeth P20 + stances R11): a power's Invoke spends what the STANCE picks (Shamanic Action · Chaotic Bonus ·
+  // Hermetic both) → "mixed", unless it is authored Reaction ("reaction") or Free ("free"). A weapon's Strike spends
+  // ftStrikePool: an Engine Form's activation, else the Action.
   game.fourththing.actionCostOf = (item) => {
     if (!item) return null;
-    if (item.type === "power" || item.type === "weapon") {
-      const t = String(item.system?.manifestation?.activation?.type ?? "").toLowerCase();
-      return ["bonus", "reaction", "free"].includes(t) ? t : "action";
+    if (item.type === "power") {
+      const t = ftNormalizeManifestationData(item.system ?? {}, "power").activation.type;
+      return t === "reaction" ? "reaction" : t === "none" ? "free" : "mixed";
+    }
+    if (item.type === "weapon") {
+      const p = ftStrikePool(item, { rig: item.flags?.fourththing?.rigGear?.subtype === "rig-weapon" && item.parent?.type === "rig" });
+      return p === "none" ? "free" : p;
     }
     return actionCostOf(item);
   };
+  game.fourththing.strikePool = ftStrikePool;
+  game.fourththing.invokePools = ftInvokePools;
+  game.fourththing.manifestationCostSpec = ftManifestationCostSpec;
+  game.fourththing.manifestationCostSummary = ftManifestationCostSummary;
   game.fourththing.rolls.defenseCheck = _ftRollDefenseCheck;   // 10-29: the HUD's Defenses buttons use the sheet's path
   game.fourththing.setUserTargets = ftSetUserTargets;
   // The manifestation glossary + knob tooltips, exposed 2026-08-17 so the
@@ -18759,17 +20088,33 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Clear any active Echo Spotlight — the spotlight is once-per-scene; Scene
     // Break is the canonical scene boundary, so refreshing it here.
     try { if (typeof ftClearEchoSpotlight === "function") await ftClearEchoSpotlight(actor); } catch (_e) {}
-    const rawSys = actor.system?.system ?? actor.system ?? {};
+    // 2026-11-08 (teeth P21/P24): the scene boundary bills sustained / scene-keyed upkeep FIRST (from the pool as it
+    // stands, before the half refill) and ends this actor's scene-long manifestation states and wards.
+    // Fix round 2026-11-08 (R4): End Scene is an alias of this, so pressing both (or either twice) billed upkeep twice.
+    // A per-scene stamp (scene id + combat id + round) makes a repeat in the same scene, with no new round of play in
+    // between, skip the upkeep bill and the Noise shave; the Clarity refill and the refreshes still run.
+    const _sbStamp = { scene: _ftSceneId(), combat: game.combat?.id ?? "", round: Number(game.combat?.round) || 0 };
+    const _sbPrev  = actor.getFlag?.("fourththing", "sceneBreakStamp") ?? null;
+    const _sbRepeat = !!(_sbPrev && _sbPrev.scene === _sbStamp.scene && (_sbPrev.combat ?? "") === _sbStamp.combat
+      && (Number(_sbPrev.round) || 0) === _sbStamp.round);
+    if (_sbRepeat) {
+      console.info(`[fourththing] Scene Break for ${actor.name}: already taken this scene — upkeep and the Noise shave skipped (refill only).`);
+    } else {
+      try { await ftChargeUpkeep(actor, { cadence: "scene" }); } catch (e) { console.warn("[fourththing] scene upkeep failed", e); }
+    }
+    try { await ftEndSceneManifestationEffects(actor); } catch (e) { console.warn("[fourththing] scene effect cleanup failed", e); }
+    const rawSys = actor.system?.system ?? actor.system ?? {};   // read after the upkeep write (re-prepared)
     const sys    = rawSys ?? {};
     const curC   = Number(sys.magic?.clarity?.value) || 0;
     const maxC   = Number(sys.magic?.clarity?.max)   || 5;
     const halfC  = Math.ceil(maxC / 2);
     const newC   = Math.min(maxC, Math.max(curC, halfC));
     const curN   = Number(sys.magic?.noise?.value)   || 0;
-    const newN   = Math.max(0, curN - 1);
+    const newN   = _sbRepeat ? curN : Math.max(0, curN - 1);
 
-    const updates = {};
+    const updates = { "flags.fourththing.sceneBreakStamp": _sbStamp };
     const deltas  = [];
+    if (_sbRepeat) deltas.push("already took a Scene Break this scene — no upkeep billed, no Noise shaved");
     if (newC !== curC) { updates["system.magic.clarity.value"] = newC; deltas.push(`Clarity ${curC} → ${newC}`); }
     if (newN !== curN) { updates["system.magic.noise.value"]   = newN; deltas.push(`Noise ${curN} → ${newN}`); }
     // 1/scene recoveries (Brexit audit 2026-06-07) — Scene Break is the scene
@@ -18874,12 +20219,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // Back-compat alias for any existing macros / external callers.
   game.fourththing.actions.lesserManifestation = game.fourththing.actions.fiat;
 
-  // ── End Scene — Sustained manifestation upkeep tick ────────────────────────
-  // Sustained workings cost 1 Clarity × tier per scene. Callable from the
-  // Active strip on the manifestation tab or via macro.
+  // ── End Scene — an alias of Scene Break (2026-11-08, teeth P21) ─────────────
+  // Scene Break is the scene boundary: it bills scene upkeep, ends scene-long effects and half-refills Clarity. The
+  // Active strip's End Scene button used to bill upkeep only (and Scene Break never billed it).
   game.fourththing.actions.endScene = async function (actor) {
     if (!actor) return;
-    return ftChargeUpkeep(actor, { cadence: "scene" });
+    return game.fourththing.actions.sceneBreak(actor);
   };
 
   // ── Condition toggle ───────────────────────────────────────────────────────
@@ -19450,6 +20795,29 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     return null;
   };
 
+  // 2026-11-08 (teeth P06/P07/P09): the one damage-type → track rule, the Clarity / Noise pool row and the conditional
+  // (vs creature type) rider, for the other system files (npc-automation) and macros.
+  game.fourththing.trackForDamage          = ftTrackForDamage;
+  game.fourththing.applyPoolShift          = ftApplyPoolShift;
+  game.fourththing.applyConditionalDamage  = ftApplyConditionalDamage;
+  // 2026-11-08 (teeth P05/P10/P15): the derived attack defense, how a weapon's Strike resolves, and the beneficial test.
+  game.fourththing.attackDefenseFor           = ftAttackDefenseFor;
+  game.fourththing.strikeResolution           = ftStrikeResolution;
+  game.fourththing.isBeneficialManifestation  = _ftStrikeIsBeneficial;
+  // 2026-11-08 (teeth P03/P04): which conditions an author may tick, and the Calmed / Charmed refusal for a Strike / Invoke.
+  game.fourththing.authorableConditions       = ftAuthorableConditions;
+  game.fourththing.conditionActionRefusal     = ftConditionActionRefusal;
+  // 2026-11-08 (C7 — teeth P25/P27/P30/P34): the one range (feet a check uses; 0 = none), the one range check, the one
+  // "this weapon is a Form" test (stamps a legacy Form), nonlethal, Form Type traits, and the area shape table.
+  game.fourththing.itemRangeFt                = _ftItemRangeFt;
+  game.fourththing.checkRange                 = _ftCheckRange;
+  game.fourththing.isFormWeapon               = ftIsFormWeapon;
+  game.fourththing.formWeaponHeuristic        = _ftFormWeaponHeuristic;
+  game.fourththing.weaponIsNonlethal          = ftWeaponIsNonlethal;
+  game.fourththing.isFoeActor                 = _ftIsFoeActor;
+  game.fourththing.weaponCategoryTraits       = ftWeaponCategoryTraits;
+  game.fourththing.areaShapeOptions           = ftAreaShapeOptions;
+
   game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15, channel = null, saveResolved = false } = {}) {
     if (!caster || !target) return null;
     const cfg = mf?.appliedStates ?? null;
@@ -19457,14 +20825,29 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Cast DC — on a fail: Staggered" but carries NO resolution shape used to land its states outright; only save-shaped powers
     // ever rolled the target. When the states name a save attribute and nothing upstream resolved one, the target rolls it here
     // (the system's own save roll — disadvantage AEs, auto-succeed one-shots and the chat card all apply). A pass negates.
+    // 2026-11-08 (teeth P12): states respect saves on EVERY path. When no save has run yet (callers that already rolled
+    // one — cast saves / contests / hit saves, the save-prompt cards — pass saveResolved:true so nothing double-rolls):
+    //   · a creator-added hit save (resolution.hitSave on an attack / auto shape) — the target rolls resolution.saveAttribute;
+    //   · a legacy item whose STORED resolution has no shape (the East Wall powers, foe weapons with bare states) and
+    //     whose states name a save attribute — the target rolls that (read from _source so the normalizer's "auto"
+    //     default doesn't hide it).
     try {
-      const _resShape = String(mf?.resolution?.shape ?? item?.system?.manifestation?.resolution?.shape ?? "none").toLowerCase();
+      const _resLive = mf?.resolution ?? item?.system?.manifestation?.resolution ?? {};
+      const _resShape = String(_resLive?.shape ?? "").toLowerCase();
+      const _srcShape = String((item?._source?.system ?? item?.system)?.manifestation?.resolution?.shape ?? (mf?.resolution ? _resShape : "")).toLowerCase();
       const _states = Array.isArray(cfg?.states) ? cfg.states : (cfg?.states && typeof cfg.states === "object" ? Object.keys(cfg.states).filter(k => cfg.states[k]) : []);
-      if (cfg?.saveAttribute && _states.length && !saveResolved && target.id !== caster.id && (_resShape === "none" || _resShape === "")) {
+      const _hitSave = _resLive?.hitSave === true && !["save", "contested"].includes(_resShape);
+      const _legacySave = !_hitSave && !!cfg?.saveAttribute && (_srcShape === "none" || _srcShape === "");
+      if (_states.length && !saveResolved && target.id !== caster.id && (_hitSave || _legacySave)) {
         const _mfTierSv = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier) || 1;
-        const _dcSv = ftSaveDCFor(caster, cfg, _mfTierSv, channel);
+        const _svCfg = _hitSave ? _resLive : cfg;
+        const _dcSv = ftSaveDCFor(caster, _svCfg, _mfTierSv, channel);
+        // One state with its own shake-off faculty (saveAttributeOverrides, teeth P40): the legacy pre-save rolls that faculty.
+        // A creator's hit save keeps its own faculty. The DC is still ftSaveDCFor (a Steward never sets one).
+        const _ovr1 = (_states.length === 1 && cfg?.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object") ? cfg.saveAttributeOverrides[_states[0]] : null;
         const sv = await game.fourththing.rolls.resolveManifestationSave(caster, target, item,
-          { saveAttribute: cfg.saveAttribute, saveDcMode: "fixed", saveDcFixed: _dcSv, onSave: "negate" }, { castDc: _dcSv });
+          { saveAttribute: _hitSave ? (_resLive.saveAttribute || "body") : (_ovr1 || cfg.saveAttribute), saveDcMode: "fixed", saveDcFixed: _dcSv, onSave: "negate" },
+          { castDc: _dcSv, passLabel: "no conditions" });
         if (sv?.saved) return { applied: [], skipped: _states.map(k => ({ key: k, reason: "saved" })), saved: true, total: sv.total, dc: sv.dc };
       }
     } catch (eSv) { console.warn("[fourththing] applied-states save roll failed", eSv); }
@@ -19494,17 +20877,42 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // tick rounds — they're ended by the save-each-round handler or scene
     // boundary. Round-based durations get `rounds` so Foundry decrements.
     const combat = game.combat;
-    const _mfDurRaw = String(mf?.duration ?? item?.system?.manifestation?.duration ?? "").toLowerCase(), _mfStabRaw = String(mf?.stability ?? item?.system?.manifestation?.stability ?? "").toLowerCase();
-    const dur = cfg?.duration ?? ((["scene", "persistent", "sustained"].includes(_mfDurRaw) || ["sustained", "enduring"].includes(_mfStabRaw)) ? "scene" : "1-round");   // 2026-11-08: a scene-long ward no longer expires after one round
+    // One duration knob (2026-11-08, teeth P24): the authored "Applied for" value, else the stability's default (scene for
+    // sustained / bound, one round for instant) — a blank / stray value never pins wards to one round any more.
+    const _mfStabRaw = String(mf?.stability ?? item?.system?.manifestation?.stability ?? "").toLowerCase();
+    const _durAuthored = String(cfg?.duration ?? "").toLowerCase();
+    const dur = ["1-round", "2-rounds", "3-rounds", "scene", "until-saved"].includes(_durAuthored) ? _durAuthored : ftAppliedDurationDefault(_mfStabRaw);
+    // Until saved always rolls a save each round (it has no other end).
+    const _saveEachRound = cfg?.saveEachRound === true || dur === "until-saved";
     const roundsByKey = { "1-round": 1, "2-rounds": 2, "3-rounds": 3 };
     // Owner ruling 2026-08-22 ("bite first"): a timed effect applied outside
     // the target's own turn is padded one round, so "1 round" always lasts
     // through the target's next full turn — it never expires before the
     // target has acted under it.
     const _isTargetsTurn = combat?.combatant?.actorId === target.id;
+    // Out of combat a timed effect runs on world time: 6 seconds a round (2026-11-08, teeth P24).
     const aeDuration = (roundsByKey[dur] && combat)
       ? { rounds: roundsByKey[dur] + (_isTargetsTurn ? 0 : 1), startRound: combat.round, startTurn: combat.turn, combat: combat.id }
-      : {};
+      : (roundsByKey[dur] ? { seconds: roundsByKey[dur] * 6, startTime: game.time?.worldTime ?? 0 } : {});
+    // Re-application refreshes (2026-11-08, teeth P24): an effect this engine put on the target is re-timed to the longer
+    // of what's left and the new duration, with the stronger save metadata — instead of being skipped.
+    const aeRefresh = [];
+    const _remainingRounds = (e) => {
+      const d = e?.duration ?? {};
+      if (Number.isFinite(Number(d.remaining)) && d.remaining !== null) return Number(d.remaining);
+      if (Number(d.rounds) && combat && Number.isFinite(Number(d.startRound))) return Number(d.rounds) - (combat.round - Number(d.startRound));
+      return Number(d.rounds) || 0;
+    };
+    const _refreshDuration = (e) => {
+      const kindOld = e.flags?.fourththing?.appliedManifestation?.durationKind ?? e.flags?.fourththing?.manifestationEffect?.durationKind;
+      // A scene-long / until-saved effect already outlasts any round count; a new scene-long one replaces a timed one.
+      if (!roundsByKey[dur]) return (kindOld === "scene" || kindOld === "until-saved") && dur !== "until-saved" ? null : { duration: { rounds: null, seconds: null }, kind: dur };
+      if (!roundsByKey[kindOld]) return null;
+      const want = aeDuration.rounds ?? null;
+      if (want && want > _remainingRounds(e)) return { duration: aeDuration, kind: dur };
+      if (aeDuration.seconds) return { duration: aeDuration, kind: dur };
+      return null;
+    };
 
     const _mfTierAS = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier)
       || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
@@ -19528,7 +20936,21 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // stacking AEs (Foundry would render duplicate icons in the HUD).
       const existing = target.effects?.find?.(e => e.flags?.fourththing?.condition === condKey);
       if (existing) {
-        skipped.push({ key: condKey, reason: "already-active" });
+        const _meta = existing.flags?.fourththing?.appliedManifestation;
+        const _rf = _meta ? _refreshDuration(existing) : null;
+        const _dcHi = _meta ? Math.max(Number(_meta.dc) || 0, Number(ftSaveDCFor(caster, cfg, Number(mf?.tier ?? item?.system?.manifestation?.tier) || 1, channel)) || 0) : 0;
+        if (_meta && (_rf || _dcHi > (Number(_meta.dc) || 0) || (_saveEachRound && !_meta.saveEachRound))) {
+          const upd = { _id: existing.id,
+            "flags.fourththing.appliedManifestation.dc": _dcHi,
+            "flags.fourththing.appliedManifestation.saveEachRound": _meta.saveEachRound === true || _saveEachRound,
+            "flags.fourththing.appliedManifestation.source": caster.uuid,
+            "flags.fourththing.appliedManifestation.itemName": item?.name ?? _meta.itemName };
+          if (_rf) { upd.duration = _rf.duration; upd["flags.fourththing.appliedManifestation.durationKind"] = _rf.kind; }
+          aeRefresh.push(upd);
+          skipped.push({ key: condKey, reason: "refreshed" });
+        } else {
+          skipped.push({ key: condKey, reason: "already-active" });
+        }
         continue;
       }
       // Bulwark Frame Die — Anchor refuses the next condition that would land.
@@ -19536,6 +20958,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // after immune + de-dupe so it's only spent when a condition would
       // genuinely be newly applied; consumed on the first such condition.
       if (await game.fourththing.consumeBulwarkAnchor?.(target, { reason: cond.label })) {
+        skipped.push({ key: condKey, reason: "anchored" });
+        continue;
+      }
+      // Surge Anchor (2026-11-08, teeth P40): while the anchor marker AE is on the target, no new condition lands.
+      if (_ftSurgeAnchorAE(target, "ccImmune")) {
         skipped.push({ key: condKey, reason: "anchored" });
         continue;
       }
@@ -19566,11 +20993,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               itemName:      item?.name ?? "Manifestation",
               dc,
               saveAttribute: saveAttr,
-              saveEachRound: cfg.saveEachRound === true,
+              saveEachRound: _saveEachRound,
               // Owner ruling 2026-08-22 ("bite first"): the first turn-start
               // save is skipped — the effect must cost the target one turn
               // before it can be shaken off. Consumed by the shake handler.
-              pendingFirstBite: cfg.saveEachRound === true,
+              pendingFirstBite: _saveEachRound,
               durationKind:  dur,
               startRound:    combat?.round ?? null,
               startTurn:     combat?.turn ?? null
@@ -19585,7 +21012,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     // Phase C — Buffs & Wards effect AE. One AE per cast carries the numeric
-    // changes (Guard/Evasion/Resolve/Initiative aeBonus) AND the resist/immune
+    // changes (Guard/Resolve/Initiative aeBonus; a legacy evasion row → Guard) AND the resist/immune
     // flag lists (read by ftComputeDefenses). De-dupe by manifestation item
     // id so AoE re-casts don't stack the same buff on the same target.
     let effectResult = null;
@@ -19608,7 +21035,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ? target.effects?.find?.(e => e.flags?.fourththing?.manifestationEffect?.itemId === itemId)
         : null;
       if (dup) {
-        effectResult = { status: "duplicate" };
+        // Re-cast refreshes the ward's clock (2026-11-08, teeth P24) instead of doing nothing.
+        const _rf = _refreshDuration(dup);
+        if (_rf) {
+          aeRefresh.push({ _id: dup.id, duration: _rf.duration, "flags.fourththing.manifestationEffect.durationKind": _rf.kind });
+          effectResult = { status: "refreshed" };
+        } else effectResult = { status: "duplicate" };
       } else {
         const aeData = {
           name:    item?.name ?? "Manifestation Effect",
@@ -19627,6 +21059,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                 resists,
                 immunes,
                 modifiers:     Array.isArray(eff.modifiers) ? eff.modifiers.filter(m => m?.stat) : [],
+                // Conditional ward (2026-11-08): "martial-form" → its Guard holds only while a melee / unarmed Form is in hand.
+                condition:     FT_WARD_CONDITIONS.includes(String(eff.condition ?? "")) ? String(eff.condition ?? "") : "",
                 durationKind:  dur,
                 startRound:    combat?.round ?? null,
                 startTurn:     combat?.turn ?? null
@@ -19645,6 +21079,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // GM applies on their behalf. Downgrade results only if no GM is available.
     const _effectAEs = condAEs.slice();
     if (buffAE) _effectAEs.push(buffAE);
+    if (aeRefresh.length) {
+      try { await _ftApplyEffectsToTarget(target, [], [], { updates: aeRefresh }); }
+      catch (e) { console.warn("[fourththing] effect refresh failed", e); }
+    }
     if (_effectAEs.length || condKeysToFlag.length) {
       const _mode = await _ftApplyEffectsToTarget(target, _effectAEs, condKeysToFlag);
       if (_mode === "none") {
@@ -19672,7 +21110,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const overrideNote = overrideAppliedKeys.length
         ? ` <span style="opacity:0.7">(${overrideAppliedKeys.map(k => `${FT.CONDITIONS?.[k]?.label ?? k}: ${ftCap(overrides[k])}`).join(", ")})</span>`
         : "";
-      const saveLine = (cfg?.saveEachRound && applied.length)
+      const saveLine = (_saveEachRound && applied.length)
         ? `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85;color:#a0d4ff">↻ Save each round: <b>${ftCap(globalSaveAttr)}</b> vs DC <b>${dc}</b> — success ends the effect.${overrideNote}</p>`
         : `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.7">Duration: <b>${durLabel}</b>.</p>`;
       // Buffs & Wards summary line — surfaces what numeric mods + resist/immune
@@ -19682,7 +21120,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const bits = [];
         const modList = (Array.isArray(eff?.modifiers) ? eff.modifiers : []).filter(m => m?.stat && Number(m?.value) > 0);
         for (const m of modList) {
-          const label = FT_EFFECT_MOD_LABELS[m.stat] ?? ftCap(m.stat);
+          const label = FT_EFFECT_MOD_LABELS[m.stat === "evasion" ? "guard" : m.stat] ?? ftCap(m.stat);
           bits.push(`${label} ${m.op === "-" ? "−" : "+"}${m.value}`);
         }
         for (const t of (eff?.resists ?? [])) bits.push(`<span style="opacity:0.85">resist ${ftCap(t)}</span>`);
@@ -19690,6 +21128,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (bits.length) {
           effectHtml = `<p style="margin:0.2rem 0;font-size:0.82rem"><b>Buffs &amp; Wards:</b> ${bits.join(" · ")}</p>`;
         }
+      } else if (effectResult?.status === "refreshed") {
+        effectHtml = `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.8"><b>Buffs &amp; Wards:</b> already on ${ftEscapeHtml(target.name)} — its duration is refreshed.</p>`;
       } else if (effectResult?.status === "duplicate") {
         effectHtml = `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.65"><b>Buffs &amp; Wards:</b> already active on ${ftEscapeHtml(target.name)} (de-duped).</p>`;
       } else if (effectResult?.status === "failed") {
@@ -20398,7 +21838,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // fields see the live AE bonus). Re-stamping after compute also keeps
       // the field present at zero when no AE is active — same initiative.bonus
       // pattern below.
-      const aeGuardBonus   = Number(sys.derived.guard?.aeBonus)   || 0;
+      // A ward that holds only while its condition is true (2026-11-08, Hammer-Bright Ward: "while wielding a martial Form")
+      // — its Guard points come back off when the bearer has no melee / unarmed Form in hand.
+      let _condWardOff = 0;
+      try { _condWardOff = ftConditionalWardGuardOff(this); } catch (_e) { _condWardOff = 0; }
+      const aeGuardBonus   = (Number(sys.derived.guard?.aeBonus) || 0) - _condWardOff;
       const aeEvasionBonus = Number(sys.derived.evasion?.aeBonus) || 0;
       const aeResolveBonus = Number(sys.derived.resolve?.aeBonus) || 0;
       sys.derived.guard.value      = 10 + v + b;
@@ -20627,7 +22071,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Descent Engine D1: Umbral+ personal Darkness dims the vessel (−2 max
       // Clarity, FT.DARKNESS_BITE). Floor at 1 — the light never fully dies.
       const darknessClarityPenalty = _ftDarknessBite(this).clarityMaxPenalty;
-      sys.magic.clarity.max = Math.max(1, Math.max(clarityBase, storedMax) + disciplineBonus + tccBonus - darknessClarityPenalty);
+      // Scarred (2026-11-08, teeth P03): the paradox mark costs 1 max Clarity while it lasts (Last Stand's scar too).
+      const scarredClarityPenalty = sys.conditions?.scarred === true ? 1 : 0;
+      sys.magic.clarity.max = Math.max(1, Math.max(clarityBase, storedMax) + disciplineBonus + tccBonus - darknessClarityPenalty - scarredClarityPenalty);
       sys.magic.clarity.tierBase = clarityBase;
     }
   }
@@ -20886,6 +22332,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // REGIMEN step 3 (2026-10-06): a real `on-turn-start` trigger event (ancestry/class triggers used to sit on a dead event)
     try { await fireTriggers(actor, "on-turn-start", { scope: "self", round: combat.round, tags: ["turn-start"] }); }
     catch (e) { console.warn("[fourththing] on-turn-start triggers failed", actor?.name, e); }
+    // Marks that last "until the start of its next turn" (Frame Drift, 2026-11-08) end now.
+    try { await ftExpireTurnStartMarks(actor, combat); }
+    catch (e) { console.warn("[fourththing] turn-start mark expiry failed", actor?.name, e); }
     // 2026-11-07 (the East Wall fight): Burning says "1d4 Integrity damage at start of each turn" and nothing ticked it.
     try {
       if ((actor.system?.system ?? actor.system)?.conditions?.burning === true) {
@@ -20919,13 +22368,44 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (_submerged)  moveFt = _swimFt > 0 ? _swimFt : Math.floor(walkFt / 2);   // swim underwater
     else if (_aloft) moveFt = _flyFt  > 0 ? _flyFt  : Math.floor(walkFt / 2);   // fly when aloft
     try { const _aw = auraWalkSquares(actor); if (_aw > 0) moveFt += _aw * (Number(canvas?.scene?.grid?.distance) || 5); } catch (_e) {}   // allies' walk auras (2026-10-07)
+    // Condition bites on the turn (2026-11-08, teeth P03 — Dave: "Yes"): Staggered halves movement, Restrained sets it to 0
+    // (the token move gate also refuses the Restrained actor's moves on its own turn). Surprised in round 1 spends the
+    // turn's Action, Bonus action and Reaction; after round 1 it clears at the turn start.
+    const _condT = sysSnap?.conditions ?? {};
+    if (_condT.staggered === true) moveFt = Math.floor(moveFt / 2);
+    if (_condT.restrained === true) moveFt = 0;
+    const _surprised = _condT.surprise === true && Number(combat.round) === 1;
     await actor.update({
-      "system.actions.actionUsed":      false,
-      "system.actions.bonusUsed":       false,
-      "system.actions.reactionUsed":    false,
+      "system.actions.actionUsed":      _surprised,
+      "system.actions.bonusUsed":       _surprised,
+      "system.actions.reactionUsed":    _surprised,
       "system.actions.movementUsedFt":  0,
       "system.actions.movementBudgetFt": moveFt
     });
+    try {
+      const _condNotes = [];
+      if (_surprised) _condNotes.push(`<b style="color:${FT.CONDITIONS.surprise.color}">Surprised</b> — no Action, Bonus action or Reaction this turn.`);
+      if (_condT.restrained === true) _condNotes.push(`<b style="color:${FT.CONDITIONS.restrained.color}">Restrained</b> — can't move this turn.`);
+      else if (_condT.staggered === true) _condNotes.push(`<b style="color:${FT.CONDITIONS.staggered.color}">Staggered</b> — movement halved (${moveFt} ft).`);
+      if (_condNotes.length) ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll">${_condNotes.map(n => `<p style="margin:0.15rem 0;font-size:0.78rem">◈ ${ftEscapeHtml(actor.name)}: ${n}</p>`).join("")}</div>` });
+      if (_condT.surprise === true && Number(combat.round) > 1) await _ftSetCondition(actor, "surprise", false);
+    } catch (e) { console.warn("[fourththing] turn-start condition bites failed", actor?.name, e); }
+    // Compelled (teeth P03): the GM gets a card naming the source and the directive; the GM rules on the turn.
+    try {
+      if (_condT.compelled === true) {
+        const _srcs = ftConditionSources(actor, "compelled");
+        const _who = _srcs.length
+          ? _srcs.map(c => `<b>${ftEscapeHtml(c.actor?.name ?? "an unknown source")}</b>${c.itemName ? ` (${ftEscapeHtml(c.itemName)})` : ""}${c.directive ? ` — directive: <i>${ftEscapeHtml(c.directive)}</i>` : ""}`).join("; ")
+          : "<i>no recorded source (set by hand)</i>";
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? game.users.filter(u => u.isGM).map(u => u.id),
+          content: `<div class="fourththing-roll" style="border-color:${FT.CONDITIONS.compelled.color}"><div class="ft-roll-header"><span class="ft-roll-name" style="color:${FT.CONDITIONS.compelled.color}">◈ Compelled — ${ftEscapeHtml(actor.name)}</span></div>`
+            + `<p style="margin:0.2rem 0;font-size:0.78rem">Compelled by ${_who}.</p>`
+            + `<p style="margin:0.2rem 0;font-size:0.78rem">This turn ${ftEscapeHtml(actor.name)} must spend at least one action toward the directive the source named. GM: rule on it.</p></div>`
+        });
+      }
+    } catch (e) { console.warn("[fourththing] compelled card failed", actor?.name, e); }
     // 10-29: an unused double-10 Act Again ends when your next turn starts — the Action is
     // back anyway, and keeping it would bank a second Action.
     if (actor.flags?.fourththing?.actAgainAvailable) {
@@ -21284,6 +22764,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // 2026-05-24 — Movement procs (Pace / Kinetic Inversion) never fire out of
     // combat. on-move exists only to drive those, so gate the whole dispatch.
     if (!inCombat) return;
+    // Restrained (2026-11-08, teeth P03): the actor can't move on its own turn. Moves on someone else's turn (a push, a
+    // grab, the GM repositioning) still go through, so forced movement keeps working.
+    if ((actor.system?.system ?? actor.system)?.conditions?.restrained === true && game.combat?.combatant?.actor?.id === actor.id) {
+      ui.notifications?.warn(`${actor.name} is Restrained and can't move this turn.`);
+      return false;
+    }
     fireTriggers(actor, "on-move", { amount: distanceFt, cumulativeFt: nextCumulative, inCombat, scope: "self" })
       .catch(err => console.error("fourththing | on-move trigger failed", err));
 
@@ -22121,7 +23607,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const dmgF = String(sys?.damage?.formula ?? "").trim();
         const dmgT = String(sys?.damage?.type ?? "kinetic");
         const skill = String(sys?.skill ?? "melee");
-        const intent = String(sys?.intent ?? "violence");
+        const intent = ftItemIntent(sys, "violence");
         const rangeText = _ftWeaponRangeChip(sys);   // AR4 (2026-10-26): fourththing short/long in squares — the dnd5e `range.value` read left the chip blank
         return {
           id: it.id,
@@ -22167,10 +23653,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           img: item?.img ?? "icons/svg/mystery-man.svg",
           name: item?.name ?? e.itemName ?? "Lost Manifestation",
           stabilityLabel: FT.MANIFESTATION_STABILITIES?.[e.stability]?.label ?? ftCap(e.stability ?? ""),
-          upkeepHint: e.stability === "sustained" ? `${e.tier} Clarity / scene`
-                    : e.stability === "bound"     ? `${e.tier} Clarity / Soma Break`
-                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break`   // 10-29: enduring bills like bound (no OP tick exists; marks ruling)
-                    : ""
+          upkeepHint: ftUpkeepHint(actor, e)   // what ftChargeUpkeep bills: keyed upkeep, else the stability baseline (2026-11-08)
         };
       });
 
@@ -22239,16 +23722,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         hasPackageMastery:  _hasPackageMastery
       } : null;
 
-      // Cosmic Linguist — Resonance Dice + Strain + Authority (Phase B 2026-05-07).
-      // Resonance auto-gains 1/round at turn start; full refill on Soma Break.
-      // Strain ticks via "aggressive" Resonance spends; resets on Soma Break.
-      // Authority is the older narrative pool, now first-class on the sheet.
-      // Cosmic Linguist Resonance/Strain/Authority chips retired (folded into Surge
-      // 2026-05-28). Kept null for the template ref.
-      const cosmicLinguistState = null;
-
       // Phase B (2026-05-07) — Wyrdlens / Dreamwalker / Pactkeeper sheet states.
-      // Mirrors cosmicLinguistState — null when the actor doesn't carry the
+      // Null when the actor doesn't carry the
       // class, otherwise a snapshot of pool data ready for HBS chip rendering.
       const _wlCls = Array.from(actor.items).find(it => it.type === "class" && (it.system?.identifier === "wyrdlens-adept" || it.system?.identifier === "wyrdlens_adept"));
       const wyrdlensState = _wlCls ? {
@@ -22567,7 +24042,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         bulwarkPools,
         isTCC: actorIsTCC,
         shadowCourierState,
-        cosmicLinguistState,
         wyrdlensState,
         dreamwalkerState,
         pactkeeperState,
@@ -22664,7 +24138,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           kind: "power",
           system: {
             sephirah: magic.sephirah,
-            manifestation: { form: "sigil", function: "transform", duration: "instant", scale: "personal" }
+            manifestation: { duration: "instant" }
           }
         }),
         features:      featuresEnriched,
@@ -22881,7 +24355,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         SEPHIROTH:     ftSephirothFor(ftEffectiveSephirah(this.actor, this.actor?.system?.magic?.sephirah)),   // players never see a locked sefirah (Yesod)
         INTENTS:       FT.INTENTS,
         CHANNELS:      FT.CHANNELS,
-        MODES:         FT.MODES,
         CONDITIONS:    FT.CONDITIONS,
         DEFENSES:      FT.DEFENSES,
         DAMAGE_TYPES:  FT.DAMAGE_TYPES,
@@ -22904,7 +24377,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                  features: [], featureGroups: { path: [], ancestry: [], identity: [], other: [] },
                  gear: [], bbttcc: { active: false, identity: {}, tikkun: {}, terrain: {} },
                  SEPHIROTH: FT.SEPHIROTH, INTENTS: FT.INTENTS, CHANNELS: FT.CHANNELS,
-                 MODES: FT.MODES, CONDITIONS: FT.CONDITIONS, DEFENSES: FT.DEFENSES, isEditable: true };
+                 CONDITIONS: FT.CONDITIONS, DEFENSES: FT.DEFENSES, isEditable: true };
       }
     }
 
@@ -24901,7 +26374,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         formula: i.system?.damage?.formula ?? "",
         type:    i.system?.damage?.type ?? "",
         skill:   i.system?.skill ?? "violence",
-        intent:  i.system?.intent ?? "violence",
+        intent:  ftItemIntent(i, "violence"),
         category: i.system?.category ?? "",
       }));
       const TYPE_LABELS = { class: "Path", subclass: "Doctrine", race: "Ancestry", species: "Ancestry" };
@@ -25002,10 +26475,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           img:    it?.img ?? "icons/svg/mystery-man.svg",
           name:   it?.name ?? e.itemName ?? "Lost Manifestation",
           stabilityLabel: FT.MANIFESTATION_STABILITIES?.[e.stability]?.label ?? ftCap(e.stability ?? ""),
-          upkeepHint: e.stability === "sustained" ? `${e.tier} Clarity / scene`
-                    : e.stability === "bound"     ? `${e.tier} Clarity / Soma Break`
-                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break`   // 10-29: enduring bills like bound (no OP tick exists; marks ruling)
-                    : ""
+          upkeepHint: ftUpkeepHint(actor, e)   // what ftChargeUpkeep bills: keyed upkeep, else the stability baseline (2026-11-08)
         };
       }) : [];
 
@@ -25032,12 +26502,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const _abBurnBand  = ftBurnBandFor(actor);   // heat = Surge band (2026-10-29)
       const _abAuraState = resources.aura?.state ?? "none";
       const _abAuraData  = (AURA_STATES ?? {})[_abAuraState] ?? { label: "None", color: "#78909c", desc: "" };
-
-      // NPC Parity Sprint B (2026-05-14) — Cosmic Linguist class panel state.
-      // Mirrors char-sheet builder; Resonance auto-gains 1/round, Strain
-      // ticks on aggressive spends, Authority is the older narrative pool.
-      // Cosmic Linguist Resonance/Strain/Authority retired (folded into Surge 2026-05-28).
-      const cosmicLinguistState = null;
 
       // NPC Parity Sprint B (2026-05-14) — Pactkeeper class panel state.
       // Mirrors the character sheet's pactkeeperState builder so the same
@@ -25231,7 +26695,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         bbttcc,
         bulwarkPools,
         shadowCourierState,
-        cosmicLinguistState,
         dreamwalkerState,
         pactkeeperState,
         soulSmithState,
@@ -26206,7 +27669,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const item = this.item;
     if (!item) return;
     const parts = _ftReadDamagePartsRaw(item);
-    parts.push({ formula: "1d6", type: "kinetic", flavor: "", track: "integrity" });
+    parts.push({ formula: "1d6", type: "kinetic", flavor: "" });   // track derives from the type (2026-11-08)
     await item.update({ "system.damageParts": parts });
   }
   async function _ftOnDeleteDamagePart(event, target) {
@@ -26277,7 +27740,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   async function _ftOnOpenManifestationEngine(event, target) {
     const item = this.item;
     if (!item) return;
-    try { await openManifestationWizardV2(item.actor ?? null, { existingItem: item }); }
+    // An existing Signature opens in Signature mode (teeth P29) — the same cap check as its slot on the sheet.
+    const signature = !!item.actor && item.system?.manifestation?.isSignature === true;
+    try { await openManifestationWizardV2(item.actor ?? null, { existingItem: item, signature }); }
     catch (e) {
       console.warn("[fourththing] open Manifestation Engine failed", e);
       ui.notifications?.error("Manifestation Engine failed to open (see console).");
@@ -26308,6 +27773,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       system.effect ??= "";
       system.flavor ??= "";
       system.manifestation = ftNormalizeManifestationData(system, "power");
+      // The one range (teeth P25): a legacy Range Baseline shows as the feet it reached, so a save keeps it.
+      if (!(Number(system.manifestation.rangeFt) > 0) && _ftItemRangeFt(this.item) > 5) system.manifestation.rangeFt = _ftItemRangeFt(this.item);
       system.damageRoll    = ftNormalizeDamageRoll(system);
       // Multi-damage editor rows — ensure an array for template iteration.
       system.damageParts = Array.isArray(system.damageParts)
@@ -26333,46 +27800,59 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       return {
         item:       this.item,
         system,
+        // Damage flavor (teeth P36): a constrained select for thermal / chemical, a tag box otherwise; fire → hot read through.
+        damageFlavorOpts:  FT.DAMAGE_FLAVORS?.[String(system.damageRoll?.type ?? "").toLowerCase()] ?? null,
+        damageFlavorValue: ftAliasHitFlavor(system.damageRoll?.type, system.damageRoll?.flavor),
         isGM:       game.user?.isGM === true,
-        SEPHIROTH:  ftSephirothFor(this.item.system?.sephirah),   // 10-29: players never see a locked sefirah (Yesod)
+        SEPHIROTH:  ftSephirothFor(ftEffectiveSephirah(this.item.actor, this.item.system?.sephirah)),   // 10-29: players never see a locked sefirah (Yesod)
         INTENTS:    FT.INTENTS,
         CHANNELS:   FT.CHANNELS,
-        MODES:      FT.MODES,
         DAMAGE_TYPES: FT.DAMAGE_TYPES,
-        CONDITIONS: FT.CONDITIONS,
-        APPLIED_STATE_DURATIONS: { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" },
+        CONDITIONS: ftAuthorableConditions(),   // authorable only — engine-owned states aren't offered (teeth P04)
+        ...ftManifestationSheetCostContext(this.item, system, "power"),
         appliedStatesSelected: selectedStates,
         appliedStatesOverrideRows: overrideRows,
-        MANIFESTATION_FORMS: FT.MANIFESTATION_FORMS,
-        MANIFESTATION_FUNCTIONS: FT.MANIFESTATION_FUNCTIONS,
-        MANIFESTATION_DURATIONS: FT.MANIFESTATION_DURATIONS,
-        MANIFESTATION_STABILITIES: FT.MANIFESTATION_STABILITIES,
-        MANIFESTATION_INTERACTIONS: FT.MANIFESTATION_INTERACTIONS,
+        MANIFESTATION_STABILITIES: ftStabilityOptionsForItem(this.item),   // non-TCC owners aren't offered Instant (2026-11-08, teeth P21)
         MANIFESTATION_COSTS: FT.MANIFESTATION_COSTS,
-        MANIFESTATION_SCALES: FT.MANIFESTATION_SCALES,
         // Phase A option lists for the Phase B editor dropdowns.
         DAMAGE_DICE:        FT_DAMAGE_DICE,
         DAMAGE_OPS:         { damage: "Damage", heal: "Heal", none: "None" },
-        AREA_SHAPES:        { none: "None", cone: "Cone", sphere: "Sphere", line: "Line", cube: "Cube", cylinder: "Cylinder" },
-        ACTIVATION_TYPES:   { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free / passive" },
+        AREA_SHAPES:        ftAreaShapeOptions(),   // Cube retired, Hex-wide added (2026-11-08, teeth P27)
+        areaSizeLabel:      ftAreaSizeLabel(system.manifestation.area?.shape),
+        areaIsTemplate:     !["none", "hex"].includes(system.manifestation.area?.shape ?? "none"),
+        areaRangeless:      ["cone", "line", "hex"].includes(system.manifestation.area?.shape ?? "none"),
+        // The sefirah that actually applies (2026-11-08, teeth P35): a Steward's Sephirotic Alignment locks it.
+        sephLocked:         !!ftStewardSephirah(this.item.actor),
+        effSephirah:        ftEffectiveSephirah(this.item.actor, sephirah),
         DEFENSES:           FT.DEFENSES,
-        TRACKS:             { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" },
+        // Track derives from the damage type (2026-11-08): a choice only for heals; Clarity / Noise via the pool row.
+        HEAL_TRACKS:        FT_HEAL_TRACKS,
+        damageTrackLabel:   ftCap(ftLandingTrack(system.damageRoll.op, system.damageRoll.track, system.damageRoll.type)),
+        POOL_CLARITY_OPTS:  FT_POOL_SHIFT_CLARITY_OPTS,
+        POOL_NOISE_OPTS:    FT_POOL_SHIFT_NOISE_OPTS,
+        poolShiftClarity:   String(system.manifestation.poolShift?.clarity ?? 0),
+        poolShiftNoise:     String(system.manifestation.poolShift?.noise ?? 0),
         // Post-cast effect-resolution editor (2026-05-05).
-        FACULTIES:          { ...FT.INTENTS, ...FT.CHANNELS },
+        FACULTIES:          FT.FACULTIES,
         RESOLUTION_SHAPES: {
-          auto:      "Auto-apply (no second roll)",
-          attack:    "Attack — caster vs target defense",
-          save:      "Save — target rolls vs cast DC",
-          contested: "Contested — both roll, higher wins"
+          auto:      "Auto — lands on a successful cast (no second roll)",
+          attack:    "Attack — Intent + Channel vs the target's defense",
+          save:      "Save: target rolls vs the save DC — a pass stops the conditions",
+          contested: "Contested — both roll; a target win stops the conditions"
         },
         // A Steward never sets a DC (2026-11-08): the Fixed option exists only on foe / unowned items.
-        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Standard (11 + tier×2 + channel)" } : { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
-        ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
+        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Ladder (11 + tier×2 + channel)" } : { "cast-dc": "Ladder (11 + tier×2 + channel)", "fixed": "Fixed" },
+        ON_RESOLVE_OUTCOMES: { negate: "No damage", half: "Half damage" },
         CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
+        // 2026-11-08 (teeth P05/P10/P15): derived attack defense, beneficial lock, hit save on attack / auto shapes.
+        attackDefenseLabel: ftCap(ftAttackDefenseFor(this.item)),
+        isBeneficialWorking: _ftStrikeIsBeneficial(this.item),
+        hitSaveAllowed:     !_ftStrikeIsBeneficial(this.item) && ["attack", "auto"].includes(system.manifestation.resolution?.shape ?? "auto"),
         manifestationModeLabel: ftManifestationModeLabel(system, "power"),
         manifestationFrameChips: ftManifestationFrameChips("power", system),
         manifestationCostLabel: ftManifestationCostLabel("power", system),
         statStrip: ftItemStatStrip(this.item, system),
+        magnitude: ftManifestationMagnitudeSheetContext(this.item),   // Rubric v1.2 points, compact (2026-11-08)
         alignMod:   ftAlignmentMod(ftEffectiveSephirah(this.item.actor, sephirah), intent, channel),
         manifestationCoachHtml: buildManifestationCoachHTML(this.item.actor, { kind: "power", system }),
         isEditable: this.isEditable,
@@ -26391,6 +27871,25 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // object-vs-array and the on-disk data drifts. Array replaces cleanly.
     _prepareSubmitData(event, form, formData) {
       const data = super._prepareSubmitData(event, form, formData);
+      // Retired activation keys go when the sheet writes an activation (2026-11-08, teeth P20) — a stored consumePool:false
+      // or a legacy system.activation string would otherwise override the type just chosen.
+      if (foundry.utils.getProperty(data, "system.manifestation.activation.type") !== undefined) {
+        const _srcAct = this.item?._source?.system?.manifestation?.activation;
+        if (_srcAct && typeof _srcAct === "object" && "consumePool" in _srcAct) foundry.utils.setProperty(data, "system.manifestation.activation.-=consumePool", null);
+        if (typeof this.item?._source?.system?.activation === "string") foundry.utils.setProperty(data, "system.-=activation", null);
+      }
+      // The one range (2026-11-08, teeth P25): once the sheet posts rangeFt (shown at the legacy Range Baseline's feet),
+      // the Baseline label goes — "self" stays while the range is 0 (it still marks a self manifestation). Cones, lines
+      // and hex-wide take no range; an area never chains (P28).
+      {
+        const _shp = String(foundry.utils.getProperty(data, "system.manifestation.area.shape") ?? this.item.system?.manifestation?.area?.shape ?? "none");
+        if (["cone", "line", "hex"].includes(_shp) && foundry.utils.getProperty(data, "system.manifestation.rangeFt") !== undefined) foundry.utils.setProperty(data, "system.manifestation.rangeFt", 0);
+        if (_shp !== "none") foundry.utils.setProperty(data, "system.manifestation.chain.enabled", false);
+        const _rf = Number(foundry.utils.getProperty(data, "system.manifestation.rangeFt"));
+        const _leg = this.item?._source?.system?.range;
+        if (Number.isFinite(_rf) && typeof _leg === "string" && !(["self", "personal"].includes(_leg.toLowerCase()) && !(_rf > 0)))
+          foundry.utils.setProperty(data, "system.-=range", null);
+      }
       const path = "system.manifestation.appliedStates.states";
       const raw  = foundry.utils.getProperty(data, path);
       if (raw && typeof raw === "object" && !Array.isArray(raw)) {
@@ -26410,6 +27909,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           .map(k => dpRaw[k]);
         foundry.utils.setProperty(data, dpPath, arr);
       }
+      // Clarity / Noise pool row (2026-11-08): selects post strings — store clamped integers.
+      const psPath = "system.manifestation.poolShift";
+      const psRaw  = foundry.utils.getProperty(data, psPath);
+      if (psRaw && typeof psRaw === "object") foundry.utils.setProperty(data, psPath, ftNormalizePoolShift(psRaw));
       return data;
     }
   }
@@ -26438,13 +27941,25 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       system.effect ??= "";
       system.flavor ??= "";
       system.range ??= { short: 1, long: 1 };
+      const _rawConcept = String(system.manifestation?.concept ?? "");
       system.manifestation = ftNormalizeManifestationData(system, "weapon");
-      system.damage ??= { formula: "2d6", attribute: system.intent ?? "violence", type: "kinetic", track: "integrity" };
-      system.damage.track ??= "integrity";
+      // The concept box shows what was authored — never the effect-text backfill, which a sheet save would then store and
+      // turn a plain weapon into a "manifestation" (2026-11-08, teeth P30).
+      system.manifestation.concept = _rawConcept;
+      // A Form's range is rangeFt (teeth P25): a legacy Form shows the number its Short / Long reached, so a save keeps it.
+      const _isFormW = ftIsFormWeapon(this.item);
+      if (_isFormW && !(Number(system.manifestation.rangeFt) > 0) && _ftItemRangeFt(this.item) > 5) system.manifestation.rangeFt = _ftItemRangeFt(this.item);
+      system.nonlethal = ftWeaponIsNonlethal(this.item);
+      system.damage ??= { formula: "2d6", type: "kinetic", track: "integrity" };
+      system.damage.track = ftTrackForDamage(system.damage.track, system.damage.type);   // derived (2026-11-08)
       // Multi-damage editor rows — ensure an array for template iteration.
-      system.damageParts = Array.isArray(system.damageParts)
+      system.damageParts = (Array.isArray(system.damageParts)
         ? system.damageParts
-        : (system.damageParts && typeof system.damageParts === "object" ? Object.values(system.damageParts) : []);
+        : (system.damageParts && typeof system.damageParts === "object" ? Object.values(system.damageParts) : []))
+        // Each row's flavor is a constrained select for thermal / chemical (fire → hot read through), a tag box otherwise (teeth P36).
+        .map(p => (p && typeof p === "object")
+          ? { ...p, flavor: ftAliasHitFlavor(p.type, p.flavor), flavorOpts: FT.DAMAGE_FLAVORS?.[String(p.type ?? "").toLowerCase()] ?? null }
+          : p);
       const sheetMode = _ftReadManifestMode(this.item);
       const selectedStates = Array.isArray(system.manifestation.appliedStates?.states)
         ? Object.fromEntries(system.manifestation.appliedStates.states.map(k => [k, true]))
@@ -26461,34 +27976,40 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         system,
         INTENTS:     FT.INTENTS,
         DAMAGE_TYPES: FT.DAMAGE_TYPES,
-        TRACKS:      { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" },
-        MANIFESTATION_FORMS: FT.MANIFESTATION_FORMS,
-        MANIFESTATION_FUNCTIONS: FT.MANIFESTATION_FUNCTIONS,
-        MANIFESTATION_DURATIONS: FT.MANIFESTATION_DURATIONS,
-        MANIFESTATION_STABILITIES: FT.MANIFESTATION_STABILITIES,
-        MANIFESTATION_INTERACTIONS: FT.MANIFESTATION_INTERACTIONS,
+        // Track derives from the damage type (2026-11-08) — shown, never chosen.
+        damageTrackLabel: ftCap(ftTrackForDamage(system.damage?.track, system.damage?.type)),
+        ...ftManifestationSheetCostContext(this.item, system, "weapon"),
+        MANIFESTATION_STABILITIES: ftStabilityOptionsForItem(this.item),   // non-TCC owners aren't offered Instant (2026-11-08, teeth P21)
         MANIFESTATION_COSTS: FT.MANIFESTATION_COSTS,
-        MANIFESTATION_SCALES: FT.MANIFESTATION_SCALES,
         DEFENSES:           FT.DEFENSES,
-        FACULTIES:          { ...FT.INTENTS, ...FT.CHANNELS },
-        CONDITIONS:         FT.CONDITIONS,
-        RESOLUTION_SHAPES: {
-          auto:      "Auto-apply (no second roll)",
-          attack:    "Attack — caster vs target defense",
-          save:      "Save — target rolls vs cast DC",
-          contested: "Contested — both roll, higher wins"
+        FACULTIES:          FT.FACULTIES,
+        isGM:               game.user?.isGM === true,   // the Signature box is GM-only (teeth P29)
+        CONDITIONS:         ftAuthorableConditions(),   // authorable only (teeth P04)
+        // 2026-11-08 (teeth P05/P10/P11/P15): a Form always rolls to hit (hit save optional); other weapons pick attack
+        // roll or save-first. The defense is derived; a weapon's save DC is 11 + tier×2 + the higher of Mind or Soul.
+        isForm:             _isFormW,
+        // Area block (teeth P27 / hex-wide) — a Form's Strike places it, picks targets by disposition like an Invoke.
+        AREA_SHAPES:        ftAreaShapeOptions(),
+        areaSizeLabel:      ftAreaSizeLabel(system.manifestation.area?.shape),
+        areaIsTemplate:     !["none", "hex"].includes(system.manifestation.area?.shape ?? "none"),
+        areaRangeless:      ["cone", "line", "hex"].includes(system.manifestation.area?.shape ?? "none"),
+        isBeneficialWorking: _ftStrikeIsBeneficial(this.item),
+        attackDefenseLabel: ftCap(ftAttackDefenseFor(this.item)),
+        strikeShapeKey:     ({ save: "save", attack: "attack" })[system.manifestation.resolution?.shape] ?? "auto",
+        WEAPON_STRIKE_SHAPES: {
+          [system.manifestation.resolution?.shape === "attack" ? "attack" : "auto"]: "Attack roll — conditions on a hit",
+          save: "Save first — no attack roll"
         },
         // A Steward never sets a DC (2026-11-08): the Fixed option exists only on foe / unowned items.
-        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Standard (11 + tier×2 + channel)" } : { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
-        ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
-        CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
-        APPLIED_STATE_DURATIONS: { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" },
+        SAVE_DC_MODES:      _ftStewardSetsNoDC(this.item.actor) ? { "cast-dc": "Standard (11 + tier×2 + the higher of Mind or Soul)" } : { "cast-dc": "Standard (11 + tier×2 + the higher of Mind or Soul)", "fixed": "Fixed" },
+        ON_RESOLVE_OUTCOMES: { negate: "No damage", half: "Half damage" },
         appliedStatesSelected: selectedStates,
         appliedStatesOverrideRows: overrideRows,
         manifestationModeLabel: ftManifestationModeLabel(system, "weapon"),
-        manifestationFrameChips: ftManifestationFrameChips("weapon", system),
-        manifestationCostLabel: ftManifestationCostLabel("weapon", system),
+        manifestationFrameChips: ftManifestationFrameChips("weapon", system, { item: this.item }),
+        manifestationCostLabel: ftManifestationCostLabel("weapon", system, { item: this.item }),
         statStrip: ftItemStatStrip(this.item, system),
+        magnitude: ftManifestationMagnitudeSheetContext(this.item),   // Rubric v1.2 points, compact (2026-11-08); Forms only
         manifestationCoachHtml: buildManifestationCoachHTML(this.item.actor, { kind: "weapon", system }),
         isEditable:  this.isEditable,
         isEditMode:  sheetMode === "edit",
@@ -26504,6 +28025,28 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // keys. Without this, mergeObject sees object-vs-array and drifts.
     _prepareSubmitData(event, form, formData) {
       const data = super._prepareSubmitData(event, form, formData);
+      // Retired activation keys go when the sheet writes an activation (2026-11-08, teeth P20) — a stored consumePool:false
+      // or a legacy system.activation string would otherwise override the type just chosen.
+      if (foundry.utils.getProperty(data, "system.manifestation.activation.type") !== undefined) {
+        const _srcAct = this.item?._source?.system?.manifestation?.activation;
+        if (_srcAct && typeof _srcAct === "object" && "consumePool" in _srcAct) foundry.utils.setProperty(data, "system.manifestation.activation.-=consumePool", null);
+        if (typeof this.item?._source?.system?.activation === "string") foundry.utils.setProperty(data, "system.-=activation", null);
+      }
+      // A Form's Short / Long follow its rangeFt (teeth P25); a cone / line / hex Form has no range.
+      if (ftIsFormWeapon(this.item, { stamp: false })) {
+        const _shp = String(foundry.utils.getProperty(data, "system.manifestation.area.shape") ?? this.item.system?.manifestation?.area?.shape ?? "none");
+        let _rf = foundry.utils.getProperty(data, "system.manifestation.rangeFt");
+        if (["cone", "line", "hex"].includes(_shp)) { _rf = 0; foundry.utils.setProperty(data, "system.manifestation.rangeFt", 0); }
+        if (_rf !== undefined) foundry.utils.setProperty(data, "system.range", ftFormRangeFromFt(_rf));
+        // An area Form never chains (teeth P28).
+        if (_shp !== "none") foundry.utils.setProperty(data, "system.manifestation.chain.enabled", false);
+      }
+      // Nonlethal is the box now (teeth P30): unticking it also drops a legacy mercy / nonlethal tag that would re-tick it.
+      if (foundry.utils.getProperty(data, "system.nonlethal") === false) {
+        const _tags = Array.isArray(this.item?._source?.system?.tags) ? this.item._source.system.tags : [];
+        if (_tags.some(t => ["mercy", "nonlethal"].includes(String(t).toLowerCase())))
+          foundry.utils.setProperty(data, "system.tags", _tags.filter(t => !["mercy", "nonlethal"].includes(String(t).toLowerCase())));
+      }
       const path = "system.manifestation.appliedStates.states";
       const raw  = foundry.utils.getProperty(data, path);
       if (raw && typeof raw === "object" && !Array.isArray(raw)) {
@@ -27216,7 +28759,7 @@ Hooks.on(_chatHook, (message, html) => {
         if (moverToken) ftSetUserTargets([moverToken]);
         // skipActionGate: AoO debited reactionUsed above; the engage flow
         // must not also debit actionUsed (Action Economy canon §3).
-        ftOpenEngageDialog(observer, item, { skipActionGate: true });
+        ftOpenEngageDialog(observer, item, { skipActionGate: true, rangeConfirm: false });
       } catch (err) {
         console.error("fourththing | AoO strike-button failed", err);
         btn.disabled = false;
@@ -30005,6 +31548,72 @@ Hooks.on("updateActor", (actor) => {
   if (actor.type === "rig") return _ftRenderCrewHud();
   if (!__ftCrewHudActiveActorId) _ftRenderCrewHud();
 });
+// The Form stamp (2026-11-08, teeth P30): a weapon created, or edited into, a Form carries flags.fourththing.manifested —
+// an authored concept or signature, a real cost (costType not none), or a manifestation / bound / path: tag; never a
+// graded arm or a Bound Working host. Every reader goes through ftIsFormWeapon. A Form's system.range follows its
+// rangeFt (P25) on any update that sets rangeFt.
+Hooks.on("preCreateItem", (item, data) => {
+  try {
+    if (item?.type !== "weapon" || foundry.utils.getProperty(item, "flags.fourththing.manifested") === true) return;
+    if (_ftFormWeaponHeuristic(item)) item.updateSource({ "flags.fourththing.manifested": true });
+  } catch (e) { console.warn("[fourththing] Form stamp on create failed", e); }
+});
+Hooks.on("preUpdateItem", (item, changes, options) => {
+  try {
+    if (item?.type !== "weapon") return;
+    const fl = item.flags?.fourththing ?? {};
+    let isForm = fl.manifested === true;
+    // Fix round 2026-11-08 (E4): the heuristic ran on item.toObject() (no parent), so its foe guard never fired — a foe's
+    // weapon is never stamped here; nor is a weapon the Engine saved as plain (E2, options.ftNoFormStamp).
+    const _noStamp = (item.parent && _ftIsFoeActor(item.parent)) || options?.ftNoFormStamp === true;
+    if (!isForm && !_noStamp && !fl.grade && !fl.working && changes?.system) {
+      const merged = foundry.utils.mergeObject(item.toObject(), changes, { inplace: false });
+      delete merged._source;
+      if (_ftFormWeaponHeuristic(merged)) { foundry.utils.setProperty(changes, "flags.fourththing.manifested", true); isForm = true; }
+    }
+    if (isForm && foundry.utils.hasProperty(changes, "system.manifestation.rangeFt") && !foundry.utils.hasProperty(changes, "system.range")) {
+      foundry.utils.setProperty(changes, "system.range", ftFormRangeFromFt(foundry.utils.getProperty(changes, "system.manifestation.rangeFt")));
+    }
+  } catch (e) { console.warn("[fourththing] Form stamp on update failed", e); }
+});
+// A Steward never carries a fixed save DC (teeth P02 data, 2026-11-08). ftSaveDCFor already ignores "fixed" for a
+// non-foe owner at read time; these hooks make the stored data say the same thing — an item created on, or edited on,
+// a non-foe actor stores saveDcMode "cast-dc" in both resolution and appliedStates. Unowned (world / pack) and foe items
+// keep a fixed DC. Registered before the derived-tier hook so the re-score reads the rewritten mode.
+const FT_SAVE_DC_MODE_PATHS = ["system.manifestation.resolution.saveDcMode", "system.manifestation.appliedStates.saveDcMode"];
+Hooks.on("preCreateItem", (item, _data, options) => {
+  try {
+    if (!item?.system?.manifestation || !_ftStewardSetsNoDC(item.parent)) return;
+    const upd = {};
+    for (const path of FT_SAVE_DC_MODE_PATHS) {
+      const v = foundry.utils.getProperty(item._source, path);
+      if (v != null && v !== "cast-dc") upd[path] = "cast-dc";
+    }
+    if (Object.keys(upd).length) {
+      item.updateSource(upd);
+      // Fix round 2026-11-08 (S2): the stored tier was scored with the fixed DC this just dropped — re-score it for the
+      // Steward (the derived-tier hook only runs on updates). Only when the rewrite fired, so a create that carries a
+      // tier for any other reason keeps it; a scoring error (null) keeps it too; options.ftKeepTier opts out.
+      if (options?.ftKeepTier !== true) {
+        const isForm = item.type === "weapon" && ftIsFormWeapon(item, { stamp: false });
+        if (isForm || item.type === "power") {
+          const t = ftManifestationMagnitudeTier(item.toObject(), isForm ? "weapon" : "power", item.parent ?? null);
+          const cur = Math.max(1, Math.min(4, Number(item._source?.system?.manifestation?.tier) || 1));
+          if (t != null && t !== cur) item.updateSource({ "system.manifestation.tier": t });
+        }
+      }
+    }
+  } catch (e) { console.warn("[fourththing] Steward DC rewrite on create failed", e); }
+});
+Hooks.on("preUpdateItem", (item, changes) => {
+  try {
+    if (!changes?.system || !item?.system?.manifestation || !_ftStewardSetsNoDC(item.parent)) return;
+    for (const path of FT_SAVE_DC_MODE_PATHS) {
+      const v = foundry.utils.hasProperty(changes, path) ? foundry.utils.getProperty(changes, path) : foundry.utils.getProperty(item._source, path);
+      if (v != null && v !== "cast-dc") foundry.utils.setProperty(changes, path, "cast-dc");
+    }
+  } catch (e) { console.warn("[fourththing] Steward DC rewrite on update failed", e); }
+});
 // Tier follows magnitude on sheet edits too (Dave 2026-11-08). A manifested Form (Engine stamp)
 // or any power with a manifestation block re-scores when a magnitude field changes — dice,
 // extra dice, states, buffs, area, range, scale, chain, conditional damage, resolution DC.
@@ -30020,7 +31629,8 @@ Hooks.on("preUpdateItem", (item, changes) => {
     if (item.parent && _ftIsFoeActor(item.parent)) return;
     if (!_ftUpdateTouchesMagnitude(changes)) return;
     const merged = foundry.utils.mergeObject(item.toObject(), changes, { inplace: false });
-    const tier = ftManifestationMagnitudeTier(merged, isForm ? "weapon" : "power");
+    const tier = ftManifestationMagnitudeTier(merged, isForm ? "weapon" : "power", item.parent ?? null);
+    if (tier == null) return;   // a scoring error never writes a tier (fix round 2026-11-08, S3)
     const cur = Math.max(1, Math.min(4, Number(item.system?.manifestation?.tier) || 1));
     if (tier !== cur) {
       foundry.utils.setProperty(changes, "system.manifestation.tier", tier);
@@ -30037,6 +31647,52 @@ Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCr
 // re-render via the updateActor hook on the rig flag.)
 Hooks.on("createActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("deleteActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
+// Initiative ward mid-combat (2026-11-08, teeth P40): a Buffs & Wards AE with an Initiative row only fed the NEXT
+// initiative roll, so a ward cast inside a started fight did nothing. When one lands on a combatant whose initiative
+// is already rolled, the active GM moves it by the ward's value (stamped on the AE) and moves it back when the AE goes.
+function _ftWardInitiativeDelta(ae) {
+  if (!ae?.flags?.fourththing?.manifestationEffect) return 0;
+  let d = 0;
+  for (const c of (ae.changes ?? [])) if (c?.key === "system.derived.initiative.bonus") d += Number(c.value) || 0;
+  return d;
+}
+function _ftCombatantsOf(combat, actor) {
+  return (combat?.combatants ?? []).filter(c => c.actor && (c.actor === actor || c.actor.uuid === actor.uuid));
+}
+Hooks.on("createActiveEffect", async (ae) => {
+  try {
+    if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
+    const a = ae?.parent;
+    const combat = game.combat;
+    if (!a || a.documentName !== "Actor" || !combat?.started) return;
+    const delta = _ftWardInitiativeDelta(ae);
+    if (!delta) return;
+    const shifted = [];
+    for (const c of _ftCombatantsOf(combat, a)) {
+      if (c.initiative === null || c.initiative === undefined) continue;
+      await combat.setInitiative(c.id, Number(c.initiative) + delta);
+      shifted.push(c.id);
+    }
+    if (shifted.length) {
+      await ae.update({ "flags.fourththing.initiativeShift": { combatId: combat.id, combatantIds: shifted, delta } });
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: a }), content: `<p style="font-size:0.78rem">⏱ ${ftEscapeHtml(a.name)}: initiative ${delta > 0 ? "+" : "−"}${Math.abs(delta)} (${ftEscapeHtml(ae.name ?? "ward")}) — moves back when the ward ends.</p>` });
+    }
+  } catch (e) { console.warn("[fourththing] initiative ward shift failed", e); }
+});
+Hooks.on("deleteActiveEffect", async (ae) => {
+  try {
+    if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
+    const sh = ae?.flags?.fourththing?.initiativeShift;
+    if (!sh || !Number(sh.delta)) return;
+    const combat = game.combats?.get?.(sh.combatId);
+    if (!combat) return;
+    for (const id of (sh.combatantIds ?? [])) {
+      const c = combat.combatants.get(id);
+      if (!c || c.initiative === null || c.initiative === undefined) continue;
+      await combat.setInitiative(id, Number(c.initiative) - Number(sh.delta));
+    }
+  } catch (e) { console.warn("[fourththing] initiative ward revert failed", e); }
+});
 // Bulwark T2 Anchor or Advance: the stance flag lives exactly as long as its AE (2026-10-25).
 Hooks.on("deleteActiveEffect", async (ae) => {
   try {
@@ -31647,6 +33303,11 @@ function _ftRelayHandlerExtra(msg) {
     // A clicker who can't write the message: the GM records that this target has taken the card.
     const m = game.messages?.get(msg.messageId);
     if (m && /^[A-Za-z0-9_]+$/.test(String(msg.key ?? ""))) m.setFlag("fourththing", `appliedTo.${msg.key}`, Date.now()).catch(e => console.warn("[fourththing] GM-relay apply stamp failed", e));
+  } else if (msg?.t === "ft-statesResolved") {
+    // A save card's clicker who can't write the strike card: the GM records the target's state outcome (teeth P12).
+    const m = game.messages?.get(msg.messageId);
+    if (m && /^[A-Za-z0-9_]+$/.test(String(msg.key ?? "")) && FT_STRIKE_STATE_STAMPS.has(msg.value))
+      m.setFlag("fourththing", `statesResolved.${msg.key}`, msg.value).catch(e => console.warn("[fourththing] GM-relay states stamp failed", e));
   } else if (msg?.t === "ft-cardResolved") {
     // Persist a chat card's one-time resolution for a clicker who can't write
     // the message (see _ftMarkCardResolved).
@@ -31783,7 +33444,7 @@ function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real
       // it was dropped from; `actorId` stays as the fallback for old payloads.
       // Active GM only, so a two-GM table doesn't apply the damage twice.
       if (game.users?.activeGM && game.users.activeGM !== game.user) return;
-      if (_ftRelaySeenRecently(`damage:${msg.targetUuid ?? msg.actorId}:${msg.op ?? "damage"}:${msg.baseDmg}:${msg.damageType ?? ""}:${msg.damageFlavor ?? ""}`)) return;
+      if (_ftRelaySeenRecently(`damage:${msg.targetUuid ?? msg.actorId}:${msg.op ?? "damage"}:${msg.baseDmg}:${msg.damageType ?? ""}:${msg.damageFlavor ?? ""}:${msg.track ?? ""}`)) return;
       (async () => {
         let actor = null;
         if (msg.targetUuid) {
@@ -31808,7 +33469,7 @@ function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real
           const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
           if (amt <= 0) continue;
           const pType  = String(part.type ?? "").toLowerCase();
-          const pTrack = String(part.track || FT.DAMAGE_TYPES?.[pType]?.track || "integrity");
+          const pTrack = ftLandingTrack(msg.op ?? "damage", part.track, pType);   // damage: from its type (2026-11-08)
           game.fourththing.rolls._applyDamageToActor(actor, amt, {
             op: msg.op ?? "damage", track: pTrack, damageType: pType,
             damageFlavor: String(part.flavor ?? "").toLowerCase(), perTargetMultiplier: 1,
@@ -31846,13 +33507,19 @@ function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real
       if (game.users?.activeGM && game.users.activeGM !== game.user) return;
       const _relayFlags = (msg.flags && typeof msg.flags === "object") ? msg.flags : {};
       const _relayFlagKeys = Object.keys(_relayFlags).filter(k => _FT_RELAY_FLAG_PATHS.has(k));
-      const sig = `applyEffects:${msg.targetUuid}:${(msg.aeList||[]).map(a=>a?.name).join("|")}:${(msg.conditionKeys||[]).join("|")}:${_relayFlagKeys.join("|")}`;
+      const sig = `applyEffects:${msg.targetUuid}:${(msg.aeList||[]).map(a=>a?.name).join("|")}:${(msg.conditionKeys||[]).join("|")}:${_relayFlagKeys.join("|")}:${(msg.updates||[]).map(u=>u?._id).join("|")}`;
       if (_ftRelaySeenRecently(sig)) return;
       (async () => {
         try {
           const doc = await fromUuid(msg.targetUuid);
           const target = doc?.actor ?? doc;
           if (!target?.createEmbeddedDocuments) return;
+          // Re-timing rows (teeth P24): only for AEs the manifestation engine created.
+          const ups = (Array.isArray(msg.updates) ? msg.updates : []).filter(u => {
+            const e = u?._id ? target.effects?.get?.(u._id) : null;
+            return !!(e?.flags?.fourththing?.appliedManifestation || e?.flags?.fourththing?.manifestationEffect || e?.flags?.fourththing?.manifestationMark);
+          });
+          if (ups.length) await target.updateEmbeddedDocuments("ActiveEffect", ups);
           const aes = (Array.isArray(msg.aeList) ? msg.aeList : []).filter(Boolean);
           if (aes.length) await target.createEmbeddedDocuments("ActiveEffect", aes);
           const conds = Array.isArray(msg.conditionKeys) ? msg.conditionKeys : [];

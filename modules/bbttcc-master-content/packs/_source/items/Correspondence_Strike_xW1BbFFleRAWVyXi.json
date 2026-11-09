@@ -112,6 +112,10 @@
         "modifiers": [],
         "resists": [],
         "immunes": []
+      },
+      "resolution": {
+        "hitSave": true,
+        "saveAttribute": "body"
       }
     },
     "description": {

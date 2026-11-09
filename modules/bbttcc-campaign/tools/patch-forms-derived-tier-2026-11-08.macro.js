@@ -22,6 +22,8 @@
   const isFormCandidate = (it) => {
     if (it.type !== "weapon") return false;
     if (foundry.utils.getProperty(it, "flags.fourththing.manifested") === true) return false;
+    // 2026-11-08 (teeth P30): the system's one Form test when deployed (game.fourththing.formWeaponHeuristic).
+    if (typeof game.fourththing?.formWeaponHeuristic === "function") return game.fourththing.formWeaponHeuristic(it);
     const mf = it.system?.manifestation ?? {};
     const tags = (it.system?.tags ?? []).map(t => String(t).toLowerCase());
     return !!String(mf.concept ?? "").trim() || (mf.costType && mf.costType !== "none") || tags.includes("bound") || tags.some(t => t.startsWith("path:"));
@@ -43,14 +45,15 @@
     const preview = foundry.utils.mergeObject(it.toObject(), foundry.utils.expandObject(u), { inplace: false });
     const cur = Math.max(1, Math.min(4, Number(it.system?.manifestation?.tier) || 1));
     if (stamped) {
-      const t = M.magnitudeTier(preview, "weapon");
+      // Owner as the 3rd arg (fix round 2026-11-08, S6); a null score (scoring error) never writes.
+      const t = M.magnitudeTier(preview, "weapon", it.parent ?? null);
       // The dry run of 2026-11-08 showed 19 legacy Forms (and 109 powers) scoring above their authored tier — mostly
       // scale "scene" / range 30 ft on starter kits. Re-tiering them locks Stewards out mid-playtest, so the write is
       // opt-in: globalThis.__formsTierRetier = true. The report always lists them.
-      if (t !== cur) { if (RETIER) u["system.manifestation.tier"] = t; report.retiered.push(`${where}: ${it.name} T${cur}→T${t}${RETIER ? "" : " (held)"}`); }
+      if (t != null && t !== cur) { if (RETIER) u["system.manifestation.tier"] = t; report.retiered.push(`${where}: ${it.name} T${cur}→T${t}${RETIER ? "" : " (held)"}`); }
     } else if (it.type === "power" && it.system?.manifestation) {
-      const t = M.magnitudeTier(preview, "power");
-      if (t !== cur) report.powerDrift.push(`${where}: ${it.name} T${cur}→T${t}`);
+      const t = M.magnitudeTier(preview, "power", it.parent ?? null);
+      if (t != null && t !== cur) report.powerDrift.push(`${where}: ${it.name} T${cur}→T${t}`);
     }
     if (!DRY_RUN && Object.keys(u).length) await it.update(u);
     return Object.keys(u).length;

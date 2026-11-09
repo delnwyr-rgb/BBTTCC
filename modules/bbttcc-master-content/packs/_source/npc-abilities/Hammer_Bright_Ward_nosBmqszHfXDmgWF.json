@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "While wielding a martial Form, +1 Guard. While the ward holds, kinetic damage you deal counts as energy.",
+    "effect": "For the scene, the Adept has +1 Guard while it wields a melee or unarmed Form, and kinetic damage it deals is dealt as electrical.",
     "tags": [
       "translated",
       "phase2-narrative",
@@ -46,18 +46,18 @@
       "costValue": 1,
       "costText": "1 Clarity / Soma Break",
       "duration": "soma-break",
-      "durationText": "Until next Soma Break.",
+      "durationText": "The scene.",
       "triggerText": "Activated as a Bonus action.",
       "scale": "personal",
-      "targetText": "Self while armed.",
+      "targetText": "Self, while armed.",
       "rangeAreaText": "Self.",
       "rangeFt": 0,
       "maintenanceCost": "",
       "riskText": "While the ward is up, the Adept cannot benefit from cover.",
       "pathResonance": "Geburah — bright martial discipline.",
-      "fictionalPermission": "May reflavor kinetic strikes as energy.",
-      "gmCalibration": "+1 Guard, kinetic→energy on outgoing damage.",
-      "mechanicalHook": "+1 Guard; outgoing damage type swap.",
+      "fictionalPermission": "Kinetic strikes land as lightning.",
+      "gmCalibration": "+1 Guard while a melee or unarmed Form is in hand; kinetic damage it deals becomes electrical.",
+      "mechanicalHook": "For the scene: +1 Guard while wielding a melee or unarmed Form; kinetic damage it deals becomes electrical.",
       "signature": "Sparks crawl up the haft.",
       "thirdThing": "Iron near the wielder rings faintly.",
       "opCost": {
@@ -78,10 +78,27 @@
         "attribute": "",
         "dcMode": "derived",
         "dcFixed": 15
-      }
+      },
+      "appliedEffects": {
+        "modifiers": [
+          {
+            "stat": "guard",
+            "op": "+",
+            "value": 1
+          }
+        ],
+        "resists": [],
+        "immunes": [],
+        "condition": "martial-form"
+      },
+      "damageConvert": {
+        "from": "kinetic",
+        "to": "electrical"
+      },
+      "markDuration": "scene"
     },
     "description": {
-      "value": "<p><strong>Form.</strong> <em>A bright halo around the haft of any weapon.</em></p>\n<p>While wielding a martial Form, the adept has +1 Guard. While the ward holds, kinetic damage the adept deals counts as electrical.</p>\n<p><strong>Cost.</strong> 1 Clarity · bonus · self / self.</p>\n<p><em>Sparks crawl up the haft.</em></p>"
+      "value": "<p><strong>Form.</strong> <em>A bright halo around the haft of any weapon.</em></p>\n<p>For the scene, the adept has +1 Guard while it wields a melee or unarmed Form, and kinetic damage it deals is dealt as electrical.</p>\n<p><strong>Cost.</strong> 1 Clarity · bonus · self.</p>\n<p><em>Sparks crawl up the haft.</em></p>"
     }
   },
   "flags": {

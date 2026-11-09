@@ -11,21 +11,22 @@
     "noiseGain": 2,
     "activation": "action",
     "target": "burst",
-    "range": "near",
-    "damage": "2d6",
+    "range": "self",
+    "damage": "",
     "damageType": "qliphothic",
     "damageFlavor": "",
     "damageRoll": {
-      "op": "none",
-      "number": 0,
+      "op": "damage",
+      "number": 2,
       "die": "d6",
+      "bonus": 0,
       "attribute": "",
       "type": "qliphothic",
       "flavor": "",
       "track": "stress"
     },
     "damageParts": [],
-    "effect": "The Shambler's mouth opens onto a place that isn't here. Each creature within near makes a Resolve check; on a failure, take 2d6 qliphothic damage to Stress and become Shaken until the start of their next turn.",
+    "effect": "The Shambler's mouth opens onto a place that isn't here. Each creature within 15 ft of it makes a Soul save; on a failure it takes 2d6 qliphothic damage to Stress and is Shaken for 1 round. A save negates both.",
     "tags": [
       "translated",
       "phase2-narrative",
@@ -49,15 +50,15 @@
       "durationText": "One pulse.",
       "triggerText": "When the Shambler is engaged in melee.",
       "scale": "scene",
-      "targetText": "All creatures within near.",
-      "rangeAreaText": "Near burst.",
+      "targetText": "Each creature within 15 ft of the Shambler.",
+      "rangeAreaText": "15-ft burst centred on the Shambler.",
       "rangeFt": 0,
       "maintenanceCost": "",
       "riskText": "The Shambler takes 1 Stress per pulse.",
       "pathResonance": "Malkuth corrupted — kingdom of consumption.",
       "fictionalPermission": "Players may be Shaken by what's behind the teeth.",
-      "gmCalibration": "Resolve check; qliphothic to Stress.",
-      "mechanicalHook": "AOE Resolve save; 2d6 qliphothic to Stress + Shaken.",
+      "gmCalibration": "Soul save (negates); qliphothic to Stress; Shaken 1 round.",
+      "mechanicalHook": "15-ft burst on itself, Soul save (negates): 2d6 qliphothic to Stress + Shaken 1 round.",
       "signature": "The room tastes of iron.",
       "thirdThing": "Whoever fails remembers a death that wasn't theirs.",
       "opCost": {
@@ -65,8 +66,8 @@
         "value": 0
       },
       "area": {
-        "shape": "none",
-        "size": 0
+        "shape": "sphere",
+        "size": 15
       },
       "activation": {
         "type": "action",
@@ -78,10 +79,31 @@
         "attribute": "",
         "dcMode": "derived",
         "dcFixed": 15
+      },
+      "resolution": {
+        "shape": "save",
+        "hitSave": false,
+        "hitSaveHalf": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "saveByPrompt": false
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
-      "value": "<p><strong>Working.</strong> <em>Ambient hunger spilled outward from a wound that never closed.</em></p>\n<p>The shambler's mouth opens onto a place that isn't here. Each creature within near range makes a Resolve check (DC by tier); on a failure it takes 2d6 qliphothic damage to Stress and is Shaken until the start of its next turn.</p>\n<p><strong>Cost.</strong> 2 Clarity, +2 Noise · action · burst / near.</p>\n<p><em>The room briefly tastes of iron and a memory you didn't have.</em></p>"
+      "value": "<p><strong>Working.</strong> <em>Ambient hunger spilled outward from a wound that never closed.</em></p>\n<p>The shambler's mouth opens onto a place that isn't here. Each creature within 15 ft of it makes a Soul save (DC by tier); on a failure it takes 2d6 qliphothic damage to Stress and is Shaken for 1 round. A save negates both.</p>\n<p><strong>Cost.</strong> 2 Clarity, +2 Noise · action · 15-ft burst centred on the shambler.</p>\n<p><em>The room briefly tastes of iron and a memory you didn't have.</em></p>"
     }
   },
   "flags": {

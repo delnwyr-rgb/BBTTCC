@@ -13,8 +13,8 @@
 //                                       handles attack-vs-defense roll)
 //   • Save/AoE items → type: "weapon"  (Strike button still renders; GM
 //                                       picks the relevant target defense
-//                                       — Resolve for "Wis", Evasion for
-//                                       "Dex", Guard for "Con" — to model
+//                                       — Resolve for "Wis", Guard for
+//                                       "Dex" / "Str" — to model
 //                                       the save. Damage rolls in engage
 //                                       dialog. Description spells out the
 //                                       save mechanic.)
@@ -22,8 +22,9 @@
 //   • Principles     → type: "feature"  (description-only by design)
 //
 // Damage convention (matches Shambler's Rot-Branch): bare dice formula in
-// system.damage.formula ("1d6", "2d8") — system.damage.attribute auto-adds
-// the listed faculty at roll time via the engage dialog. RFI 7-damage canon
+// system.damage.formula ("1d6", "2d8") — the strike adds its Intent faculty
+// at roll time (system.damage.attribute retired 2026-11-08; Intent drives
+// both the attack and the damage add). RFI 7-damage canon
 // in system.damage.type (kinetic / energy / sephirotic / qliphothic /
 // psychic / poison / radiation). Free-text in system.damage.damageFlavor
 // for narrative tone (blade / cinder / bone-rot / etc.).
@@ -73,7 +74,7 @@
   // ── Mechanical scaffolding tables ────────────────────────────────────────
   const TIER_INT = { I: 1, II: 2, III: 3, IV: 4 };
 
-  // Damage formula by tier × bracket (bare dice — attribute auto-adds at roll)
+  // Damage formula by tier × bracket (bare dice — the Intent faculty adds at roll)
   const DMG = {
     light:  { I: "1d6",  II: "1d8",  III: "2d6",  IV: "2d8"  },
     medium: { I: "1d8",  II: "1d10", III: "2d8",  IV: "2d10" },
@@ -92,8 +93,9 @@
     return valid.includes(canon) ? canon : "kinetic";
   }
 
-  // Default attribute (faculty) per role — used for system.damage.attribute
-  // so the engage dialog auto-adds the right bonus.
+  // Legacy per-role damage faculty. Retired 2026-11-08: the strike's Intent
+  // (default Violence) is both its attack and its damage faculty; kept only
+  // for the prose line below.
   const ROLE_ATTRIBUTE = {
     brute:    "violence",
     stealth:  "violence",
@@ -138,7 +140,7 @@
       : { short: Math.max(1, Math.round((atk.shortRange ?? 60) / 5)), long: Math.max(1, Math.round((atk.longRange ?? 180) / 5)) };
     const FT_DEF_HINT = {
       con:  "Resolve (Body/Constitution-flavored saves)",
-      dex:  "Evasion (Dexterity-flavored saves)",
+      dex:  "Guard (Dexterity-flavored saves)",
       wis:  "Resolve (Wisdom-flavored saves)",
       str:  "Guard (Strength-flavored saves)",
       int:  "Resolve (Mind/Intelligence-flavored saves)",
@@ -157,7 +159,6 @@
         skill,
         damage: {
           formula,
-          attribute: attr,
           type: dType,
           damageFlavor: flavor,
           track: dType === "psychic" || dType === "qliphothic" ? "stress" : "integrity"
@@ -167,7 +168,7 @@
         effect: atk.riderText ?? "",
         flavor: atk.flavor ?? "",
         description: {
-          value: `<p><strong>Strike.</strong> ${reachLabel}, one target. Damage: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${attr}.${atk.riderText ? " " + atk.riderText : ""}</p>${atk.flavor ? `<p><em>${atk.flavor}</em></p>` : ""}`,
+          value: `<p><strong>Strike.</strong> ${reachLabel}, one target. Damage: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${intent}.${atk.riderText ? " " + atk.riderText : ""}</p>${atk.flavor ? `<p><em>${atk.flavor}</em></p>` : ""}`,
           chat: ""
         }
       },
@@ -181,7 +182,7 @@
 
   // Build a weapon-type item flagged as save-based AoE. Strike button still
   // renders; engage dialog lets the GM pick the appropriate target defense
-  // (Resolve / Evasion / Guard) to model the save. Description spells out
+  // (Resolve / Guard) to model the save. Description spells out
   // the intended save mechanic, recharge, and rider effects.
   function makeSaveItem(spec, save) {
     const formula = damageFormula(spec, save.damageOverride);
@@ -195,7 +196,7 @@
     const size    = save.template?.size ?? 10;
     const SAVE_TO_DEFENSE = {
       con: "Resolve",
-      dex: "Evasion",
+      dex: "Guard",
       wis: "Resolve",
       str: "Guard",
       int: "Resolve",
@@ -205,7 +206,7 @@
       mind: "Resolve",
       soul: "Resolve",
       violence: "Guard",
-      intrigue: "Evasion"
+      intrigue: "Guard"
     };
     const targetDefense = SAVE_TO_DEFENSE[save.saveAbility] ?? "Resolve";
     const rechargeSuffix = save.recharge ? ` (Recharge ${save.recharge})` : (save.usesPerDay ? ` (${save.usesPerDay}/Day)` : "");
@@ -220,7 +221,6 @@
         skill,
         damage: {
           formula,
-          attribute: attr,
           type: dType,
           damageFlavor: flavor,
           track: dType === "psychic" || dType === "qliphothic" ? "stress" : "integrity"

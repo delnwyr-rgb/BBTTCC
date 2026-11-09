@@ -2,9 +2,9 @@
  * rider actually happens in play (owner ask 2026-10-06: "anything with a described mechanical effect should happen").
  * Three shapes, all executed by EXISTING system machinery (module.js, 2026-10-06 wiring):
  *   ON-HIT          "On a hit, the target is Staggered…"          → appliedStates (auto-applied on the hit)
- *   ON-HIT SAVE     "On a hit … Body vs DC 13 or be knocked Prone" → resolution{saveAttribute,fixed DC,onSave:negate,statesOnFail}
+ *   ON-HIT SAVE     "On a hit … Body vs DC 13 or be knocked Prone" → resolution{saveAttribute,fixed DC,onSave:negate}
  *                                                                     + appliedStates (+ riderDamage) → save-prompt card
- *   SAVE-FIRST      "15 ft. cone. Resolve vs DC 13. Fail: …"       → resolution{mode:"save",…} (+ area) → no attack roll,
+ *   SAVE-FIRST      "15 ft. cone. Resolve vs DC 13. Fail: …"       → resolution{shape:"save",…} (+ area) → no attack roll,
  *                                                                     a save card per target (weapon damage, half/negate)
  * Returns { shape, manifestation, notes[] } or null when the prose isn't one of these (left for the npc-automation engine).
  */
@@ -63,7 +63,8 @@ export function parseRider(text) {
 
   if (saveFirst) {
     const mf = {
-      resolution: { mode: "save", ...save, onSave: halfOnSave ? "half" : "negate", statesOnFail: noStatesOnSave || !halfOnSave },
+      // shape "save" = save-first (resolution.mode retired 2026-11-08); a passed save never lands states (statesOnFail retired).
+      resolution: { shape: "save", ...save, onSave: halfOnSave ? "half" : "negate" },
       appliedStates: conds.length ? { states: conds, ...dur, saveAttribute: dur.saveEachRound ? save.saveAttribute : undefined } : undefined,
     };
     if (area) mf.area = area; else notes.push("no area parsed — uses the GM's targets");
@@ -73,7 +74,7 @@ export function parseRider(text) {
   if (onHit && save && (conds.length || riderDamageIn(t))) {
     const rd = riderDamageIn(t);
     const mf = {
-      resolution: { ...save, onSave: "negate", statesOnFail: true },
+      resolution: { ...save, onSave: "negate" },
       appliedStates: conds.length ? { states: conds, ...dur, saveAttribute: dur.saveEachRound ? save.saveAttribute : undefined } : undefined,
       riderDamage: rd || undefined,
     };

@@ -11,21 +11,22 @@
     "noiseGain": 1,
     "activation": "action",
     "target": "burst",
-    "range": "near",
-    "damage": "2d6",
+    "range": "self",
+    "damage": "",
     "damageType": "sephirotic",
     "damageFlavor": "",
     "damageRoll": {
-      "op": "none",
-      "number": 0,
+      "op": "damage",
+      "number": 2,
       "die": "d6",
+      "bonus": 0,
       "attribute": "",
       "type": "sephirotic",
       "flavor": "",
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 sephirotic damage and become Charmed for one exchange (they see only beauty in the Elemental).",
+    "effect": "Release a saturated wave. Each creature within 15 ft of the Elemental makes a Soul save; on a failure it takes 2d6 sephirotic damage and is Charmed by the Elemental for 1 round — it sees only beauty in it and can't attack it. A save negates both.",
     "tags": [
       "translated",
       "phase2-narrative",
@@ -35,7 +36,7 @@
     "category": "manifestation",
     "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
     "manifestation": {
-      "tier": 1,
+      "tier": 2,
       "family": "working",
       "concept": "An eruption of impossible color and goodwill.",
       "form": "aura",
@@ -46,18 +47,18 @@
       "costValue": 2,
       "costText": "2 Clarity",
       "duration": "instant",
-      "durationText": "One pulse; Charm lasts one exchange.",
+      "durationText": "One pulse; the charm lasts 1 round.",
       "triggerText": "Activated as an Action.",
       "scale": "scene",
-      "targetText": "All creatures within near.",
-      "rangeAreaText": "Near burst.",
+      "targetText": "Each creature within 15 ft of the Elemental.",
+      "rangeAreaText": "15-ft burst centred on the Elemental.",
       "rangeFt": 0,
       "maintenanceCost": "",
       "riskText": "The Elemental fades by 1 Integrity per Cascade — joy is expensive.",
       "pathResonance": "Netzach — eternity of art.",
-      "fictionalPermission": "Charmed targets cannot directly attack the Elemental.",
-      "gmCalibration": "Resolve check; energy damage; Charm one exchange.",
-      "mechanicalHook": "AOE save; 2d6 energy + Charmed.",
+      "fictionalPermission": "Charmed targets can't attack the Elemental.",
+      "gmCalibration": "Soul save (negates); 2d6 sephirotic; Charmed by the Elemental 1 round.",
+      "mechanicalHook": "15-ft burst on itself, Soul save (negates): 2d6 sephirotic + Charmed by the Elemental 1 round.",
       "signature": "Animals appear behind the targets.",
       "thirdThing": "Anyone Charmed remembers it as the best afternoon of their life.",
       "opCost": {
@@ -65,8 +66,8 @@
         "value": 0
       },
       "area": {
-        "shape": "none",
-        "size": 0
+        "shape": "sphere",
+        "size": 15
       },
       "activation": {
         "type": "action",
@@ -78,10 +79,31 @@
         "attribute": "",
         "dcMode": "derived",
         "dcFixed": 15
+      },
+      "resolution": {
+        "shape": "save",
+        "hitSave": false,
+        "hitSaveHalf": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "saveByPrompt": false
+      },
+      "appliedStates": {
+        "states": [
+          "charmed"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
-      "value": "<p><strong>Working.</strong> <em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within near range makes a Resolve check (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed for one exchange — it sees only beauty in the Elemental.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · burst / near.</p>\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p>"
+      "value": "<p><strong>Working.</strong> <em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within 15 ft of the Elemental makes a Soul save (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed by the Elemental for 1 round — it sees only beauty in the Elemental and can't attack it. A save negates both.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · 15-ft burst centred on the Elemental.</p>\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p>"
     }
   },
   "flags": {

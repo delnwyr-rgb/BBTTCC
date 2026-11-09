@@ -537,7 +537,7 @@
       "type": "weapon",
       "damage.formula": "dnd5e damage part (dice + bonus); '+N' flat bonuses are dropped unless the item is enhanced",
       "damage.type": "via damage",
-      "damage.attribute": "violence → Str melee / Dex finesse; intrigue → Dex ranged",
+      "intent": "the item's Intent (any of six faculties; weapons default violence) is its attack AND damage faculty — violence → Str melee / Dex finesse; intrigue → Dex ranged. system.damage.attribute is retired (2026-11-08) and ignored",
       "range.short/long (squares)": "×5 ft; melee reach 1 → 5 ft",
       "category melee/ranged": "weapon type simpleM/martialM/simpleR/martialR: martial = tagged heavy, two-handed, reach, or a firearm beyond a pistol; everything else simple (ruled 2026-10-07)",
       "tags": {
