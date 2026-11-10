@@ -12086,6 +12086,23 @@ function ftManifestationMagnitudeSheetContext(item) {
   } catch (e) { console.warn("Roll for Initiation | magnitude sheet context failed", e); return null; }
 }
 function ftIsManifestedForm(item) { return ftIsFormWeapon(item); }
+// Delivery tags for incoming-damage triggers (Dave 2026-11-09: Foam Finger's "non-magical projectile" was offered on
+// melee claws — the trigger only saw the damage type). From the source item: "manifestation" for a power or an Engine
+// Form; "melee" / "ranged" from the weapon category; "projectile" for a NON-magical ranged weapon fired by firearms /
+// ranged / thrown skill. Unknown source → [] (nothing narrower than the damage type can match).
+function ftDeliveryTags(item) {
+  if (!item) return [];
+  if (item.type === "power") return ["manifestation"];
+  if (item.type !== "weapon") return [];
+  const out = [];
+  const magical = ftIsManifestedForm(item);
+  if (magical) out.push("manifestation");
+  const cat = String(item.system?.category ?? "").toLowerCase();
+  const skill = String(item.system?.skill ?? "").toLowerCase();
+  out.push(cat === "ranged" ? "ranged" : "melee");
+  if (!magical && cat === "ranged" && ["firearms", "ranged", "thrown"].includes(skill)) out.push("projectile");
+  return out;
+}
 // Nonlethal weapon (2026-11-08, teeth P30): the system.nonlethal box; a legacy mercy / nonlethal tag reads as ticked.
 function ftWeaponIsNonlethal(item) {
   if (item?.type !== "weapon") return false;
@@ -19042,7 +19059,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
     perTargetMultiplier = 1, ignoreResists = false, nonlethal = false,
-    _skipInterceptors = false, _noEnvArc = false
+    _skipInterceptors = false, _noEnvArc = false, deliveryTags = []
   } = {}) {
     if (!actor) return null;
 
@@ -19062,7 +19079,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
       _ftRelayEmit({
         t: "ft-applyDamage", actorId: actor.id, targetUuid: actor.uuid,
-        baseDmg: _amt, op, track, damageType, damageFlavor, ignoreResists, nonlethal
+        baseDmg: _amt, op, track, damageType, damageFlavor, ignoreResists, nonlethal,
+        deliveryTags: Array.isArray(deliveryTags) ? deliveryTags : []
       });
       return `${actor.name}: ${op === "heal" ? "+" : ""}${_amt}${damageType ? ` ${damageType}` : ""} ${op === "heal" ? "healing" : "damage"} — sent to GM`;
     }
@@ -19255,7 +19273,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // (on-ally-incoming-damage) may REDUCE the hit before the write. Offer-mode triggers refund after.
     if (op === "damage" && dmg > 0) {
       try {
-        const _inTags = [damageType, damageFlavor, track].filter(Boolean);
+        // Delivery tags (2026-11-09, Foam Finger "non-magical projectile"): melee / ranged / projectile / manifestation
+        // ride in from the source item (ftDeliveryTags) so a trigger predicate can tell a claw from a bullet.
+        const _inTags = [damageType, damageFlavor, track, ...(Array.isArray(deliveryTags) ? deliveryTags : [])].filter(Boolean);
         const _inSelf = await fireTriggers(actor, "on-incoming-damage", { amount: dmg, tags: _inTags, track, scope: "self" });
         let _inNew = Number.isFinite(_inSelf?.data?.newAmount) ? _inSelf.data.newAmount : null;
         for (const r of await fireAllyTriggers(actor, "on-ally-incoming-damage", { amount: dmg, tags: _inTags, track })) {
@@ -19627,7 +19647,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         continue;
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
-        op, track, damageType, damageFlavor, perTargetMultiplier: _hsMult, ignoreResists, nonlethal
+        op, track, damageType, damageFlavor, perTargetMultiplier: _hsMult, ignoreResists, nonlethal,
+        deliveryTags: ftDeliveryTags(sourceItem)
       });
       if (desc) ui.notifications.info(desc);
 
@@ -19640,7 +19661,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const pTrack = ftLandingTrack(op, part.track, pType);   // damage: from its type; heal: as authored (2026-11-08)
         const pDesc = await game.fourththing.rolls._applyDamageToActor(actor, amt, {
           op, track: pTrack, damageType: pType, damageFlavor: String(part.flavor ?? "").toLowerCase(),
-          perTargetMultiplier: _hsMult, ignoreResists, nonlethal
+          perTargetMultiplier: _hsMult, ignoreResists, nonlethal, deliveryTags: ftDeliveryTags(sourceItem)
         });
         if (pDesc) ui.notifications.info(pDesc);
       }
@@ -33550,6 +33571,7 @@ function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real
           perTargetMultiplier: 1,
           ignoreResists: !!msg.ignoreResists,
           nonlethal: !!msg.nonlethal,
+          deliveryTags: Array.isArray(msg.deliveryTags) ? msg.deliveryTags : [],
           _fromUserId: senderId || null   // 10-29: bbttcc-structures matches a relayed Bulwark source to the real dealer
         }).then(desc => { if (desc) ui.notifications.info(desc); })
           .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));

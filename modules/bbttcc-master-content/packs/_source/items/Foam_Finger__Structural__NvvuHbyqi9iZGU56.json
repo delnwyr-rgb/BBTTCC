@@ -67,7 +67,7 @@
           "event": "on-incoming-damage",
           "predicate": {
             "tag": [
-              "kinetic"
+              "projectile"
             ]
           },
           "limit": {
