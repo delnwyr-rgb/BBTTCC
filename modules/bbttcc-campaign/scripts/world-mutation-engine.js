@@ -7,6 +7,7 @@
 (() => {
   const TAG          = "[bbttcc-campaign/world-mutation]";
   const MOD_FACTIONS = "bbttcc-factions";
+  const MOD_ID_LOOT = "bbttcc-campaign";   // stewardLoot flags (2026-11-09)
 
   function get(o, p, d) {
     try { return foundry.utils.getProperty(o, p) ?? d; } catch { return d; }
@@ -2181,6 +2182,52 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-party-effects"><b>${esc(String(we.partyEffectsTitle || "").trim() || "The table is fed")}</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` }); } catch (_eC) {} }
       }
     } catch (ePE) { console.warn(TAG, "partyEffects apply failed", ePE); }
+
+    // 2n′) STEWARD LOOT (Dave 2026-11-09, Fixit's Mystery Bin: "a one time roll on our consumables and items list and provide a
+    // random useful item to each steward once"): worldEffects.stewardLoot = { key, pack?, tiers?:["I"], types?:["gear","weapon",
+    // "armor"], origins?:["looted","given"], title?, icon? }. Every coalition Steward (seated or not) who hasn't had `key` before gets
+    // ONE random item from the pack's pool that they don't already carry (by name). Once per Steward per key, ever:
+    // flags.bbttcc-campaign.lootOnce.<key>. The item carries flags.bbttcc-campaign.loot = { key, beatId, at }. Moment card + chat line.
+    try {
+      const sl = (we.stewardLoot && typeof we.stewardLoot === "object") ? we.stewardLoot : null;
+      const key = sl ? String(sl.key || "").trim() : "";
+      if (sl && key) {
+        const pack = game.packs?.get(String(sl.pack || "bbttcc-master-content.items"));
+        const tiers = Array.isArray(sl.tiers) && sl.tiers.length ? sl.tiers.map(String) : ["I"];
+        const types = Array.isArray(sl.types) && sl.types.length ? sl.types.map(String) : ["gear", "weapon", "armor"];
+        const origins = Array.isArray(sl.origins) && sl.origins.length ? sl.origins.map(String) : ["looted", "given"];
+        const pool = pack ? (await pack.getDocuments()).filter(d => {
+          const rfi = d.flags?.fourththing?.rfi?.item || {};
+          return types.includes(d.type) && tiers.includes(String(rfi.tier || "")) && origins.includes(String(rfi.origin || ""));
+        }) : [];
+        if (!pool.length) console.warn(TAG, "stewardLoot: empty pool", { beatId: beatCtx.beatId, sl });
+        const stewards = await _coalitionStewards();
+        const lines = [], got = [];
+        for (const a of stewards) {
+          try {
+            if (a.getFlag?.(MOD_ID_LOOT, `lootOnce.${key}`)) { lines.push(`· ${a.name} already had their pick`); continue; }
+            const held = new Set((a.items?.contents ?? []).map(i => String(i.name).toLowerCase()));
+            const choices = pool.filter(d => !held.has(String(d.name).toLowerCase()));
+            if (!choices.length) { lines.push(`· ${a.name}: nothing left in the bin they don't already carry`); continue; }
+            const pick = choices[Math.floor(Math.random() * choices.length)];
+            const data = pick.toObject(); delete data._id;
+            foundry.utils.setProperty(data, `flags.${MOD_ID_LOOT}.loot`, { key, beatId: beatCtx.beatId || null, at: Date.now() });
+            await Item.create(data, { parent: a });
+            await a.setFlag(MOD_ID_LOOT, `lootOnce.${key}`, { item: pick.name, at: Date.now() });
+            lines.push(`${String(sl.icon || "🎁")} ${a.name} — ${pick.name}`); got.push(`${a.name}: ${pick.name}`); changed = true;
+          } catch (eA) { console.warn(TAG, "stewardLoot: grant failed", a?.name, eA); }
+        }
+        if (got.length) {
+          notes.push("stewardLoot:" + key);
+          const title = String(sl.title || "Found something");
+          try { _announceBonus({ kicker: beat?.label || "Loot", title, detail: got.join(" · "), fallback: `${title}: ${got.join(", ")}` }); } catch (_eB) {}
+        }
+        if (lines.length) {
+          const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+          try { await ChatMessage.create({ content: `<div class="bbttcc-steward-loot"><b>${esc(String(sl.title || "Found something"))}</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>`, speaker: { alias: "Bad Eden" } }); } catch (_eC) {}
+        }
+      }
+    } catch (eSL) { console.warn(TAG, "stewardLoot apply failed", eSL); }
 
     // 2o) SPARK GRANTS (THE RECALCITRANT CAFE, 2026-10-13 — the permanent boon rides the Enlightenment ladder, which never lowers):
     // worldEffects.sparkGrants = [{ key, name?, note? }] — every coalition Steward gets the spark created + marked integrated
