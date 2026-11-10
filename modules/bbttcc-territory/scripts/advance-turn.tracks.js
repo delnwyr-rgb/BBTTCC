@@ -214,6 +214,41 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   }
 
   // ===========================================================================
+  // HEX DARKNESS SPREAD (Dave 2026-11-09: "Can we have darkness follow the same hex infection rules as Radiation")
+  // ===========================================================================
+  // Mirrors doRadiationDecayAndSpread: a hex at Darkness 3+ (the dark-ground threshold) gives each CLEAN neighbour
+  // (0 pips) a 25% chance each turn to take 1 pip. Nothing fades on its own; only cleansing lowers it.
+  async function doHexDarknessSpread() {
+    const updates = [];
+    const lines   = [];
+    const pips = (d) => Math.max(0, Number(d?.flags?.[MODT]?.mods?.darkness || 0) || 0);
+    for (const { sc, hexes } of hexDocsByScene()) {
+      const seeds = hexes.filter(d => pips(d) >= HEX_DARK_FEED);
+      const raised = new Set();
+      for (const src of seeds) {
+        for (const n of hexNeighborsOf(src, hexes)) {
+          if (raised.has(n.id) || pips(n) >= 1) continue;
+          if (Math.random() > RAD_SPREAD_CHANCE) continue;
+          raised.add(n.id);
+          const mods = foundry.utils.duplicate(n.flags?.[MODT]?.mods || {});
+          mods.darkness = 1;
+          updates.push(n.update({ [`flags.${MODT}.mods`]: mods }, { parent: sc }));
+          const srcName = src.flags?.[MODT]?.name ?? src.name ?? src.id;
+          lines.push(`• <b>${foundry.utils.escapeHTML(n.flags?.[MODT]?.name ?? n.name ?? n.text ?? n.id)}</b>: Darkness crept in from ${foundry.utils.escapeHTML(srcName)} (now 1)`);
+        }
+      }
+    }
+    if (updates.length) await Promise.allSettled(updates);
+    if (lines.length) {
+      await ChatMessage.create({
+        content: `<p><b>Hex Darkness Spread</b></p>${lines.join("<br/>")}`,
+        whisper: tableAudience(),
+        speaker: { alias: "Bad Eden Darkness" }
+      }).catch(() => {});
+    }
+  }
+
+  // ===========================================================================
   // CLEANUP: PURIFIED HEXES + DARKNESS BONUS DROP
   // ===========================================================================
 
@@ -439,10 +474,12 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   }
   function ownsHex(fid, tf){ const o = tf?.factionId || tf?.ownerId; return String(o) === String(fid); }
   function isRadiated(tf){ return Number(tf?.mods?.radiation || 0) > 0; }   // the hex Radiation level (2026-10-22)
-  // Dark ground (owner ruling 2026-10-28: "make Hex Darkness feed Domain Darkness"): a held hex at Darkness 3+ adds +1
-  // to its Domain each turn, like radiated ground (the two stack: +1 each). 1–2 pips are a warning only.
+  // Dark ground (owner ruling 2026-10-28: "make Hex Darkness feed Domain Darkness"). Scaled per hex (Dave 2026-11-09:
+  // "3 +1; 4 +2, 5 +3; 6 +4, and it counts per affected hex"): every held hex at Darkness 3+ adds (pips − 2) to its
+  // Domain each turn, summed across hexes. 1–2 pips are a warning only. Radiated ground still adds its own +1.
   const HEX_DARK_FEED = 3;
   function isDarkGround(tf){ return Number(tf?.mods?.darkness || 0) >= HEX_DARK_FEED; }
+  function darkGroundFeed(tf){ const p = Math.min(6, Number(tf?.mods?.darkness || 0) || 0); return p >= HEX_DARK_FEED ? p - (HEX_DARK_FEED - 1) : 0; }
 
   async function doDarknessTrack() {
     const facs = facActors();
@@ -450,13 +487,13 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     const lines = [];
 
     for (const A of facs) {
-      let ownedRadiated = 0, ownedDark = 0, blessed = 0;
+      let ownedRadiated = 0, ownedDark = 0, darkFeed = 0, blessed = 0;
       for (const sc of game.scenes ?? []) {
         for (const d of sc.drawings ?? []) {
           const tf = d.flags?.[MODT]; if (!tf) continue;
           if (!ownsHex(A.id, tf)) continue;
           if (isRadiated(tf)) ownedRadiated++;
-          if (isDarkGround(tf)) ownedDark++;
+          if (isDarkGround(tf)) { ownedDark++; darkFeed += darkGroundFeed(tf); }
           // Sanctum Expansion (2026-09-09): each Blessed Ground hex you hold is −1 Darkness per turn.
           if (Array.isArray(tf.modifiers) && tf.modifiers.some(m => String(m).toLowerCase() === "blessed ground")) blessed++;
         }
@@ -472,7 +509,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       // should be real." It falls only through deliberate work: Blessed Ground (below), cleansing a hex, the
       // rites and councils in the planner, story beats. (A clean Domain used to shed 1 a turn for free.)
       if (ownedRadiated > 0) g = g + 1;
-      if (ownedDark > 0)     g = g + 1;
+      if (darkFeed > 0)      g = g + darkFeed;
       if (blessed > 0)       g = Math.max(0, g - blessed);
 
       if (g !== before) {
@@ -482,7 +519,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         const dir = (g > before) ? "↑" : "↓";
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Darkness ${dir} ${before} → ${g}`
-          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "") + (ownedDark>0 ? ` (dark ground, Darkness ${HEX_DARK_FEED}+: ${ownedDark})` : "") + (blessed>0 ? ` (Blessed Ground: ${blessed})` : "")
+          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "") + (ownedDark>0 ? ` (dark ground: ${ownedDark} hex${ownedDark>1?"es":""}, +${darkFeed})` : "") + (blessed>0 ? ` (Blessed Ground: ${blessed})` : "")
         );
       }
     }
@@ -1209,6 +1246,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         }
 
         await doRadiationDecayAndSpread();
+        try { await doHexDarknessSpread(); } catch (eHDS) { console.warn(TAG, "hex darkness spread failed", eHDS); }
         await doCleanupPurified();
         await doCleanupAura();
         await doRadiationBleedPurifiedActors();
