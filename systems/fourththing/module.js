@@ -13060,7 +13060,7 @@ FT.CONDITIONS = {
   calmed:     { label: "Calmed",     color: "#4a90d9", desc: "You can't Strike, and you can't Invoke a working that deals damage. Healing and helping still work." },
   blinded:    { label: "Blinded",    color: "#546e7a", desc: "Your Strikes roll 3d10 and keep the worst 2." },
   prone:      { label: "Prone",      color: "#78909c", desc: "Strikes against you: melee +2, ranged −2." },
-  shaken:     { label: "Shaken",     color: "#e8c84a", desc: "−2 to your Resolve checks, and your Resolve is 2 lower against Strikes." },
+  shaken:     { label: "Shaken",     color: "#e8c84a", desc: "Damage to your Stress is doubled (vulnerable). −2 to your Resolve checks, and your Resolve is 2 lower against Strikes." },
   burning:    { label: "Burning",    color: "#c03030", desc: "1d4 Integrity damage at the start of each of your turns." },
   restrained: { label: "Restrained", color: "#3dd6c0", desc: "You can't move on your turn (movement 0), and attacks against you get +2." },
   charmed:    { label: "Charmed",    color: "#e07ec6", desc: "You can't Strike the one who charmed you, or Invoke a hostile working at them." },
@@ -19059,7 +19059,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
     perTargetMultiplier = 1, ignoreResists = false, nonlethal = false,
-    _skipInterceptors = false, _noEnvArc = false, deliveryTags = []
+    _skipInterceptors = false, _noEnvArc = false, deliveryTags = [], cardTs = 0
   } = {}) {
     if (!actor) return null;
 
@@ -19080,7 +19080,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       _ftRelayEmit({
         t: "ft-applyDamage", actorId: actor.id, targetUuid: actor.uuid,
         baseDmg: _amt, op, track, damageType, damageFlavor, ignoreResists, nonlethal,
-        deliveryTags: Array.isArray(deliveryTags) ? deliveryTags : []
+        deliveryTags: Array.isArray(deliveryTags) ? deliveryTags : [], cardTs: Number(cardTs) || 0
       });
       return `${actor.name}: ${op === "heal" ? "+" : ""}${_amt}${damageType ? ` ${damageType}` : ""} ${op === "heal" ? "healing" : "damage"} — sent to GM`;
     }
@@ -19234,6 +19234,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     let defMult = 1;
     const tags = [];
+    let _typeVuln = false;
     if (surgeImmune) {
       defMult = 0;
       tags.push(...surgeTags);
@@ -19246,6 +19247,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       } else {
         if (ftDefenseMatches(def.vulnerabilities, damageType, damageFlavor)) {
           defMult *= 2;
+          _typeVuln = true;
           tags.push(`vulnerable to ${flavorLabel}`);
         }
         if (!ignoreResists && ftDefenseMatches(def.resistances, damageType, damageFlavor)) {
@@ -19261,6 +19263,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     } else if (surgeResist) {
       // Untyped damage with a Steel Veil on the actor — Veil only triggers
       // when the type matches, so no-op here.
+    }
+    // Shaken (Dave 2026-11-09: "make shaken make you vulnerable to attacks that do stress damage"): damage landing on
+    // the Stress track is doubled while the target is Shaken — the ordinary ×2 vulnerability, so it never stacks with a
+    // type vulnerability, and immunity / Narrative Miss (defMult 0) still win. A Shaken that arrived AFTER the damage card
+    // was posted (the same cast's own rider — Strikethrough deals Stress AND applies Shaken) doesn't double that card.
+    const _shakenAEs = Array.from(actor.effects ?? []).filter(e => !e.disabled && (e.statuses?.has?.("shaken") || e.flags?.fourththing?.condition === "shaken"));
+    const _shakenBefore = _shakenAEs.length
+      ? _shakenAEs.some(e => !(Number(cardTs) > 0) || (Number(e._stats?.createdTime) || 0) < Number(cardTs))
+      : rawSys?.conditions?.shaken === true;
+    if (op === "damage" && track === "stress" && defMult > 0 && !_typeVuln && _shakenBefore) {
+      defMult *= 2;
+      tags.push("Shaken: vulnerable to Stress damage");
     }
     // Aegis flat damage reduction — applied after the multiplier, before write.
     let dmg = Math.floor(scaled * defMult);
@@ -19569,6 +19583,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const cardMult      = (btn.dataset.multiplier !== undefined && Number.isFinite(Number(btn.dataset.multiplier)))
       ? Math.max(0, Number(btn.dataset.multiplier)) : 1;
     const itemUuid      = btn.dataset.itemUuid ?? "";
+    // When the card was posted — a Shaken that landed after it (the same cast's rider) doesn't double it (2026-11-09).
+    const cardTs        = (() => { try { const id = btn.closest?.("[data-message-id]")?.dataset?.messageId; return Number(game.messages?.get(id)?.timestamp) || 0; } catch (_e) { return 0; } })();
     const ignoreResists = btn.dataset.ignoreResists === "1";
     const nonlethal     = btn.dataset.nonlethal === "1";
     // 2026-05-29 — Multi-damage-type riders carried on the button as JSON.
@@ -19648,7 +19664,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
         op, track, damageType, damageFlavor, perTargetMultiplier: _hsMult, ignoreResists, nonlethal,
-        deliveryTags: ftDeliveryTags(sourceItem)
+        deliveryTags: ftDeliveryTags(sourceItem), cardTs
       });
       if (desc) ui.notifications.info(desc);
 
@@ -19661,7 +19677,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const pTrack = ftLandingTrack(op, part.track, pType);   // damage: from its type; heal: as authored (2026-11-08)
         const pDesc = await game.fourththing.rolls._applyDamageToActor(actor, amt, {
           op, track: pTrack, damageType: pType, damageFlavor: String(part.flavor ?? "").toLowerCase(),
-          perTargetMultiplier: _hsMult, ignoreResists, nonlethal, deliveryTags: ftDeliveryTags(sourceItem)
+          perTargetMultiplier: _hsMult, ignoreResists, nonlethal, deliveryTags: ftDeliveryTags(sourceItem), cardTs
         });
         if (pDesc) ui.notifications.info(pDesc);
       }
@@ -33572,6 +33588,7 @@ function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real
           ignoreResists: !!msg.ignoreResists,
           nonlethal: !!msg.nonlethal,
           deliveryTags: Array.isArray(msg.deliveryTags) ? msg.deliveryTags : [],
+          cardTs: Number(msg.cardTs) || 0,
           _fromUserId: senderId || null   // 10-29: bbttcc-structures matches a relayed Bulwark source to the real dealer
         }).then(desc => { if (desc) ui.notifications.info(desc); })
           .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
