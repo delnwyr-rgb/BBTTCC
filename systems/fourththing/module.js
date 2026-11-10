@@ -22325,6 +22325,78 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   }
 
   let _ftLastTurnKey = null;
+  // Shake-off saves at TURN END (Dave 2026-11-09: "something that gets a save each round to shake off should experience
+  // the effect for one round before being allowed to save … I would have expected the Waste Stalker to lose its swing,
+  // and then make a save, on its first turn after the effect lands"). Turn start marks the bite (pendingFirstBite → false);
+  // the end of that same turn rolls the save. A state that landed mid-turn on its own target still waits for a full turn.
+  async function _ftShakeOffSaves(actor) {
+    // Save-each-round automation. Walk owned effects with the saveEachRound
+    // flag set; roll 2d10x10 + saveAttribute vs DC; on success, delete the AE
+    // (the preDeleteActiveEffect hook will clear system.conditions for us).
+    try {
+      const saveEffects = (actor.effects ?? []).filter(e =>
+        e.flags?.fourththing?.appliedManifestation?.saveEachRound === true
+        && !e.disabled
+      );
+      for (const eff of saveEffects) {
+        const meta = eff.flags.fourththing.appliedManifestation;
+        // Bite first, then save (owner ruling 2026-08-22): skip the very
+        // first turn-start save so the effect costs the target this turn;
+        // shake-off chances begin on their NEXT turn.
+        if (meta.pendingFirstBite === true) continue;   // hasn't had its turn yet — the save waits
+        const sys  = actor.system?.system ?? actor.system ?? {};
+        const attrKey = meta.saveAttribute || "body";
+        const dc      = Number(meta.dc) || 15;
+        // 10-29: base from the SOURCE — actor.system is already AE-applied, so the
+        // sweep below was counting every AE add twice (same fix as attributeTest).
+        const attrVal = Number(ftSourceSystem(actor)?.attributes?.[attrKey]?.value) || 0;
+        // Walk AEs for the save-attribute add (target rolls with their own
+        // appliedEffects honoured — same pattern as resolveManifestationSave).
+        let aeAttr = 0;
+        for (const ae of (actor.appliedEffects ?? [])) {
+          if (ae.disabled) continue;
+          for (const ch of (ae.changes ?? [])) {
+            if (ch.type !== "add" || !ch.key?.endsWith(".value")) continue;
+            if (ch.key === `system.attributes.${attrKey}.value`) aeAttr += Number(ch.value) || 0;
+          }
+        }
+        const total = attrVal + aeAttr;
+        const roll  = new Roll(`${_ftXd10(actor)} + ${total}`);
+        await roll.evaluate();
+        const dieResults = roll.dice?.[0]?.results ?? [];
+        const explos     = Math.max(0, dieResults.length - 2);
+        if (explos > 0) await _ftBankSurge(actor, explos);
+        // Human Adaptive — auto-succeed a failed save (also honored on this
+        // condition-shake path; roller is `actor`).
+        const _adaptiveCS = !!actor.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave && roll.total < dc;
+        if (_adaptiveCS) {
+          try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); } catch (_e) {}
+        }
+        const saved = _adaptiveCS ? true : (roll.total >= dc);
+        const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
+        const headerColor = saved ? "#4fc3ff" : "#ff7b7b";
+        const headerLabel = saved ? "SHAKEN OFF" : "STILL AFFLICTED";
+        await roll.toMessage({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          flavor:  `<div class="fourththing-roll">
+            <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">↻ ${ftEscapeHtml(actor.name)} — ${ftCap(attrKey)} save vs ${ftEscapeHtml(condLabel)}: ${headerLabel}</span></div>
+            <div class="ft-result-row ${saved ? "ft-success" : "ft-failure"}">
+              <span class="ft-total">${roll.total}</span>
+              <span class="ft-outcome">vs DC ${dc}${explos > 0 ? ` · +${explos} Surge` : ""}</span>
+            </div>
+            ${meta.itemName ? `<p style="margin:0.2rem 0 0;font-size:0.74rem;opacity:0.7">From: ${ftEscapeHtml(meta.itemName)}</p>` : ""}
+          </div>`
+        });
+        if (saved) {
+          try { await eff.delete(); }
+          catch (e) { console.warn("Roll for Initiation | save-each-round AE delete failed", e); }
+        }
+      }
+    } catch (err) {
+      console.warn("Roll for Initiation | save-each-round handler failed", err);
+    }
+  }
+
   async function _ftHandleTurnStart(source, combat, current) {
     if (!combat) return;
     // 10-29: keyed on the combatant id, not the turn index — core silently re-pins
@@ -22387,6 +22459,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const _prev = (_prevId && _prevId !== combatant?.id) ? combat.combatants.get(_prevId)?.actor : null;
       if (_prev) {
         await fireTriggers(_prev, "on-turn-end", { scope: "self", round: combat.round, tags: ["turn-end"] });
+        await _ftShakeOffSaves(_prev);   // shake-off saves roll at the END of the afflicted creature's turn (2026-11-09)
         for (const n of ftNearbyActors(_prev, { radius: 2 })) await fireTriggers(n.actor, n.ally ? "on-ally-turn-end-adjacent" : "on-enemy-turn-end-adjacent", { target: _prev, scope: n.ally ? "ally" : "enemy", squares: n.squares });
       }
     } catch (e) { console.warn("[fourththing] on-turn-end triggers failed", e); }
@@ -22659,74 +22732,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
     }
 
-    // Save-each-round automation. Walk owned effects with the saveEachRound
-    // flag set; roll 2d10x10 + saveAttribute vs DC; on success, delete the AE
-    // (the preDeleteActiveEffect hook will clear system.conditions for us).
+    // Save-each-round: a state that has just landed takes its bite THIS turn (the save rolls at the end of the turn —
+    // _ftShakeOffSaves, called from the turn-end block of the next turn change).
     try {
-      const saveEffects = (actor.effects ?? []).filter(e =>
-        e.flags?.fourththing?.appliedManifestation?.saveEachRound === true
-        && !e.disabled
-      );
-      for (const eff of saveEffects) {
-        const meta = eff.flags.fourththing.appliedManifestation;
-        // Bite first, then save (owner ruling 2026-08-22): skip the very
-        // first turn-start save so the effect costs the target this turn;
-        // shake-off chances begin on their NEXT turn.
-        if (meta.pendingFirstBite === true) {
-          try { await eff.update({ "flags.fourththing.appliedManifestation.pendingFirstBite": false }); }
-          catch (e) { console.warn("Roll for Initiation | pendingFirstBite clear failed", e); }
-          continue;
-        }
-        const sys  = actor.system?.system ?? actor.system ?? {};
-        const attrKey = meta.saveAttribute || "body";
-        const dc      = Number(meta.dc) || 15;
-        // 10-29: base from the SOURCE — actor.system is already AE-applied, so the
-        // sweep below was counting every AE add twice (same fix as attributeTest).
-        const attrVal = Number(ftSourceSystem(actor)?.attributes?.[attrKey]?.value) || 0;
-        // Walk AEs for the save-attribute add (target rolls with their own
-        // appliedEffects honoured — same pattern as resolveManifestationSave).
-        let aeAttr = 0;
-        for (const ae of (actor.appliedEffects ?? [])) {
-          if (ae.disabled) continue;
-          for (const ch of (ae.changes ?? [])) {
-            if (ch.type !== "add" || !ch.key?.endsWith(".value")) continue;
-            if (ch.key === `system.attributes.${attrKey}.value`) aeAttr += Number(ch.value) || 0;
-          }
-        }
-        const total = attrVal + aeAttr;
-        const roll  = new Roll(`${_ftXd10(actor)} + ${total}`);
-        await roll.evaluate();
-        const dieResults = roll.dice?.[0]?.results ?? [];
-        const explos     = Math.max(0, dieResults.length - 2);
-        if (explos > 0) await _ftBankSurge(actor, explos);
-        // Human Adaptive — auto-succeed a failed save (also honored on this
-        // condition-shake path; roller is `actor`).
-        const _adaptiveCS = !!actor.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave && roll.total < dc;
-        if (_adaptiveCS) {
-          try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); } catch (_e) {}
-        }
-        const saved = _adaptiveCS ? true : (roll.total >= dc);
-        const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
-        const headerColor = saved ? "#4fc3ff" : "#ff7b7b";
-        const headerLabel = saved ? "SHAKEN OFF" : "STILL AFFLICTED";
-        await roll.toMessage({
-          speaker: ChatMessage.getSpeaker({ actor }),
-          flavor:  `<div class="fourththing-roll">
-            <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">↻ ${ftEscapeHtml(actor.name)} — ${ftCap(attrKey)} save vs ${ftEscapeHtml(condLabel)}: ${headerLabel}</span></div>
-            <div class="ft-result-row ${saved ? "ft-success" : "ft-failure"}">
-              <span class="ft-total">${roll.total}</span>
-              <span class="ft-outcome">vs DC ${dc}${explos > 0 ? ` · +${explos} Surge` : ""}</span>
-            </div>
-            ${meta.itemName ? `<p style="margin:0.2rem 0 0;font-size:0.74rem;opacity:0.7">From: ${ftEscapeHtml(meta.itemName)}</p>` : ""}
-          </div>`
-        });
-        if (saved) {
-          try { await eff.delete(); }
-          catch (e) { console.warn("Roll for Initiation | save-each-round AE delete failed", e); }
-        }
+      for (const eff of (actor.effects ?? [])) {
+        const meta = eff.flags?.fourththing?.appliedManifestation;
+        if (meta?.saveEachRound === true && meta.pendingFirstBite === true && !eff.disabled)
+          await eff.update({ "flags.fourththing.appliedManifestation.pendingFirstBite": false });
       }
     } catch (err) {
-      console.warn("Roll for Initiation | save-each-round handler failed", err);
+      console.warn("Roll for Initiation | save-each-round bite mark failed", err);
     }
   }
 
