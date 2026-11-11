@@ -4331,6 +4331,13 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // Journal auto-open (optional)
   _maybeShowBeatJournal(beat);
 
+  // Walk-ons land when the beat OPENS (Dave 2026-11-10, Arc Bay: "Get Mara" — Mara must be in the scene for the talk, not after the
+  // reply). A dialog beat's worldEffects otherwise fire at the reply pick; placeActors never duplicates, so that later pass is a no-op.
+  if (game.user?.isGM && beat?.worldEffects?.placeActors) {
+    try { await game.bbttcc?.api?.worldMutation?.applyWorldEffects?.({ id: beat.id, label: beat.label, sceneId: beat.sceneId, worldEffects: { placeActors: beat.worldEffects.placeActors } }, { source: "bbttcc-campaign", campaignId: campaign.id, beatId: beat.id }); }
+    catch (ePA) { warn("placeActors on open failed:", beat.id, ePA); }
+  }
+
   // Beat audio (optional). Dialogue-sourced runs skip it: under the
   // intro-on-open doctrine the hub's recording already played when the
   // conversation window opened, and the routed OUTCOME beat's audio is
