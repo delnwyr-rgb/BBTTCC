@@ -276,8 +276,10 @@
               <td class="center">{{r.targetName}}</td>
 
               {{#if ../isGM}}
-                <td class="center">{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}</td>
+                {{!-- No numbers before the roll (Dave 2026-11-11): Roll / DC / Outcome stay blank until the round is committed. --}}
+                <td class="center">{{#if r.committed}}{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}{{else}}—{{/if}}</td>
                 <td class="center">
+                  {{#if r.committed}}
                   {{#if r.dcFinal}}
                     {{#if r.meta.dcBreakdown}}
                       {{#if r.meta.dcBreakdown.tip}}
@@ -298,8 +300,9 @@
                       {{r.DC}}
                     {{/if}}
                   {{/if}}
+                  {{else}}—{{/if}}
                 </td>
-                <td class="center">{{default r.outcome "—"}}</td>
+                <td class="center">{{#if r.committed}}{{default r.outcome "—"}}{{else}}—{{/if}}</td>
               {{else}}
                 <td class="center">
                   {{!-- Resolved = committed only: total/dcFinal can be set by projection before any commit (trailer playtest 2026-10-09). --}}{{#if r.committed}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.cancelled}}<span style="opacity:.8;">Cancelled</span>{{else}}{{#if (eq r.open false)}}<span style="opacity:.8;">Closed</span>{{else}}<span style="opacity:.8;">Draft</span>{{/if}}{{/if}}{{/if}}
@@ -327,14 +330,15 @@
                   <div class="flex2 card" style="padding:.5rem;">
                     <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
 
-                    {{#if r.view.strengthOn}}
+                    {{#if r.view.scenarioLine}}<p class="hint" style="margin:.25rem 0; font-size:.8rem;">{{r.view.scenarioLine}}</p>{{/if}}
+                    {{#if r.view.strengthOn}}{{#unless r.view.scenarioKind}}
                     {{!-- ALPHA CUT: one Strength line per side (what the Domain owns, as the engine adds it) + the stake. Ruling 5 (no marks at raid time) was RETIRED 2026-10-26 (DC5): every Battle, Heist and Parley costs marks, so the spend grid below always renders. --}}
                     <div class="bbttcc-strength" style="display:flex; flex-direction:column; gap:.3rem; margin-bottom:.35rem;">
                       <p style="margin:.25rem 0;"><b>Strength +{{r.view.strengthAtt.total}}</b> — {{r.view.attackerName}} <small style="opacity:.8;">· {{r.view.strengthAtt.parts}}</small></p>
                       {{#if ../isGM}}{{#if r.view.hasDef}}<p style="margin:.25rem 0;"><b>Defence {{r.view.strengthDef.total}}</b> — {{r.view.defenderName}} <small style="opacity:.8;">· {{r.view.strengthDef.parts}}</small></p>{{/if}}{{/if}}
                       {{#if r.view.stake}}<p style="margin:.25rem 0;"><b>Stake:</b> {{r.view.stake.text}}{{#if r.view.stake}} A Battle is fought on the battlemap; the GM calls it.{{/if}}</p>{{/if}}
                     </div>
-                    {{/if}}
+                    {{/unless}}{{/if}}
                     <p class="hint bbttcc-spend-line" style="margin:.25rem 0; font-size:.78rem; opacity:.8;">Every {{default r.activityLabel "fight"}} costs marks, story-offered or not: staged marks and each maneuver's price leave the bank when the round is committed.{{#if r.view.spendAtt}} <b>This round's maneuvers spend</b> — {{r.view.attackerName}}: {{r.view.spendAtt}} marks{{#if r.view.spendDef}}; {{r.view.defenderName}}: {{r.view.spendDef}} marks{{/if}}.{{else}}{{#if r.view.spendDef}} <b>This round's maneuvers spend</b> — {{r.view.defenderName}}: {{r.view.spendDef}} marks.{{/if}}{{/if}}</p>
                     <div class="grid" style="grid-template-columns: {{#if ../isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
                       {{#if ../isGM}}
@@ -411,6 +415,7 @@
                     </div>
 
                     {{#if ../isGM}}
+                      {{#unless r.view.scenarioKind}}
                       <div style="margin-top:.5rem;">
                         <small>
                           Base DC: <b>{{r.DC}}</b>
@@ -430,6 +435,7 @@
                         <div><em style="opacity:.8;">{{r.view.breakdown}}</em></div>
                         {{/if}}
                       </div>
+                      {{/unless}}
                     {{else}}
                       <div style="margin-top:.5rem; opacity:.85;">
                         <small><em>Hidden info:</em> enemy staged points, defender bank, and resolution math are GM-only.</small>

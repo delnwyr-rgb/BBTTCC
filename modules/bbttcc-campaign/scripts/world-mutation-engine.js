@@ -2623,7 +2623,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           attackerId: A.id, supportFactionIds: (() => { try { return (game.bbttcc?.api?.radiation?.partyFactionIds?.(A.id) || []).filter(id => id !== A.id); } catch (_e) { return []; } })(), activityKey: TYPE, difficulty: String(R.difficulty || "normal"),
           targetType, targetName: targetName || "—", targetUuid, defenderId, rigId, creatureId: "", actorUuid: "", sceneUuid: "", tokenUuid: "",
           rounds: [], logWar: true, includeDefender: true,
-          parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show") } : null,
+          // audience (Dave 2026-11-11): who the Parley sways — observers | judges | jury | crowd | court
+          parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show"), audience: String(R.audience || "observers").toLowerCase() } : null,
           stake: String(R.stake || ""), label: String(R.label || ""),
           objectiveOnly: R.objectiveOnly === true,  // ruling 21: the fight is over an objective, never the hex (a road ambush, a room)
           // routes: where the story goes when the fight concludes — { win, stalemate, loss } beat ids (the console runs ONE of them once).

@@ -26,11 +26,11 @@
                 hint: "Fought on the battlemap, in combat rounds.",
                 summary: "Direct combat across battle scenes. Subsumes Assault, Siege, Blockade." },
     intrigue: { key: "intrigue", label: "Heist", primaryKey: "intrigue", icon: "🥷",
-                hint: "Fought on the battlemap, in combat rounds. Quiet until the alarm trips.",
+                hint: "Played in rounds against the house's Alarm. Quiet work until the alarm trips.",
                 summary: "Stealth, intel, sabotage — uses the Alarm engine. Subsumes Infiltration, Espionage.",
                 kind: "scenario" },
     presence: { key: "presence", label: "Parley", primaryKey: "softpower", icon: "♕",
-                hint: "Talked out at the table. Influence, not dice.",
+                hint: "Talked out at the table, swaying the observers. Run out of Influence and you lose the argument.",
                 summary: "Social and narrative pressure — uses the Influence engine. Subsumes Propaganda, Courtly Intrigue.",
                 kind: "scenario" }
     // NOTE: presence's primaryKey is "softpower" (the canonical OP pool for social/narrative
@@ -85,6 +85,21 @@
     return (canon && TYPES_CANONICAL[canon]?.hint) || "";
   }
 
+  const AUDIENCES = freeze({
+    observers: { one: "observer", many: "observers", plural: "observers", label: "Observers" },
+    judges:    { one: "judge",    many: "judges",    plural: "judges",    label: "Judges (a contest, a dance-off)" },
+    jury:      { one: "juror",    many: "jury",      plural: "jurors",      label: "Jury (a trial)" },
+    crowd:     { one: "onlooker", many: "crowd",     plural: "onlookers",     label: "Crowd (a battle of words, a show)" },
+    court:     { one: "courtier", many: "court",     plural: "courtiers",     label: "Court (a diplomatic exchange)" }
+  });
+  function audienceWords(keyOrState) {
+    const raw = (keyOrState && typeof keyOrState === "object") ? (keyOrState.audienceKey ?? keyOrState.audience) : keyOrState;
+    const key = AUDIENCES[String(raw || "").toLowerCase()] ? String(raw).toLowerCase() : "observers";
+    const a = AUDIENCES[key];
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+    return { key, one: a.one, many: a.many, plural: a.plural, One: cap(a.one), Many: cap(a.many), label: a.label };
+  }
+
   // Map any key (canonical or legacy) to its canonical raidType key. Returns
   // null for keys that are out of raid scope (occupation/liberation/ritual).
   function resolveCanonical(key) {
@@ -118,6 +133,11 @@
       raid.typeLabel         = typeLabel;
       raid.typeHint          = typeHint;
       raid.LEGACY_TYPE_LABELS = LEGACY_LABELS;
+      // THE AUDIENCE of a Parley (Dave 2026-11-11): the people you sway are "observers" in the basic terms — a story's
+      // Parley can name them (dance judges, a jury, the crowd at a rap battle, a court at a diplomatic exchange).
+      // Keys: observers (default) | judges | jury | crowd | court. Returns { key, one, many (the group), plural (for counts), One, Many }.
+      raid.AUDIENCES = AUDIENCES;
+      raid.audienceWords = audienceWords;
 
       // IMPORTANT:
       // Return {} so Raid Console does NOT receive extra maneuvers from this helper file.

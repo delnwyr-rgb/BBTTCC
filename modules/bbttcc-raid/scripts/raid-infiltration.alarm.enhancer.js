@@ -258,7 +258,8 @@
       }
       // ---------------------------------------------------------------------
 
-      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "", stewardBonus = 0, exposedCount = 0, atkOpBonus = 0, defOpBonus = 0 } = {}) {
+      // atkManBonus / defManBonus / atkMode / defMode (2026-11-11): selected maneuvers + staged marks, from the console.
+      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "", stewardBonus = 0, exposedCount = 0, atkOpBonus = 0, defOpBonus = 0, atkManBonus = 0, defManBonus = 0, atkMode = "normal", defMode = "normal", manNotes = [] } = {}) {
         if (state.outcome !== "ongoing") return { ...state, note: "scenario already resolved" };
 
         const _stepBeforeAlarm = state.alarm; // S3a.4: VFX hook baseline
@@ -319,13 +320,22 @@
         // caller computes via _rcCoalitionBonus and passes the totals here.
         const atkCoalition = Math.max(0, Math.floor(Number(atkOpBonus || 0)));
         const defCoalition = Math.max(0, Math.floor(Number(defOpBonus || 0)));
-        const atkBonus = Math.ceil(atkSpend / 2) + stewBonus + atkCoalition;
-        const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty)) + defCoalition;
+        const atkBonus = Math.ceil(atkSpend / 2) + stewBonus + atkCoalition + Math.trunc(Number(atkManBonus) || 0);
+        const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty)) + defCoalition + Math.trunc(Number(defManBonus) || 0);
 
-        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04).
+        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04). Advantage / disadvantage = a second plain
+        // throw, keep the better / worse (2026-11-11).
         const _infilRoll = (bonus, faction) => (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @b", { b: bonus }, { faction }) ?? new Roll("2d10x10 + @b", { b: bonus }).evaluate());
-        const atkRoll = await _infilRoll(atkBonus, A);
-        const defRoll = await _infilRoll(defBonus, D);
+        const _modeOf = (m) => { const k = String(m || "normal").toLowerCase(); return (k === "adv" || k === "advantage") ? "adv" : (k === "dis" || k === "disadvantage") ? "dis" : "normal"; };
+        const _rollMode = async (bonus, faction, mode) => {
+          const r1 = await _infilRoll(bonus, faction);
+          if (mode === "normal") return r1;
+          const r2 = await new Roll("2d10x10 + @b", { b: bonus }).evaluate();
+          const t1 = Number(r1.total ?? 0), t2 = Number(r2.total ?? 0);
+          return (mode === "adv") ? (t2 > t1 ? r2 : r1) : (t2 < t1 ? r2 : r1);
+        };
+        const atkRoll = await _rollMode(atkBonus, A, _modeOf(atkMode));
+        const defRoll = await _rollMode(defBonus, D, _modeOf(defMode));
 
         const atkTotal = atkRoll.total ?? 0;
         const defTotal = defRoll.total ?? 0;
@@ -396,11 +406,14 @@
         if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue ×${atkSpend} per 10 marks)</small>`);
         if (stewBonus     > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
         if (atkCoalition  > 0) atkParts.push(`+ ${atkCoalition} <small style="opacity:.7;">(coalition Intrigue marks)</small>`);
+        const _manA = Math.trunc(Number(atkManBonus) || 0), _manD = Math.trunc(Number(defManBonus) || 0);
+        if (_manA) atkParts.push(`${_manA > 0 ? "+" : "−"} ${Math.abs(_manA)} <small style="opacity:.7;">(maneuvers + staging)</small>`);
 
         const defParts = [`${defDiceSum} <small style="opacity:.7;">(2d10)</small>`];
         if (defSpendBonus > 0) defParts.push(`+ ${defSpendBonus} <small style="opacity:.7;">(Nonlethal marks × ${defSpend})</small>`);
         if (Number(state.difficulty) > 0) defParts.push(`+ ${state.difficulty} <small style="opacity:.7;">(difficulty)</small>`);
         if (defCoalition  > 0) defParts.push(`+ ${defCoalition} <small style="opacity:.7;">(coalition Nonlethal marks)</small>`);
+        if (_manD) defParts.push(`${_manD > 0 ? "+" : "−"} ${Math.abs(_manD)} <small style="opacity:.7;">(maneuvers + staging)</small>`);
 
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
@@ -411,6 +424,9 @@
           `Progress <b>${beforeProgress}</b> → <b>${state.progress}</b>/${state.progressMax}`
         ];
         if (result === "defender" && exposureExtra > 0) lines.push(`<span style="opacity:.7;color:#fbbf24;">⚠ Exposed stewards (${exposedCount}) added +${exposureExtra} to the alarm rise.</span>`);
+        for (const n of (Array.isArray(manNotes) ? manNotes : [])) lines.push(`<span style="opacity:.75;">${foundry.utils.escapeHTML(String(n))}</span>`);
+        if (String(atkMode || "normal") !== "normal") lines.push(`<span style="opacity:.75;">${foundry.utils.escapeHTML(A.name)} rolled twice and kept the ${/^adv/.test(String(atkMode)) ? "better" : "worse"}.</span>`);
+        if (String(defMode || "normal") !== "normal") lines.push(`<span style="opacity:.75;">${foundry.utils.escapeHTML(D.name)} rolled twice and kept the ${/^adv/.test(String(defMode)) ? "better" : "worse"}.</span>`);
         if (note) lines.push(foundry.utils.escapeHTML(note));
 
         // S3a.5.2 — pass Roll objects so Dice So Nice animates the 3D dice,

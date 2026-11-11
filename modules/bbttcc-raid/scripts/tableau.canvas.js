@@ -170,16 +170,20 @@
       return true;
     });
   }
-  function courtiers(scene = canvas?.scene) {
+  function courtiers(scene = canvas?.scene, { bound: useBound = true } = {}) {
+    // A running Parley's room is ITS scene (2026-11-11): when the GM looks at another map that happens to have NPCs,
+    // those people are not the court — the bound scene wins for the default (current-scene) call.
+    if (useBound && _parleySceneId && scene === canvas?.scene && scene?.id !== _parleySceneId) {
+      const b0 = game.scenes?.get(_parleySceneId);
+      if (b0) scene = b0;
+    }
     if (!scene) return [];
     const onCanvas = scene === canvas?.scene;
     const toks = onCanvas
       ? (canvas?.tokens?.placeables || []).filter(t => t?.actor && t.document)
       : Array.from(scene.tokens ?? []).filter(d => d?.actor).map(_tokenLike);
     const found = _filterCourtiers(scene, toks);
-    if (found.length || !onCanvas) return found;
-    const bound = (_parleySceneId && _parleySceneId !== scene.id) ? game.scenes?.get(_parleySceneId) : null;
-    return bound ? courtiers(bound) : found;
+    return found;
   }
 
   // Restore vanilla appearance for tokens that previously had spike scale/sort.
@@ -461,8 +465,8 @@
       btn.title = isStage
         ? (on ? "Tableau: scales with depth — click to PIN at true size"
               : "Tableau: pinned at true size — click to scale with depth")
-        : (on ? "Parley courtier — click to take them OUT of the Parley"
-              : "Not marked as a Parley courtier — click to make them one (on a plain map, unmarked NPCs count until you mark someone)");
+        : (on ? "Parley observer — click to take them OUT of the Parley"
+              : "Not marked as a Parley observer — click to make them one (on a plain map, unmarked NPCs count until you mark someone)");
       btn.innerHTML = `<i class="fa-solid fa-masks-theater"></i>`;
       btn.addEventListener("click", async (ev) => {
         ev.preventDefault(); ev.stopPropagation();

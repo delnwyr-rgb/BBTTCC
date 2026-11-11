@@ -979,6 +979,7 @@ for (const b of beats) {
     if (["parley", "presence", "courtly"].includes(T) && !s(R.courtScene)) F("E19", "INFO", b.id, `${where}: a Parley with no courtScene — it runs on whatever scene is viewed (any scene since 2026-10-22; courtiers = its NPCs or 🎭-marked tokens)`);
     if (R.goal != null && !["persuade", "deceive", "impress", "unnoticed"].includes(String(R.goal).toLowerCase())) F("E19", "WARN", b.id, `${where}.goal '${R.goal}' — engine knows persuade | deceive | impress | unnoticed`);
     if (R.goal != null && !["parley", "presence", "courtly"].includes(T)) F("E19", "WARN", b.id, `${where}.goal is set on a ${T} — goals belong to a Parley`);
+    if (R.audience != null && !["observers", "judges", "jury", "crowd", "court"].includes(String(R.audience).toLowerCase())) F("E19", "WARN", b.id, `${where}.audience '${R.audience}' — engine knows observers | judges | jury | crowd | court`);
     if (R.routes != null) { if (typeof R.routes !== "object") F("E19", "ERR", b.id, `${where}.routes must be { win, stalemate, loss }`); else for (const k of ["win", "stalemate", "loss"]) { const to = s(R.routes[k]); if (to && !byId.has(to)) F("E19", "ERR", b.id, `${where}.routes.${k} → '${to}' is not a beat`); } }
   }
   if (we.openTravel != null && !s(we.openTravel.hexName)) F("E06", "WARN", b.id, `openTravel has no hexName — opens the travel console with no destination`);

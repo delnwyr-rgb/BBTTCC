@@ -487,7 +487,7 @@ async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
   r.meta ||= {}; r.meta.stake = stake;
   const won = _rcRoundWord(r) === "win";
   const esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
-  const say = (html) => ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid"><p style="margin:0;">${html}</p></section>` }).catch(() => {});
+  const say = (html) => ChatMessage.create({ speaker: { alias: "Bad Eden Conflict" }, content: `<section class="bbttcc-raid"><p style="margin:0;">${html}</p></section>` }).catch(() => {});
   if (!won) return stake;
   if (stake.kind === "ground") {
     if (!game.user?.isGM) return stake;
@@ -1679,11 +1679,11 @@ async function _rcConfirm(title, text) {
 function _isCourtlyKey(k) {
   const lk = String(k || "").toLowerCase();
   if (lk === "courtly") return true;
-  // A Parley runs on ANY scene (owner ruling 2026-10-22): a tableau, or any map with courtiers on it
-  // (marked tableauActor tokens, else its non-party NPCs — api.raid.tableau.courtiers).
-  if (lk === "presence" && (canvas?.scene?.flags?.["bbttcc-raid"]?.tableau?.enabled === true
-    || (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []).length > 0)) return true;
-  return false;
+  // Every Parley is a Parley (2026-11-11): it used to need a tableau or courtiers on the GM's CURRENT canvas, so a
+  // Parley started while the GM looked at the strategic map silently fell to Battle dice and never reached the story.
+  // The courtiers only add the room's favor; an empty room just adds nothing.
+  if (lk === "presence") return true;
+  try { return (game.bbttcc?.api?.raid?.resolveCanonical?.(lk) || "") === "presence"; } catch (_e) { return false; }
 }
 
 function primaryKeyFor(activityKey){
@@ -1725,6 +1725,7 @@ function _effectsMans() {
       text: v?.text || "",
       tier: v?.tier || 1,
       raidTypes: v?.raidTypes,
+      defenderAccess: v?.defenderAccess === true,   // was dropped here, so _mansForTypeDefense never saw it (2026-11-11)
     };
   }
   return out;
@@ -2043,7 +2044,7 @@ function _rcEmitManFireCard(r, side, key, manDef, attacker, defender) {
       <p style="margin:0 0 .25rem;"><b>🎯 ${foundry.utils.escapeHTML(actorName)}</b> fires <b>${foundry.utils.escapeHTML(label)}</b> ${fmBadge}</p>
       <p style="margin:0;opacity:.85;font-size:.9em;">vs <b>${foundry.utils.escapeHTML(targetName)}</b> · <i>${foundry.utils.escapeHTML(roundLabel)}</i> · <span style="opacity:.7;">${sideLabel} side</span></p>
     </section>`;
-    ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: card }).catch(()=>{});
+    ChatMessage.create({ speaker: { alias: "Bad Eden Conflict" }, content: card }).catch(()=>{});
   } catch (e) { console.warn("[bbttcc-raid] fire card emit failed", e); }
 }
 
@@ -2201,6 +2202,10 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
           appliedScenario = true;
         } else if (_isCourtlyKey(mode) && app?.__courtlyScenario?.applyEffects) {
           await app.__courtlyScenario.applyEffects(scenarioEffects, { side: String(side) === "def" ? "D" : "A" });
+          appliedScenario = true;
+        } else if (_isInfilKey(mode) && app) {
+          // No Heist board yet (it opens at the first commit) — hold, same as the Parley (2026-11-11).
+          (app.__infilPendingEffects ||= []).push({ effects: scenarioEffects });
           appliedScenario = true;
         } else if (_isCourtlyKey(mode) && app) {
           // No Parley board yet (it opens at the first commit's "Start") — hold the effects and apply
@@ -2375,7 +2380,10 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   // fires let B2 apply their effects at commit time (their normal pipeline).
   // Player seats can't write other Domains (the defender's actor): their fire leaves mechApplied unset, and the GM's
   // commit-time B2 applies the effects (2026-10-28 — the effects used to fail silently and be marked applied anyway).
-  if (fireMode === "anytime" && game.user?.isGM) {
+  // Scenario rounds (Parley / Heist, 2026-11-11): a PRE-ROLL maneuver's effects land when it fires — before the exchange
+  // rolls — instead of in the post-exchange B2 pass, where "+2 this exchange" would only reach the next one.
+  const __scnPre = fireMode === "pre-roll" && (_isCourtlyKey(r.activityKey) || _isInfilKey(r.activityKey));
+  if ((fireMode === "anytime" || __scnPre) && game.user?.isGM) {
     const applyRes = await _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender);
     if (applyRes?.ok) {
       try {
@@ -2502,26 +2510,55 @@ function _mansForType(type){
       tier:     (e?.tier     || x?.tier     || 1),
     };
   };
-  keys.forEach(add); Object.keys(ext).forEach(add);
-
-  const pKey = primaryKeyFor(type);
+  // A defense list ("presence_defense", …) that has no registry entry of its own reads its OP pool and canonical
+  // type from the base activity (2026-11-11 — "presence_defense" fell through primaryKeyFor to "violence", so every
+  // Violence-heavy maneuver — Flank Attack, Sap the Walls, Artillery Salvo — was offered to a Parley's defender).
+  const _typeLc0 = String(type || "").toLowerCase();
+  const _hasOwnType = !!(game.bbttcc?.api?.raid?.TYPES || {})[_typeLc0];
+  const _baseType = (!_hasOwnType && /_defense$/.test(_typeLc0)) ? _typeLc0.replace(/_defense$/, "") : _typeLc0;
+  const pKey = primaryKeyFor(_baseType);
   // Phase 4A taxonomy: maneuver `raidTypes` may carry either canonical keys
   // (intrigue/violence/presence) or LEGACY keys (Infiltration/Espionage/...).
   // Resolve both directions case-insensitively so legacy-tagged maneuvers
   // surface under their canonical raid type. Falls back to cost-dominance
   // and "any" wildcards as before.
-  const typeLc = String(type || "").toLowerCase();
+  const typeLc = _typeLc0;
   const canonicalFor = game.bbttcc?.api?.raid?.resolveCanonical || null;
-  const canonicalType = (typeof canonicalFor === "function" ? (canonicalFor(typeLc) || typeLc) : typeLc);
+  const canonicalType = (typeof canonicalFor === "function" ? (canonicalFor(_baseType) || _baseType) : _baseType);
+  // A Parley is talked out at the table: a maneuver joins it only by its TAGS (presence / propaganda / courtly / any),
+  // never by what it costs — Soft Power-heavy battle moves (Rally the Line, Crown of Mercy) are still battle moves
+  // (Dave 2026-11-11, Arc Bay Parley). GM-only throughput stubs carry no tags, so they stay out of a Parley too.
+  const parley = canonicalType === "presence";
+  if (parley) { for (const k of Object.keys(ext)) { if (!eff[k] && !keys.includes(k)) delete ext[k]; } }
+  keys.forEach(add); Object.keys(ext).forEach(add);
+
+  // Tag → conflict type for the picker (2026-11-11). "X_defense" tags (Patch the Breach: assault_defense) count only on a
+  // DEFENDER list, for X's type; the retired Ritual / Liberation / Occupation tags read as Battle (they were fights —
+  // Occupation / Liberation are now Battle outcomes). Before, nine maneuvers tagged only that way (Patch the Breach,
+  // Prayer in the Smoke, Quantum Shield, Crown of Mercy, …) appeared in no list at all.
+  const _isDefList = /_defense$/.test(_typeLc0);
+  const _tagCanon = (rt) => {
+    if (typeof canonicalFor !== "function") return null;
+    const d = /_defense$/.test(rt);
+    const base = d ? rt.replace(/_defense$/, "") : rt;
+    if (d && !_isDefList) return null;
+    return canonicalFor(base) || null;
+  };
+  const _RETIRED_TAGS = ["ritual", "liberation", "occupation"];
   for (const [k,e] of Object.entries(eff)){
     if (res[k]) continue;
     const rtypesRaw = Array.isArray(e.raidTypes) ? e.raidTypes : (e.raidTypes ? [e.raidTypes] : []);
     const rtypesLc  = rtypesRaw.map(t => String(t).toLowerCase());
     const matchesAny       = rtypesLc.includes("any");
     const matchesDirect    = rtypesLc.includes(typeLc) || rtypesLc.includes(canonicalType);
-    const matchesCanonical = !matchesDirect && (typeof canonicalFor === "function")
-      && rtypesLc.some(rt => canonicalFor(rt) === canonicalType);
-    const matchesDominant  = (_dominantOp(e.cost) === pKey);
+    // A maneuver tagged ONLY with retired types (no live tag anywhere) reads as Battle — tagged with a live type too, its
+    // live tags decide (Flash Bargain's "liberation" doesn't make it a Battle move).
+    const _liveTagged = rtypesLc.some(rt => rt === "any" || !!_tagCanon(rt) || !!canonicalFor?.(rt.replace(/_defense$/, "")));
+    const matchesCanonical = !matchesDirect && (rtypesLc.some(rt => _tagCanon(rt) === canonicalType)
+      || (!_liveTagged && canonicalType === "violence" && rtypesLc.some(rt => _RETIRED_TAGS.includes(rt))));
+    // Cost dominance is the fallback for UNTAGGED maneuvers only (2026-11-11): a tagged maneuver goes where its tags say —
+    // courtly cards with an Intrigue-heavy price were leaking into Heists (and Violence-priced ones into Battles).
+    const matchesDominant  = !parley && !rtypesLc.length && (_dominantOp(e.cost) === pKey);
     if (matchesDirect || matchesAny || matchesCanonical || matchesDominant) add(k);
   }
 
@@ -2538,7 +2575,15 @@ function _mansForTypeDefense(typeKey){
 
   const eff = _effectsMans();
   const defenseAdds = {};
+  // A Parley's defender talks too: defender-access maneuvers join it only when they'd join the Parley itself (2026-11-11).
+  const _canon = game.bbttcc?.api?.raid?.resolveCanonical?.(String(typeKey || "").toLowerCase()) || String(typeKey || "").toLowerCase();
+  const _parley = _canon === "presence";
   for (const [k,e] of Object.entries(eff)){
+    if (_parley && !base[k]) continue;
+    // defenderAccess never moves a maneuver ACROSS conflict types (2026-11-11): passed through at last, it would have put
+    // Smoke and Mirrors and Flash Bargain on a Battle's defender. The defender list is the type's own (tags + X_defense
+    // tags, see _mansForType) — the flag only matters for maneuvers already in this type.
+    if (!base[k] && !def[k] && !DEFENDER_ALWAYS_MANS[String(k || "").toLowerCase()]) continue;
     if (e?.defenderAccess === true || DEFENDER_ALWAYS_MANS[String(k||"").toLowerCase()]){ defenseAdds[k]=true; }
   }
 
@@ -2976,7 +3021,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.logWar      = !!s.logWar;
       this.vm.includeDefender = (s.includeDefender !== undefined) ? !!s.includeDefender : this.vm.includeDefender;
       // Ruling 22 — what the story asked for: the Parley goal/style preset, the stake line, the offering beat.
-      this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show") } : null;
+      this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show"), audience: String(s.parley.audience || "observers") } : null;
       this.vm.stake     = String(s.stake || "");
       this.vm.offeredBy = String(s.offeredBy || "");
       this.vm.objectiveOnly = s.objectiveOnly === true;   // ruling 21: the story says the hex is not the prize
@@ -3378,14 +3423,15 @@ _renderScenarioHUD(host, round){
     }
 
     if (_isInfilKey(k)) {
-      row.appendChild(this._mkChip("INFILTRATION", { tone:"mode" }));
+      row.appendChild(this._mkChip("HEIST", { tone:"mode" }));
 
       const rNum = (st && st.round != null) ? Number(st.round) : (Array.isArray(st?.history) ? st.history.length : 0);
       row.appendChild(this._mkChip("R" + String(rNum), { tone:"default", title:"Scenario round" }));
 
       const alarm = st ? Number(st.alarm || 0) : 0;
       const alarmMax = st ? Number(st.alarmMax || (sc && sc.alarmMax) || 5) : (sc && sc.alarmMax ? Number(sc.alarmMax) : 5);
-      const band = st?.band ?? (alarm >= alarmMax ? "lockdown" : "quiet");
+      // The live state carries no `band` (only history rows do), so the chip read QUIET at any alarm short of the cap (2026-11-11).
+      const band = st?.band ?? (Array.isArray(st?.history) && st.history.length ? st.history[st.history.length - 1]?.band : null) ?? (alarm >= alarmMax ? "lockdown" : String(_alarmBand(alarm).label || "quiet").toLowerCase());
       const bandLabel = this._bandLabel(band || "");
 
       const aLabel = document.createElement("span");
@@ -4442,7 +4488,7 @@ _renderScenarioHUD(host, round){
       defenderName: defender?.name || "(none)",
       hasDef: !!defender,
       coalition: coalitionTop,
-      topDC: defender ? {
+      topDC: (defender && !_isCourtlyKey(this.vm?.activityKey) && !_isInfilKey(this.vm?.activityKey)) ? {
         base: baseTop,
         defProjBonus: bonusTop,
         diff: diffTop,
@@ -4553,6 +4599,15 @@ r.view = {
       // Ruling 5 retired 2026-10-26: marks are spent in every Battle/Heist/Parley, so the grid always renders.
       r.view.noMarks = false;
       r.view.strengthOn = _rcAlphaOn();
+      // Parley / Heist rounds (2026-11-11): the Battle Strength / Defence / DC lines are not what these engines roll — a
+      // Parley showed "Defence 32" its engine never reads. Show the exchange's own rule instead.
+      try {
+        const __par = _isCourtlyKey(r.activityKey), __hei = !__par && _isInfilKey(r.activityKey);
+        r.view.scenarioKind = __par ? "parley" : (__hei ? "heist" : "");
+        const __st = stagedOpBonus(Number(stagedA || 0) + Number(stagedSupport || 0)), __sd = stagedOpBonus(Number(stagedD || 0));
+        if (__par) r.view.scenarioLine = `Each exchange: 2d10 (exploding) + the chosen action's spend + backing (allies and the ${(game.bbttcc?.api?.raid?.audienceWords?.(this.vm?.parley?.audience)?.many) || "observers"}' favor, at most +5) + maneuvers + staged marks (+1 per ${Math.max(1, Math.round(_mpo() * 2 * _rcPriceMult()))}). The loser of the exchange loses Influence equal to the margin.${__st ? ` Staged now: ${r.view.attackerName} +${__st}.` : ""}${(__sd && game.user?.isGM) ? ` ${r.view.defenderName} +${__sd}.` : ""}`;
+        else if (__hei) r.view.scenarioLine = `Each round: 2d10 (exploding) + Intrigue spend + crew backing + Stewards' declarations + maneuvers + staged marks. A lost round raises the Alarm.${__st ? ` Staged now: ${r.view.attackerName} +${__st}.` : ""}`;
+      } catch (_eSK) {}
       // What this round spends — each side's selected maneuver costs in marks (the panel's "spends" line).
       try {
         const __EFF = (game.bbttcc?.api?.raid?.EFFECTS) || {};
@@ -4770,7 +4825,7 @@ r.view = {
       // Raid OP gate: require 1 OP of the activity primary key to DECLARE a round.
       const gate = _rcHasOpForActivity(attacker, this.vm.activityKey);
       if (!gate.ok) {
-        ui.notifications?.warn?.("This raid round requires " + _mpo() + " " + _rcOpLabel(gate.key) + " marks. Attacker has " + _rcOP(gate.pool) + ".");
+        ui.notifications?.warn?.("This round requires " + _mpo() + " " + _rcOpLabel(gate.key) + " marks. Attacker has " + _rcOP(gate.pool) + ".");
         try { _rcApplyGateToAddRoundButton(this); } catch (_eG3) {}
         return;
       }
@@ -4917,6 +4972,13 @@ r.view = {
   } else {
     comp = await computeDryRun(attacker, { activityKey:this.vm.activityKey, difficulty:this.vm.difficulty, attackerBaseOverride: Number(coalition.total || 0) }, baseDC);
   }
+  // NO PREVIEW DICE (Dave 2026-11-11: "No numbers there until the actual roll happens"). Add Round used to roll real dice
+  // and show them in the table and on the Post card as if they were the result. Keep the flat bonuses (what the commit
+  // re-reads); drop every rolled number. A contested round's DC is its flat base until the commit rolls the defender.
+  comp.__contested = !!comp.defRoll;
+  comp.roll = null; comp.attRoll = null; comp.defRoll = null;
+  comp.total = null; comp.margin = null; comp.outcome = null;
+  if (comp.__contested) { comp.DC = Number(comp.baseDC || 0); comp.defTotal = null; }
 }
 
       const roundSupportStage = {};
@@ -4966,8 +5028,8 @@ r.view = {
         total: comp.total,
         defTotal: (comp.defTotal != null ? comp.defTotal : null),
         margin: (comp.margin != null ? comp.margin : null),
-        contested: !!comp.defRoll,
-        dcLabel: (!!comp.defRoll ? "DEF" : ""),
+        contested: !!(comp.__contested || comp.defRoll),
+        dcLabel: ((comp.__contested || comp.defRoll) ? "DEF" : ""),
         outcome: comp.outcome,
 
         open: true,
@@ -5041,7 +5103,7 @@ r.view = {
       const staged = Math.min(Math.max(0, want), avail);
       if (staged > 0) round.localStaged.att[cat] = staged;
 
-      ui.notifications?.info?.(`Imported Raid Plan (${cat}): requested ${want} → staged ${staged} (bank ${avail}).`);
+      ui.notifications?.info?.(`Imported the plan (${_rcOpLabel(cat)}): requested ${want} → staged ${staged} marks (bank ${avail}).`);
       this.vm.rounds.push(round);
       this._queueSaveSession();
       // Broadcast the "Round Added" pill so player browsers play the banner
@@ -5231,7 +5293,7 @@ r.view = {
     //   - Attacker staging is allowed only when the player owns the lead.
     if (!_rcIsGMUser()) {
       if (side === "def") {
-        try { ui.notifications?.warn?.("Only the GM can stage defender OP."); } catch(_e) {}
+        try { ui.notifications?.warn?.("Only the GM can stage the defender's marks."); } catch(_e) {}
         return;
       }
       if (side === "support") {
@@ -5298,7 +5360,7 @@ r.view = {
     const remain = Number(bank[opKey] || 0) - stagedAlready;
 
     if (d > 0 && remain <= 0) {
-      ui.notifications?.warn?.(`${label} has no ${opKey} left in OP Turn Bank.`);
+      ui.notifications?.warn?.(`${label} has no ${_rcOpLabel(opKey)} marks left.`);
       return;
     }
 
@@ -5331,8 +5393,18 @@ async _postRoundCard(idx){
   const contested = !!r.contested || (r.defTotal != null) || (r.defRoll != null) || (r.dcLabel === "DEF");
   const tgtLabel = (r.targetType === "rig") ? "Target Rig" : (r.targetType === "creature" ? "Target Creature" : "Target Hex");
   const _escJ = (arr) => arr.map(n => foundry.utils.escapeHTML(String(n))).join(", ");
-  const mansA = (r.mansSelected?.length) ? `<br/><i>Maneuvers (Att):</i> ${_escJ(r.mansSelected)}` : "";
-  const mansD = (r.mansSelectedDef?.length) ? `<br/><i>Maneuvers (Def):</i> ${_escJ(r.mansSelectedDef)}` : "";
+  // Labels, not keys; supporters' maneuvers listed under their own names; the DEFENDER's picks stay hidden until the
+  // round is rolled — the card goes to the whole table (2026-11-11).
+  const _labs = (keys) => (Array.isArray(keys) ? keys : []).map(k => manDefLabel(k));
+  const mansA = (r.mansSelected?.length) ? `<br/><i>Maneuvers (${foundry.utils.escapeHTML(String(r.attackerName || "Att"))}):</i> ${_escJ(_labs(r.mansSelected))}` : "";
+  let mansS = "";
+  for (const [sfid, keys] of Object.entries(r.mansSelectedSupport || {})) {
+    if (!Array.isArray(keys) || !keys.length) continue;
+    const nm = game.actors?.get?.(String(sfid).replace(/^Actor\./, ""))?.name || "Support";
+    mansS += `<br/><i>Maneuvers (${foundry.utils.escapeHTML(nm)}):</i> ${_escJ(_labs(keys))}`;
+  }
+  const mansD = (r.mansSelectedDef?.length && r.committed) ? `<br/><i>Maneuvers (Def):</i> ${_escJ(_labs(r.mansSelectedDef))}` : "";
+  const rolled = !!r.committed;
   const supportNames = Array.isArray(r.supportFactionNames) ? r.supportFactionNames.filter(Boolean) : [];
   const coalitionLine = (supportNames.length ? `<br/><i>Support:</i> ${_escJ(supportNames)}` : "")
     + (r.meta?.stake?.text ? `<br/><i>Stake:</i> ${foundry.utils.escapeHTML(String(r.meta.stake.text))}` : "")
@@ -5343,16 +5415,17 @@ async _postRoundCard(idx){
   const dTotal = Number((contested ? (r.defTotal ?? r.dcFinal) : (r.dcFinal ?? r.DC)) ?? 0) || 0;
   const margin = aTotal - dTotal;
 
-  const attLine = contested
+  // Nothing is rolled before the commit (no preview dice, 2026-11-11) — an unrolled round says so.
+  const attLine = !rolled ? "—" : contested
     ? `<code>${foundry.utils.escapeHTML(String(r.attRoll?.result || r.roll?.result || "—"))}</code> = <strong>${aTotal}</strong>`
     : `<code>${foundry.utils.escapeHTML(String(r.roll?.result || "—"))}</code> ${aTotal?`= <strong>${aTotal}</strong>`:""}`;
 
-  const defLine = contested
+  const defLine = !rolled ? "—" : contested
     ? `<code>${foundry.utils.escapeHTML(String(r.defRoll?.result || "—"))}</code> = <strong>${dTotal}</strong>`
     : `<span class="center">${dTotal}</span>`;
 
-  const outcome = String(r.outcome ?? "—");
-  const marginTxt = contested ? `<strong>${margin>=0?"+":""}${margin}</strong>` : "—";
+  const outcome = rolled ? String(r.outcome ?? "—") : "Not rolled yet";
+  const marginTxt = (rolled && contested) ? `<strong>${margin>=0?"+":""}${margin}</strong>` : "—";
 
   // Damage Tracking Unification 2026-05-14 — casualties line.
   // Margin-driven default computed at commit; GM can adjust via buttons below.
@@ -5408,7 +5481,7 @@ async _postRoundCard(idx){
   const card = `
     <section class="bbttcc-raid">
       <h3 style="margin:0 0 .25rem 0;">Domain Conflict (Round ${idx+1})</h3>
-      <p style="margin:.25rem 0;"><strong>Activity:</strong> ${foundry.utils.escapeHTML(r.activityLabel)} • <strong>Difficulty:</strong> ${diffName}${r.diffOffset?` • <strong>Adj:</strong> ${r.diffOffset>0?'+':''}${r.diffOffset}`:''}${mansA}${mansD}${coalitionLine}</p>
+      <p style="margin:.25rem 0;"><strong>Activity:</strong> ${foundry.utils.escapeHTML(r.activityLabel)} • <strong>Difficulty:</strong> ${diffName}${r.diffOffset?` • <strong>Adj:</strong> ${r.diffOffset>0?'+':''}${r.diffOffset}`:''}${mansA}${mansS}${mansD}${coalitionLine}</p>
       <table class="bbttcc-table" style="width:100%;">
         <thead>
           <tr>
@@ -5432,13 +5505,13 @@ async _postRoundCard(idx){
       ${holdingsBlock}
       ${casualtiesBlock}
     </section>`;
-  ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, flavor:card, whisper: tableAudience() });
+  ChatMessage.create({ speaker:{alias:"Bad Eden Conflict"}, flavor:card, whisper: tableAudience() });
 
   // Echo Roster (2026-05-26) — manifesting echoes posted as a PUBLIC message
   // (players see their past-life crews show up), separate from the
   // round card above (table-audience since 2026-10-12). First-round only; empty block = no message.
   if (echoesBlock) {
-    ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
+    ChatMessage.create({ speaker: { alias: "Bad Eden Conflict" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
   }
 }
 
@@ -5519,7 +5592,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
     try {
       const gate = _rcHasOpForActivity(attacker, r.activityKey);
       if (!gate.ok) {
-        ui.notifications?.warn?.("Cannot commit: requires 1 " + _rcOpLabel(gate.key) + " OP to attempt this action.");
+        ui.notifications?.warn?.("Cannot commit: this round needs " + _mpo() + " " + _rcOpLabel(gate.key) + " marks.");
         return;
       }
     } catch (_eCG) {}
@@ -5583,6 +5656,21 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         // or the held scenario has already RESOLVED. A rematch of the same
         // court gets a fresh board instead of "scenario already resolved"
         // (owner hit this validating the courtly sprint 2026-07-14).
+        // A GM reload (or a fresh console) used to start the Parley over — commitments charged again, scars / door bonuses
+        // lost, receipts orphaned. The engine mirrors its full state on both Domains; rebuild the SAME Parley from it (2026-11-11).
+        if (!this.__courtlyScenario && typeof raidApi.courtly === "function") {
+          try {
+            const mir = attacker.getFlag?.(RAID_ID, "courtlyActive") || null;
+            const ms = mir?.state || null;
+            if (ms && ms.outcome === "ongoing" && String(ms.attackerId) === attacker.id && String(ms.defenderId) === defender.id) {
+              const sc = await raidApi.courtly({ attackerId: attacker.id, defenderId: defender.id, restore: ms });
+              if (sc?.restored) {
+                this.__courtlyScenario = sc; this.__courtlyScenarioAtt = attacker.id; this.__courtlyScenarioDef = defender.id;
+                ui.notifications?.info?.(`Parley resumed — ${ms.label || "the table"}, exchange ${Number(ms.round || 0) + 1}.`);
+              }
+            }
+          } catch (eRes) { warn("Parley restore failed — opening a new table", eRes); }
+        }
         const __prevCourtSt = this.__courtlyScenario?.getState?.() || null;
         if (!this.__courtlyScenario || !__prevCourtSt || __prevCourtSt.outcome !== "ongoing" || this.__courtlyScenarioAtt !== attacker.id || this.__courtlyScenarioDef !== defender.id) {
           // ALPHA CUT ruling 3: one goal per Parley, picked here. Ruling 5 retired 2026-10-26 (DC5): the opening commitment
@@ -5596,6 +5684,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           const __pre = (this.vm.parley && typeof this.vm.parley === "object") ? this.vm.parley : { goal: "persuade", style: "show" };   // ruling 22: the story's preset
           const goalOpts = GOALS.map(([k, l]) => `<option value="${k}"${k === String(__pre.goal || "persuade") ? " selected" : ""}>${l}</option>`).join("");
           const __profiles = (typeof raidApi.performanceProfiles === "function") ? raidApi.performanceProfiles() : {};
+          const __AUD = raidApi.AUDIENCES || {};
+          const audOpts = Object.entries(__AUD).map(([k, v]) => `<option value="${k}"${k === String(__pre.audience || "observers") ? " selected" : ""}>${foundry.utils.escapeHTML(v?.label || k)}</option>`).join("") || `<option value="observers">Observers</option>`;
           const styleOpts = Object.entries(__profiles).map(([k, v]) => `<option value="${k}"${k === String(__pre.style || "show") ? " selected" : ""}>${foundry.utils.escapeHTML(v?.label || k)}</option>`).join("") || `<option value="show">The Show</option>`;
           const init = await new Promise((resolve) => {
             new Dialog({
@@ -5604,6 +5694,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                 <form>
                   <div class="form-group"><label>Goal</label><select name="goal">${goalOpts}</select></div>
                   <div class="form-group" data-parley-style style="display:none;"><label>Style</label><select name="style">${styleOpts}</select></div>
+                  <div class="form-group"><label>Audience</label><select name="audience">${audOpts}</select></div>
                   <p class="hint">One goal per Parley. Suspicion only runs when the goal is Stay unnoticed; Impress runs the contest with its crowd.</p>
                   <p class="hint">Initial commitment sets starting Influence HP — marks spent now from each Domain's bank. Every Parley costs marks, story-offered or not.</p>
                   <p class="hint" style="opacity:.85;">Attacker bank — Diplomacy <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.diplomacy||0))}</b> · Soft Power <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.softpower||0))}</b> marks. 10 Soft Power stays in reserve so the next round can still be added.</p>
@@ -5620,6 +5711,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                   resolve({
                     goal: String(f.goal?.value || "persuade"),
                     style: String(f.style?.value || "show"),
+                    audience: String(f.audience?.value || "observers"),
                     atkDip: Number(f.atkDip?.value||0),
                     atkSoft: Number(f.atkSoft?.value||0),
                     defDip: Number(f.defDip?.value||0),
@@ -5667,6 +5759,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               label: init.label,
               goal: init.goal,
               performance: init.goal === "impress" ? init.style : null,
+              audience: init.audience,
               domainStrength: null   // ruling 5 retired 2026-10-26: Influence opens from the marks committed above
             });
             this.__courtlyScenarioAtt = attacker.id;
@@ -5773,9 +5866,19 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           warn("courtly coalition-bonus compute failed", e);
         }
 
+        // Maneuvers + staged marks reach the exchange (2026-11-11 — a Parley commit used to charge for both and apply neither).
+        try {
+          const mm = await _rcScenarioManeuverMods(r, attacker, defender, __scnCat, { pendingAtt: __b3AttExtra, pendingDef: __b3DefExtra, pendingAttMode: __b3AttMode, pendingDefMode: __b3DefMode });
+          stepArgs.atkManBonus = mm.attBonus; stepArgs.defManBonus = mm.defBonus;
+          stepArgs.atkMode = mm.attMode; stepArgs.defMode = mm.defMode; stepArgs.manNotes = mm.notes;
+          r.meta ||= {}; r.meta.b3 ||= {}; r.meta.b3.scenarioMods = mm;
+        } catch (eMM) { warn("Parley maneuver/staging bonus failed (non-fatal)", eMM); }
+
         let st = null;
         try { st = await this.__courtlyScenario.step(stepArgs); }
         catch (e) { warn("courtly step failed", e); ui.notifications?.error?.("Parley exchange failed — see console."); return; }
+        if (st?.note === "scenario already resolved") { ui.notifications?.warn?.("That Parley is already over — nothing rolled; round left open."); return; }
+        try { await _b3ConsumePendingRollMods(attacker); } catch (_eC) {}   // the earned next-roll bonus is spent on this exchange
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;
         r.roll = { result: String((last?.atkTotal ?? 0)) + " vs " + String((last?.defTotal ?? 0)) };
@@ -5787,6 +5890,15 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (courtly)", e); }
         // The Parley's round maneuvers + staged marks are paid now (2026-10-28 — the courtly path used to charge nothing).
         try { await _rcChargeRound(attacker, defender, _rcRoundCharges(r, r.mansSelected || [], r.mansSelectedDef || [], __scnCat)); } catch (eSpendC) { warn("Parley maneuver/staging spend failed (non-fatal)", eSpendC); }
+        // The maneuvers' own effects (favor, Influence damage, Suspicion, faction effects) — the same B2 pass a Battle and a
+        // Heist run. Tier = who took THIS exchange. Anything already applied at fire time (mechApplied) is skipped.
+        try {
+          r.meta ||= {};
+          r.meta.scenarioOutcomeTier = (Number(last?.atkTotal ?? 0) >= Number(last?.defTotal ?? 0)) ? "success" : "fail";
+          const b2 = await _b2ComputeAndApplyManeuverIntents({ app: this, round: r, attacker, defender, targetHex: null, targetType: r.targetType });
+          if (b2 && b2.persisted) { r.meta.b2 ||= {}; r.meta.b2.intentsAppliedAt = b2.appliedAt || Date.now(); r.meta.b2.intentSummary = b2.summary || null; }
+          await _b3ExecuteRoundEffectsPostCommit({ round: r, attackerActor: attacker, defenderActor: defender });
+        } catch (eB2C) { warn("B2 intents (Parley) failed (non-fatal)", eB2C); }
         r.open = false; r.committed = true; r.committedAt = Date.now();
         r.meta ||= {};
         r.meta.scenario = {
@@ -5888,6 +6000,9 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             });
             this.__infilScenarioAtt = attacker.id;
             this.__infilScenarioDef = defender.id;
+            for (const p of (Array.isArray(this.__infilPendingEffects) ? this.__infilPendingEffects.splice(0) : [])) {
+              try { await this.__infilScenario?.applyEffects?.(p.effects); } catch (ePend) { console.warn("[bbttcc-raid] pending Heist effects failed", ePend); }
+            }
 
             // Capture scenario max for HUD (compact strip)
             try {
@@ -5986,11 +6101,19 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           warn("infiltration coalition-bonus compute failed", e);
         }
 
+        // Maneuvers + staged marks reach the Heist roll (2026-11-11 — they were charged and never rolled).
+        let __mmH = { attBonus: 0, defBonus: 0, attMode: "normal", defMode: "normal", notes: [] };
+        try {
+          __mmH = await _rcScenarioManeuverMods(r, attacker, defender, __scnCat, { pendingAtt: __b3AttExtra, pendingDef: __b3DefExtra, pendingAttMode: __b3AttMode, pendingDefMode: __b3DefMode });
+          r.meta ||= {}; r.meta.b3 ||= {}; r.meta.b3.scenarioMods = __mmH;
+        } catch (eMMH) { warn("Heist maneuver/staging bonus failed (non-fatal)", eMMH); }
+
         let st = null;
-        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount, atkOpBonus, defOpBonus }); }
+        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount, atkOpBonus, defOpBonus, atkManBonus: __mmH.attBonus, defManBonus: __mmH.defBonus, atkMode: __mmH.attMode, defMode: __mmH.defMode, manNotes: __mmH.notes }); }
         catch (e) { warn("infiltration step failed", e); ui.notifications?.error?.("Infiltration step failed — see console."); return; }
         // Backstop: a resolved board rolls nothing — never commit (and charge) a phantom round.
         if (st?.note === "scenario already resolved") { ui.notifications?.warn?.("Infiltration already resolved — nothing rolled; round left open."); return; }
+        try { await _b3ConsumePendingRollMods(attacker); } catch (_eC) {}
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;
         r.roll = { result: String((last?.atkTotal ?? 0)) + " vs " + String((last?.defTotal ?? 0)) };
@@ -5998,7 +6121,22 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         r.dcFinal = Number(last?.defTotal ?? 0);
         r.outcome = (st?.outcome === "lockdown") ? "LOCKDOWN" : String(last?.band || "ongoing").toUpperCase();
         // Ruling 22 — a concluded Heist goes where the story said (success = win; detected / lockdown / messy = loss).
-        try { const o = String(st?.outcome || "ongoing").toLowerCase(); if (o && o !== "ongoing") await _rcStoryRoute(this, /success|clean|complete/.test(o) ? "win" : /partial|escape/.test(o) ? "stalemate" : "loss", o); } catch (_e) {}
+        // Heist endings (2026-11-11): clean AND messy reached the objective (messy only leaves the house alert) → win. Detected →
+        // the GM's call: Convert to Battle really converts (the console's next round is a Battle — the story routes when THAT
+        // ends), Escape = they got out with something → stalemate, Negotiate = held for the GM (no automatic route).
+        try {
+          const o = String(st?.outcome || "ongoing").toLowerCase();
+          const flip = String(st?.flipResolution || "");
+          if (o === "detected" && flip === "violence") {
+            this.vm.activityKey = "violence";
+            r.meta ||= {}; r.meta.convertedToBattle = true;
+            ui.notifications?.info?.("The Heist became a Battle — add the next round to fight it out. The story routes when the Battle ends.");
+          } else if (o === "detected" && flip === "negotiate") {
+            ui.notifications?.info?.("Held at the table — resolve it in the story; nothing routed automatically.");
+          } else if (o && o !== "ongoing") {
+            await _rcStoryRoute(this, /success|clean|messy|complete/.test(o) ? "win" : (/partial|escape/.test(o) || flip === "escape") ? "stalemate" : "loss", o + (flip ? `:${flip}` : ""));
+          }
+        } catch (_e) {}
         try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (infil)", e); }
         r.open = false; r.committed = true;
         r.meta ||= {};
@@ -6055,6 +6193,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             r.meta.b2.intentsAppliedAt = b2.appliedAt || Date.now();
             r.meta.b2.intentSummary = b2.summary || null;
           }
+          await _b3ExecuteRoundEffectsPostCommit({ round: r, attackerActor: attacker, defenderActor: defender });
         } catch (eB2S) {
           warn("B2 intents (scenario) failed (non-fatal)", eB2S);
         }
@@ -6158,9 +6297,14 @@ const __b3DefExtra2 = Number(__b3ThisRound?.defenderBonusDelta || 0) || 0;
 // own OP roll read it). Consumed here at commit: the attacking side (lead + supporters) and the defender each roll 1d10x
 // per armed Domain, added to that side's roll bonus; the flag clears.
 let __momAtt = 0, __momDef = 0;
+// Spent Momentum is remembered so a commit that is then REFUSED (marks short) or cancelled (Battle call) gives it back
+// (2026-11-11 — it used to vanish with nothing rolled).
+const __momTaken = [];
+const __momRestore = async () => { for (const [a, k, v] of __momTaken.splice(0)) { try { await a.setFlag("bbttcc-factions", k, v); } catch (_eR) {} } };
 try {
   const __momRoll = async (actor) => {
     if (!actor?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) return 0;
+    __momTaken.push([actor, "nextRollBonusDie", actor.getFlag("bbttcc-factions", "nextRollBonusDie")]);
     const rr = new Roll("1d10x"); await rr.evaluate();
     try { await actor.unsetFlag("bbttcc-factions", "nextRollBonusDie"); } catch (_eU) {}
     return Number(rr.total || 0);
@@ -6188,7 +6332,7 @@ function __b3MergeMode(baseMode, addMode){
 // better = this console's advantage mode, for the side whose Domain armed it (lead/supporters or defender). Clears on use.
 let __momRerollAtt = false, __momRerollDef = false;
 try {
-  const __takeReroll = async (a) => { if (!a?.getFlag?.("bbttcc-factions", "nextRollReroll")) return false; try { await a.unsetFlag("bbttcc-factions", "nextRollReroll"); } catch (_eU) {} return true; };
+  const __takeReroll = async (a) => { if (!a?.getFlag?.("bbttcc-factions", "nextRollReroll")) return false; __momTaken.push([a, "nextRollReroll", a.getFlag("bbttcc-factions", "nextRollReroll")]); try { await a.unsetFlag("bbttcc-factions", "nextRollReroll"); } catch (_eU) {} return true; };
   const __sup2 = (Array.isArray(r.supportFactionIds) ? r.supportFactionIds : []).map(id => game.actors?.get?.(String(id).replace(/^Actor\./, ""))).filter(Boolean);
   for (const a of [attacker, ...__sup2]) if (await __takeReroll(a)) { __momRerollAtt = true; __b3ThisRound.notes.push(`Momentum reroll (${a.name}): roll twice, keep the better`); }
   if (defender && await __takeReroll(defender)) { __momRerollDef = true; __b3ThisRound.notes.push(`Momentum reroll (${defender.name}): roll twice, keep the better`); }
@@ -6302,6 +6446,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3DefMode, 
       }
       if (short.length) {
         ui.notifications?.warn?.(`Cannot commit — not enough marks for the selected maneuvers/staging. ${short.join(" • ")}. Deselect maneuvers or reduce staging.`);
+        await __momRestore();
         return;
       }
     } catch (eAff) { warn("affordability check failed (non-fatal)", eAff); }
@@ -6319,7 +6464,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3DefMode, 
       r.meta ||= {}; if (__stake) r.meta.stake = __stake;
       if (__stake && this.vm.stake) __stake = Object.assign({}, __stake, { text: `${__stake.text} ${this.vm.stake}` });   // ruling 22: the story's own line
       const call = await _rcBattleCallDialog(r, attacker, defender, __stake);
-      if (call === null) return;                       // cancelled — nothing spent, nothing rolled
+      if (call === null) { await __momRestore(); return; }   // cancelled — nothing spent, nothing rolled (Momentum given back)
       __battleCall = (call === "roll") ? null : call;  // "roll" = the GM wants the dice
     }
 
@@ -8933,6 +9078,10 @@ function _b2ApplyReflectFirst(byManeuver, { attackerId=null, defenderId=null, de
 
 function _b2NormOutcomeTier(outcomeStr){
   const s = String(outcomeStr || "").toLowerCase();
+  // Scenario outcomes (2026-11-11): "DEFENDERWIN" contains "win" and read as the attacker's success.
+  if (s.includes("defender") && s.includes("win")) return "fail";
+  if (s.includes("attacker") && s.includes("win")) return "success";
+  if (s.includes("mutualruin") || s === "lockdown" || s === "detected") return "fail";
   if (s.includes("great") && s.includes("success")) return "great_success";
   if (s.includes("success")) return "success";
   if (s.includes("win")) return "success";
@@ -9550,6 +9699,38 @@ function _b3ApplyEffectToMods(effect, mods, fallbackSide, firingSide = null){
 // into the round. Keys the hard-coded switch already handles are skipped.
 // ------------------------------------------------------------
 const _B3_HARDCODED_KEYS = new Set(["flank_attack","defensive_entrenchment","battlefield_harmony","qliphothic_gambit","harmonic_chant","tactical_overwatch","flash_bargain","patch_the_breach","psychic_disruption","suppressive_fire","last_stand_banner"]);
+// Scenario rounds (Parley / Heist) — what the selected maneuvers and the staged marks add to THIS exchange's roll
+// (2026-11-11). The Battle path folds the same three sources (pending next-roll mods, the hard-coded this-round set,
+// the generic pre-roll consumer) plus staging into its roll; the scenario engines never received any of it.
+// Support maneuvers fire on the attacker's side; staged marks give +1 per STAGE_PRICE (stagedOpBonus).
+async function _rcScenarioManeuverMods(r, attacker, defender, cat, { pendingAtt = 0, pendingDef = 0, pendingAttMode = "normal", pendingDefMode = "normal" } = {}) {
+  const listA = (Array.isArray(r?.mansSelected) ? r.mansSelected : []).slice();
+  for (const keys of Object.values(r?.mansSelectedSupport || {})) for (const k of (keys || [])) if (!listA.includes(k)) listA.push(k);
+  const listD = (Array.isArray(r?.mansSelectedDef) ? r.mansSelectedDef : []).slice();
+  const thisR = _b3ComputeThisRoundMods(r, listA, listD);
+  const gen = await _b3GenericPreRollMods(r, listA, listD, attacker, defender);
+  const merge = (b, a) => {
+    const n = (m) => { const k = String(m || "normal").toLowerCase(); return (k === "adv" || k === "advantage") ? "adv" : (k === "dis" || k === "disadvantage") ? "dis" : "normal"; };
+    const x = n(a), y = n(b);
+    if (x === "dis" || y === "dis") return (x === "adv" || y === "adv") ? "normal" : "dis";   // adv + dis cancel
+    return (x === "adv" || y === "adv") ? "adv" : "normal";
+  };
+  const stagedA = Number(r?.localStaged?.att?.[cat] || 0);
+  let stagedS = 0; for (const b of Object.values(r?.localStaged?.support || {})) stagedS += Number(b?.[cat] || 0);
+  const stagedD = Number(r?.localStaged?.def?.[cat] || 0);
+  const stageA = stagedOpBonus(stagedA + stagedS), stageD = stagedOpBonus(stagedD);
+  const notes = [...(thisR.notes || []), ...(gen.notes || [])];
+  if (stageA) notes.push(`attacker staged ${stagedA + stagedS} marks: +${stageA}`);
+  if (stageD) notes.push(`defender staged ${stagedD} marks: +${stageD}`);
+  if (pendingAtt) notes.push(`attacker earned next-roll bonus: ${pendingAtt > 0 ? "+" : ""}${pendingAtt}`);
+  if (pendingDef) notes.push(`defender earned next-roll bonus: ${pendingDef > 0 ? "+" : ""}${pendingDef}`);
+  const attBonus = Number(pendingAtt || 0) + Number(thisR.attackerRollBonusDelta || 0) + Number(thisR.attackerMarginDelta || 0) + Number(gen.attBonus || 0) + stageA;
+  const defBonus = Number(pendingDef || 0) + Number(thisR.defenderRollBonusDelta || 0) + Number(thisR.defenderBonusDelta || 0) + Number(gen.defBonus || 0) + stageD;
+  const attMode = merge(merge(pendingAttMode, thisR.rollModeAtt), gen.attMode);
+  const defMode = merge(merge(pendingDefMode, thisR.rollModeDef), gen.defMode);
+  return { attBonus, defBonus, attMode, defMode, notes, staged: { att: stagedA + stagedS, def: stagedD, bonusAtt: stageA, bonusDef: stageD } };
+}
+
 async function _b3GenericPreRollMods(round, mansAtt, mansDef, attacker, defender){
   const out = { attBonus: 0, defBonus: 0, attMode: "normal", defMode: "normal", notes: [] };
   try {
@@ -10180,7 +10361,7 @@ async function _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, de
   await _side("Defender", defenderId, defCount);
   if (lines.length) {
     ChatMessage.create({
-      speaker: { alias: "Bad Eden Raid" },
+      speaker: { alias: "Bad Eden Conflict" },
       whisper: tableAudience(),
       content: `<section class="bbttcc-raid"><h3 style="margin:0 0 .25rem 0;">⚔ Casualties Applied to Roster</h3><ul style="margin:.2rem 0 0 .9rem;padding:0;">${lines.join("")}</ul></section>`
     });

@@ -32,10 +32,10 @@
     {
       key: "courtly_whispered_aside", label: "Whispered Aside", tier: 1, costBand: "light",
       cost: { diplomacy: 10 },
-      effectsText: "Pick a courtier. +1 Favor to your side.",
-      description: "<p>A bowed head, a brushed sleeve, a coded word at the edge of the music. <b>+1 Favor with a chosen courtier toward your side.</b></p>",
+      effectsText: "Pick an observer. +1 Favor to your side.",
+      description: "<p>A bowed head, a brushed sleeve, a coded word at the edge of the music. <b>+1 Favor with a chosen observer toward your side.</b></p>",
       effects: [
-        { type: "favorShift", side: "self", delta: 1, prompt: "Choose a courtier to win over (+1 favor toward you)" }
+        { type: "favorShift", side: "self", delta: 1, prompt: "Choose an observer to win over (+1 favor toward you)" }
       ]
     },
     {
@@ -51,10 +51,10 @@
     {
       key: "courtly_plant_a_doubt", label: "Plant a Doubt", tier: 2, costBand: "light",
       cost: { intrigue: 10 },
-      effectsText: "Pick a courtier. −1 Favor to opponent's side. Suspicion +1.",
-      description: "<p>A muttered question, a raised eyebrow at the wrong moment. The doubt seeds itself. <b>−1 Favor with a chosen courtier toward your opponent's side. +1 Suspicion.</b></p>",
+      effectsText: "Pick an observer. −1 Favor to opponent's side. Suspicion +1.",
+      description: "<p>A muttered question, a raised eyebrow at the wrong moment. The doubt seeds itself. <b>−1 Favor with a chosen observer toward your opponent's side. +1 Suspicion.</b></p>",
       effects: [
-        { type: "favorShift", side: "opp", delta: -1, prompt: "Choose a courtier to sour against your opponent (−1 favor toward them)" },
+        { type: "favorShift", side: "opp", delta: -1, prompt: "Choose an observer to sour against your opponent (−1 favor toward them)" },
         { type: "suspicionRise", delta: 1, reason: "Plant a Doubt" }
       ]
     },
@@ -80,8 +80,8 @@
     {
       key: "courtly_read_the_room", label: "Read the Room", tier: 1, costBand: "light",
       cost: { intrigue: 10 },
-      effectsText: "Mark a courtier and work them in conversation (or draw 1 Earned Secret blind).",
-      description: "<p>You attend to the right glances, the right silences — and mark the one holding something. <b>Open a real conversation with a courtier</b> (they'll feel seen, and inclined to talk); whatever they give up routes through the usual divulge flow. No willing courtier on the tableau, or you'd rather not talk? <b>Draw 1 Earned secret</b> blind instead.</p>",
+      effectsText: "Mark an observer and work them in conversation (or draw 1 Earned Secret blind).",
+      description: "<p>You attend to the right glances, the right silences — and mark the one holding something. <b>Open a real conversation with an observer</b> (they'll feel seen, and inclined to talk); whatever they give up routes through the usual divulge flow. No willing observer on the tableau, or you'd rather not talk? <b>Draw 1 Earned secret</b> blind instead.</p>",
       effects: [
         { type: "converseSecret", side: "self", acquisition: "earned", flavor: "readTheRoom" }
       ]
@@ -118,8 +118,8 @@
     {
       key: "courtly_eavesdrop", label: "Eavesdrop", tier: 2, costBand: "light",
       cost: { intrigue: 10 },
-      effectsText: "Listen in on an unguarded courtier (a slipped truth is Stolen) — or draw 1 Earned Secret blind.",
-      description: "<p>A wall, an alcove, a half-open door. Patience does the rest. <b>Listen in on a courtier who believes themselves alone</b> — they think aloud, and if the night's pressure truly loosens one of their guarded truths, it slips (an overheard truth counts as <b>Stolen</b>). No candidate on the tableau? <b>Draw 1 Earned secret</b> blind instead.</p>",
+      effectsText: "Listen in on an unguarded observer (a slipped truth is Stolen) — or draw 1 Earned Secret blind.",
+      description: "<p>A wall, an alcove, a half-open door. Patience does the rest. <b>Listen in on an observer who believes themselves alone</b> — they think aloud, and if the night's pressure truly loosens one of their guarded truths, it slips (an overheard truth counts as <b>Stolen</b>). No candidate on the tableau? <b>Draw 1 Earned secret</b> blind instead.</p>",
       effects: [
         { type: "converseSecret", side: "self", acquisition: "earned", flavor: "eavesdrop" }
       ]
@@ -137,7 +137,7 @@
       key: "courtly_patrons_word", label: "Patron's Word", tier: 3, costBand: "medium",
       cost: { diplomacy: 10 },
       effectsText: "Spend a +2 patron's favor → +3 to one non-Intimidate roll.",
-      description: "<p>You call in a chip from a high-placed friend (a courtier with favor ≥ 2 toward you). Their voice tips the scale. <b>−1 favor with the chosen patron → +3 to your next Persuade, Inspire, or Expose</b> (cannot be Intimidate).</p>",
+      description: "<p>You call in a chip from a high-placed friend (an observer with favor ≥ 2 toward you). Their voice tips the scale. <b>−1 favor with the chosen patron → +3 to your next Persuade, Inspire, or Expose</b> (cannot be Intimidate).</p>",
       effects: [
         { type: "spendFavor", minFavor: 2 }
       ]

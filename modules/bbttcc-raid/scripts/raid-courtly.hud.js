@@ -94,6 +94,36 @@
     return mirror || rel || null;
   }
 
+  // PRE-TABLE (2026-11-11): the HUD used to appear only after the FIRST exchange's commit — that commit's
+  // "Open the table" dialog is what builds __courtlyScenario and stamps meta.scenario on the round, so before it
+  // there is no state and _renderAll tore everything down. The players couldn't see the room (who favours whom)
+  // before deciding how to talk. Now: a rendered console holding an open (uncommitted, uncancelled) Parley round
+  // gets a SYNTHETIC state { pretable: true, attackerId, defenderId } — roster + receipts only, no Influence
+  // numbers, no Play. It is used ONLY when no real scenario/mirror/relayed state exists, so a live table renders
+  // exactly as before. Battle/Heist rounds never match (Parley = canonical "presence", or the legacy "courtly").
+  function _isParleyKey(k) {
+    const lk = String(k || "").toLowerCase();
+    if (!lk) return false;
+    if (lk === "courtly" || lk === "presence") return true;
+    try { return (game.bbttcc?.api?.raid?.resolveCanonical?.(lk) || "") === "presence"; } catch (_e) { return false; }
+  }
+  const _bareId = (x) => String(x || "").replace(/^Actor\./, "");
+  function _ftPretableConsole() {
+    const set = globalThis.__bbttccRaidOpenConsoles;
+    if (!set?.size) return null;
+    for (const app of set) {
+      if (!app?.rendered) continue;
+      const vm = app?.vm || {};
+      const rounds = Array.isArray(vm.rounds) ? vm.rounds : [];
+      const r = rounds.find(x => x && !x.committed && !x.cancelled && _isParleyKey(x.activityKey || vm.activityKey));
+      if (!r) continue;
+      const attackerId = _bareId(vm.attackerId || vm.__lockAttackerId);
+      if (!attackerId) continue;
+      return { app, state: { pretable: true, attackerId, defenderId: _bareId(r.defenderId || vm.defenderId), round: 0, outcome: "ongoing" } };
+    }
+    return null;
+  }
+
   function _courtlyMaxFromRow(app) {
     const rounds = Array.isArray(app?.vm?.rounds) ? app.vm.rounds : [];
     for (let i = rounds.length - 1; i >= 0; i--) {
@@ -139,7 +169,21 @@
       </div>`;
   }
 
+  // PRE-TABLE (2026-11-11): no Influence exists until the first commit opens the table — say so, no 0/0 bars.
+  function _buildPretableInfluenceHtml(state) {
+    const atkName = game.actors.get(state.attackerId)?.name || "Attacker";
+    const defName = state.defenderId ? (game.actors.get(state.defenderId)?.name || "Defender") : "—";
+    return `<div id="ft-courtly-influence" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;left:12px;top:60px;width:300px;padding:.5rem .7rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
+        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Parley — before the table</span>
+      </div>
+      <div style="font-size:0.78rem;"><span style="color:${ATK_COLOR};font-weight:600;">${esc(atkName)}</span> <span style="color:#888;">vs</span> <span style="color:${DEF_COLOR};font-weight:600;">${esc(defName)}</span></div>
+      <div style="margin-top:.35rem;font-size:0.72rem;color:#aaa;font-style:italic;">The table isn't open yet — the first exchange's commit opens it (goal + opening commitments).</div>
+    </div>`;
+  }
+
   function _buildInfluenceHtml(app, state) {
+    if (state?.pretable) return _buildPretableInfluenceHtml(state);
     const { maxA, maxD } = _courtlyMaxFromRow(app);
     const A = game.actors.get(state.attackerId);
     const D = game.actors.get(state.defenderId);
@@ -197,6 +241,8 @@
     </div>`;
   }
 
+  // Who the Parley sways — "observers" unless the Parley names them (judges, jury, crowd, court; Dave 2026-11-11).
+  function _aud(state) { return game.bbttcc?.api?.raid?.audienceWords?.(state) || { key: "observers", one: "observer", many: "observers", One: "Observer", Many: "Observers" }; }
   function _tableauTokens() {
     if (!canvas?.tokens?.placeables) return [];
     return game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? canvas.tokens.placeables.filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true);   // courtiers on ANY scene (2026-10-22)
@@ -211,9 +257,10 @@
     const tokens = _tableauTokens();
     const A = game.actors.get(state.attackerId);
     const D = game.actors.get(state.defenderId);
+    const W = _aud(state);
 
     const rowsHtml = tokens.length === 0
-      ? `<div style="padding:.5rem;color:#888;font-style:italic;font-size:0.78rem;text-align:center;">No courtiers flagged on this scene.<br/><span style="font-size:0.7rem;">Mark tokens via the Tableau tuner.</span></div>`
+      ? `<div style="padding:.5rem;color:#888;font-style:italic;font-size:0.78rem;text-align:center;">No ${esc(W.many)} flagged on this scene.<br/><span style="font-size:0.7rem;">Mark tokens via the Tableau tuner.</span></div>`
       : tokens.map(t => {
           const a = t.actor;
           const img = a?.img || t.document?.texture?.src || "icons/svg/mystery-man.svg";
@@ -226,14 +273,14 @@
           };
           return `<div class="ft-courtly-roster-row" data-token-id="${esc(t.id)}" style="display:flex;align-items:center;gap:.4rem;padding:.25rem .35rem;border-radius:4px;cursor:pointer;border:1px solid transparent;">
             <img src="${esc(img)}" style="width:32px;height:32px;object-fit:cover;border-radius:3px;border:1px solid #444;flex:0 0 auto;"/>
-            <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.8rem;">${esc(a?.name || t.name || "Courtier")}</div>
+            <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.8rem;">${esc(a?.name || t.name || W.One)}</div>
             <div style="display:flex;gap:3px;flex:0 0 auto;">${pill(favA, ATK_COLOR)}${pill(favD, DEF_COLOR)}</div>
           </div>`;
         }).join("");
 
     return `<div id="ft-courtly-roster" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;right:12px;top:60px;width:280px;max-height:60vh;display:flex;flex-direction:column;padding:.5rem .55rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
-        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtiers</span>
+        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ ${esc(W.Many)}</span>
         <span style="font-size:0.7rem;color:#888;">${tokens.length}</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#888;padding:0 .35rem .2rem;">
@@ -271,11 +318,14 @@
             const rawAcq = String(i.flags?.[MOD_R]?.secret?.acquisition || "earned");
             const acq = rawAcq === "template" ? "earned" : rawAcq;
             const acqColor = acq === "stolen" ? "#ff7a7a" : "#88cc55";
-            return `<div class="ft-courtly-secret" data-item-id="${esc(i.id)}" data-actor-id="${esc(actor.id)}" draggable="true" title="${esc(i.name)} — drag onto Influence panel to play" style="display:flex;align-items:center;gap:.4rem;padding:.2rem .35rem;border:1px solid #444;border-radius:3px;cursor:grab;background:#15151c;">
+            // PRE-TABLE (2026-11-11): playSecret needs a live scenario — list the receipt, but no drag and no Play.
+            const pre = !!state?.pretable;
+            const playBtn = pre ? "" : `<button type="button" class="ft-courtly-secret-play" draggable="false" title="Play this secret now" style="font-size:0.66rem;color:${VIOLET};border:1px solid ${VIOLET};background:#1a1426;border-radius:4px;padding:1px 8px;cursor:pointer;flex:0 0 auto;">Play</button>`;
+            return `<div class="ft-courtly-secret" data-item-id="${esc(i.id)}" data-actor-id="${esc(actor.id)}" draggable="${pre ? "false" : "true"}" title="${esc(i.name)} — ${pre ? "playable once the table opens" : "drag onto Influence panel to play"}" style="display:flex;align-items:center;gap:.4rem;padding:.2rem .35rem;border:1px solid #444;border-radius:3px;cursor:${pre ? "default" : "grab"};background:#15151c;">
               <img src="${esc(i.img || "icons/svg/book.svg")}" style="width:24px;height:24px;border-radius:2px;flex:0 0 auto;"/>
               <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.78rem;">${esc(i.name)}</div>
               <span style="font-size:0.66rem;color:${acqColor};border:1px solid ${acqColor};border-radius:6px;padding:0 5px;">${esc(acq)}</span>
-              <button type="button" class="ft-courtly-secret-play" draggable="false" title="Play this secret now" style="font-size:0.66rem;color:${VIOLET};border:1px solid ${VIOLET};background:#1a1426;border-radius:4px;padding:1px 8px;cursor:pointer;flex:0 0 auto;">Play</button>
+              ${playBtn}
             </div>`;
           }).join("");
       return `<div style="display:flex;flex-direction:column;gap:3px;">
@@ -285,7 +335,7 @@
     }).join('<div style="height:6px;"></div>');
 
     return `<div id="ft-courtly-secrets" class="ft-hud-panel ft-hud-acc-violet" style="position:fixed;left:12px;bottom:16px;width:300px;max-height:40vh;display:flex;flex-direction:column;padding:.5rem .55rem;">
-      <div style="margin-bottom:.35rem;color:${VIOLET};font-weight:600;letter-spacing:.04em;">🧾 Receipts &amp; Leverage</div>
+      <div style="margin-bottom:.35rem;color:${VIOLET};font-weight:600;letter-spacing:.04em;">🧾 Receipts &amp; Leverage${state?.pretable ? ` <span style="font-size:0.66rem;color:#888;font-weight:normal;letter-spacing:0;">— play once the table opens</span>` : ""}</div>
       <div style="overflow-y:auto;display:flex;flex-direction:column;gap:4px;">${sectionHtml}</div>
     </div>`;
   }
@@ -379,6 +429,8 @@
         payload = JSON.parse(raw || "{}");
       } catch (err) { return; }
       if (payload?.kind !== "courtly-secret" || !payload.actorId || !payload.itemId) return;
+      // PRE-TABLE (2026-11-11): the panel element persists, so this listener outlives the mode — re-checked per drop.
+      if (el.dataset.ftCourtlyPretable === "1") { ui.notifications?.info?.("The table isn't open yet — receipts play once the first exchange commits."); return; }
       const api = game.bbttcc?.api?.raid?.courtlySecrets;
       if (!api?.playSecret) { ui.notifications?.error?.("Receipts API not loaded."); return; }
       try { await api.playSecret(payload.actorId, payload.itemId); }
@@ -393,6 +445,7 @@
     const actor = toks.find(t => t.id === id)?.actor || toks.find(t => t.actor?.id === id)?.actor || game.actors.get(id);
     if (!actor) return;
     const factionId = side === "attacker" ? state.attackerId : state.defenderId;
+    if (!factionId) return;   // pre-table round with no defender picked yet (2026-11-11)
     const current = _favorOf(actor, factionId);
     const opts = [-3, -2, -1, 0, 1, 2, 3].map(n =>
       `<option value="${n}" ${n === current ? "selected" : ""}>${n > 0 ? "+" : ""}${n}</option>`
@@ -479,7 +532,7 @@
     try { collapsed = localStorage.getItem("courtly:hud:dock:collapsed") === "1"; } catch (_) {}
     d.classList.toggle("collapsed", collapsed);
     d.classList.toggle("ft-court-strip", _stripOn());
-    d.innerHTML = `<div class="ft-courtly-dock-head"><span>⚜ Court</span><button type="button" data-dock-layout title="Strip along the bottom ⇄ column on the left">⇄</button><button type="button" data-dock-toggle title="Collapse / expand">${collapsed ? "▸" : "▾"}</button></div>`;
+    d.innerHTML = `<div class="ft-courtly-dock-head"><span>⚜ Parley</span><button type="button" data-dock-layout title="Strip along the bottom ⇄ column on the left">⇄</button><button type="button" data-dock-toggle title="Collapse / expand">${collapsed ? "▸" : "▾"}</button></div>`;
     d.querySelector("[data-dock-layout]").addEventListener("click", (ev) => {
       ev.stopPropagation();
       const strip = !d.classList.contains("ft-court-strip");
@@ -580,14 +633,20 @@
       atk: { name: A?.name || "Attacker", val: Number(state.influenceA ?? 0), max: maxA, scandal: !!state.scandalOnA, bonus: Number(state.courtBonusA ?? 0) },
       def: { name: D?.name || "Defender", val: Number(state.influenceD ?? 0), max: maxD, scandal: !!state.scandalOnD, bonus: Number(state.courtBonusD ?? 0) },
       track: (state.performance || state.suspicionEnabled !== false) ? { label: state.performance ? String(state.trackLabel || "Crowd") : "Suspicion", val: clamp(state.suspicion ?? 0, 0, 10) } : null,
-      courtiers: _tableauTokens().map(t => ({ tokenId: t.id, name: t.actor?.name || t.name || "Courtier", img: t.actor?.img || t.document?.texture?.src || "icons/svg/mystery-man.svg", favA: _favorOf(t.actor, state.attackerId), favD: _favorOf(t.actor, state.defenderId) })),
+      audience: _aud(state),
+      courtiers: _tableauTokens().map(t => ({ tokenId: t.id, name: t.actor?.name || t.name || _aud(state).One, img: t.actor?.img || t.document?.texture?.src || "icons/svg/mystery-man.svg", favA: _favorOf(t.actor, state.attackerId), favD: _favorOf(t.actor, state.defenderId) })),
       receipts
     };
   }
   function _pingCourtier(tokenId) { const tk = canvas.tokens?.get?.(tokenId); if (!tk) return; try { canvas.ping?.(tk.center); } catch (_e) {} }
 
   function _renderAll() {
-    if (_barUp()) { _teardownAll(); return; }   // the Conflict bar carries the court on this seat
+    // PRE-TABLE (2026-11-11): the Conflict bar only draws a court once view() has real state, so before the table
+    // opens it has nothing to show — the strip stays up (it places itself above the bar) until a real state exists.
+    if (_barUp() && !_courtView()) {
+      const pre = _ftPretableConsole();
+      if (!pre || !_isParleyStage()) { _teardownAll(); return; }
+    } else if (_barUp()) { _teardownAll(); return; }   // the Conflict bar carries the court on this seat
     let app = _ftActiveCourtlyConsole();
     let state = null;
     if (app) {
@@ -599,13 +658,20 @@
       app = _ftAnyCourtlyConsole();
       state = app ? _fallbackState(app) : null;
     }
+    if (!state) {
+      // PRE-TABLE (2026-11-11): no real state anywhere — an open Parley round still shows the room.
+      const pre = _ftPretableConsole();
+      if (pre) { app = pre.app; state = pre.state; }
+    }
     if (!app || !state || !_isParleyStage()) return _teardownAll();
 
     // Influence panel (also drop-zone for Phase C secret drag-to-play)
     const infSlot = { get el() { return _infEl; }, set el(v) { _infEl = v; } };
-    _swapPanel(infSlot, _buildInfluenceHtml(app, state), _bindInfluenceDropZone, "courtly:hud:influence", "⚜ Court");
+    _swapPanel(infSlot, _buildInfluenceHtml(app, state), _bindInfluenceDropZone, "courtly:hud:influence", "⚜ Parley");
+    if (_infEl) _infEl.dataset.ftCourtlyPretable = state.pretable ? "1" : "0";
     // Phase F polish — value-change flash on bars when influence or suspicion shifts.
-    try {
+    if (state.pretable) { _lastInfA = _lastInfD = _lastSusp = null; }   // no bars pre-table; first real render must not flash
+    else try {
       const curA = Number(state.influenceA ?? 0);
       const curD = Number(state.influenceD ?? 0);
       const curS = Number(state.suspicion ?? 0);
@@ -618,7 +684,7 @@
 
     // Roster panel
     const rosSlot = { get el() { return _rosEl; }, set el(v) { _rosEl = v; } };
-    _swapPanel(rosSlot, _buildRosterHtml(app, state), (el) => _bindRoster(el, state), "courtly:hud:roster", "⚜ Courtiers");
+    _swapPanel(rosSlot, _buildRosterHtml(app, state), (el) => _bindRoster(el, state), "courtly:hud:roster", `⚜ ${_aud(state).Many}`);
 
     // Secrets panel — Phase B: holder-only (gm sees both); Phase C: draggable
     const vc = _viewerCtx(state);

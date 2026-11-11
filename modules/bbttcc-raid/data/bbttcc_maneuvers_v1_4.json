@@ -41,8 +41,7 @@
         },
         "raidTypes": [
           "Infiltration",
-          "Espionage",
-          "Propaganda"
+          "Espionage"
         ],
         "defenderAccess": "Conditional",
         "minFactionTier": 1,

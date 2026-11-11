@@ -367,13 +367,13 @@
     const rec = v.receipts.flatMap(r => r.items.map(i => `<span class="cb-receipt${i.acq === "stolen" ? " stolen" : ""}" title="${esc(i.name)} (${esc(i.acq)})"><img src="${esc(i.img || "icons/svg/book.svg")}" alt="">${esc(i.name)}<button type="button" data-cb="play" data-actor-id="${esc(r.actorId)}" data-item-id="${esc(i.id)}">▶ Play</button></span>`));
     const ended = v.outcome !== "ongoing";
     return `<div class="cb-row cb-court${ended ? " ended" : ""}">
-        <span class="cb-label">⚜ Court</span>${side(v.atk, "atk")}<span class="cb-vs">vs</span>${side(v.def, "def")}
+        <span class="cb-label">⚜ Parley</span>${side(v.atk, "atk")}<span class="cb-vs">vs</span>${side(v.def, "def")}
         ${v.goal ? `<span class="cb-chip goal">${esc(v.goal)}</span>` : ""}
         ${v.track ? `<span class="cb-chip track">${esc(v.track.label)} ${v.track.val}/10</span>` : ""}
         ${ended ? `<span class="cb-chip outcome">${esc(v.outcome.toUpperCase())}</span>` : ""}
       </div>
       <div class="cb-row cb-court2">
-        <span class="cb-label">Courtiers</span>${court || `<span class="cb-dim">No courtiers marked on this scene.</span>`}
+        <span class="cb-label">${esc(v.audience?.Many || "Observers")}</span>${court || `<span class="cb-dim">No ${esc(v.audience?.many || "observers")} marked on this scene.</span>`}
         <span class="cb-label" style="margin-left:.6rem;">🧾 Receipts</span>${rec.length ? rec.join("") : `<span class="cb-dim">None yet — earn them with Read the Room or Eavesdrop.</span>`}
       </div>`;
   }
@@ -409,9 +409,13 @@
   const ROUND_MARKS = 10;
   function sharingRow(app) {
     const vm = app?.vm || {}; const lead = game.actors?.get?.(String(vm.attackerId || "")); if (!lead) return "";
-    const key = String(vm.activityKey || "violence"); const have = Number(lead.getFlag?.("bbttcc-factions", "opBank")?.[key]) || 0;
+    // The POOL a round draws on, not the conflict type (2026-11-11): a Parley ("presence") pays from Soft Power — reading
+    // opBank.presence (always empty) told every Parley lead they were broke.
+    const _ty = String(vm.activityKey || "violence").toLowerCase();
+    const key = String(game.bbttcc?.api?.raid?.TYPES?.[_ty]?.primaryKey || _ty);
+    const have = Number(lead.getFlag?.("bbttcc-factions", "opBank")?.[key]) || 0;
     const need = ROUND_MARKS - have; if (need <= 0) return "";
-    const word = key.charAt(0).toUpperCase() + key.slice(1);
+    const word = ({ softpower: "Soft Power" })[key] || (key.charAt(0).toUpperCase() + key.slice(1));
     const allies = (vm.supportFactionIds || []).map(id => game.actors.get(String(id))).filter(Boolean);
     const mine = allies.find(a => a.isOwner);
     if (lead.isOwner && !mine) return `<div class="cb-row"><span class="cb-title">🤝 ${esc(lead.name)} needs ${need} more ${esc(word)} for the next round.</span> <span class="cb-dim">Allies can send it from their own pools: ${esc(allies.map(a => a.name).join(", ") || "no one riding with you")}.</span></div>`;
