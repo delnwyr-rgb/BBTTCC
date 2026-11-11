@@ -31141,7 +31141,7 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
         rightCol.appendChild(mkBtn("fa-door-open", "Disembark Rig", () => ftDisembarkSteward(actor)));
       } else {
         rightCol.appendChild(mkBtn("fa-truck-pickup", "Board a Rig…", async () => {
-          // Open picker — list rigs on current scene first, else all rigs.
+          // Open picker — rigs on this scene only (Dave 2026-11-11).
           // 2026-05-24 — Players only see rigs they personally own, rigs of
           // their own faction, or rigs of a faction whose relationship to
           // theirs is above Neutral (friendly/allied). GM sees everything.
@@ -31160,11 +31160,16 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
             if (stewardFac && owner === stewardFac) return true;             // own faction's rig
             return !!(stewardFac && rel?.tier && rel.tier(stewardFac, owner) > 3); // > Neutral
           };
-          const sceneRigs = (canvas?.scene?.tokens ?? []).filter(t => t.actor?.type === "rig").map(t => t.actor).filter(allowedRig);
-          const allRigs   = game.actors.filter(a => a.type === "rig").filter(allowedRig);
-          const list      = sceneRigs.length ? sceneRigs : allRigs;
-          if (!list.length) { ui.notifications?.warn("No rigs available to board."); return; }
-          const opts = list.map(r => `<option value="${r.id}">${foundry.utils.escapeHTML?.(r.name) ?? r.name}${r === sceneRigs[0] ? " (on scene)" : ""}</option>`).join("");
+          // Dave 2026-11-11: a rig can be boarded only when it is on the scene WITH the Steward — every seat, GM
+          // included (the old fallback listed every rig in the world when none was on the scene). Same-scene = a rig
+          // token on the scene this Steward's token stands on; one entry per rig actor.
+          const stewardScene = (actor.isToken ? actor.token?.parent : null)
+            ?? (canvas?.scene?.tokens?.some(t => t.actor?.id === actor.id) ? canvas.scene : null);
+          const seen = new Set();
+          const list = (stewardScene?.tokens ?? []).filter(t => t.actor?.type === "rig").map(t => t.actor)
+            .filter(r => r && !seen.has(r.id) && seen.add(r.id)).filter(allowedRig);
+          if (!list.length) { ui.notifications?.warn(`No rigs here to board — a rig has to be on this scene with ${actor.name}.`); return; }
+          const opts = list.map(r => `<option value="${r.id}">${foundry.utils.escapeHTML?.(r.name) ?? r.name}</option>`).join("");
           const html = `<form>
             <div class="form-group"><label>Rig</label><select name="rigId" style="width:100%">${opts}</select></div>
             <div class="form-group"><label>Role</label>
