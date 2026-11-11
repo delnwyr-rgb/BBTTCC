@@ -2,7 +2,7 @@
  * patch-fixit-garren-says-hi-2026-11-10.macro.js — Dave at Arc Bay (2026-11-10): Garren's Leygate line ("Tell YG I said hi. Tell
  * me if he says hi back. I have a bet with Pike.") had no payoff — "Yes, add the Garren says hi choice."
  *   fixit_arc_bay_conversation gains "Garren says hi." → ans_fixit_arc_bay_garren_says_hi:
- *     requires ag_leygate_visit played (you've met Garren) and the answer NOT yet played (once — the spent-choice grey);
+ *     requires ag_leygate_visit played (you've met Garren); once — the spent-choice system greys it ✓ after (never hidden);
  *     withItem tetrarch_spanner (the button reads "— with the Tetrarch Spanner" while someone carries it).
  *   The answer beat is a clone of ans_fixit_arc_bay_drink_the_coffee's shape (dialog, Arc Bay scene, Young Gearbox speaking,
  *   exits "Back to the bay." / "Leave"), once-only. Its played mark is the record Garren's bet can read later.
@@ -38,9 +38,15 @@
     conv.choices.splice(at, 0, {
       label: "Garren says hi.", next: ID, description: "", checkStat: "", checkDC: 0, failNext: "",
       withItem: "tetrarch_spanner",
-      requires: [{ beatMark: "ag_leygate_visit" }, { beatMark: ID, not: true }]
+      requires: [{ beatMark: "ag_leygate_visit" }]
     });
     report.changed.push("conversation: 'Garren says hi.' added before Leave");
+  }
+  // Universal greying (Dave 2026-10-30, again 11-10): a once-only choice stays on the menu, greyed ✓ — never hidden. The answer beat
+  // is non-repeatable, so _choiceSpent locks it; a "not played" requires (the first version) hid it instead.
+  for (const ch of conv.choices) if (ch.next === ID && Array.isArray(ch.requires) && ch.requires.some(r => r?.beatMark === ID && r.not)) {
+    ch.requires = ch.requires.filter(r => !(r?.beatMark === ID && r.not));
+    report.changed.push("conversation: 'Garren says hi.' greys after use instead of hiding");
   }
   if (!DRY_RUN && report.changed.length) await C.saveCampaign(cid, { ...c, beats });
   console.log("GARRENHI " + JSON.stringify(report));
