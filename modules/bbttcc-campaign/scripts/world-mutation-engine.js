@@ -2183,6 +2183,41 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (ePE) { console.warn(TAG, "partyEffects apply failed", ePE); }
 
+    // 2n″) PLACE ACTORS (Dave 2026-11-10, Arc Bay: "if we ask about the Leyline Stabilizer here with YG, Mara is supposed to be
+    // fetched and added to the scene"): worldEffects.placeActors = { actors: [actorId…], sceneId?, beside?: actorId } (or a LIST).
+    // GM-only. Each actor with no token on the scene (beat's sceneId unless given) gets one — next to `beside`'s token when it is
+    // there (first free square around it), else at the scene centre. Never duplicates; scene_transition's actors[] spawn is separate.
+    try {
+      const paList = Array.isArray(we.placeActors) ? we.placeActors : (we.placeActors && typeof we.placeActors === "object" ? [we.placeActors] : []);
+      for (const pa of paList) {
+        if (!game.user?.isGM) { notes.push("placeActors:skipped(not-gm)"); break; }
+        const sref = String(pa.sceneId || beat?.sceneId || "").replace(/^Scene\./, "");
+        const scene = (sref && game.scenes?.get(sref)) || game.scenes?.viewed || null;
+        if (!scene) { console.warn(TAG, "placeActors: no scene", { beatId: beatCtx.beatId, pa }); continue; }
+        const grid = scene.grid?.size || 100;
+        const anchor = pa.beside ? scene.tokens.find(t => t.actorId === String(pa.beside).replace(/^Actor\./, "")) : null;
+        const taken = new Set(scene.tokens.map(t => `${Math.round(t.x / grid)},${Math.round(t.y / grid)}`));
+        const spot = () => {
+          if (anchor) {
+            const ax = Math.round(anchor.x / grid), ay = Math.round(anchor.y / grid);
+            for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [1, 1], [-1, 1], [0, -1], [1, -1], [-1, -1], [2, 0], [-2, 0]]) {
+              const k = `${ax + dx},${ay + dy}`; if (!taken.has(k)) { taken.add(k); return { x: (ax + dx) * grid, y: (ay + dy) * grid }; }
+            }
+          }
+          const d = scene.dimensions || {};
+          return { x: Math.floor(((d.sceneX ?? 0) + (d.sceneWidth ?? scene.width) / 2) / grid) * grid, y: Math.floor(((d.sceneY ?? 0) + (d.sceneHeight ?? scene.height) / 2) / grid) * grid };
+        };
+        for (const raw of (Array.isArray(pa.actors) ? pa.actors : [])) {
+          const id = String(raw || "").replace(/^Actor\./, ""); const actor = id ? game.actors?.get(id) : null;
+          if (!actor) { console.warn(TAG, "placeActors: actor not found", raw); continue; }
+          if (scene.tokens.some(t => t.actorId === actor.id)) continue;
+          const td = await actor.getTokenDocument({ ...spot(), hidden: false });
+          await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+          notes.push("placeActors:" + actor.name); changed = true;
+        }
+      }
+    } catch (ePA) { console.warn(TAG, "placeActors apply failed", ePA); }
+
     // 2n′) STEWARD LOOT (Dave 2026-11-09, Fixit's Mystery Bin: "a one time roll on our consumables and items list and provide a
     // random useful item to each steward once"): worldEffects.stewardLoot = { key, pack?, tiers?:["I"], types?:["gear","weapon",
     // "armor"], origins?:["looted","given"], title?, icon? }. Every coalition Steward (seated or not) who hasn't had `key` before gets
