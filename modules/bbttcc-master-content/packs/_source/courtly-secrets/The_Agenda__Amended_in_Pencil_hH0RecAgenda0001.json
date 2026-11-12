@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecAgenda0001",
+  "name": "The Agenda, Amended in Pencil",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-bound-white-tan.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>The Agenda, Amended in Pencil.</strong> The word at the top of the page is crossed out and another written above it in a hand everyone recognises. Change what this Parley is for — Persuade, Deceive, or Stay unnoticed.</p><p><em>Play:</em> rewrite the stake — change what this Parley is for.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "rewriteStake",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3500000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecAgenda0001"
+}

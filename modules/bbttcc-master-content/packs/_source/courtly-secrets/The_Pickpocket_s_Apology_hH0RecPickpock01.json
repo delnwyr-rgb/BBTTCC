@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecPickpock01",
+  "name": "The Pickpocket's Apology",
+  "type": "feat",
+  "img": "icons/sundries/documents/envelope-sealed-red-white.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>The Pickpocket's Apology.</strong> A note in the opponent's pocket where a secret used to be: SORRY. They discard a stolen receipt at random.</p><p><em>Play:</em> your opponent discards a random stolen receipt.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "discardStolen",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3800000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecPickpock01"
+}

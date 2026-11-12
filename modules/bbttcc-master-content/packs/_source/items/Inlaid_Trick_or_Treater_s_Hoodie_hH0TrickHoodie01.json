@@ -1,0 +1,156 @@
+{
+  "_id": "hH0TrickHoodie01",
+  "name": "Inlaid Trick-or-Treater's Hoodie",
+  "type": "armor",
+  "img": "icons/equipment/back/cloak-hooded-blue.webp",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 2,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "light",
+      "graded",
+      "grade-inlaid",
+      "hoodie",
+      "grief-towns",
+      "soft-landing"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Soft Landing. When you went first and grieved with them, somebody left this on the kerb for you, folded, the way a parent folds a thing for a kid who will not fold it. It fits whoever grieves honestly. The inlay in the drawstrings is the Mayor's own needlework.</p><p><em>Light, Inlaid: Guard +2, Evasion +2. Needs Fitting. A kid's hoodie, grown to fit you, left at the castle with the shoes.</em></p><p>Guard +2 · Evasion +2 · Resolve +0 — light, needs fitting (Trained = half, Proficient = full).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "It fits whoever grieves honestly.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Soft Landing. When you went first and grieved with them, somebody left this on the kerb for you, folded, the way a parent folds a thing for a kid who will not fold it. It fits whoever grieves honestly. The inlay in the drawstrings is the Mayor's own needlework.</p>",
+          "materialOf": [
+            "fleece",
+            "drawstring",
+            "hex-inlay",
+            "fun-size"
+          ],
+          "price": {
+            "marks": 90,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1) × bound free",
+            "bound": "free",
+            "saleBack": 36,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 225
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0TrickHoodEff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0TrickHoodie01"
+}

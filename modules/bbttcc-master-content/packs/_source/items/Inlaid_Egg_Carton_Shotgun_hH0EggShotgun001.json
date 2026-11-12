@@ -1,0 +1,139 @@
+{
+  "_id": "hH0EggShotgun001",
+  "name": "Inlaid Egg-Carton Shotgun",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-blunderbuss-gold.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "firearms",
+    "damage": {
+      "formula": "1d10+1",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "ballistic",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 2,
+      "long": 8,
+      "units": "sq"
+    },
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "graded",
+      "grade-inlaid",
+      "shotgun",
+      "sawed-off",
+      "trick-or-treat"
+    ],
+    "effect": "A sawed-off, Inlaid: +1 to hit and +1 damage. Loaded from an egg carton; when you fire it at one target, an adjacent second target takes the spray too (GM applies the roll's damage once more).",
+    "flavor": "A dozen in the carton. You are always one short.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Donny on the Wall took it off a party at the mall gate in 2077 and has kept it, like everything else, out of a sense that someone should. He gives it to the ones who answer honestly. The carton is always one egg short and the gun does not seem to mind.</p><p><em>A sawed-off, Inlaid: +1 to hit and +1 damage. Loaded from an egg carton; when you fire it at one target, an adjacent second target takes the spray too (GM applies the roll's damage once more).</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "8",
+          "frame": "weapon",
+          "signature": "Always one egg short.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Donny on the Wall took it off a party at the mall gate in 2077 and has kept it, like everything else, out of a sense that someone should. He gives it to the ones who answer honestly. The carton is always one egg short and the gun does not seem to mind.</p>",
+          "materialOf": [
+            "scrap-steel",
+            "egg-carton",
+            "bad-vibes"
+          ],
+          "price": {
+            "marks": 60,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII weapon (Inlaid +1) × bound free",
+            "bound": "free",
+            "saleBack": 24,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 150
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "attack": 1,
+        "damage": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0EggShotgun001"
+}

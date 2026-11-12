@@ -1,0 +1,276 @@
+{
+  "_id": "hH0PorchCarbine1",
+  "name": "Circuited Porchlight Carbine",
+  "type": "weapon",
+  "img": "icons/weapons/guns/rifle-brown.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "firearms",
+    "damage": {
+      "formula": "1d10+2",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "ballistic",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 8,
+      "long": 32,
+      "units": "sq"
+    },
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "graded",
+      "grade-circuited",
+      "bound-working",
+      "carbine",
+      "rifle",
+      "pre-fall"
+    ],
+    "effect": "A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.",
+    "flavor": "The light comes on by itself when something is on the step.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Compliance Engine PRIME's perimeter arm, re-barrelled by a hex gunsmith who did not ask what the light was for. The light is for knowing who is on the porch. It still knows.</p><p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen. (2 charges, recovers per scene.)</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "32",
+          "frame": "weapon",
+          "signature": "The porchlight comes on by itself.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Compliance Engine PRIME's perimeter arm, re-barrelled by a hex gunsmith who did not ask what the light was for. The light is for knowing who is on the porch. It still knows.</p>",
+          "materialOf": [
+            "gun-steel",
+            "pre-fall-component",
+            "hex-glyph-plate",
+            "perimeter-light"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 140,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII weapon (Circuited +2) × tech 2.0 (bound Working: Porchlight) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 56,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 900
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "attack": 2,
+        "damage": 2
+      },
+      "working": {
+        "power": {
+          "name": "Porchlight",
+          "img": "icons/magic/light/beam-rays-yellow.webp",
+          "system": {
+            "intent": "violence",
+            "channel": "body",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "far",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "mark",
+              "light"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Trick or treat. The porch decides which.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "beam",
+              "function": "mark",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 60,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": true,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "evasion",
+                    "op": "-",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0PorchCarbine1"
+}

@@ -1,0 +1,145 @@
+{
+  "_id": "hH0SparkyMask001",
+  "name": "Sparky Mask (Crown Mall, 2077)",
+  "type": "gear",
+  "img": "icons/equipment/head/mask-carved-face-orange.webp",
+  "system": {
+    "slot": "mask",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "worn",
+      "set:sparky",
+      "costume",
+      "mask",
+      "grief-towns"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Yellow vinyl, goggles painted on, elastic that never lost its stretch because nothing in Soft Landing wears out. It was under the row of small sneakers at the castle door, face down, where a kid drops a mask the second the grown-ups stop looking. The inside still smells like running.</p><p><em>Resolve +1 and +2 on Performance checks while worn — behind the goggles you could be anybody, which is the point of a mask.</em></p><p>Worn (mask) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "vestment",
+          "signature": "SPARKY, in the cereal-box font. One ear bent.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Yellow vinyl, goggles painted on, elastic that never lost its stretch because nothing in Soft Landing wears out. It was under the row of small sneakers at the castle door, face down, where a kid drops a mask the second the grown-ups stop looking. The inside still smells like running.</p>",
+          "materialOf": [
+            "vinyl",
+            "elastic",
+            "mascot-energy"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI vestment × bound free",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "performance",
+            "bonus": 2,
+            "note": "Sparky says: nobody can read a dog's face"
+          }
+        ]
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0SparkyMasEff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0SparkyMask001"
+}

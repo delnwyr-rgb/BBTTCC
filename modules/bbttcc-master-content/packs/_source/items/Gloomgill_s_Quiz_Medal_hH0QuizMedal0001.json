@@ -1,0 +1,97 @@
+{
+  "_id": "hH0QuizMedal0001",
+  "name": "Gloomgill's Quiz Medal",
+  "type": "gear",
+  "img": "icons/commodities/treasure/medal-ribbon-star-gold-red.webp",
+  "system": {
+    "slot": "pin",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "worn"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>The marsh quizmaster gave these out, once a decade, to the one guest who got every question right. There are three in the world. The other two are on the bottom of the marsh, still pinned to the winners.</p><p><em>+2 on Lore and +1 on Occult checks while pinned on. Gloomgill asked the questions; whoever wears this knew the answers.</em></p><p>Worn (pin) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "FIRST PLACE, in gilt, over a question mark.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>The marsh quizmaster gave these out, once a decade, to the one guest who got every question right. There are three in the world. The other two are on the bottom of the marsh, still pinned to the winners.</p>",
+          "materialOf": [
+            "gilt",
+            "ribbon",
+            "right-answer"
+          ],
+          "price": {
+            "marks": 85,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII talisman × bound free",
+            "bound": "free",
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 540
+          }
+        }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "lore",
+            "bonus": 2
+          },
+          {
+            "context": "check",
+            "skill": "occult",
+            "bonus": 1
+          }
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0QuizMedal0001"
+}

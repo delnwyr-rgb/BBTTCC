@@ -1,0 +1,148 @@
+{
+  "_id": "hH0MallVest00001",
+  "name": "Inlaid Mall Security Vest",
+  "type": "armor",
+  "img": "icons/equipment/chest/vest-cloth-tattered-orange.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "light",
+      "graded",
+      "grade-inlaid",
+      "vest",
+      "security",
+      "crown-mall"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Crown Mall issue, 2077, hi-vis gone to amber. The Tanneritos keep one as a reminder of what not to be and give it away when they make peace, because nothing makes a person less of a cop than being handed the vest by the kids. The inlay is theirs. It is very good inlay.</p><p><em>Light, Inlaid: Guard +3. Needs Fitting. The Tanneritos gave it to you so that you would never, ever wear it like a mall cop.</em></p><p>Guard +3 · Evasion +0 · Resolve +0 — light, needs fitting (Trained = half, Proficient = full).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Given by the kids. That is the whole bonus.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Crown Mall issue, 2077, hi-vis gone to amber. The Tanneritos keep one as a reminder of what not to be and give it away when they make peace, because nothing makes a person less of a cop than being handed the vest by the kids. The inlay is theirs. It is very good inlay.</p>",
+          "materialOf": [
+            "hi-vis-nylon",
+            "kevlar-weave",
+            "hex-inlay"
+          ],
+          "price": {
+            "marks": 90,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1) × bound free",
+            "bound": "free",
+            "saleBack": 36,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 225
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0MallVest0Eff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0MallVest00001"
+}

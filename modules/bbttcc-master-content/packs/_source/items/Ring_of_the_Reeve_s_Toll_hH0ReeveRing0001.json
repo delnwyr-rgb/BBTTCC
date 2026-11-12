@@ -1,0 +1,96 @@
+{
+  "_id": "hH0ReeveRing0001",
+  "name": "Ring of the Reeve's Toll",
+  "type": "gear",
+  "img": "icons/equipment/finger/ring-signet-copper.webp",
+  "system": {
+    "slot": "ring",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "worn"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hollis Varn wore it on the hand he held out. He had a rate for everyone and a reason for every rate, and the ring made both sound settled. It will do the same for you, which is not entirely a gift.</p><p><em>+1 on Intimidation and Streetwise checks while worn. Every bridge has a price; the ring remembers which hand to hold out.</em></p><p>Worn (ring) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "A copper signet worn smooth on the inside by two centuries of being turned.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hollis Varn wore it on the hand he held out. He had a rate for everyone and a reason for every rate, and the ring made both sound settled. It will do the same for you, which is not entirely a gift.</p>",
+          "materialOf": [
+            "copper",
+            "toll-stamp"
+          ],
+          "price": {
+            "marks": 70,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII talisman × bound free",
+            "bound": "free",
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
+          }
+        }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "intimidation",
+            "bonus": 1
+          },
+          {
+            "context": "check",
+            "skill": "streetwise",
+            "bonus": 1
+          }
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0ReeveRing0001"
+}

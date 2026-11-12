@@ -1,0 +1,217 @@
+{
+  "_id": "hH0FogMachine001",
+  "name": "Fog Machine, Party Grade",
+  "type": "gear",
+  "img": "icons/tools/laboratory/bowl-liquid-orange.webp",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "bound-working",
+      "gadget"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>The Chuckle Creek showrunner's. It made the series finale look like a series finale. The reservoir refills itself between scenes because that is what reservoirs do on television.</p><p><strong>Bound Working — Dry Ice:</strong> A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A dented party fog machine with a reservoir that never runs dry.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>The Chuckle Creek showrunner's. It made the series finale look like a series finale. The reservoir refills itself between scenes because that is what reservoirs do on television.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "glycol",
+            "stage-direction"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 60,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × tech 2.0 (bound Working: Dry Ice) × attuned",
+            "bound": "attuned",
+            "saleBack": 24
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Dry Ice",
+          "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "mind",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "self",
+            "range": "self",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "fog",
+              "stealth"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'It worked at the finale. Finales are mostly fog.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "cloud",
+              "function": "conceal",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "circle",
+                "size": 2
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "evasion",
+                    "op": "+",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0FogMachine001"
+}

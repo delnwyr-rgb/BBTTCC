@@ -1,0 +1,139 @@
+{
+  "_id": "hH0BoardingAxe01",
+  "name": "Crowned Valhaulan Boarding Axe",
+  "type": "weapon",
+  "img": "icons/weapons/axes/axe-double-engraved-blue.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d10+3",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "blade",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "units": "sq"
+    },
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "graded",
+      "grade-crowned",
+      "axe",
+      "valhaulan",
+      "capstone"
+    ],
+    "effect": "A boarding axe, Crowned: +3 to hit and +3 damage; soulbound — keyed to the hand that took it from Sklar, it will not be sold. On a hit, push the target 1 square: Boarding Call.",
+    "flavor": "Blue steel, Valhaulan script down the haft, a name you cannot read and will come to.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Sklar Bjrornholt's. It has gone over the rail of eleven ships and come back every time. The script on the haft is the new hand, the one Etta knows, and it spells the axe's name, and the axe will tell you the name the first time you kill with it and never again.</p><p><em>A boarding axe, Crowned: +3 to hit and +3 damage; soulbound — keyed to the hand that took it from Sklar, it will not be sold. On a hit, push the target 1 square: Boarding Call.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "melee",
+          "frame": "weapon",
+          "signature": "It will tell you its name once.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "soulbound",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Sklar Bjrornholt's. It has gone over the rail of eleven ships and come back every time. The script on the haft is the new hand, the one Etta knows, and it spells the axe's name, and the axe will tell you the name the first time you kill with it and never again.</p>",
+          "materialOf": [
+            "sky-steel",
+            "valhaulan-script",
+            "a-true-name"
+          ],
+          "price": {
+            "marks": 125,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV weapon (Crowned +3) × bound soulbound",
+            "bound": "soulbound",
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 2025
+          }
+        }
+      },
+      "grade": {
+        "rank": 3,
+        "name": "Crowned",
+        "key": "crowned",
+        "attack": 3,
+        "damage": 3
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0BoardingAxe01"
+}

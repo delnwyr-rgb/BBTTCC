@@ -1,0 +1,219 @@
+{
+  "_id": "hH0SpiritBoard01",
+  "name": "Spirit Board, Travel Edition",
+  "type": "gear",
+  "img": "icons/sundries/gaming/magic-eight-ball.webp",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "bound-working",
+      "gadget"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Soft Landing's. The kids played it at the state function the night the ground went soft, and it told them something, and then the Mayor banged the gavel and they never finished asking. It still wants to finish.</p><p><strong>Bound Working — Ask the Board:</strong> One target within 6 squares: Soul defense vs Cast DC. On a fail they are Compelled for 1 round — they answer one question truthfully, and the planchette moves on its own to confirm it.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A folding spirit board, letters worn smooth at YES and at GOODBYE.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Soft Landing's. The kids played it at the state function the night the ground went soft, and it told them something, and then the Mayor banged the gavel and they never finished asking. It still wants to finish.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "pressboard",
+            "unfinished-question"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 70,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool × tech 2.0 (bound Working: Ask the Board) × attuned",
+            "bound": "attuned",
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Ask the Board",
+          "img": "icons/magic/symbols/runes-triangle-orange-purple.webp",
+          "system": {
+            "intent": "presence",
+            "channel": "soul",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "One target within 6 squares: Soul defense vs Cast DC. On a fail they are Compelled for 1 round — they answer one question truthfully, and the planchette moves on its own to confirm it.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "compel",
+              "truth"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Everyone pushes the planchette. The trick is the board pushes back.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "sigil",
+              "function": "compel",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": true,
+                "defense": "resolve",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [],
+                "resists": [],
+                "immunes": []
+              },
+              "appliedStates": {
+                "states": [
+                  "compelled"
+                ],
+                "duration": "1-round"
+              }
+            },
+            "description": {
+              "value": "<p>One target within 6 squares: Soul defense vs Cast DC. On a fail they are Compelled for 1 round — they answer one question truthfully, and the planchette moves on its own to confirm it.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0SpiritBoard01"
+}

@@ -1,0 +1,158 @@
+{
+  "_id": "hH0DrownedCoat01",
+  "name": "Circuited Drowned Coat",
+  "type": "armor",
+  "img": "icons/equipment/chest/coat-trench-brown.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 3,
+    "resistances": [
+      "chemical"
+    ],
+    "armorSkill": "bracing",
+    "equipped": false,
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "medium",
+      "graded",
+      "grade-circuited",
+      "coat",
+      "revenant",
+      "river"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>The Ferryman wore it across the Drowned South for two hundred years and never once came out dry, and never once dripped. The circuit of sigils down the back is the river's own, which is why the water in the coat does you no harm and the river does less.</p><p><em>Medium, Circuited: Guard +3, Resolve +3, resists chemical; attunes to one wearer. Needs Bracing. It is always wet and it never drips.</em></p><p>Guard +3 · Evasion +0 · Resolve +3 · resists chemical — medium, needs bracing (Trained = half, Proficient = full).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Wet. Never drips.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>The Ferryman wore it across the Drowned South for two hundred years and never once came out dry, and never once dripped. The circuit of sigils down the back is the river's own, which is why the water in the coat does you no harm and the river does less.</p>",
+          "materialOf": [
+            "oilcloth",
+            "river-sigils",
+            "hex-glyph-plate",
+            "wardiron"
+          ],
+          "price": {
+            "marks": 105,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor (Circuited +2) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 42,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 675
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0DrownedCoEff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0DrownedCoat01"
+}

@@ -1,0 +1,219 @@
+{
+  "_id": "hH0WalkiePair001",
+  "name": "Pre-Fall Walkie, One of a Pair",
+  "type": "gear",
+  "img": "icons/tools/navigation/compass-brass-blue-red.webp",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "bound-working",
+      "gadget"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Chuckle Creek. The new episode needed a prop and this was in the drawer. It has no batteries and it works, and sometimes when you key it the other one keys back, from somewhere that is not Chuckle Creek, and a courteous voice says thank you for the directions.</p><p><strong>Bound Working — Over.:</strong> Key the walkie: one ally within 12 squares hears you clear as a bell and gains Resolve +2 for 1 round. Occasionally someone else answers. Do not answer back.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A yellow kids' walkie-talkie, channel 3, battery compartment empty, working.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Chuckle Creek. The new episode needed a prop and this was in the drawer. It has no batteries and it works, and sometimes when you key it the other one keys back, from somewhere that is not Chuckle Creek, and a courteous voice says thank you for the directions.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "yesodium",
+            "channel-three"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 70,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool × tech 2.0 (bound Working: Over.) × attuned",
+            "bound": "attuned",
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Over.",
+          "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "mind",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "far",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Key the walkie: one ally within 12 squares hears you clear as a bell and gains Resolve +2 for 1 round. Occasionally someone else answers. Do not answer back.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "comms",
+              "steady"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'The other one is out there. Somebody has it. Somebody is very polite about it.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "voice",
+              "function": "steady",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 60,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "resolve",
+                    "op": "+",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Key the walkie: one ally within 12 squares hears you clear as a bell and gains Resolve +2 for 1 round. Occasionally someone else answers. Do not answer back.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0WalkiePair001"
+}

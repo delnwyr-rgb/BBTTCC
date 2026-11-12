@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecRecess0001",
+  "name": "A Recess, Called by Nobody",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>A Recess, Called by Nobody.</strong> Somebody rings a bell that is not on the agenda, and the whole court stops to listen to a train leave. Nobody loses anything in the next exchange — Influence stands where it was; scandal, Suspicion and marks still happen.</p><p><em>Play:</em> the next exchange deals no Influence damage to either side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "recess",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3100000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecRecess0001"
+}

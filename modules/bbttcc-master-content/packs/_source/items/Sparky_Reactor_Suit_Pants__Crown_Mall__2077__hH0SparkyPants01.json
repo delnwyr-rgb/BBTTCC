@@ -1,0 +1,145 @@
+{
+  "_id": "hH0SparkyPants01",
+  "name": "Sparky Reactor-Suit Pants (Crown Mall, 2077)",
+  "type": "gear",
+  "img": "icons/equipment/leg/pants-brown-orange-leather-pants.webp",
+  "system": {
+    "slot": "costume",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "worn",
+      "set:sparky",
+      "costume",
+      "pants",
+      "grief-towns"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Yellow padded trousers, the paw on one hip, knees out. Dewey of Chuckle Creek traded them for a ride on your rig and did not need them, because nothing there hurts. His brother had the top but got too big. The set was never complete in any one town. That was the whole trouble with that Halloween.</p><p><em>Evasion +1 and +2 on Athletics checks while worn — the knees are gone because the kid who wore them ran everywhere, and the pants remember how.</em></p><p>Worn (costume) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "vestment",
+          "signature": "Both knees worn through to the lining. Eleven thousand and six pianos.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Yellow padded trousers, the paw on one hip, knees out. Dewey of Chuckle Creek traded them for a ride on your rig and did not need them, because nothing there hurts. His brother had the top but got too big. The set was never complete in any one town. That was the whole trouble with that Halloween.</p>",
+          "materialOf": [
+            "padded-cloth",
+            "reflective-tape",
+            "mascot-energy"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI vestment × bound free",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "athletics",
+            "bonus": 2,
+            "note": "kids run"
+          }
+        ]
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0SparkyPanEff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0SparkyPants01"
+}

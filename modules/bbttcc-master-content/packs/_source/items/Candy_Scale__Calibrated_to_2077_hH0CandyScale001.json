@@ -1,0 +1,217 @@
+{
+  "_id": "hH0CandyScale001",
+  "name": "Candy Scale, Calibrated to 2077",
+  "type": "gear",
+  "img": "icons/commodities/tech/clock-stopwatch-brass.webp",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "bound-working",
+      "gadget"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Bucky Sorrel's, from the lemonade concession, used to weigh the haul on the thirty-first. It still measures in 2077 candy. Put anything on it and it tells you what that thing would have fetched at the end of the night, and it is never as much as you hoped.</p><p><strong>Bound Working — Weigh It:</strong> Set the scale before one target within 6 squares: Mind defense vs Cast DC. On a fail it tells them exactly what they are worth, in candy, and they are Shaken for 1 round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A brass candy scale, pans polished, needle steady at a number that is always a little low.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Bucky Sorrel's, from the lemonade concession, used to weigh the haul on the thirty-first. It still measures in 2077 candy. Put anything on it and it tells you what that thing would have fetched at the end of the night, and it is never as much as you hoped.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "brass",
+            "fun-size"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 60,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × tech 2.0 (bound Working: Weigh It) × attuned",
+            "bound": "attuned",
+            "saleBack": 24
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Weigh It",
+          "img": "icons/magic/control/debuff-energy-hold-levitate-yellow.webp",
+          "system": {
+            "intent": "presence",
+            "channel": "mind",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Set the scale before one target within 6 squares: Mind defense vs Cast DC. On a fail it tells them exactly what they are worth, in candy, and they are Shaken for 1 round.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "shaken",
+              "truth"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Everybody wants to know. Nobody wants to know in fun-size.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "sigil",
+              "function": "shake",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": true,
+                "defense": "resolve",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [],
+                "resists": [],
+                "immunes": []
+              },
+              "appliedStates": {
+                "states": [
+                  "shaken"
+                ],
+                "duration": "1-round"
+              }
+            },
+            "description": {
+              "value": "<p>Set the scale before one target within 6 squares: Mind defense vs Cast DC. On a fail it tells them exactly what they are worth, in candy, and they are Shaken for 1 round.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0CandyScale001"
+}

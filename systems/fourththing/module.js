@@ -494,19 +494,21 @@ function ftIntegrityBracketFor(actor) {
   return { bracket: "mid", base: FT_INTEGRITY_BRACKETS.mid.base };
 }
 
-// Rig defense brackets (B11.A — 2026-05-12). Guard/Evasion are bracket-derived
-// (±3 from the medium 12/11 baseline); Resolve is flat. All three get +tier
+// Rig defense brackets (B11.A — 2026-05-12). Guard is bracket-derived; Resolve is flat. Both get +tier
 // on top in prepareDerivedData. Frame-item bracket overrides the actor-level
 // one when present, matching the sheet's frame-row resolution order.
+// Evasion retired 2026-11-11 (Dave, phase 2): the old bracket evasion column folds into Guard, higher wins —
+// guard = max(old guard, old evasion). Old rows were personal 9/14, light 10/13, medium 12/11, heavy 14/9,
+// siege 15/8, mecha 11/12 (guard/evasion).
 const FT_RIG_DEFENSE_BY_BRACKET = {
-  personal: { guard:  9, evasion: 14, resolve: 10 },
-  light:    { guard: 10, evasion: 13, resolve: 10 },
-  medium:   { guard: 12, evasion: 11, resolve: 10 },
-  heavy:    { guard: 14, evasion:  9, resolve: 10 },
-  siege:    { guard: 15, evasion:  8, resolve: 10 },
-  // RIG BALANCE (owner ruling 2026-10-21): mecha had no row and fell back to medium (12/11). A walker is
+  personal: { guard: 14, resolve: 10 },
+  light:    { guard: 13, resolve: 10 },
+  medium:   { guard: 12, resolve: 10 },
+  heavy:    { guard: 14, resolve: 10 },
+  siege:    { guard: 15, resolve: 10 },
+  // RIG BALANCE (owner ruling 2026-10-21): mecha had no row and fell back to medium. A walker is
   // armoured but light on its feet — between light and medium.
-  mecha:    { guard: 11, evasion: 12, resolve: 10 }
+  mecha:    { guard: 12, resolve: 10 }
 };
 
 // B12 ramming weight — multiplies tier into the ram damage formula
@@ -530,13 +532,14 @@ const FT_RIG_BRACKET_WEIGHT = {
 // is deliberately NOT a per-round flag — canvas you set stays set until someone
 // changes it. Absent/unknown reads as "working", which is a no-op, so every rig
 // that never touches a sail is unaffected.
+// 2026-11-11 (Evasion retired, phase 2): trim moves Guard now (was Evasion), same amounts.
 const FT_SAIL_TRIM = {
-  full:    { label: "Full Sail",    speedMult: 2,   evasion: -2, state: "sail-full",
-             blurb: "double steer distance, −2 Evasion" },
-  working: { label: "Working Sail", speedMult: 1,   evasion:  0, state: null,
+  full:    { label: "Full Sail",    speedMult: 2,   guard: -2, state: "sail-full",
+             blurb: "double steer distance, −2 Guard" },
+  working: { label: "Working Sail", speedMult: 1,   guard:  0, state: null,
              blurb: "normal steer distance" },
-  reefed:  { label: "Reefed",       speedMult: 0.5, evasion: +2, state: "sail-reefed",
-             blurb: "half steer distance (min 1), +2 Evasion" }
+  reefed:  { label: "Reefed",       speedMult: 0.5, guard: +2, state: "sail-reefed",
+             blurb: "half steer distance (min 1), +2 Guard" }
 };
 function ftRigSailKey(rig) {
   const key = String(rig?.flags?.fourththing?.combat?.sail || "working");
@@ -555,17 +558,20 @@ function ftRigBracketFor(actor) {
 }
 
 /** RG8 (2026-10-26) — rig-system passives. A `rig-system` item declares `flags.fourththing.rigGear.passive =
- *  { guard?, evasion?, integrityMaxPerTier?, initiative?, repairBonus?, signalBonus? }` (numbers). Summed over the
- *  rig's equipped rig-system items; read by the rig derive pass (guard / evasion / integrity max), the boarded crew's
+ *  { guard?, integrityMaxPerTier?, initiative?, repairBonus?, signalBonus? }` (numbers). Summed over the
+ *  rig's equipped rig-system items; read by the rig derive pass (guard / integrity max), the boarded crew's
  *  initiative (Sensor Suite), the engineer's repair check (Repair Bay) and the signal action (Comms Array). Before this
  *  the five catalog systems were prose only. */
-const FT_RIG_PASSIVE_KEYS = ["guard", "evasion", "integrityMaxPerTier", "initiative", "repairBonus", "signalBonus"];
+// 2026-11-11 (Evasion retired, phase 2): a legacy passive.evasion (Phase Cloak) adds to guard, same amount.
+const FT_RIG_PASSIVE_KEYS = ["guard", "integrityMaxPerTier", "initiative", "repairBonus", "signalBonus"];
 function ftRigSystemPassives(rig) {
-  const out = { guard: 0, evasion: 0, integrityMaxPerTier: 0, initiative: 0, repairBonus: 0, signalBonus: 0 };
+  const out = { guard: 0, integrityMaxPerTier: 0, initiative: 0, repairBonus: 0, signalBonus: 0 };
   for (const it of (rig?.items ?? [])) {
     const g = it?.flags?.fourththing?.rigGear;
     if (g?.subtype !== "rig-system" || !g.passive || it.system?.equipped === false) continue;
     for (const k of FT_RIG_PASSIVE_KEYS) { const v = Number(g.passive[k]); if (Number.isFinite(v)) out[k] += v; }
+    const legacyEva = Number(g.passive.evasion);   // legacy evasion passive → Guard
+    if (Number.isFinite(legacyEva)) out.guard += legacyEva;
   }
   return out;
 }
@@ -2485,8 +2491,17 @@ function ftDamageRollDefaults() {
 const FT_EFFECT_MOD_AE_KEYS = Object.freeze({
   guard:      "system.derived.guard.aeBonus",
   resolve:    "system.derived.resolve.aeBonus",
-  initiative: "system.derived.initiative.bonus"
+  initiative: "system.derived.initiative.bonus",
+  // FACULTY BUFFS / DEBUFFS (Dave 2026-11-11): a ward may raise (+) or lower (−) a faculty score. The roll paths read the
+  // source faculty and add AE rows once (attributeTest aeAttr sweep), and derived Guard/Resolve/damage follow the score.
+  violence:   "system.attributes.violence.value",
+  intrigue:   "system.attributes.intrigue.value",
+  presence:   "system.attributes.presence.value",
+  body:       "system.attributes.body.value",
+  mind:       "system.attributes.mind.value",
+  soul:       "system.attributes.soul.value"
 });
+const FT_FACULTY_MOD_STATS = Object.freeze(["violence", "intrigue", "presence", "body", "mind", "soul"]);
 function ftEffectModifierAEKey(stat) {
   const s = String(stat ?? "").toLowerCase();
   return FT_EFFECT_MOD_AE_KEYS[s === "evasion" ? "guard" : s] ?? null;   // legacy evasion ward → Guard (2026-11-08)
@@ -2494,7 +2509,13 @@ function ftEffectModifierAEKey(stat) {
 const FT_EFFECT_MOD_LABELS = Object.freeze({
   guard:      "Guard",
   resolve:    "Resolve",
-  initiative: "Initiative"
+  initiative: "Initiative",
+  violence:   "Violence",
+  intrigue:   "Intrigue",
+  presence:   "Presence",
+  body:       "Body",
+  mind:       "Mind",
+  soul:       "Soul"
 });
 
 // Phase D — Chain (Secondary Targets).
@@ -2752,12 +2773,13 @@ function _ftCoreDice(mode, actor = null) {
 // the roll total (banking was already gated; this closes the total-inflation
 // half). Playtest 2026-06-09: "NPCs still roll surge dice into their totals."
 function _ftXd10(actor) { return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "2d10x10"; }
-// Active defense check (Guard / Evasion / Resolve) — one path for steward and
+// Active defense check (Guard / Resolve — Evasion retired 2026-11-11; a legacy "evasion" ask rolls Guard) — one path for steward and
 // NPC sheets. Techniques R4/R5 (2026-09-21): honors "defense" reroll grants
 // (+ banked rerolls), the Imposed condition (3d10kl2, consumed) and the Strain
 // roll penalty. 2d10x10 + defense value, posted to chat.
 async function _ftRollDefenseCheck(actor, which = "guard") {
   if (!actor) return null;
+  if (which !== "resolve") which = "guard";
   const sys   = actor.system?.system ?? actor.system ?? {};
   const v     = Number(sys.derived?.[which]?.value ?? 10) + auraDefenseBonus(actor, which);   // + allies' auras (2026-10-07)
   const pen   = _ftStrainBite(actor).rollPenalty + ((which === "resolve" && sys.conditions?.shaken === true) ? 2 : 0);   // 2026-11-08: Shaken −2 to Resolve checks
@@ -5465,7 +5487,26 @@ function _ftSurgeCap(actor) {
   const base = ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
   // Bulwark / Cataclyst L17 Both Things At Once (ruling BW1, 2026-10-25): Surge cap +2.
   const bothThings = Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === "bulwark_cataclyst_l17_both_things_at_once");
-  return base + (bothThings ? 2 : 0);
+  // Worn / wielded grants (2026-10-31, the Halloween hoard): an EQUIPPED weapon / armor / gear item may carry AE rows keyed
+  // `flags.fourththing.grant.surgeCap` (Gerald's Lanyard, Maarg's ring). Summed, clamped to +4 so a hoard never doubles a Tier I cap.
+  let gearCap = 0;
+  for (const it of (actor.items ?? [])) {
+    if (!(it.type === "weapon" || it.type === "armor" || it.type === "gear")) continue;
+    const eq = it.type === "armor" ? !!it.system?.equipped : !!it.getFlag?.("fourththing", "equipped");
+    if (!eq) continue;
+    for (const ae of (it.effects ?? [])) {
+      if (ae.disabled) continue;
+      for (const ch of _ftAeRows(ae)) if (String(ch?.key || "") === "flags.fourththing.grant.surgeCap") gearCap += Number(ch.value) || 0;
+    }
+  }
+  return base + (bothThings ? 2 : 0) + Math.max(0, Math.min(4, gearCap));
+}
+// Change rows of an ActiveEffect: top-level `changes`, else the v14 typed `system.changes` (whichever is populated).
+function _ftAeRows(ae) {
+  const top = Array.isArray(ae?.changes) ? ae.changes : [];
+  if (top.length) return top;
+  const sys = ae?.system?.changes;
+  return Array.isArray(sys) ? sys : [];
 }
 // The heat bands (ft-class-automation) scale to this same cap.
 ftRegisterSurgeCap(_ftSurgeCap);
@@ -5692,10 +5733,6 @@ function _ftApplySurgeRollMods(formula, shots) {
   }
   if (shots.wrathCascade) {
     // Match whatever threshold ended up in the base term and mirror it onto
-  }
-  // 2026-11-02 (failure pass, Dave: "use surge to help with rolls"): the Bonus Die promises the "next d10 roll" —
-  // aptitude/attribute CHECKS included (every story check). It was never read on a check, so the Surge was spent for nothing.
-  if (context === "strike" || context === "cast" || context === "save" || context === "check") {
     // the bonus dice (so the two pools have consistent explode behavior).
     const m = f.match(/(\d+)d10x(10|>=\d+)/);
     const thresh = m ? m[2] : "10";
@@ -8040,7 +8077,8 @@ async function ftEndSceneManifestationEffects(actor) {
     // Marks (2026-11-08): scene-long ones end here, and a "next-turn" one too (out of combat no turn will end it).
     return f.appliedManifestation?.durationKind === "scene" || f.manifestationEffect?.durationKind === "scene"
       || ["scene", "next-turn"].includes(f.manifestationMark?.durationKind)
-      || f.drink?.durationKind === "scene";   // Gullywasher drinks (2026-11-11)
+      || f.drink?.durationKind === "scene"           // Gullywasher drinks (2026-11-11)
+      || f.facultyEffect?.durationKind === "scene";  // ftApplyFacultyEffect (2026-11-11)
   }).map(e => e.id);
   if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
   return ids.length;
@@ -9148,8 +9186,7 @@ async function _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType) {
       // (Playtest 2026-06-06: Brace +1 never landed — this was why.)
       changes: [
         { key: "system.derived.guard.aeBonus",   mode: 2, value: "1", priority: 20 },
-        { key: "system.derived.evasion.aeBonus", mode: 2, value: "1", priority: 20 },
-        { key: "system.derived.resolve.aeBonus", mode: 2, value: "1", priority: 20 }
+        { key: "system.derived.resolve.aeBonus", mode: 2, value: "1", priority: 20 }   // Evasion row dropped 2026-11-11 (retired)
       ],
       flags: { fourththing: { surge: { kind: "brace" } } }
     };
@@ -9193,7 +9230,7 @@ async function _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType) {
   }
 
   const dur = aeData.duration?.rounds ? `${aeData.duration.rounds} round${aeData.duration.rounds === 1 ? "" : "s"}` : "1 turn";
-  const what = effectKey === "brace"        ? "+1 Guard / Evasion / Resolve"
+  const what = effectKey === "brace"        ? "+1 Guard / Resolve"
              : effectKey === "mythic-stand" ? "All damage ignored"
              : effectKey === "steel-veil"   ? `Half damage from ${FT.DAMAGE_TYPES[chosenType]?.label}`
              : effectKey === "sanctum"      ? `Immune to ${FT.DAMAGE_TYPES[chosenType]?.label}`
@@ -9409,13 +9446,12 @@ function _ftHasManifestationApplicables(mf, item) {
   return !!(hasStates || hasEffects);
 }
 
-// Read an actor's current defense trio (guard/evasion/resolve) from the
+// Read an actor's current defenses (guard/resolve — Evasion retired 2026-11-11) from the
 // derived store. Used by Bulwark Stance to share the higher value.
 function _ftReadDefTrio(actor) {
   const sys = actor?.system?.system ?? actor?.system ?? {};
   return {
     guard:   Number(sys?.derived?.guard?.value)   || 10,
-    evasion: Number(sys?.derived?.evasion?.value) || 10,
     resolve: Number(sys?.derived?.resolve?.value) || 10
   };
 }
@@ -9491,7 +9527,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
     for (const t of allies) {
       const theirs = _ftReadDefTrio(t.actor);
       const changes = [];
-      for (const k of ["guard", "evasion", "resolve"]) {
+      for (const k of ["guard", "resolve"]) {
         const delta = Math.max(0, mine[k] - theirs[k]);
         // .aeBonus, not .value (2026-10-01) — prepareDerivedData rebuilds .value
         // after AEs apply, so a .value change never landed (same fix as Brace).
@@ -9509,7 +9545,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
       if (ok) buffed.push(t.actor.name);
     }
     return buffed.length
-      ? `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Adjacent allies share your stance (G ${mine.guard}/E ${mine.evasion}/R ${mine.resolve}): ${buffed.map(n => `<b>${n}</b>`).join(", ")}.</p>`
+      ? `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Adjacent allies share your stance (G ${mine.guard}/R ${mine.resolve}): ${buffed.map(n => `<b>${n}</b>`).join(", ")}.</p>`
       : `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No adjacent ally benefited (none nearby or all already better-defended).</p>`;
   }
 
@@ -9530,7 +9566,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
         img: "icons/svg/mage-shield.svg",
         origin: caster.uuid,
         duration: { rounds: 1 },
-        changes: ["guard", "evasion", "resolve"].map(k =>
+        changes: ["guard", "resolve"].map(k =>
           ({ key: `system.derived.${k}.aeBonus`, mode: 2, value: String(tier), priority: 20 })),
         flags: { fourththing: { surge: { kind: "mass-aegis" } } }
       });
@@ -9544,7 +9580,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
   return "";
 }
 
-// Guard/Evasion/Resolve. All actor types now populate `derived.<key>.value`
+// Guard/Resolve (Evasion retired 2026-11-11). All actor types now populate `derived.<key>.value`
 // in prepareDerivedData, so this is mostly a fallback-safe wrapper — but it
 // pins the contract so B11.B/C and downstream raid code don't need to know
 // where each actor type stores its trio.
@@ -11941,7 +11977,8 @@ function ftManifestationMagnitude(itemLike, kind = null, owner = undefined) {
   // ── Wards / buffs ──
   {
     const eff = ftNormalizeAppliedEffects(mf.appliedEffects);
-    const pts = eff.modifiers.reduce((s, m) => s + (Number(m.value) || 0), 0);
+    // Faculty points weigh double a Guard/Resolve point (Dave 2026-11-11): a faculty feeds every check, defense and damage add.
+    const pts = eff.modifiers.reduce((s, m) => s + (Number(m.value) || 0) * (FT_FACULTY_MOD_STATS.includes(m.stat) ? 2 : 1), 0);
     const n = Math.ceil(pts / 2) + eff.resists.length + 2 * eff.immunes.length;
     if (n) {
       const bitsW = [];
@@ -13435,7 +13472,7 @@ async function _ftElectricalArc(primaryActor, baseDmg, { damageType, damageFlavo
 
 FT.DEFENSES = {
   guard:   { label: "Guard",   formula: "10 + Violence + Body",    desc: "Resists physical force"       },
-  evasion: { label: "Evasion", formula: "10 + Intrigue + Body",    desc: "Resists being struck at all"  },
+  // evasion retired 2026-11-11 (Dave, phase 2) — defenses are binary: Integrity harm → Guard, Stress harm → Resolve.
   resolve: { label: "Resolve", formula: "10 + Presence + Soul",    desc: "Resists mental/psychic force" }
 };
 
@@ -13573,6 +13610,9 @@ function ftActorCreatureTypes(actor) {
 // guardBonus/evasionBonus/resolveBonus it delivers, plus a flat defense bump at
 // Expert+. Scene-triggered effects (Master reroll, Legendary auto-success) are
 // TODO(armor-scene) — content authors them, runtime wiring is a later sprint.
+// WORN GEAR SLOTS (2026-10-31, the Halloween hoard): `gear` in one of these slots is jewelry / a mask / a lens — equipped through the
+// inventory flag toggle, read FLAT by ftComputeArmorBonus (no armor skill, no rank scaling) and by the defense-grant loop.
+FT.WORN_GEAR_SLOTS = new Set(["trinket", "pin", "lens", "boots", "implant", "wondrous", "ring", "amulet", "bracelet", "mask", "costume", "worn"]);
 FT.ARMOR_RANK_SCALE = {
   0: { mult: 0,   flat: 0, label: "Untrained — worn wrong, no benefit" },
   1: { mult: 0.5, flat: 0, label: "Trained — half bonuses" },
@@ -13742,7 +13782,7 @@ FT.COMBAT_ACTIONS = {
   },
   dodge: {
     label: "Dodge", icon: "🛡", cost: "actionUsed",
-    desc: "+2 to Guard, Evasion, and Resolve until the start of your next turn.",
+    desc: "+2 to Guard and Resolve until the start of your next turn.",
     apply: async (actor) => {
       const cur = actor.flags?.fourththing?.combat ?? {};
       await actor.setFlag("fourththing", "combat", { ...cur, dodging: true });
@@ -13961,6 +14001,7 @@ function ftComputeDefenses(actor, sys) {
       // the practice; resistance grants are dormant.
       // 10-29: monsters skip the gate, matching ftComputeArmorBonus (ruling 2026-09-04).
       if (item.type === "armor" && !_monsterWearer) {
+        if (!_ftArmorCountedIds(actor, sys)?.has(item.id)) continue;   // one per slot (2026-11-03): an uncounted piece grants no resistances either
         const skillKey = _ftArmorGateSkill(item);
         const rank = sys?.skills?.[skillKey]?.value ?? 0;
         if (rank < 1) continue;
@@ -13983,7 +14024,6 @@ function ftComputeDefenses(actor, sys) {
 
       // Bucket-A migration toward native Active Effects: an item may declare its
       // passive defense grants as GM-visible/editable AE *change rows* keyed
-        if (!_ftArmorCountedIds(actor, sys)?.has(item.id)) continue;   // one per slot (2026-11-03): an uncounted piece grants no resistances either
       //   flags.fourththing.grant.{resists|immunes|vulns|condImmunes}
       // (one damage-type/condition per row, or comma-separated). Read here, inside
       // the gated item loop, so AE grants inherit the SAME equipped + skill gates as
@@ -14183,6 +14223,7 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   const summary = [];
   const conditionOps = [];
   const drinkOps = [];
+  const facultyOps = [];
 
   for (const eff of (consume.effects ?? [])) {
     if (eff.kind === "track") {
@@ -14242,6 +14283,10 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       } });
       const rollTag = /d/i.test(formula) ? ` (${ftEscapeHtml(formula)} → ${n})` : "";
       summary.push(`<li><b>${ftEscapeHtml(lab(up))} +${n}</b>${down ? `, <b>${ftEscapeHtml(lab(down))} −${m}</b>${m < n ? ` (stops at 0)` : ""}` : ""}${rollTag} — until the scene ends</li>`);
+    } else if (eff.kind === "faculty") {
+      // { kind:"faculty", faculty, amount | formula, mode:"score"|"checks", duration, rounds, slot } → ftApplyFacultyEffect (2026-11-11)
+      facultyOps.push({ faculty: eff.faculty, amount: eff.amount, formula: eff.formula, kind: eff.mode === "checks" ? "checks" : "score",
+        duration: eff.duration, rounds: eff.rounds, slot: eff.slot, name: item.name, img: item.img, origin: item.uuid });
     } else if (eff.kind === "mutation") {
       // Gene-cleanse — cure radiation mutations. op "cleanseAll"/"clear" purges
       // every mutation; otherwise cure up to `count` (default 1), letting the
@@ -14282,6 +14327,11 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
     } else if ((await _ftApplyEffectsToTarget(recipient, [data])) === "none") summary.push(`<li><i>no GM online — drink not applied</i></li>`);
   }
 
+  for (const op of facultyOps) {
+    const r = await ftApplyFacultyEffect(recipient, op);
+    summary.push(r.ok ? `<li>${ftEscapeHtml(r.text || "")}${r.rolled ? ` (${ftEscapeHtml(String(op.formula))} → ${r.rolled.total})` : ""}</li>` : `<li>${ftEscapeHtml(op.faculty)}: ${ftEscapeHtml(r.error || "no effect")}</li>`);
+  }
+
   // Bucket B: clone the item's `applyOnUse` template Active Effects onto the
   // recipient. These are GM-authored durational buffs/effects (native changes +
   // duration + statuses) flagged flags.fourththing.applyOnUse — the AE-native
@@ -14308,6 +14358,60 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   }
 
   return summary;
+}
+
+// ─── GENERIC FACULTY BUFF / DEBUFF (Dave 2026-11-11) ──────────────────────────────────────────────────────────
+// ftApplyFacultyEffect(actor, { faculty, amount | formula, kind, duration, rounds, name, img, slot, origin, note })
+//   faculty  violence|intrigue|presence|body|mind|soul
+//   amount   signed integer (or formula, e.g. "1d4" / "-1d4", rolled once)
+//   kind     "score"  (default) — the faculty itself (checks, defenses, damage adds all follow); a debuff stops at 0
+//            "checks" — only checks with that faculty (a flags.fourththing.checkBonus row; roll cards itemise it)
+//   duration "scene" (default; ends at Scene Break / combat end) | "rounds" (+ rounds: N, Foundry combat duration) | "permanent"
+//   slot     optional — one effect per slot per actor (a new one replaces the last)
+// Returns { ok, effectId, amount, rolled } . ftClearFacultyEffects(actor, { slot?, faculty?, all? }) removes them.
+async function ftApplyFacultyEffect(actor, opts = {}) {
+  const faculty = String(opts.faculty ?? "").toLowerCase();
+  if (!actor || !FT.FACULTIES?.[faculty]) return { ok: false, error: "unknown faculty" };
+  let amount = Math.trunc(Number(opts.amount) || 0), rolled = null;
+  if (!amount && opts.formula) { const r = await new Roll(String(opts.formula)).evaluate(); rolled = r; amount = Math.trunc(Number(r.total) || 0); }
+  if (!amount) return { ok: false, error: "zero amount" };
+  const kind = opts.kind === "checks" ? "checks" : "score";
+  const duration = ["scene", "rounds", "permanent"].includes(opts.duration) ? opts.duration : "scene";
+  const key = `system.attributes.${faculty}.value`;
+  if (kind === "score" && amount < 0) {
+    const cur = Math.max(0, Number(foundry.utils.getProperty(actor, key)) || 0);
+    amount = -Math.min(-amount, cur);
+    if (!amount) return { ok: false, error: "already at 0" };
+  }
+  const label = FT.FACULTIES[faculty].label ?? faculty;
+  const sgn = amount > 0 ? "+" : "−";
+  const what = kind === "score" ? `${label} ${sgn}${Math.abs(amount)}` : `${sgn}${Math.abs(amount)} on ${label} checks`;
+  const until = duration === "scene" ? " until the scene ends" : duration === "rounds" ? ` for ${Math.max(1, Number(opts.rounds) || 1)} round(s)` : "";
+  const slot = opts.slot ? String(opts.slot) : null;
+  const data = {
+    name: String(opts.name || what), img: opts.img || (amount > 0 ? "icons/svg/upgrade.svg" : "icons/svg/downgrade.svg"),
+    origin: opts.origin ?? null, transfer: false, disabled: false,
+    description: `${what}${until}.`,
+    changes: kind === "score" ? [{ key, mode: (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD ?? 2), value: String(amount), priority: 20 }] : [],
+    duration: duration === "rounds" ? { rounds: Math.max(1, Number(opts.rounds) || 1) } : {},
+    flags: { fourththing: { facultyEffect: { faculty, amount, kind, durationKind: duration, slot },
+      ...(kind === "checks" ? { checkBonus: [{ context: "check", attribute: faculty, bonus: amount, note: opts.note || String(opts.name || what) }] } : {}) } }
+  };
+  const relay = !game.user?.isGM && !actor.isOwner;
+  if (!relay) {
+    if (slot) { const prev = actor.effects.filter(e => e.flags?.fourththing?.facultyEffect?.slot === slot).map(e => e.id); if (prev.length) await actor.deleteEmbeddedDocuments("ActiveEffect", prev); }
+    const [ae] = await actor.createEmbeddedDocuments("ActiveEffect", [data]);
+    return { ok: true, effectId: ae?.id ?? null, amount, rolled, text: data.description };
+  }
+  const r = await _ftApplyEffectsToTarget(actor, [data]);
+  return { ok: r !== "none", relayed: true, amount, rolled, text: data.description };
+}
+async function ftClearFacultyEffects(actor, { slot = null, faculty = null, all = false } = {}) {
+  if (!actor || !(game.user?.isGM || actor.isOwner)) return 0;
+  const ids = actor.effects.filter(e => { const f = e.flags?.fourththing?.facultyEffect; if (!f) return false;
+    return all || (slot && f.slot === slot) || (faculty && f.faculty === faculty); }).map(e => e.id);
+  if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+  return ids.length;
 }
 
 async function runConsumeEffects(actor, item, consume, { targets = null } = {}) {
@@ -14567,7 +14671,7 @@ function _ftArmorStatRaw(item, stat) {
   let ae;
   for (const e of (item?.effects ?? [])) {
     if (e.disabled) continue;
-    for (const ch of (e.changes ?? [])) {
+    for (const ch of _ftAeRows(e)) {   // top-level `changes`, else the v14 typed `system.changes` (2026-10-31)
       if (String(ch?.key || "") === `flags.fourththing.grant.${stat}`) ae = (ae ?? 0) + (Number(ch.value) || 0);
     }
   }
@@ -14576,30 +14680,48 @@ function _ftArmorStatRaw(item, stat) {
   return Number(item?.system?.[field] ?? 0) || 0;
 }
 
-function ftComputeArmorBonus(actor, sys) {
-  const result = { guard: 0, evasion: 0, resolve: 0, breakdown: [] };
-  if (!actor?.items) return result;
-
-  // 2026-05-25 — Armor Sundered (Bulwark · Catastrophic Entry vs a foe). While
-  // an armor-sundered effect is active, the wearer gets NO defensive benefit
-  // from armor, for EVERY attacker. The AE carries its own ~1-round duration.
-  const sundered = actor.effects?.some?.(e =>
-    (e.active ?? !e.disabled) && e.flags?.fourththing?.armorSundered === true);
-  if (sundered) {
-    result.breakdown.push({ item: "— armor sundered —", skill: null, rank: 0, guard: 0, evasion: 0, resolve: 0 });
-    return result;
-  }
-
-  // Monsters wear their hide/plating natively — full (Proficient) armor
-  // benefit regardless of stored aptitude ranks (owner ruling 2026-09-04).
-  let monsterWearer = false;
-  try { monsterWearer = actorKind(actor) === "monster"; } catch (_e) {}
-
-  for (const item of actor.items) {
-    if (item.type !== "armor") continue;
-    const a = item.system ?? {};
 // ONE BODY PIECE PLUS A SHIELD (owner ruling 2026-11-03, round three: worn armor stacked without limit, and Tier I armor is free). Each armor item fills
 // one slot; boots, a helm and a scarf or shirt are their own slots, not body pieces. Only the best worn piece per slot counts. Monsters wear hides natively.
+// Evasion retired 2026-11-11 (Dave, phase 2, ruling 1 + refinement): a worn item's POSITIVE evasion bonus (native
+// evasionBonus or a flags.fourththing.grant.evasion AE row) folds into Guard PER ITEM as
+//   guard' = max(guard, evasion) + floor(min(guard, evasion) / 2)      (4/4 → 6 · 4/3 → 5 · 0/3 → 3)
+// Negative evasion is not folded — heavy pieces' −1 became a worn −1 Intrigue checkBonus (data migration). The data
+// migration also folds evasionBonus into guardBonus; this is the safety net for anything it misses.
+function ftFoldEvasionIntoGuard(guard, evasion) {
+  const g = Number(guard) || 0, e = Number(evasion) || 0;
+  if (e <= 0) return g;
+  return Math.max(g, e) + Math.floor(Math.min(g, e) / 2);
+}
+// Legacy `system.derived.evasion.aeBonus` AE rows (2026-11-11): Evasion is no longer computed, so those rows would land
+// nowhere. Per active ADD-mode effect, a POSITIVE evasion row folds into Guard with the same per-source formula — an
+// effect that already gave Guard as much (Brace, Mass Aegis, Enlightenment's +1/+1/+1) adds nothing extra; an
+// evasion-only effect (Lucid Step, a dodge-flavoured mutation) becomes that much Guard. Negative evasion rows are ignored.
+// Returns the EXTRA guard to add on top of the summed guard.aeBonus.
+function _ftLegacyEvasionAeGuard(actor) {
+  let extra = 0;
+  let effects = [];
+  try {
+    effects = typeof actor?.allApplicableEffects === "function" ? [...actor.allApplicableEffects()] : [...(actor?.effects ?? [])];
+  } catch (_e) { effects = []; }
+  for (const e of effects) {
+    if (!(e?.active ?? !e?.disabled)) continue;
+    let g = 0, ev = 0;
+    for (const ch of _ftAeRows(e)) {
+      if (Number(ch?.mode) !== 2) continue;
+      const k = String(ch?.key || "");
+      if (k === "system.derived.evasion.aeBonus") ev += Number(ch.value) || 0;
+      else if (k === "system.derived.guard.aeBonus") g += Number(ch.value) || 0;
+    }
+    if (ev > 0) extra += ftFoldEvasionIntoGuard(g, ev) - g;
+  }
+  return extra;
+}
+
+// Shared by the armor accumulator and the inventory tooltips.
+function _ftArmorGuardRaw(item) {
+  return ftFoldEvasionIntoGuard(_ftArmorStatRaw(item, "guard"), _ftArmorStatRaw(item, "evasion"));
+}
+
 function _ftArmorSlot(item) {
   const frame = String(item?.flags?.fourththing?.rfi?.item?.frame || "");
   const tags = (item?.system?.tags || []).map(t => String(t).toLowerCase());
@@ -14616,14 +14738,43 @@ function _ftArmorCountedIds(actor, sys) {
     if (item.type !== "armor" || item.system?.equipped === false) continue;
     const rank = sys?.skills?.[_ftArmorGateSkill(item)]?.value ?? 0;
     const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
-    const score = ["guard", "evasion", "resolve"].reduce((n, k) => { const raw = _ftArmorStatRaw(item, k); return n + Math.round(raw * scale.mult) + (raw > 0 ? scale.flat : 0); }, 0);
+    const score = [_ftArmorGuardRaw(item), _ftArmorStatRaw(item, "resolve")].reduce((n, raw) => n + Math.round(raw * scale.mult) + (raw > 0 ? scale.flat : 0), 0);
     const slot = _ftArmorSlot(item), cur = best.get(slot);
     if (!cur || score > cur.score) best.set(slot, { id: item.id, score });
   }
   return new Set([...best.values()].map(b => b.id));
 }
 
+// `legacyEvasion` (2026-11-11): what the worn items' evasion bonus WOULD have added to Evasion (scaled, any sign) — read only
+// by the NPC fold in prepareDerivedData (ruling 4: an NPC's Guard = max(Guard, would-be Evasion)). Not a defense.
+function ftComputeArmorBonus(actor, sys) {
+  const result = { guard: 0, resolve: 0, legacyEvasion: 0, breakdown: [] };
+  if (!actor?.items) return result;
+
+  // 2026-05-25 — Armor Sundered (Bulwark · Catastrophic Entry vs a foe). While
+  // an armor-sundered effect is active, the wearer gets NO defensive benefit
+  // from armor, for EVERY attacker. The AE carries its own ~1-round duration.
+  const sundered = actor.effects?.some?.(e =>
+    (e.active ?? !e.disabled) && e.flags?.fourththing?.armorSundered === true);
+  if (sundered) {
+    result.breakdown.push({ item: "— armor sundered —", skill: null, rank: 0, guard: 0, resolve: 0 });
+    return result;
+  }
+
+  // Monsters wear their hide/plating natively — full (Proficient) armor
+  // benefit regardless of stored aptitude ranks (owner ruling 2026-09-04).
+  let monsterWearer = false;
+  try { monsterWearer = actorKind(actor) === "monster"; } catch (_e) {}
+
+  const countedArmor = _ftArmorCountedIds(actor, sys);
+  for (const item of actor.items) {
+    if (item.type !== "armor") continue;
+    const a = item.system ?? {};
     if (a.equipped === false) continue;
+    if (countedArmor && !countedArmor.has(item.id)) {
+      result.breakdown.push({ item: `${item.name} (not counted: one per slot)`, skill: null, rank: 0, guard: 0, resolve: 0 });
+      continue;
+    }
 
     // Weight tag is canonical (light→fitting, medium→bracing, heavy→plating);
     // armorSkill field is the fallback for armor without a weight tag.
@@ -14632,9 +14783,10 @@ function _ftArmorCountedIds(actor, sys) {
     const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
 
     // Bucket-A migration toward native AEs: GM-editable AE grant rows
-    // (flags.fourththing.grant.{guard,evasion,resolve}) take PRECEDENCE over the
+    // (flags.fourththing.grant.{guard,resolve}) take PRECEDENCE over the
     // native bonus field per stat (shared resolver — see _ftArmorStatRaw).
-    const rawG = _ftArmorStatRaw(item, "guard");
+    // A positive legacy evasion bonus folds into Guard (_ftArmorGuardRaw, 2026-11-11).
+    const rawG = _ftArmorGuardRaw(item);
     const rawE = _ftArmorStatRaw(item, "evasion");
     const rawR = _ftArmorStatRaw(item, "resolve");
 
@@ -14642,23 +14794,29 @@ function _ftArmorCountedIds(actor, sys) {
     // instead of silently zeroing. Half-bonuses canon preserved: +1→+1, +2→+1,
     // +3→+2, +4→+2 at Trained; full bonuses at Proficient and above.
     const g = Math.round(rawG * scale.mult) + (rawG > 0 ? scale.flat : 0);
-  const countedArmor = _ftArmorCountedIds(actor, sys);
     const e = Math.round(rawE * scale.mult) + (rawE > 0 ? scale.flat : 0);
     const r = Math.round(rawR * scale.mult) + (rawR > 0 ? scale.flat : 0);
 
     result.guard   += g;
-    if (countedArmor && !countedArmor.has(item.id)) {
-      result.breakdown.push({ item: `${item.name} (not counted: one per slot)`, skill: null, rank: 0, guard: 0, evasion: 0, resolve: 0 });
-      continue;
-    }
-    result.evasion += e;
     result.resolve += r;
+    result.legacyEvasion += e;
     result.breakdown.push({
       item:   item.name,
       skill:  skillKey,
       rank,
-      guard: g, evasion: e, resolve: r
+      guard: g, resolve: r
     });
+  }
+  // WORN GEAR (2026-10-31, the Halloween hoard): rings, pins, masks, lenses — `gear` in a FT.WORN_GEAR_SLOTS slot, equipped through
+  // the inventory flag toggle. Its AE grant rows (flags.fourththing.grant.guard|resolve; a positive legacy evasion row → guard) land FLAT: no armor skill, no rank
+  // scaling — a ring is not practice. Armor keeps the gated path above. Sundered armor still zeroes everything (early return).
+  for (const item of actor.items) {
+    if (item.type !== "gear" || !FT.WORN_GEAR_SLOTS.has(String(item.system?.slot || ""))) continue;
+    if (!item.getFlag?.("fourththing", "equipped")) continue;
+    const g = _ftArmorGuardRaw(item), e = _ftArmorStatRaw(item, "evasion"), r = _ftArmorStatRaw(item, "resolve");
+    if (!g && !e && !r) continue;
+    result.guard += g; result.resolve += r; result.legacyEvasion += e;
+    result.breakdown.push({ item: item.name, skill: null, rank: null, worn: true, guard: g, resolve: r });
   }
   return result;
 }
@@ -16811,6 +16969,22 @@ Hooks.once("init", function () {
   registerThreatChassisHooks();
   registerItemLadderHooks();                 // graded arms + bound Workings (2026-10-07) — see item-ladder.js
   game.fourththing.ladder = ItemLadder;
+  // ITEM SETS (2026-10-31, the Crown Mall costume): pieces carry the tag `set:<key>` (armor, weapons, worn gear). A set is complete
+  // when `need` pieces are EQUIPPED (default 3 — mask, shirt, pants). Readers: bbttcc-campaign's Wendigo ward (a Steward in full
+  // costume on the ride → the rung does not climb), the Proof of Purchase receipt. `holders(key)` = every Steward wearing the set.
+  game.fourththing.sets = {
+    pieces(actor, key) {
+      const want = `set:${String(key || "").toLowerCase()}`;
+      return Array.from(actor?.items ?? []).filter(it => {
+        if (!(it.type === "weapon" || it.type === "armor" || it.type === "gear")) return false;
+        const tags = Array.isArray(it.system?.tags) ? it.system.tags : [];
+        if (!tags.some(t => String(t).toLowerCase() === want)) return false;
+        return it.type === "armor" ? !!it.system?.equipped : !!it.getFlag?.("fourththing", "equipped");
+      });
+    },
+    complete(actor, key, need = 3) { return this.pieces(actor, key).length >= Math.max(1, Number(need) || 3); },
+    holders(key, need = 3) { return (game.actors?.contents ?? []).filter(a => a.type === "character" && this.complete(a, key, need)); }
+  };
 
   // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired
@@ -17125,9 +17299,9 @@ Hooks.once("init", function () {
   // ftPoolTip / ftDefenseTip / ftAptColTip helpers below.
   globalThis.FT_FACULTY_TIPS = {
     violence:  "Violence — raw force, pressure, willingness to harm. Drives Brawl, Melee, Firearms, Athletics; feeds Guard (10 + Violence + Body + armor).",
-    intrigue:  "Intrigue — guile, finesse, working the angle. Drives Stealth, Hacking, Tinkering, Piloting, Streetwise, Fitting (light armor); feeds Evasion (10 + Intrigue + Body + armor).",
+    intrigue:  "Intrigue — guile, finesse, working the angle. Drives Stealth, Hacking, Tinkering, Piloting, Streetwise, Fitting (light armor).",
     presence:  "Presence — bearing, voice, weight in a room. Drives Diplomacy, Intimidation, Empathy, Performance; feeds Resolve (10 + Presence + Soul + armor).",
-    body:      "Body — stamina and structure. Drives Plating (heavy armor). Feeds Integrity max (10 + 3·Body + per-level bracket) AND contributes to both Guard and Evasion.",
+    body:      "Body — stamina and structure. Drives Plating (heavy armor). Feeds Integrity max (10 + 3·Body + per-level bracket) AND contributes to Guard.",
     mind:      "Mind — memory, reason, pattern-finding. Drives Perception, Investigation, Lore, Occult. Feeds Stress max (10 + 2·Mind + Soul).",
     soul:      "Soul — conviction, attunement, the shape of your faith. Drives Faith, Meditation, Ritual, Insight, Bracing (medium armor, shields). Feeds Stress max and Resolve."
   };
@@ -17136,9 +17310,9 @@ Hooks.once("init", function () {
     stress:    "Stress — your mental/spiritual track. Reduced by psychic and qliphothic damage. Max = 10 + 2·Mind + Soul. Refills on Soma Break."
   };
   globalThis.FT_DEFENSE_TIPS = {
-    guard:   "Guard — defense vs. brute-force/melee strikes. 10 + Violence + Body + equipped armor. Higher Guard makes head-on hits glance off.",
-    evasion: "Evasion — defense vs. ranged shots, traps, area effects. 10 + Intrigue + Body + equipped armor. Higher Evasion means you weren't standing where they aimed.",
-    resolve: "Resolve — defense vs. social, mental, manifestation pressure. 10 + Presence + Soul + equipped armor. Targeted by psychic, qliphothic, and most influence rolls."
+    guard:   "Guard — defense vs. anything that does Integrity damage (strikes, shots, traps, blasts). 10 + Violence + Body + equipped armor. Higher Guard makes hits glance off.",
+    // evasion retired 2026-11-11 (Dave, phase 2) — Integrity harm attacks Guard, Stress harm attacks Resolve.
+    resolve: "Resolve — defense vs. anything that does Stress damage (social, mental, manifestation pressure). 10 + Presence + Soul + equipped armor. Targeted by psychic, qliphothic, and most influence rolls."
   };
   globalThis.FT_APT_COLUMN_TIPS = {
     name:    "Aptitude — what you're rolling. Hover the name to see its canonical label; the colored tag is your rank tier.",
@@ -17526,6 +17700,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const formula = `${_ftXd10(actor)} + ${totalBonus}${_dwExtra}${_sShots.bonusDie ? " + 1d10x10" : ""}`;
     const roll    = new Roll(formula);
     await roll.evaluate();
+    if (_sShots.consumed.length) await _ftConsumeSurgeOneShots(actor, _sShots, { context: "check" });
 
     const allResults = roll.terms[0]?.results ?? [];
     const baseDice   = allResults.slice(0, 2).map(r => r.result);
@@ -17575,7 +17750,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const parts = aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`);
       noteBits.push(`Passives: ${parts.join(", ")}`);
     }
-    if (_sShots.consumed.length) await _ftConsumeSurgeOneShots(actor, _sShots, { context: "check" });
     if (_framePushBonus > 0) noteBits.push(`⛰ Frame Push +${_framePushBonus} (Body)`);
     if (_radPen > 0)         noteBits.push(`☢ Radiation −${_radPen}`);
     if (_cb.length)          noteBits.push(`Bonuses: ${_cb.map(b => `${b.bonus >= 0 ? "+" : ""}${b.bonus} (${b.source})`).join(", ")}`);
@@ -19813,7 +19987,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const q = { ...query, target: query.target?.actor ?? query.target ?? null };
       return { rerolls: collectRerolls(actor, q).map(g => ({ mode: g.mode, source: g.sourceItemName, vs: g.vs ?? null })), bonuses: collectCheckBonuses(actor, q),
                auras: collectAuraSources(actor).map(s => ({ from: s.actor.name, item: s.item.name, squares: s.squares, aura: s.aura })), ranks: rankGrantsOf(actor),
-               defenseBonus: { guard: auraDefenseBonus(actor, "guard"), evasion: auraDefenseBonus(actor, "evasion"), resolve: auraDefenseBonus(actor, "resolve") }, walkSquares: auraWalkSquares(actor) };
+               defenseBonus: { guard: auraDefenseBonus(actor, "guard"), resolve: auraDefenseBonus(actor, "resolve") }, walkSquares: auraWalkSquares(actor) };
     },
     /** displace-token: push/pull a target along the line from the actor, or widen the actor's own movement budget for a free shift. */
     async displace(actor, target, args = {}, source = "") {
@@ -20870,6 +21044,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // (vs creature type) rider, for the other system files (npc-automation) and macros.
   game.fourththing.trackForDamage          = ftTrackForDamage;
   game.fourththing.applyPoolShift          = ftApplyPoolShift;
+  // 2026-11-11 (Dave): the generic faculty buff / debuff — macros, story effects, items and other modules.
+  game.fourththing.facultyEffect           = ftApplyFacultyEffect;
+  game.fourththing.clearFacultyEffects     = ftClearFacultyEffects;
   game.fourththing.applyConditionalDamage  = ftApplyConditionalDamage;
   // 2026-11-08 (teeth P05/P10/P15): the derived attack defense, how a weapon's Strike resolves, and the beneficial test.
   game.fourththing.attackDefenseFor           = ftAttackDefenseFor;
@@ -21094,9 +21271,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       for (const m of (Array.isArray(eff.modifiers) ? eff.modifiers : [])) {
         const key = ftEffectModifierAEKey(m?.stat);
         if (!key) continue;
-        const v = Math.max(0, Math.floor(Number(m?.value) || 0));
+        let v = Math.max(0, Math.floor(Number(m?.value) || 0));
         if (v <= 0) continue;
         const sign = m?.op === "-" ? -1 : 1;
+        // A faculty debuff stops at 0 (Dave 2026-11-11, same rule as the Gullywasher drinks).
+        if (sign < 0 && FT_FACULTY_MOD_STATS.includes(String(m?.stat ?? "").toLowerCase())) {
+          v = Math.min(v, Math.max(0, Number(foundry.utils.getProperty(target, key)) || 0));
+          if (v <= 0) continue;
+        }
         aeChanges.push({ key, mode: ADD_MODE, value: String(sign * v), priority: 20 });
       }
       const resists = Array.isArray(eff.resists) ? eff.resists : [];
@@ -21746,8 +21928,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
 
       // Rig defense derive (B11.A — 2026-05-12). Rigs don't carry attributes,
-      // so the standard 10+attr+attr formula doesn't apply. Guard/Evasion come
-      // from frame bracket; Resolve is flat. All three +tier on top. Live here
+      // so the standard 10+attr+attr formula doesn't apply. Guard comes
+      // from frame bracket (old evasion column folded in, higher wins — 2026-11-11); Resolve is flat. Both +tier on top. Live here
       // so the existing manifestation/weapon attack path (which reads
       // `derived.<defense>.value`) Just Works against rigs.
       if (this.type === "rig" && sys?.integrity) {
@@ -21755,30 +21937,30 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const tier = Math.max(1, Math.min(4, Number(sys.integrity.tier) || 1));
         const table = FT_RIG_DEFENSE_BY_BRACKET[bracket];
         sys.derived         ??= {};
-        // RG8 (2026-10-26): equipped rig-system passives (Phase Cloak +Evasion, Reinforced Plating +integrity max per tier …)
+        // RG8 (2026-10-26): equipped rig-system passives (Phase Cloak +Guard, Reinforced Plating +integrity max per tier …)
         const _rigPassives = ftRigSystemPassives(this);
         sys.derived.guard   ??= {}; sys.derived.guard.value   = table.guard   + tier + _rigPassives.guard;
-        sys.derived.evasion ??= {}; sys.derived.evasion.value = table.evasion + tier + _rigPassives.evasion;
         sys.derived.resolve ??= {}; sys.derived.resolve.value = table.resolve + tier;
+        if (sys.derived.evasion !== undefined) delete sys.derived.evasion;   // Evasion retired 2026-11-11 — template default is stale
         sys.derived.defenseBracket = bracket;
         const _integrityBonus = Math.max(0, Math.round(_rigPassives.integrityMaxPerTier * tier));
         sys.derived.integrityBonus = _integrityBonus;
         if (_integrityBonus > 0 && Number.isFinite(Number(sys.integrity.max))) sys.integrity.max = Number(sys.integrity.max) + _integrityBonus;
         // B12: per-round combat state stacked onto base defenses. Pilot
-        // holds → +1 Guard; pilot evades → +2 Evasion; any crew braces →
+        // holds → +1 Guard; pilot evades → +2 Guard (was Evasion, 2026-11-11); any crew braces →
         // +1 Guard. Cleared by pilot's _onFtNewTurn.
         const cmb = this.flags?.fourththing?.combat ?? {};
         // 2026-05-19 — Bonuses now read from cmb.<action>Bonus when set
         // (driver's Piloting rank stacks on top of base). Fallback to the
         // pre-Piloting defaults so legacy flags still resolve.
         if (cmb.holding) sys.derived.guard.value   += Number(cmb.holdingBonus ?? 1);
-        if (cmb.evading) sys.derived.evasion.value += Number(cmb.evadingBonus ?? 2);
+        if (cmb.evading) sys.derived.guard.value   += Number(cmb.evadingBonus ?? 2);
         if (cmb.brace)   sys.derived.guard.value   += Number(cmb.braceBonus   ?? 1);
         // Sail trim is persistent, not per-round: full canvas is fast and clumsy,
         // reefed is slow and nimble. No sail set ⇒ "working" ⇒ 0, so rigs that
         // never raise a sail are untouched.
-        const _sailEva = FT_SAIL_TRIM[String(cmb.sail || "")]?.evasion ?? 0;
-        if (_sailEva) sys.derived.evasion.value += _sailEva;
+        const _sailGuard = FT_SAIL_TRIM[String(cmb.sail || "")]?.guard ?? 0;
+        if (_sailGuard) sys.derived.guard.value += _sailGuard;
         // B11.B mirror: canonical integrity + defenses surface through the
         // derived path so the unified _applyDamageToActor read flow Just
         // Works for rigs. Writes still target system.integrity.value (the
@@ -21817,7 +21999,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       sys.derived.integrity ??= {};
       sys.derived.stress    ??= {};
       sys.derived.guard     ??= {};
-      sys.derived.evasion   ??= {};
       sys.derived.resolve   ??= {};
 
       // Integrity = base derivative (Body) + per-level class-bracketed boost.
@@ -21914,11 +22095,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       let _condWardOff = 0;
       try { _condWardOff = ftConditionalWardGuardOff(this); } catch (_e) { _condWardOff = 0; }
       const aeGuardBonus   = (Number(sys.derived.guard?.aeBonus) || 0) - _condWardOff;
-      const aeEvasionBonus = Number(sys.derived.evasion?.aeBonus) || 0;
       const aeResolveBonus = Number(sys.derived.resolve?.aeBonus) || 0;
       sys.derived.guard.value      = 10 + v + b;
-      sys.derived.evasion.value    = 10 + i + b;
       sys.derived.resolve.value    = 10 + p + s;
+      // EVASION RETIRED (Dave 2026-11-11, phase 2). Defenses are Guard + Resolve only; derived.evasion is no longer
+      // computed. _wouldBeEvasion tracks what Evasion WOULD have been (10 + Intrigue + Body + worn evasion + legacy
+      // evasion AE rows + threat) for ONE reader: the NPC fold below (ruling 4 — an NPC's Guard = max(Guard, that),
+      // higher wins). A player character's base Evasion is simply dropped (its worn-item evasion folds into Guard via
+      // _ftArmorGuardRaw — ruling 1). A legacy system.derived.evasion.aeBonus AE row is read here only for that fold.
+      let _wouldBeEvasion = 10 + i + b + (Number(sys.derived.evasion?.aeBonus) || 0);
       // Iron Will (technique, canon 2026-09-21): "choose Soul or Body — a rank in
       // defense checks using it" → +1 to the defense that faculty keys (Body →
       // Guard, Soul → Resolve). The engine picks the higher faculty (ties → Soul);
@@ -21931,44 +22116,57 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
       // Rank-scaled armor bonuses from equipped armor items. See FT.ARMOR_RANK_SCALE.
       const armorBonus = ftComputeArmorBonus(this, sys);
-      sys.derived.guard.value   += armorBonus.guard;
-      sys.derived.evasion.value += armorBonus.evasion;
+      sys.derived.guard.value   += armorBonus.guard;     // positive worn evasion already folded in (ruling 1)
       sys.derived.resolve.value += armorBonus.resolve;
+      _wouldBeEvasion           += armorBonus.legacyEvasion;
       sys.derived.armorBreakdown = armorBonus.breakdown;
 
-      // Phase 1 codified action — Dodge: +2 to all defenses while flag set.
+      // Phase 1 codified action — Dodge: +2 Guard and +2 Resolve while flag set (Evasion retired 2026-11-11, ruling 3).
       // Cleared on _onFtNewTurn (i.e., expires at start of your next turn).
       if (this.flags?.fourththing?.combat?.dodging) {
         sys.derived.guard.value   += 2;
-        sys.derived.evasion.value += 2;
         sys.derived.resolve.value += 2;
       }
 
-      // 2026-11-07 (Pike's HQ briefing, "Dig in"): any item's flags.fourththing.passives.defenseBonus {guard?,evasion?,resolve?}
+      // 2026-11-07 (Pike's HQ briefing, "Dig in"): any item's flags.fourththing.passives.defenseBonus {guard?,resolve?}
       // adds flat — a timed party buff (worldEffects.partyEffects) is a feature item, not armor, so the armor path never saw it.
+      // A legacy positive `evasion` there folds into Guard per item (2026-11-11, ruling 1 — ftFoldEvasionIntoGuard).
       for (const _it of this.items ?? []) {
         const _db = _it.flags?.fourththing?.passives?.defenseBonus;
         if (!_db || typeof _db !== "object") continue;
-        sys.derived.guard.value   += Number(_db.guard)   || 0;
-        sys.derived.evasion.value += Number(_db.evasion) || 0;
+        sys.derived.guard.value   += ftFoldEvasionIntoGuard(_db.guard, _db.evasion);
         sys.derived.resolve.value += Number(_db.resolve) || 0;
       }
 
       if (_threat?.defense) {
         sys.derived.guard.value   += _threat.defense;
-        sys.derived.evasion.value += _threat.defense;
         sys.derived.resolve.value += _threat.defense;
+        _wouldBeEvasion           += _threat.defense;
       }
 
       // Phase C — fold in AE-applied bonuses, then re-stamp so the field
       // survives the next prep cycle (Foundry will overwrite with the live
       // AE value before derive runs again).
       sys.derived.guard.value     += aeGuardBonus;
-      sys.derived.evasion.value   += aeEvasionBonus;
       sys.derived.resolve.value   += aeResolveBonus;
+      // Legacy evasion AE rows → Guard (2026-11-11; per effect, positive only — see _ftLegacyEvasionAeGuard).
+      try { sys.derived.guard.value += _ftLegacyEvasionAeGuard(this); } catch (_e) { /* tolerant */ }
       sys.derived.guard.aeBonus    = aeGuardBonus;
-      sys.derived.evasion.aeBonus  = aeEvasionBonus;
       sys.derived.resolve.aeBonus  = aeResolveBonus;
+
+      // Ruling 4 (2026-11-11): NPCs / creatures (anything that is not a player Steward) fold their would-be Evasion into
+      // Guard, higher wins. The Guard AE bonus is already in; compare against Evasion's own would-be total.
+      {
+        let _kindNow = "";
+        try { _kindNow = actorKind(this); } catch (_e) { _kindNow = ""; }
+        sys.derived.guard.foldedFromEvasion = 0;
+        if (_kindNow !== "steward" && _wouldBeEvasion > sys.derived.guard.value) {
+          sys.derived.guard.foldedFromEvasion = _wouldBeEvasion - sys.derived.guard.value;
+          sys.derived.guard.value = _wouldBeEvasion;
+        }
+      }
+      // Stale data: a stored/derived evasion is no longer a defense. Drop it from the prepared copy so nothing reads it.
+      if (sys.derived.evasion !== undefined) delete sys.derived.evasion;
 
       sys.derived.defenses = ftComputeDefenses(this, sys);
 
@@ -23944,10 +24142,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           : i.type === "armor"
             ? (() => {
                 const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
-                const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
+                const gB = _ftArmorGuardRaw(i), rB = _ftArmorStatRaw(i, "resolve");   // legacy +evasion folds into Guard (2026-11-11)
                 return [
                   gB ? `Guard ${sgn(gB)}`     : "",
-                  eB ? `Evasion ${sgn(eB)}`   : "",
                   rB ? `Resolve ${sgn(rB)}`   : "",
                   i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                 ].filter(Boolean).join(" · ");
@@ -24009,6 +24206,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           // QUEST ITEMS (Dave 2026-10-30): story objects the Steward carries (bbttcc-campaign choice.questItems) — own group,
           // no equip toggle (isQuestItem)
           isQuestItem: !!i.flags?.["bbttcc-campaign"]?.questItem,
+          // 2026-10-31: a quest item that is ARMOR, a WEAPON or worn gear (the Crown Mall costume) keeps its equip toggle beside the Quest tag.
+          questEquip: !!i.flags?.["bbttcc-campaign"]?.questItem && (i.type === "armor" || i.type === "weapon" || (i.type === "gear" && FT.WORN_GEAR_SLOTS.has(String(i.system?.slot || "")))),
           group: i.flags?.["bbttcc-campaign"]?.questItem ? "Quest Items"
                : i.type === "weapon" ? "Weapons"
                : i.type === "armor"  ? "Armor"
@@ -24824,7 +25023,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       await actor.update({ [`system.skills.${skillKey}.value`]: newRank });
     }
 
-    // Defense check (Guard / Evasion / Resolve). Mirrors the NPC sheet's
+    // Defense check (Guard / Resolve). Mirrors the NPC sheet's
     // ftNpcDefenseRoll path — 2d10x10 + derived defense value, posted to chat.
     // Used when something asks the steward to make a defense check actively.
     static async _onFtDefenseRoll(event, target) {
@@ -26696,10 +26895,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           : i.type === "armor"
             ? (() => {
                 const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
-                const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
+                const gB = _ftArmorGuardRaw(i), rB = _ftArmorStatRaw(i, "resolve");   // legacy +evasion folds into Guard (2026-11-11)
                 return [
                   gB ? `Guard ${sgn(gB)}`     : "",
-                  eB ? `Evasion ${sgn(eB)}`   : "",
                   rB ? `Resolve ${sgn(rB)}`   : "",
                   i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                 ].filter(Boolean).join(" · ");
@@ -27143,7 +27341,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         cycleState: r.baseImmune ? "immune" : (r.baseResist ? "resist" : "none")
       }));
 
-      // B11.A (2026-05-12) — Guard/Evasion/Resolve trio derived in
+      // B11.A (2026-05-12) — Guard/Resolve (Evasion retired 2026-11-11) derived in
       // FourthThingActor.prepareDerivedData from frame bracket + tier. Surfaced
       // here as a tile row above the resist/immune/vuln table so the GM can see
       // the contact defenses at a glance. Bracket source is the frame item if
@@ -27159,7 +27357,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         bracketLabel: _bracketLabel,
         tier: _rigTier,
         guard:   Number(sysData.derived?.guard?.value)   || 10,
-        evasion: Number(sysData.derived?.evasion?.value) || 10,
         resolve: Number(sysData.derived?.resolve?.value) || 10,
         formulaHint: `${_bracketLabel} bracket · T${_rigTier} (base + tier)`
       };
@@ -27176,7 +27373,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const _heatMax = _ftRigHeatMax(this.actor);
       const combatStates = [];
       if (_rigCmb.holding) combatStates.push({ key: "holding", label: "Holding Position", note: `+${_rigCmb.holdingBonus ?? 1} Guard`, color: "#7ec0ff" });
-      if (_rigCmb.evading) combatStates.push({ key: "evading", label: "Evading", note: `+${_rigCmb.evadingBonus ?? 2} Evasion`, color: "#7ec0ff" });
+      if (_rigCmb.evading) combatStates.push({ key: "evading", label: "Evading", note: `+${_rigCmb.evadingBonus ?? 2} Guard`, color: "#7ec0ff" });
       if (_rigCmb.brace)   combatStates.push({ key: "brace", label: "Braced", note: `+${_rigCmb.braceBonus ?? 1} Guard`, color: "#7ec0ff" });
       if (_rigCmb.boostedSystemId) {
         const sysItem = this.actor.items?.get(_rigCmb.boostedSystemId);
@@ -29877,10 +30074,10 @@ const _FT_CREW_ACTION_DESC = {
   ram:             "Pilot charge — ram a TARGETED token: (tier × bracket + Piloting)d6 collision damage, half fed back to your rig. Structures take it as Plate damage and can collapse.",
   "hold-position": "Steady the rig — gunners reroll their lowest die until the next pilot turn.",
   evasive:         "Attacks against the rig roll 3d10 and keep the lowest 2 until next turn.",
-  swerve:          "Reaction — the off-turn dodge: +(2 + Piloting) Evasion until your next pilot turn. Shares the Evading state, so it does not stack with Evasive.",
+  swerve:          "Reaction — the off-turn dodge: +(2 + Piloting) Guard until your next pilot turn. Shares the Evading state, so it does not stack with Evasive.",
   "tack-against-wind": "Pilot action — beat upwind at HALF steer distance; in exchange Ram and Stomp reach one extra square this round.",
-  "raise-sail":    "Bonus — make sail one step (Reefed → Working → Full). Full Sail: double steer distance, −2 Evasion. Trim persists between rounds.",
-  "lower-sail":    "Bonus — shorten sail one step (Full → Working → Reefed). Reefed: half steer distance, +2 Evasion. Trim persists between rounds.",
+  "raise-sail":    "Bonus — make sail one step (Reefed → Working → Full). Full Sail: double steer distance, −2 Guard. Trim persists between rounds.",
+  "lower-sail":    "Bonus — shorten sail one step (Full → Working → Reefed). Reefed: half steer distance, +2 Guard. Trim persists between rounds.",
   "fire-weapon":   "Activate equipped rig-weapon (use the buttons below).",
   "aimed-shot":    "Spend action + bonus — increased damage / accuracy on next fire.",
   suppression:     "Bonus — fire to pin: the target's next attack roll takes −2.",
@@ -29896,7 +30093,7 @@ const _FT_CREW_ACTION_DESC = {
   signal:          "Bonus — coordination buff to crew or allies.",
   "hold-on":       "Reaction — reduce damage to self when the rig is hit.",
   stomp:           "Pilot melee — bring a foot down on a TARGETED token in contact: (tier × bracket)d6 kinetic, no recoil, target is knocked Prone. Costs 1 Heat (refused when overheated).",
-  "hit-and-run":   "Small rigs only (personal / light) — bonus action after you FIRE this round: peel away for +(2 + Piloting) Evasion until your next pilot turn. Shares the Evading state."
+  "hit-and-run":   "Small rigs only (personal / light) — bonus action after you FIRE this round: peel away for +(2 + Piloting) Guard until your next pilot turn. Shares the Evading state."
 };
 
 // ─── Crew Action: Active Effect + Heat helpers (2026-05-19) ────────
@@ -30222,12 +30419,12 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setRigCombat({ evading: true, evadingBonus: evaBonus });
       await setPilotGate();
       await consumeAction();
-      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${evaBonus} Evasion until next pilot turn.` });
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${evaBonus} Guard until next pilot turn.` });
       try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] evasive VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">💨 ${rig.name} evades</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+${evaBonus} Evasion</b> until the next pilot turn (${steward.name}).${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+${evaBonus} Guard</b> until the next pilot turn (${steward.name}).${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
       });
       return;
     }
@@ -30560,12 +30757,12 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const hrBonus = 2 + piloting;
       await setRigCombat({ evading: true, evadingBonus: hrBonus });
       await consumeBonus();
-      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${hrBonus} Evasion until next pilot turn (hit and run).` });
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${hrBonus} Guard until next pilot turn (hit and run).` });
       try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] hit-and-run VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9be7ff">🏍 ${rig.name} hits and runs</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">Bonus action — shot fired, wheels spinning: <b>+${hrBonus} Evasion</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem">Bonus action — shot fired, wheels spinning: <b>+${hrBonus} Guard</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
       });
       return;
     }
@@ -30578,12 +30775,12 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const swerveBonus = 2 + piloting;
       await setRigCombat({ evading: true, evadingBonus: swerveBonus });
       await steward.update({ "system.actions.reactionUsed": true });
-      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${swerveBonus} Evasion until next pilot turn (swerve).` });
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${swerveBonus} Guard until next pilot turn (swerve).` });
       try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] swerve VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9be7ff">↩ ${steward.name} swerves ${rig.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">Reaction — <b>+${swerveBonus} Evasion</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem">Reaction — <b>+${swerveBonus} Guard</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
       });
       return;
     }
@@ -31821,6 +32018,17 @@ Hooks.on("preUpdateItem", (item, changes) => {
 Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
+// Putting on a second piece in a slot takes the first one off (2026-11-03): the sheet shows what actually counts.
+Hooks.on("updateItem", (item, changed, _opts, userId) => {
+  try {
+    if (userId !== game.user?.id || item?.type !== "armor" || changed?.system?.equipped !== true) return;
+    const actor = item.parent; if (!actor?.items) return;
+    try { if (actorKind(actor) === "monster") return; } catch (_e) {}
+    const slot = _ftArmorSlot(item);
+    const off = actor.items.filter(i => i.type === "armor" && i.id !== item.id && i.system?.equipped !== false && _ftArmorSlot(i) === slot).map(i => ({ _id: i.id, "system.equipped": false }));
+    if (off.length) actor.updateEmbeddedDocuments("Item", off);
+  } catch (e) { console.warn("[fourththing] armor slot swap failed", e); }
+});
 // 2026-05-26 — Refresh the HUD/banner status strip the moment a rig condition
 // AE (overheat / suppressed) lands or clears, so negative conditions surface
 // without waiting for an unrelated rig update. (Heat-value changes already
@@ -31918,17 +32126,6 @@ function _ftRigOnScene(rig, scene = canvas?.scene) {
   if (!rig || !scene) return false;
   return !!scene.tokens?.some?.(t => t.actorId === rig.id);
 }
-// Putting on a second piece in a slot takes the first one off (2026-11-03): the sheet shows what actually counts.
-Hooks.on("updateItem", (item, changed, _opts, userId) => {
-  try {
-    if (userId !== game.user?.id || item?.type !== "armor" || changed?.system?.equipped !== true) return;
-    const actor = item.parent; if (!actor?.items) return;
-    try { if (actorKind(actor) === "monster") return; } catch (_e) {}
-    const slot = _ftArmorSlot(item);
-    const off = actor.items.filter(i => i.type === "armor" && i.id !== item.id && i.system?.equipped !== false && _ftArmorSlot(i) === slot).map(i => ({ _id: i.id, "system.equipped": false }));
-    if (off.length) actor.updateEmbeddedDocuments("Item", off);
-  } catch (e) { console.warn("[fourththing] armor slot swap failed", e); }
-});
 function _ftRigOnAnyScene(rig) {
   if (!rig) return false;
   return !!game.scenes?.some?.(sc => sc.tokens?.some?.(t => t.actorId === rig.id));

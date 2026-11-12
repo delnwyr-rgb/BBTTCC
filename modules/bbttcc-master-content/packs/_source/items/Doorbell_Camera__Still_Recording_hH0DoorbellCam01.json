@@ -1,0 +1,213 @@
+{
+  "_id": "hH0DoorbellCam01",
+  "name": "Doorbell Camera, Still Recording",
+  "type": "gear",
+  "img": "icons/tools/navigation/spyglass-telescope-brass.webp",
+  "system": {
+    "slot": "lens",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "bound-working",
+      "gadget"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>From Miss June's rare inventory: the camera from a porch on Mallwalker Lane, the night of the thirty-first. It has footage. It will show you the footage if you hold it to your eye, and it will also show you the next thirty seconds, which it should not have.</p><p><strong>Bound Working — Playback:</strong> Review the last thirty seconds from every angle: hidden or invisible things within 6 squares are revealed to you until your next turn, and you may not be surprised this round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A doorbell camera, unplugged for two centuries, with a live red light.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>From Miss June's rare inventory: the camera from a porch on Mallwalker Lane, the night of the thirty-first. It has footage. It will show you the footage if you hold it to your eye, and it will also show you the next thirty seconds, which it should not have.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "witness-glass",
+            "porchlight"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 70,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool × tech 2.0 (bound Working: Playback) × attuned",
+            "bound": "attuned",
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Playback",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "mind",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "self",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Review the last thirty seconds from every angle: hidden or invisible things within 6 squares are revealed to you until your next turn, and you may not be surprised this round.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "sight",
+              "reveal"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'It saw the kid come to the door. It is still seeing it.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "lens",
+              "function": "reveal",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Review the last thirty seconds from every angle: hidden or invisible things within 6 squares are revealed to you until your next turn, and you may not be surprised this round.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0DoorbellCam01"
+}

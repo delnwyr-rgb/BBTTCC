@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecAudit00001",
+  "name": "Audit Notice",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-official-capital.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>Audit Notice.</strong> Every purse at the table is frozen pending review. No marks may be spent by either side next exchange.</p><p><em>Play:</em> no marks may be spent by either side next exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "freezePurse",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3900000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecAudit00001"
+}

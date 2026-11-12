@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecStrike0001",
+  "name": "The Room Remembers Differently",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-torn-diagram-tan.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>The Room Remembers Differently.</strong> A page comes out of the minutes so cleanly that everyone agrees it was never there. Influence, Suspicion, scandal and the round go back to before the last exchange; the marks spent in it stay spent.</p><p><em>Play:</em> strike the last exchange from the record.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "strikeRecord",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3200000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecStrike0001"
+}

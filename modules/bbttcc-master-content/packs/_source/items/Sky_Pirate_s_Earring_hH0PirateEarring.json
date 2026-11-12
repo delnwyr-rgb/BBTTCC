@@ -1,0 +1,94 @@
+{
+  "_id": "hH0PirateEarring",
+  "name": "Sky-Pirate's Earring",
+  "type": "gear",
+  "img": "icons/commodities/treasure/trinket-wing-white.webp",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "worn"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Sklar Bjrornholt wore one; the other is on whoever took the last ship before this one. The bead is a drop of the high cold sky, and it wants to be up there, and it will pull you along.</p><p><em>Initiative +2 and +1 on Piloting checks while worn. Valhaulan boarders move first or not at all.</em></p><p>Worn (trinket) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "A gold hoop with a blue bead that is not glass.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Sklar Bjrornholt wore one; the other is on whoever took the last ship before this one. The bead is a drop of the high cold sky, and it wants to be up there, and it will pull you along.</p>",
+          "materialOf": [
+            "gold",
+            "sky-bead"
+          ],
+          "price": {
+            "marks": 85,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII talisman × bound free",
+            "bound": "free",
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 540
+          }
+        }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "piloting",
+            "bonus": 1
+          }
+        ],
+        "initiative": {
+          "bonus": 2
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0PirateEarring"
+}

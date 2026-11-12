@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecDrinks0001",
+  "name": "Round of Drinks on the House",
+  "type": "feat",
+  "img": "icons/consumables/drinks/alcohol-beer-stein-wooden-brown.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>Round of Drinks on the House.</strong> Somebody is paying and it is you. Every courtier at the table warms to your side by one.</p><p><em>Play:</em> +1 Favor with every courtier, your side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorAllPlus1",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3700000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecDrinks0001"
+}

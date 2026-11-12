@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecCounter001",
+  "name": "Counterfeit Truth, Notarized",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-brown-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>Counterfeit Truth, Notarized.</strong> A notary's seal on a thing nobody said. Your next stolen receipt plays as earned — no Suspicion, and the one you took it from never learns who carried it.</p><p><em>Play:</em> your next stolen receipt plays as earned.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "counterfeit",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3400000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecCounter001"
+}

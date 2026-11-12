@@ -1,0 +1,138 @@
+{
+  "_id": "hH0CandyCleaver1",
+  "name": "Inlaid Candy-Corn Cleaver",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-broad-red.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d8+1",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "blade",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "units": "sq"
+    },
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "graded",
+      "grade-inlaid",
+      "machete",
+      "cleaver"
+    ],
+    "effect": "A machete, Inlaid: +1 to hit and +1 damage. Confiscated from a child in 2077 and sharpened since by someone who was not one.",
+    "flavor": "Orange at the back, yellow at the edge, white where it bites.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Hollis Varn's. The blade is painted in three stripes like the candy and the paint has never chipped, which is not how paint works. He used it at the toll bar on the people who argued about the rate. There were not many arguments.</p><p><em>A machete, Inlaid: +1 to hit and +1 damage. Confiscated from a child in 2077 and sharpened since by someone who was not one.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "melee",
+          "frame": "weapon",
+          "signature": "Three stripes. Never chips.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hollis Varn's. The blade is painted in three stripes like the candy and the paint has never chipped, which is not how paint works. He used it at the toll bar on the people who argued about the rate. There were not many arguments.</p>",
+          "materialOf": [
+            "scrap-steel",
+            "enamel",
+            "toll-stamp"
+          ],
+          "price": {
+            "marks": 60,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII weapon (Inlaid +1) × bound free",
+            "bound": "free",
+            "saleBack": 24,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 150
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "attack": 1,
+        "damage": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0CandyCleaver1"
+}

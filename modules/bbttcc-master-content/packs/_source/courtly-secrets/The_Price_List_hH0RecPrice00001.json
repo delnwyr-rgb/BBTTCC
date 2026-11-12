@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecPrice00001",
+  "name": "The Price List",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-writing-brown.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>The Price List.</strong> Filed under WEATHER: who in this court wants what, and what it costs. Every courtier's favor toward both sides, and the court bonus each side carries, whispered to you alone.</p><p><em>Play:</em> every courtier's favor, both sides, whispered to you.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "namePrice",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3300000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecPrice00001"
+}

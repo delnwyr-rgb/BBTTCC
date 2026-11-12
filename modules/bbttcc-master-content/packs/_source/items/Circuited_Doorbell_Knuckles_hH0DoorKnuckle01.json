@@ -1,0 +1,276 @@
+{
+  "_id": "hH0DoorKnuckle01",
+  "name": "Circuited Doorbell Knuckles",
+  "type": "weapon",
+  "img": "icons/weapons/fist/claw-gauntlet-gray.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "brawl",
+    "damage": {
+      "formula": "1d6+2",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "chime",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "units": "sq"
+    },
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "graded",
+      "grade-circuited",
+      "bound-working",
+      "knuckles",
+      "fist",
+      "doorbell"
+    ],
+    "effect": "Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.",
+    "flavor": "Ding. Dong. Ditch.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Kickflip Lazarus wore them for the run-back and gave them to the one who skated it clean. Four doorbell buttons on a brass bar; hit something and every porch on Mallwalker Lane rings at once, two hundred years late.</p><p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per scene.)</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "melee",
+          "frame": "weapon",
+          "signature": "Four buttons. All of them ring.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Kickflip Lazarus wore them for the run-back and gave them to the one who skated it clean. Four doorbell buttons on a brass bar; hit something and every porch on Mallwalker Lane rings at once, two hundred years late.</p>",
+          "materialOf": [
+            "brass",
+            "pre-fall-component",
+            "witness-glass",
+            "doorbell-button"
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 2,
+              "max": 2,
+              "recoverPer": "scene"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          },
+          "price": {
+            "marks": 140,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII weapon (Circuited +2) × tech 2.0 (bound Working: Ding-Dong Ditch) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 56,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 900
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "attack": 2,
+        "damage": 2
+      },
+      "working": {
+        "power": {
+          "name": "Ding-Dong Ditch",
+          "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "body",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "self",
+            "range": "self",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.",
+            "tags": [
+              "bound-working",
+              "halloween-hoard",
+              "move",
+              "evade"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'The sport of kings. Very short kings.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "",
+              "form": "step",
+              "function": "move",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "1-round",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "evasion",
+                    "op": "+",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.</p>",
+              "chat": ""
+            }
+          }
+        },
+        "charges": {
+          "value": 2,
+          "max": 2,
+          "recoverPer": "scene"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "effects": [],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0DoorKnuckle01"
+}

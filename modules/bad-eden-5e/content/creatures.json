@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.11.0",
-    "at": "2026-11-01",
+    "at": "2026-11-09",
     "overridesApplied": 0
   },
   "actors": [
@@ -663,7 +663,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "17"
+                    "formula": "18"
                   }
                 }
               }
@@ -1943,7 +1943,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "18"
+                    "formula": "16"
                   }
                 }
               }
@@ -6556,7 +6556,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "18"
+                    "formula": "16"
                   }
                 }
               }
@@ -8950,7 +8950,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "13"
                   }
                 }
               }
@@ -10489,7 +10489,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>Release a saturated wave. Each creature within near makes a Wisdom saving throw; on failure, take 2d6 sephirotic damage and become Charmed for one exchange (they see only beauty in the Elemental).</p><p><em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within near range makes a Wisdom saving throw (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed for one exchange — it sees only beauty in the Elemental.</p>\n\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p><p><strong>When it uses this:</strong> deal 2d6 sephirotic damage; the target is charmed until the end of its next turn.</p>",
+              "value": "<p>Release a saturated wave. Each creature within 15 ft of the Elemental makes a Wisdom save; on a failure it takes 2d6 sephirotic damage and is Charmed by the Elemental for 1 round — it sees only beauty in it and can't attack it. A save negates both.</p><p><em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within 15 ft of the Elemental makes a Wisdom save (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed by the Elemental for 1 round — it sees only beauty in the Elemental and can't attack it. A save negates both.</p>\n\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p><p><strong>When it uses this:</strong> deal 2d6 sephirotic damage; the target is charmed until the end of its next turn.</p>",
               "chat": ""
             },
             "type": {
@@ -10545,8 +10545,8 @@
                   }
                 ],
                 "range": {
-                  "value": "60",
-                  "units": "ft",
+                  "value": "",
+                  "units": "self",
                   "special": "",
                   "override": false
                 },
@@ -10561,8 +10561,8 @@
                     "units": ""
                   },
                   "affects": {
-                    "count": "1",
-                    "type": "creature",
+                    "count": "",
+                    "type": "self",
                     "choice": false,
                     "special": ""
                   },
@@ -10574,6 +10574,12 @@
                   "recovery": []
                 },
                 "appliedEffects": [],
+                "roll": {
+                  "formula": "",
+                  "name": "",
+                  "prompt": false,
+                  "visible": false
+                },
                 "save": {
                   "ability": [
                     "wis"
@@ -10590,22 +10596,6 @@
                     "bonus": ""
                   },
                   "parts": [
-                    {
-                      "custom": {
-                        "enabled": false,
-                        "formula": ""
-                      },
-                      "number": 2,
-                      "denomination": 6,
-                      "bonus": "",
-                      "types": [
-                        "sephirotic"
-                      ],
-                      "scaling": {
-                        "mode": "",
-                        "number": 1
-                      }
-                    },
                     {
                       "custom": {
                         "enabled": false,
@@ -10775,7 +10765,7 @@
             "id": "a9orjOV99MnMObho",
             "pack": "npcs",
             "identifier": "CACA",
-            "hash": "f5b3d287cd05"
+            "hash": "0bf673fbe30b"
           }
         }
       }
@@ -15718,7 +15708,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "13"
+                    "formula": "12"
                   }
                 }
               }
@@ -28475,7 +28465,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "14"
+                    "formula": "13"
                   }
                 }
               }
@@ -29262,7 +29252,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "14"
                   }
                 }
               }
@@ -30883,7 +30873,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "17"
+                    "formula": "16"
                   }
                 }
               }
@@ -37406,7 +37396,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "13"
                   }
                 }
               }
@@ -45388,7 +45378,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "16"
+                    "formula": "17"
                   }
                 }
               }
@@ -45720,7 +45710,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>The Shambler's mouth opens onto a place that isn't here. Each creature within near makes a Wisdom saving throw; on a failure, take 2d6 qliphothic damage  and become Frightened until the start of their next turn.</p><p><em>Ambient hunger spilled outward from a wound that never closed.</em></p>\n<p>The shambler's mouth opens onto a place that isn't here. Each creature within near range makes a Wisdom saving throw (DC by tier); on a failure it takes 2d6 qliphothic damage  and is Frightened until the start of its next turn.</p>\n\n<p><em>The room briefly tastes of iron and a memory you didn't have.</em></p><p><strong>When it uses this:</strong> deal 2d6 qliphothic damage; the target is frightened until the end of its next turn.</p>",
+              "value": "<p>The Shambler's mouth opens onto a place that isn't here. Each creature within 15 ft of it makes a Wisdom save; on a failure it takes 2d6 qliphothic damage  and is Frightened for 1 round. A save negates both.</p><p><em>Ambient hunger spilled outward from a wound that never closed.</em></p>\n<p>The shambler's mouth opens onto a place that isn't here. Each creature within 15 ft of it makes a Wisdom save (DC by tier); on a failure it takes 2d6 qliphothic damage  and is Frightened for 1 round. A save negates both.</p>\n\n<p><em>The room briefly tastes of iron and a memory you didn't have.</em></p><p><strong>When it uses this:</strong> deal 2d6 qliphothic damage; the target is frightened until the end of its next turn.</p>",
               "chat": ""
             },
             "type": {
@@ -45776,8 +45766,8 @@
                   }
                 ],
                 "range": {
-                  "value": "60",
-                  "units": "ft",
+                  "value": "",
+                  "units": "self",
                   "special": "",
                   "override": false
                 },
@@ -45792,8 +45782,8 @@
                     "units": ""
                   },
                   "affects": {
-                    "count": "1",
-                    "type": "creature",
+                    "count": "",
+                    "type": "self",
                     "choice": false,
                     "special": ""
                   },
@@ -45805,6 +45795,12 @@
                   "recovery": []
                 },
                 "appliedEffects": [],
+                "roll": {
+                  "formula": "",
+                  "name": "",
+                  "prompt": false,
+                  "visible": false
+                },
                 "save": {
                   "ability": [
                     "wis"
@@ -45821,22 +45817,6 @@
                     "bonus": ""
                   },
                   "parts": [
-                    {
-                      "custom": {
-                        "enabled": false,
-                        "formula": ""
-                      },
-                      "number": 2,
-                      "denomination": 6,
-                      "bonus": "",
-                      "types": [
-                        "qliphothic"
-                      ],
-                      "scaling": {
-                        "mode": "",
-                        "number": 1
-                      }
-                    },
                     {
                       "custom": {
                         "enabled": false,
@@ -45980,7 +45960,7 @@
             "id": "dskzJNdpkiTFEbik",
             "pack": "npcs",
             "identifier": "Qliphothic Shambler",
-            "hash": "726540529ad9"
+            "hash": "0a85b23a6411"
           }
         }
       }
@@ -48160,7 +48140,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "12"
+                    "formula": "11"
                   }
                 }
               }
@@ -50387,7 +50367,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "14"
+                    "formula": "12"
                   }
                 }
               }
@@ -53595,7 +53575,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "13"
                   }
                 }
               }
@@ -56273,7 +56253,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "16"
                   }
                 }
               }
@@ -56466,7 +56446,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "15"
+                    "formula": "16"
                   }
                 }
               }
@@ -56667,7 +56647,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>Phase the Wraith partially out of the current frame. Until the start of its next turn, attackers advantage on attacks against it; on each missed attack, the attacker takes 1d6 qliphothic damage as the slip bleeds back into them.</p><p><em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attackers have disadvantage on attacks against it; each missed attack costs the attacker 1d6 qliphothic damage  as the slip bleeds back into them.</p>\n\n<p><em>The air around it remembers things that didn't happen.</em></p><p><strong>When it uses this:</strong> Each miss costs the attacker 1d6 qliphothic damage..</p>",
+              "value": "<p>Phase the Wraith partially out of the current frame. Until the start of its next turn, attacks against it roll with disadvantage, and each attack that misses it deals 1d6 qliphothic damage to the attacker's Stress as the slip bleeds back into them.</p><p><em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attacks against it roll with disadvantage, and each attack that misses it deals 1d6 qliphothic damage to the attacker's Stress as the slip bleeds back into them.</p>\n\n<p><em>The air around it remembers things that didn't happen.</em></p><p><strong>When it uses this:</strong> Each miss costs the attacker 1d6 qliphothic damage..</p>",
               "chat": ""
             },
             "type": {
@@ -56891,7 +56871,7 @@
             "id": "CdNx8WLo0aZO6q8c",
             "pack": "npcs",
             "identifier": "Slippage Wraith",
-            "hash": "d828022f8106"
+            "hash": "72152454bf28"
           }
         }
       }
@@ -60145,7 +60125,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "17"
+                    "formula": "16"
                   }
                 }
               }
@@ -65100,7 +65080,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>A luminous bough extends from the bark. The named target must speak the truest thing they fear; on a failed Resolve, take 2d6 sephirotic damage applied  and Calmed for one exchange while the tree weighs the answer.</p><p><em>A bough that interrogates by judgment.</em></p>\n<p>A luminous bough extends from the bark toward one creature within near range. The target must speak the truest thing they fear; on a failed Wisdom saving throw (DC by tier), they take 3d6 sephirotic damage  and are Calmed for one exchange while the tree weighs the answer.</p>\n\n<p><em>Bark grows over the wound and sings hymns until they answer.</em></p><p><strong>When it uses this:</strong> deal 2d6 sephirotic damage; the target is charmed (it can't willingly take violent action) until the end of its next turn; The 2d6 goes ..</p>",
+              "value": "<p>A luminous bough extends from the bark toward one creature within 30 ft. The target must speak the truest thing it fears and makes a Wisdom save; on a failure it takes 2d6 psychic damage  — sephirotic judgment — and is Calmed for 1 round while the tree weighs the answer. A save negates both.</p><p><em>A bough that interrogates by judgment.</em></p>\n<p>A luminous bough extends from the bark toward one creature within 30 ft. The target must speak the truest thing it fears and makes a Wisdom save (DC by tier); on a failure it takes 2d6 psychic damage  — sephirotic judgment — and is Calmed for 1 round while the tree weighs the answer. A save negates both.</p>\n\n<p><em>Bark grows over the wound and sings hymns until they answer.</em></p><p><strong>When it uses this:</strong> deal 2d6 psychic damage; the target is charmed (it can't willingly take violent action) until the end of its next turn; The 2d6 goes ..</p>",
               "chat": ""
             },
             "type": {
@@ -65185,6 +65165,12 @@
                   "recovery": []
                 },
                 "appliedEffects": [],
+                "roll": {
+                  "formula": "",
+                  "name": "",
+                  "prompt": false,
+                  "visible": false
+                },
                 "save": {
                   "ability": [
                     "wis"
@@ -65206,27 +65192,11 @@
                         "enabled": false,
                         "formula": ""
                       },
-                      "number": 3,
-                      "denomination": 6,
-                      "bonus": "",
-                      "types": [
-                        "sephirotic"
-                      ],
-                      "scaling": {
-                        "mode": "",
-                        "number": 1
-                      }
-                    },
-                    {
-                      "custom": {
-                        "enabled": false,
-                        "formula": ""
-                      },
                       "number": 2,
                       "denomination": 6,
                       "bonus": "",
                       "types": [
-                        "sephirotic"
+                        "psychic"
                       ],
                       "scaling": {
                         "mode": "",
@@ -65378,7 +65348,7 @@
             "id": "Wlk2fVGEGJKgROfD",
             "pack": "npcs",
             "identifier": "The Tree Person of Early Tifaret",
-            "hash": "8834e89a92d6"
+            "hash": "80ba345bb207"
           }
         }
       }
@@ -66029,7 +65999,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 fire to hit points. Vow lasts one scene; only one Spark Vow may be active at a time.</p><p><em>A martial pact with a sky that keeps score.</em></p>\n<p>Name a target within far range and speak a vow against them. The next time that target misses an attack against the adept or an ally, lightning answers: it takes 2d8 lightning damage. The vow lasts one scene; only one Spark Vow may be active at a time.</p>\n\n<p><em>Ozone smell, and a bell rings somewhere in Valhaul.</em></p><p><strong>When it uses this:</strong> Spark Vow: name a target; its next miss vs the adept or an ally → 2d8 electrical to it..</p>",
+              "value": "<p>Name a creature within 60 ft and speak a vow against it. The next time it misses an attack against the Adept or one of the Adept's allies, lightning answers — it takes 2d8 lightning damage and the vow ends. The vow lasts the scene; the Adept holds one vow at a time, and a new vow moves it.</p><p><em>A martial pact with a sky that keeps score.</em></p>\n<p>Name a creature within 60 ft and speak a vow against it. The next time it misses an attack against the adept or one of the adept's allies, lightning answers: it takes 2d8 lightning damage and the vow ends. The vow lasts the scene; the adept holds one vow at a time, and a new vow moves it.</p>\n\n<p><em>Ozone smell, and a bell rings somewhere in Valhaul.</em></p><p><strong>When it uses this:</strong> Spark Vow: name a target; its next miss vs the adept or an ally → 2d8 electrical to it..</p>",
               "chat": ""
             },
             "type": {
@@ -66050,7 +66020,7 @@
             "activities": {
               "f03a3da658ca0000": {
                 "_id": "f03a3da658ca0000",
-                "type": "save",
+                "type": "utility",
                 "name": "",
                 "img": "",
                 "sort": 0,
@@ -66109,39 +66079,11 @@
                   "recovery": []
                 },
                 "appliedEffects": [],
-                "save": {
-                  "ability": [
-                    "str"
-                  ],
-                  "dc": {
-                    "calculation": "",
-                    "formula": "14"
-                  }
-                },
-                "damage": {
-                  "onSave": "half",
-                  "critical": {
-                    "allow": false,
-                    "bonus": ""
-                  },
-                  "parts": [
-                    {
-                      "custom": {
-                        "enabled": false,
-                        "formula": ""
-                      },
-                      "number": 2,
-                      "denomination": 8,
-                      "bonus": "",
-                      "types": [
-                        "lightning"
-                      ],
-                      "scaling": {
-                        "mode": "",
-                        "number": 1
-                      }
-                    }
-                  ]
+                "roll": {
+                  "formula": "",
+                  "name": "",
+                  "prompt": false,
+                  "visible": false
                 }
               }
             },
@@ -66158,7 +66100,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>While wielding a martial Form, +1 AC. While the ward holds, bludgeoning, piercing, or slashing damage you deal counts as energy.</p><p><em>A bright halo around the haft of any weapon.</em></p>\n<p>While wielding a martial Form, the adept has +1 AC. While the ward holds, bludgeoning, piercing, or slashing damage the adept deals counts as electrical.</p>\n\n<p><em>Sparks crawl up the haft.</em></p>",
+              "value": "<p>For the scene, the Adept has +1 AC while it wields a melee or unarmed Form, and bludgeoning, piercing, or slashing damage it deals is dealt as electrical.</p><p><em>A bright halo around the haft of any weapon.</em></p>\n<p>For the scene, the adept has +1 AC while it wields a melee or unarmed Form, and bludgeoning, piercing, or slashing damage it deals is dealt as electrical.</p>\n\n<p><em>Sparks crawl up the haft.</em></p>",
               "chat": ""
             },
             "type": {
@@ -66327,7 +66269,7 @@
             "id": "ZOttfT1AftTApkwf",
             "pack": "npcs",
             "identifier": "Valhaulan Spark Adept",
-            "hash": "b704b99e8118"
+            "hash": "bb58563d5444"
           }
         }
       }
@@ -71855,7 +71797,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "18"
+                    "formula": "16"
                   }
                 }
               }
@@ -74137,7 +74079,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "16"
+                    "formula": "14"
                   }
                 }
               }
@@ -74870,7 +74812,7 @@
                   ],
                   "dc": {
                     "calculation": "",
-                    "formula": "13"
+                    "formula": "12"
                   }
                 }
               }

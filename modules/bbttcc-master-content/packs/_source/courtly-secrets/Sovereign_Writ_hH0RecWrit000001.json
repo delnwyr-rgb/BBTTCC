@@ -1,0 +1,46 @@
+{
+  "_id": "hH0RecWrit000001",
+  "name": "Sovereign Writ",
+  "type": "feat",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-red-gold.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "halloween-hoard"
+    ],
+    "description": {
+      "value": "<p><strong>Sovereign Writ.</strong> A writ with a seal older than the court. Produce it and the next exchange is simply yours — the dice are read, and the record says you won by at least three.</p><p><em>Play:</em> you win the next exchange outright.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "decree",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3600000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0RecWrit000001"
+}

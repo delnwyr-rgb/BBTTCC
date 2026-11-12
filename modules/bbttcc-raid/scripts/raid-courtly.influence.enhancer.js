@@ -360,11 +360,23 @@
       label = "Parley",
       performance = null,             // PERFORMANCE MODE (2026-10-04): a profile key or object — see raid-performance below
       goal = "persuade",              // ALPHA CUT ruling 3: persuade | deceive | impress | unnoticed — one per Parley
-      domainStrength = null           // ALPHA CUT ruling 5: { atk:{dip,soft}, def:{dip,soft} } in OP — Influence from what the Domain owns, nothing debited
+      domainStrength = null,          // ALPHA CUT ruling 5: { atk:{dip,soft}, def:{dip,soft} } in OP — Influence from what the Domain owns, nothing debited
+      audience = null,                // 2026-11-11 (Dave): who is being swayed — observers | judges | jury | crowd | court (raid.audienceWords)
+      restore = null                  // 2026-11-11: a saved state (the courtlyActive mirror) — rebuild the SAME Parley after a GM reload: nothing charged again, no scars / door re-consumed
     } = {}) {
       const A = game.actors.get(String(attackerId||"").replace(/^Actor\./,""));
       const D = game.actors.get(String(defenderId||"").replace(/^Actor\./,""));
       if (!A || !D) throw new Error(`${TAG} attacker or defender not found`);
+      const RESTORE = (restore && typeof restore === "object" && restore.outcome === "ongoing"
+        && String(restore.attackerId) === A.id && String(restore.defenderId) === D.id) ? restore : null;
+      // A restore that doesn't fit (ended, or another pairing) must never quietly open a NEW Parley — that would consume
+      // scars / the door again. The caller decides what to do.
+      if (restore && !RESTORE) throw new Error(`${TAG} restore refused — that Parley is over or belongs to another pairing`);
+      if (RESTORE) {
+        goal = RESTORE.goal || goal;
+        performance = RESTORE.performance?.key || null;
+        label = RESTORE.label || label;
+      }
 
       // Spend initial commitment OPs & compute starting Influence HP
       // Spends are OP; banks store marks. Clamp to what each side can pay,
@@ -385,7 +397,7 @@
         atkInitSoft = Math.max(0, Math.floor(Number(domainStrength.atk?.soft || 0)));
         defInitDip = Math.max(0, Math.floor(Number(domainStrength.def?.dip || 0)));
         defInitSoft = Math.max(0, Math.floor(Number(domainStrength.def?.soft || 0)));
-      } else {
+      } else if (!RESTORE) {
       const atkInitDipM = Math.min(_m10(atkInitDip), bankOpOf(A, FUEL1));   // marks
       const atkInitSoftM = Math.min(_m10(atkInitSoft), bankOpOf(A, FUEL2));   // marks
       const defInitDipM = Math.min(_m10(defInitDip), bankOpOf(D, FUEL1));   // marks
@@ -413,11 +425,11 @@
       // after consume per [[foundry-setflag-recursive-merge]].
       const aCapDelta = Number(A.flags?.["bbttcc-raid"]?.nextCourtlyInfluenceCapDelta || 0);
       const dCapDelta = Number(D.flags?.["bbttcc-raid"]?.nextCourtlyInfluenceCapDelta || 0);
-      if (aCapDelta) {
+      if (aCapDelta && !RESTORE) {
         initInfluenceA = Math.max(1, initInfluenceA + aCapDelta);
         await A.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
-      if (dCapDelta) {
+      if (dCapDelta && !RESTORE) {
         initInfluenceD = Math.max(1, initInfluenceD + dCapDelta);
         await D.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
@@ -461,8 +473,11 @@
         pendingMods: [],
         history: [],
         performance: PERF ? { key: PERF.key, label: PERF.label, crowd: PERF.crowd || "the Crowd", foul: PERF.foul || null, actions: Object.fromEntries(Object.entries(PERF.actions || {}).map(([k, v]) => [k, v?.label || k])) } : null,
-        foulBy: null
+        foulBy: null,
+        audienceKey: (raidApi.audienceWords?.(audience)?.key) || "observers"
       };
+      if (RESTORE) { try { Object.assign(state, structuredClone(RESTORE)); } catch (_eR) { Object.assign(state, JSON.parse(JSON.stringify(RESTORE))); } }
+      const AUD = () => (raidApi.audienceWords?.(state) || { one: "observer", many: "observers", One: "Observer", Many: "Observers" });
 
       // Phase E — Consume pending Scandal Scars on both factions. Each scar
       // queues a one-shot penalty mod that fires at a specific round, then
@@ -493,8 +508,10 @@
         }
         if (mutated) await actor.update({ "flags.bbttcc-raid.scandalScars": scars });
       }
-      await _consumeScarsForSide(A, "A");
-      await _consumeScarsForSide(D, "D");
+      if (!RESTORE) {
+        await _consumeScarsForSide(A, "A");
+        await _consumeScarsForSide(D, "D");
+      }
 
       // Conversation door (bbttcc-mal-voice on-ramp): an NPC ushered the
       // attacker into THIS court in dialogue (open_court_door tool). Consumed
@@ -503,7 +520,7 @@
       // (+2 on the first exchange); conceded = grudging access (+1, and the
       // court starts wary at Suspicion 1). Flag deleted after consume per
       // [[foundry-setflag-recursive-merge]].
-      const door = A.flags?.[MOD_R]?.courtlyDoor;
+      const door = RESTORE ? null : A.flags?.[MOD_R]?.courtlyDoor;
       if (door && String(door.defenderId || "") === D.id) {
         const invited = door.method !== "conceded";
         state.pendingMods.push({
@@ -520,7 +537,7 @@
         await sendChat([
           `${esc(door.npcName || "An insider")} holds the door: ${invited
             ? `${esc(A.name)} enters on a warm introduction (+2 on the first exchange).`
-            : `${esc(A.name)} pushed their way in (+1 on the first exchange, but the court is already wary — Suspicion starts at 1).`}`
+            : `${esc(A.name)} pushed their way in (+1 on the first exchange, but the ${AUD().many} are already wary — Suspicion starts at 1).`}`
         ], { title: `${label}: The Door Was Opened In Conversation` });
       }
 
@@ -542,6 +559,13 @@
         defOpBonus = 0,
         atkSweeten = 0,   // ruling 5: Sweeten the deal — marks to the OTHER side, in the open
         defSweeten = 0,
+        // Maneuvers + staged marks (2026-11-11): the console's pre-roll consumer (B3) and the staged-marks bonus land here,
+        // OUTSIDE the backing cap — they were paid for. Modes: "normal" | "adv" | "dis" (roll twice, keep the better / worse).
+        atkManBonus = 0,
+        defManBonus = 0,
+        atkMode = "normal",
+        defMode = "normal",
+        manNotes = [],
         note = ""
       } = {}) {
         if (state.outcome !== "ongoing") {
@@ -660,7 +684,7 @@
         const capNotes = [];
         const _capBacking = (opInt, cb, who) => {
           const over = Math.max(0, opInt + Math.max(0, cb) - COURTLY_BACKING_CAP);
-          if (over > 0) capNotes.push(`${who} backing capped at +${COURTLY_BACKING_CAP} (coalition +${opInt}, court ${cb >= 0 ? "+" : ""}${cb}).`);
+          if (over > 0) capNotes.push(`${who} backing capped at +${COURTLY_BACKING_CAP} (allies +${opInt}, ${AUD().many} ${cb >= 0 ? "+" : ""}${cb}).`);
           return over;
         };
         atkBonus -= _capBacking(atkOpBonusInt, courtBonusA, "Attacker");
@@ -676,6 +700,11 @@
           if (defAct === "persuade") defBonus -= 1;
         }
 
+        // Maneuvers + staging (paid, so never capped).
+        const atkManInt = Math.trunc(Number(atkManBonus) || 0), defManInt = Math.trunc(Number(defManBonus) || 0);
+        atkBonus += atkManInt;
+        defBonus += defManInt;
+
         // Apply scandal penalties (–2 next exchange)
         if (state.scandalOnA) atkBonus -= 2;
         if (state.scandalOnD) defBonus -= 2;
@@ -687,6 +716,7 @@
         //           (heavy = round 1 + round 2 split). Mods with fireOnRound
         //           set are skipped on non-matching rounds; carried forward.
         let forceAReroll = false, forceDReroll = false;
+        let truce = false, decree = null;   // Halloween hoard receipts (2026-10-31): Recess / Sovereign Writ, queued as pendingMods
         const consumedMods = [];
         const carriedMods = [];
         for (const mod of (state.pendingMods || [])) {
@@ -699,8 +729,10 @@
           }
           if (mod.type === "bonus" && mod.side === "A") { atkBonus += Number(mod.value || 0); consumedMods.push(`atk ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
           else if (mod.type === "bonus" && mod.side === "D") { defBonus += Number(mod.value || 0); consumedMods.push(`def ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
-          else if (mod.type === "forceReroll" && mod.side === "A") { forceAReroll = true; consumedMods.push(`atk forced reroll (${mod.source || "secret"})`); }
-          else if (mod.type === "forceReroll" && mod.side === "D") { forceDReroll = true; consumedMods.push(`def forced reroll (${mod.source || "secret"})`); }
+          else if (mod.type === "forceReroll" && mod.side === "A") { forceAReroll = true; consumedMods.push(`atk forced to reroll — rolls twice, keeps the worse (${mod.source || "secret"})`); }
+          else if (mod.type === "forceReroll" && mod.side === "D") { forceDReroll = true; consumedMods.push(`def forced to reroll — rolls twice, keeps the worse (${mod.source || "secret"})`); }
+          else if (mod.type === "truce") { truce = true; consumedMods.push(`recess — no Influence lost this exchange (${mod.source || "receipt"})`); }
+          else if (mod.type === "decree" && (mod.side === "A" || mod.side === "D")) { decree = mod.side; consumedMods.push(`${mod.side === "A" ? "atk" : "def"} wins this exchange outright (${mod.source || "receipt"})`); }
           else if (mod.type === "actionBonus") {
             const sideAct = mod.side === "A" ? atkAct : defAct;
             const filter = Array.isArray(mod.actionFilter) ? mod.actionFilter : [];
@@ -720,14 +752,25 @@
         let nextScandalOnA = false;
         let nextScandalOnD = false;
 
-        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04). A forced reroll throws the first roll away,
-        // so the first is plain and the armed die rides the roll that counts.
+        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04). The armed die rides the first throw.
+        // Advantage / disadvantage (maneuvers) = a second plain throw, keep the better / worse. A forced reroll
+        // ("force your opponent to reroll", 2026-11-11) used to throw again and keep the new roll — statistically
+        // nothing. It now bites: that side rolls twice and keeps the worse (cancels an advantage).
         const _courtRoll = (bonus, faction) => (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @b", { b: bonus }, { faction }) ?? new Roll("2d10x10 + @b", { b: bonus }).evaluate());
         const _plainRoll = (bonus) => new Roll("2d10x10 + @b", { b: bonus }).evaluate();
-        let atkRoll = forceAReroll ? await _plainRoll(atkBonus) : await _courtRoll(atkBonus, A);
-        let defRoll = forceDReroll ? await _plainRoll(defBonus) : await _courtRoll(defBonus, D);
-        if (forceAReroll) atkRoll = await _courtRoll(atkBonus, A);
-        if (forceDReroll) defRoll = await _courtRoll(defBonus, D);
+        const _modeOf = (m) => { const k = String(m || "normal").toLowerCase(); return (k === "adv" || k === "advantage") ? "adv" : (k === "dis" || k === "disadvantage") ? "dis" : "normal"; };
+        let aMode = _modeOf(atkMode), dMode = _modeOf(defMode);
+        if (forceAReroll) aMode = (aMode === "adv") ? "normal" : "dis";
+        if (forceDReroll) dMode = (dMode === "adv") ? "normal" : "dis";
+        const _rollMode = async (bonus, faction, mode) => {
+          const r1 = await _courtRoll(bonus, faction);
+          if (mode === "normal") return r1;
+          const r2 = await _plainRoll(bonus);
+          const t1 = Number(r1.total ?? 0), t2 = Number(r2.total ?? 0);
+          return (mode === "adv") ? (t2 > t1 ? r2 : r1) : (t2 < t1 ? r2 : r1);
+        };
+        let atkRoll = await _rollMode(atkBonus, A, aMode);
+        let defRoll = await _rollMode(defBonus, D, dMode);
 
         const atkTotal = atkRoll.total ?? 0;
         const defTotal = defRoll.total ?? 0;
@@ -741,11 +784,19 @@
         } else {
           result = "defender";
         }
+        // Sovereign Writ (2026-10-31): the decreed side wins this exchange outright — the dice still show, the record reads a 3-point win
+        // at least (a Writ is not a rout). Scandal / backlash / Suspicion then follow the forced result as they would any other.
+        if (decree === "A") { result = "attacker"; if (margin < 3) margin = 3; }
+        else if (decree === "D") { result = "defender"; if (margin > -3) margin = -3; }
 
         // Influence damage
         let damageToD = 0;
         let damageToA = 0;
-        let extraNotes = [...capNotes, ...sweetNotes];
+        let extraNotes = [...capNotes, ...sweetNotes, ...(Array.isArray(manNotes) ? manNotes.map(n => foundry.utils.escapeHTML(String(n))) : [])];
+        if (aMode !== "normal") extraNotes.push(`${foundry.utils.escapeHTML(A.name)} rolled twice and kept the ${aMode === "adv" ? "better" : "worse"}.`);
+        if (dMode !== "normal") extraNotes.push(`${foundry.utils.escapeHTML(D.name)} rolled twice and kept the ${dMode === "adv" ? "better" : "worse"}.`);
+        if (decree) extraNotes.push(`Sovereign Writ: ${decree === "A" ? A.name : D.name} wins this exchange by decree.`);
+        if (truce)  extraNotes.push("Recess: nobody loses Influence this exchange — the table talked, and the record shows it.");
 
         if (result === "attacker") {
           const dmg = Math.max(1, Math.abs(margin));
@@ -780,6 +831,7 @@
         }
 
         // Apply damage
+        if (truce) { damageToA = 0; damageToD = 0; }   // Recess (2026-10-31)
         const beforeA = state.influenceA;
         const beforeD = state.influenceD;
         state.influenceA = Math.max(0, state.influenceA - damageToA);
@@ -863,7 +915,7 @@
               await neutralToken.actor.update({ [`flags.${MOD_R}.courtFavor`]: cf });
               extraNotes.push(`Crisis (suspicion ≥ 8): ${neutralToken.actor.name} defects to the ${higherSideId === state.attackerId ? "attacker" : "defender"}'s side (favor +1).`);
             } else {
-              extraNotes.push(`Crisis (suspicion ≥ 8): no neutral courtier available to defect.`);
+              extraNotes.push(`Crisis (suspicion ≥ 8): no neutral ${AUD().one} available to defect.`);
             }
           } catch (e) { console.warn(TAG, "threshold-8 defect failed", e); }
         }
@@ -871,7 +923,7 @@
         // Phase E will replace with the full Public Humiliation 5-outcome.
         if (!_suspOff() && state.suspicion >= 10 && !state.courtCollapsed) {
           state.courtCollapsed = true;
-          extraNotes.push(`Collapse (suspicion = 10): the court turns on the noisier side.`);
+          extraNotes.push(`Collapse (suspicion = 10): the ${AUD().many} turn on the noisier side.`);
         }
 
         // Determine outcome (collapse may force; otherwise damage-based)
@@ -952,7 +1004,7 @@
           if (opb > 0) parts.push(`coalition ${k} +${opb}`);
           return parts.length ? ` <small style="opacity:.7;">(${parts.join(", ")})</small>` : "";
         };
-        const _cbLine = (cb) => cb !== 0 ? ` <small style="opacity:.7;">(court ${cb > 0 ? "+" : ""}${cb})</small>` : "";
+        const _cbLine = (cb) => cb !== 0 ? ` <small style="opacity:.7;">(${AUD().many} ${cb > 0 ? "+" : ""}${cb})</small>` : "";
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
           `Actions: Attacker <i>${foundry.utils.escapeHTML(_nm(atkAct))}</i> (spend ${atkSpendInt})${_opLine("atk", atkKey || "", atkOpBonusInt)}${_cbLine(courtBonusA)} vs Defender <i>${foundry.utils.escapeHTML(_nm(defAct))}</i> (spend ${defSpendInt})${_opLine("def", defKey || "", defOpBonusInt)}${_cbLine(courtBonusD)}`,
@@ -1093,6 +1145,90 @@
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
         return true;
       }
+      // ── Halloween hoard receipts (2026-10-31) — the reality-bending set. Each is a one-shot the step() consumes or a state edit. ──
+      // Recess: the NEXT exchange deals no Influence damage to either side (scandal, Suspicion and marks still happen).
+      function queueTruce(source = "receipt") {
+        state.pendingMods.push({ side: "both", type: "truce", source });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+      // Sovereign Writ: the side wins the NEXT exchange outright (result forced, margin at least 3 in their favour).
+      function queueDecree(side, source = "receipt") {
+        const s = _normSide(side);
+        if (!s) return false;
+        state.pendingMods.push({ side: s, type: "decree", source });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+      // The Room Remembers Differently: strike the LAST exchange from the record — Influence, Suspicion, scandal and the round
+      // counter go back to where they stood before it. Marks spent and receipts played in it stay spent (the table remembers
+      // the money, if not the words). Only while the court is ongoing; a foul round cannot be struck.
+      async function undoLastExchange(source = "receipt") {
+        if (state.outcome !== "ongoing") return { ok: false, why: "the court has concluded" };
+        const h = Array.isArray(state.history) ? state.history : [];
+        const last = h.length ? h[h.length - 1] : null;
+        if (!last || last.foul || typeof last.influenceA_before !== "number") return { ok: false, why: "no exchange on the record to strike" };
+        h.pop();
+        const prev = h.length ? h[h.length - 1] : null;
+        state.influenceA = Math.max(0, Number(last.influenceA_before) || 0);
+        state.influenceD = Math.max(0, Number(last.influenceD_before) || 0);
+        if (typeof last.suspicion_before === "number") state.suspicion = Math.max(0, last.suspicion_before);
+        state.scandalOnA = !!(prev && prev.scandalOnA);
+        state.scandalOnD = !!(prev && prev.scandalOnD);
+        state.courtCollapsed = false;
+        state.round = Math.max(0, Number(state.round) - 1);
+        await sendChat([`The room remembers differently: exchange ${last.round} is struck from the record. ${foundry.utils.escapeHTML(A.name)} ${state.influenceA} · ${foundry.utils.escapeHTML(D.name)} ${state.influenceD}${state.suspicionEnabled ? ` · Suspicion ${state.suspicion}` : ""} <small style=\"opacity:.7;\">(${foundry.utils.escapeHTML(source)})</small>`], { title: `${label}: Struck` });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return { ok: true, round: last.round };
+      }
+      // Name the Price: every courtier's favor toward BOTH sides, plus the court bonus each side carries — whispered to the asking
+      // side's seats and the GM only (it is their receipt; the other side bought no price list).
+      async function revealCourt(side, source = "receipt") {
+        const s = _normSide(side);
+        if (!s) return { ok: false, why: "no side" };
+        const selfFid = s === "A" ? state.attackerId : state.defenderId, oppFid = s === "A" ? state.defenderId : state.attackerId;
+        const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);
+        const rows = tokens.map(t => t?.actor).filter(Boolean).map(c => `· <b>${esc(c.name)}</b> — ${_favorOf(c, selfFid)} toward you, ${_favorOf(c, oppFid)} toward them`);
+        const bonusLine = `${AUD().Many}' favor this round: ${esc(A.name)} +${Number(state.courtBonusA) || 0} · ${esc(D.name)} +${Number(state.courtBonusD) || 0}`;
+        const faction = game.actors?.get?.(selfFid);
+        const whisper = (game.users?.contents ?? []).filter(u => u.isGM || (faction && faction.testUserPermission?.(u, "OWNER"))).map(u => u.id);
+        const lines = rows.length ? rows : [`<i>No ${AUD().many} are marked at this table (🎭) — the price list is blank.</i>`];
+        await ChatMessage.create({
+          content: `<p><b>${esc(label)}: The Price List</b> <small style=\"opacity:.7;\">(${esc(source)})</small></p>${lines.join("<br/>")}<br/><small>${bonusLine}</small>`,
+          whisper, speaker: { alias: "Bad Eden Parley" }
+        }).catch(() => {});
+        return { ok: true, courtiers: rows.length };
+      }
+      // Rewrite the Stake: change what this Parley is FOR — Persuade / Deceive / Stay unnoticed. A performance contest keeps its
+      // profile (Impress is a crowd track, not a goal you can pencil in), so it refuses there.
+      async function setGoal(goal, source = "receipt") {
+        const g = String(goal || "").toLowerCase();
+        if (PERF || g === "impress" || !GOAL_LABELS[g]) return false;
+        if (g === state.goal) return false;
+        const before = state.goalLabel;
+        state.goal = g; state.goalLabel = GOAL_LABELS[g];
+        state.suspicionEnabled = g === "unnoticed";
+        state.trackLabel = g === "unnoticed" ? "Suspicion" : null;
+        await sendChat([`The agenda is amended in pencil: this Parley is now <b>${esc(state.goalLabel)}</b> (was ${esc(before)}). <small style=\"opacity:.7;\">(${esc(source)})</small>`], { title: `${label}: Stake rewritten` });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+      // Counterfeit Truth: the side's NEXT stolen receipt plays as earned — no Suspicion bump, no betrayal memory. Armed here,
+      // consumed by the secrets API at play time.
+      function armCounterfeit(side, source = "receipt") {
+        const s = _normSide(side);
+        if (!s) return false;
+        state[`counterfeit${s}`] = String(source || "receipt");
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+      function consumeCounterfeit(side) {
+        const s = _normSide(side);
+        if (!s || !state[`counterfeit${s}`]) return false;
+        delete state[`counterfeit${s}`];
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
       async function dealInfluenceDamage(side, n, source = "secret") {
         const s = _normSide(side);
         const amount = Math.max(0, Math.floor(Number(n) || 0));
@@ -1217,23 +1353,35 @@
         return true;
       }
 
-      // Phase D — Draw a random secret from the bbttcc-master-content.courtly-secrets
-      // compendium and add it to the target actor (self/opp) via addSecret.
+      // Phase D — the room's receipts. Dave 2026-11-11: "get rid of all of them, and then build specific receipts" —
+      // receipts are unique, serve a specific purpose and play in a specific Parley, so the blind draw from the
+      // courtly-secrets compendium is retired (the pack stays as templates only). A Parley may carry its own
+      // story-authored papers (state.roomReceipts: [{ label, effectKey, truth, acquisition? }]); Read the Room /
+      // Eavesdrop turn up the next one not yet found. None authored → the room gives up nothing.
       async function drawSecret(side, acquisition = "earned") {
         const s = _normSide(side);
         if (!s) return null;
         const targetActor = s === "A" ? A : D;
-        const PACK_ID = "bbttcc-master-content.courtly-secrets";
-        const pack = game.bbttcc?.packs?.get?.(PACK_ID) ?? game.packs?.get(PACK_ID);   // dnd5e: the bad-eden-5e twin
-        if (!pack) { await sendChat([`Receipts compendium not found (${PACK_ID}).`], { title: `${label}: Draw` }); return null; }
-        const docs = await pack.getDocuments();
-        if (!docs.length) { await sendChat([`Receipts compendium is empty — run the seeder macro first.`], { title: `${label}: Draw` }); return null; }
-        const pick = docs[Math.floor(Math.random() * docs.length)];
+        const pool = Array.isArray(state.roomReceipts) ? state.roomReceipts : [];
+        state.roomReceiptsFound = Array.isArray(state.roomReceiptsFound) ? state.roomReceiptsFound : [];
+        const row = pool.find(r => r && String(r.label || "").trim() && !state.roomReceiptsFound.includes(String(r.label).trim()));
+        if (!row) {
+          await sendChat([`${esc(targetActor.name)} works the ${esc(AUD().many)} — nothing here they can use.`], { title: `${label}: Draw` });
+          return null;
+        }
         const api = game.bbttcc?.api?.raid?.courtlySecrets;
-        if (!api?.addSecret) { await sendChat([`Secrets API missing.`], { title: `${label}: Draw` }); return null; }
-        const created = await api.addSecret(targetActor.id, pick, { acquisition });
+        const PACK_ID = "bbttcc-master-content.courtly-secrets";
+        const pack = game.bbttcc?.packs?.get?.(PACK_ID) ?? game.packs?.get(PACK_ID);
+        const template = pack ? (await pack.getDocuments())[0] : null;
+        if (!api?.addSecret || !template) { await sendChat([`Receipts API or template missing.`], { title: `${label}: Draw` }); return null; }
+        const src = template.toObject();
+        src.name = String(row.label).trim();
+        src.flags = { ...(src.flags || {}), [MOD_R]: { ...(src.flags?.[MOD_R] || {}), secret: { effectKey: String(row.effectKey || "") } } };   // the row's key, not the template's
+        if (row.truth) src.system = { ...(src.system || {}), description: { ...(src.system?.description || {}), value: `<p><em>${esc(row.truth)}</em></p>` } };
+        const created = await api.addSecret(targetActor.id, src, { acquisition: row.acquisition || acquisition, effectKey: row.effectKey, story: true });
         if (created) {
-          await sendChat([`${esc(targetActor.name)} draws a ${esc(acquisition)} secret: <b>${esc(created.name)}</b>`], { title: `${label}: Draw` });
+          state.roomReceiptsFound.push(String(row.label).trim());
+          await sendChat([`${esc(targetActor.name)} turns up <b>${esc(created.name)}</b>.`], { title: `${label}: Draw` });
         }
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
         return created;
@@ -1267,9 +1415,9 @@
             title: `${title} — a conversation, or the blind draw?`,
             content: `<form>
               <p style="font-size:.85em;opacity:.85;">${isRead
-                ? "Someone in this court is holding something. Work them in a REAL conversation — what they give up is what you get (routed through the usual divulge/approval flow) — or take the blind draw."
+                ? `Someone among the ${AUD().many} is holding something. Work them in a REAL conversation — what they give up is what you get (routed through the usual divulge/approval flow) — or take the blind draw.`
                 : "Slip within earshot of someone unguarded. What slips out is what you get (an overheard truth counts as stolen) — or take the blind draw."}</p>
-              <div class="form-group"><label>Courtier</label><select name="cid">${opts2}</select></div>
+              <div class="form-group"><label>${AUD().One}</label><select name="cid">${opts2}</select></div>
             </form>`,
             buttons: {
               talk: { label: isRead ? "Work them" : "Listen in", callback: html => resolve({ mode: "talk", actor: game.actors.get(html[0].querySelector("[name=cid]").value) || null }) },
@@ -1308,7 +1456,7 @@
         const candidates = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? [])   // courtiers on ANY scene (2026-10-22)
           .filter(t => Number(t.actor.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0) >= minFavor);
         if (!candidates.length) {
-          ui.notifications?.warn?.(`No courtier has favor ≥ ${minFavor} toward you. Cannot invoke Patron's Word.`);
+          ui.notifications?.warn?.(`No ${AUD().one} has favor ≥ ${minFavor} toward you. Cannot invoke Patron's Word.`);
           return null;
         }
         const opts2 = candidates.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, factionId)})</option>`).join("");   // token id → token's actor (2026-10-28)
@@ -1373,12 +1521,12 @@
                 // Picker for chosen courtier; favor toward resolved faction.
                 const fid = resolveFaction(eff.side);
                 const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
-                if (!tokens.length) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); break; }
+                if (!tokens.length) { ui.notifications?.warn?.(`No ${AUD().many} on this scene — mark one with the 🎭 button on its token HUD.`); break; }
                 const opts2 = tokens.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, fid)})</option>`).join("");   // token id → token's actor (2026-10-28)
                 const pick = await new Promise(resolve => {
                   new Dialog({
                     title: eff.title || "Adjust Favor",
-                    content: `<form><p>${esc(eff.prompt || `Choose courtier (favor ${eff.delta > 0 ? "+" : ""}${eff.delta} toward ${selfSide === "A" ? A.name : D.name})`)}.</p><div class="form-group"><label>Courtier</label><select name="cid">${opts2}</select></div></form>`,
+                    content: `<form><p>${esc(eff.prompt ? String(eff.prompt).replace(/\b(courtier|observer)\b/gi, AUD().one) : `Choose ${AUD().one} (favor ${eff.delta > 0 ? "+" : ""}${eff.delta} toward ${selfSide === "A" ? A.name : D.name})`)}.</p><div class="form-group"><label>${AUD().One}</label><select name="cid">${opts2}</select></div></form>`,
                     buttons: {
                       ok: { label: "Choose", callback: html => resolve(_courtierActor(html[0].querySelector("[name=cid]").value)) },
                       cancel: { label: "Cancel", callback: () => resolve(null) }
@@ -1475,7 +1623,7 @@
           for (const tk of courtierTokens()) {
             if (await bumpFavor(tk.actor, winFid, +1, 3)) bumped++;
           }
-          lines.push(`Clean Triumph — ${esc(winActor.name)} gains +1 favor with ${bumped} courtier(s).`);
+          lines.push(`Clean Triumph — ${esc(winActor.name)} gains +1 favor with ${bumped} ${bumped === 1 ? AUD().one : (AUD().plural || AUD().many)}.`);
           // Loser: -1 Influence cap on next courtly raid (flag on the faction)
           if (losActor) {
             const flags = foundry.utils.duplicate(losActor.flags?.["bbttcc-raid"] || {});
@@ -1559,7 +1707,16 @@
       async function _stepPersist(args) { const r = await _stepRaw(args); await _persistCourtlyMirror(); return r; }
       async function _applyEffectsPersist(fx, opts) { const r = await _applyEffectsRaw(fx, opts); await _persistCourtlyMirror(); return r; }   // keep opts ({side}) — a defender-fired bundle must resolve as D
 
-      const apiObj = { step: _stepPersist, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects: _applyEffectsPersist, burnScandalScar, armLastWord };
+      const apiObj = { step: _stepPersist, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects: _applyEffectsPersist, burnScandalScar, armLastWord,
+        // Halloween hoard receipts (2026-10-31)
+        queueTruce, queueDecree, undoLastExchange, revealCourt, setGoal, armCounterfeit, consumeCounterfeit };
+      // Every state edit persists (2026-11-11): only step/applyEffects used to, so a reload lost queued receipts,
+      // Suspicion moves and favor spends. The mirror is also what a reloaded GM restores the Parley from.
+      for (const [k, fn] of Object.entries(apiObj)) {
+        if (k === "getState" || k === "step" || k === "applyEffects" || typeof fn !== "function") continue;
+        apiObj[k] = async function (...args) { const out = await fn(...args); try { await _persistCourtlyMirror(); } catch (_eP) {} return out; };
+      }
+      apiObj.restored = !!RESTORE;
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;

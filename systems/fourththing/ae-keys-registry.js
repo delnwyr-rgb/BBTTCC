@@ -87,7 +87,7 @@ const SEED = [
   entry("system.derived.stress.value",     "Stress — Current",     "Derived Stats", { desc: "Mental/social pressure track." }),
   entry("system.derived.stress.max",       "Stress — Max",         "Derived Stats", { desc: "Stress ceiling." }),
   entry("system.derived.guard.value",      "Guard",                "Derived Stats", { desc: "Defensive guard rating used by armor-skill resolution." }),
-  entry("system.derived.evasion.value",    "Evasion",              "Derived Stats", { desc: "Evasion / dodge rating." }),
+  // system.derived.evasion.* retired 2026-11-11 (Dave, phase 2) — Evasion is no longer computed; grant Guard instead.
   entry("system.derived.resolve.value",    "Resolve",              "Derived Stats", { desc: "Resolve track for fear, charm, and willpower." }),
   entry("system.derived.initiative.bonus", "Initiative — Bonus",   "Derived Stats", { desc: "Flat bonus to initiative rolls. Stacks with item-flag passives (flags.fourththing.passives.initiative.bonus). Applied via Combat tracker + NPC sheet's Surge Init button.", readBy: ["Combat.rollInitiative", "_onFtNpcSurgeInit"] }),
 
@@ -130,8 +130,9 @@ const SEED = [
   entry("flags.fourththing.grant.vulns",       "Grant — Vulnerability (while equipped)","Item Defense Grants", { desc: "Item imposes this damage vulnerability while equipped.", readBy: ["ftComputeDefenses"], valueHint: "damage-type key" }),
   entry("flags.fourththing.grant.condImmunes", "Grant — Condition Immunity (while equipped)","Item Defense Grants", { desc: "Item grants immunity to this condition while equipped/trained.", readBy: ["ftComputeDefenses"], valueHint: "condition key" }),
   entry("flags.fourththing.grant.guard",       "Grant — Guard bonus (armor)",          "Item Defense Grants", { desc: "Armor's Guard modifier. Takes precedence over native guardBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
-  entry("flags.fourththing.grant.evasion",     "Grant — Evasion bonus (armor)",        "Item Defense Grants", { desc: "Armor's Evasion modifier. Takes precedence over native evasionBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
+  entry("flags.fourththing.grant.evasion",     "Grant — Evasion (RETIRED → Guard)",    "Item Defense Grants", { desc: "RETIRED 2026-11-11 — use Grant — Guard. A legacy positive row still folds into the item's Guard as max(guard, evasion) + ⌊min/2⌋; negatives are ignored.", readBy: ["_ftArmorGuardRaw"], valueHint: "integer (+)" }),
   entry("flags.fourththing.grant.resolve",     "Grant — Resolve bonus (armor)",        "Item Defense Grants", { desc: "Armor's Resolve modifier. Takes precedence over native resolveBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
+  entry("flags.fourththing.grant.surgeCap",    "Grant — Surge cap (while equipped)",   "Item Defense Grants", { desc: "Worn or wielded item raises the Steward's Surge cap by this much while equipped (summed across items, clamped to +4). 2026-10-31 Halloween hoard.", readBy: ["_ftSurgeCap"], valueHint: "integer (+)" }),
 
   // ── Conditions (boolean flags) ──────────────────────────────────────────
   ...CONDITIONS.map(c => entry(

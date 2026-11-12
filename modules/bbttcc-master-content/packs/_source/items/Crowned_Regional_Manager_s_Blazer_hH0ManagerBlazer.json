@@ -1,0 +1,156 @@
+{
+  "_id": "hH0ManagerBlazer",
+  "name": "Crowned Regional Manager's Blazer",
+  "type": "armor",
+  "img": "icons/equipment/chest/coat-collared-red-gold.webp",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": 0,
+    "resolveBonus": 5,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "halloween-hoard",
+      "mal-voiced",
+      "light",
+      "graded",
+      "grade-crowned",
+      "blazer",
+      "capstone",
+      "apocalypse"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Gerald wore it to the end of everything and it has not a mark on it. Put it on and the collar already has your name, in Gerald's handwriting, which you have never seen, and the Apocalypse (Region 4) treats you as the person it reports to. It is soulbound. It was always going to be.</p><p><em>Light, Crowned: Guard +4, Resolve +5; soulbound. Needs Fitting. Gerald's blazer, with Gerald's name in the collar crossed out and yours, somehow, written in.</em></p><p>Guard +4 · Evasion +0 · Resolve +5 — light, needs fitting (Trained = half, Proficient = full).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Your name is already in the collar.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "soulbound",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Gerald wore it to the end of everything and it has not a mark on it. Put it on and the collar already has your name, in Gerald's handwriting, which you have never seen, and the Apocalypse (Region 4) treats you as the person it reports to. It is soulbound. It was always going to be.</p>",
+          "materialOf": [
+            "worsted",
+            "shoulder-pad",
+            "a-true-name",
+            "regional-authority"
+          ],
+          "price": {
+            "marks": 190,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV armor (Crowned +3) × bound soulbound",
+            "bound": "soulbound",
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 3040
+          }
+        }
+      },
+      "grade": {
+        "rank": 3,
+        "name": "Crowned",
+        "key": "crowned",
+        "defense": 3
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 4,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 5,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hH0ManagerBlEff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793491200000,
+        "modifiedTime": 1793491200000,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "hH0Folder0000001",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1793491200000,
+    "modifiedTime": 1793491200000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hH0ManagerBlazer"
+}

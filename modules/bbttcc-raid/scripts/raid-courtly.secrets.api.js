@@ -57,7 +57,16 @@
     "oppRollMinus2",
     "stirThePot",
     "discardStolen",
-    "freezePurse"
+    "freezePurse",
+    // ── Halloween hoard (2026-10-31) — the reality-bending receipts. New scenario methods in raid-courtly.influence.enhancer.js
+    //    (queueTruce / queueDecree / undoLastExchange / revealCourt / setGoal / armCounterfeit); favorAllPlus1 composes adjustFavor.
+    "recess",
+    "strikeRecord",
+    "namePrice",
+    "counterfeit",
+    "rewriteStake",
+    "decree",
+    "favorAllPlus1"
   ]);
 
   // Human-readable one-liner per effect key — single source of truth for the
@@ -67,17 +76,24 @@
     forceReroll:   "Force your opponent to reroll their next exchange",
     influenceDmg2: "Deal 2 Influence damage outside an exchange",
     clearScandal:  "Clear your own Scandal flag",
-    favorPlus1:    "+1 Favor with a chosen courtier (your side)",
-    favorShift:    "−1 Favor with two courtiers (toward your opponent)",
+    favorPlus1:    "+1 Favor with a chosen observer (your side)",
+    favorShift:    "−1 Favor with two observers (toward your opponent)",
     rollPlus3:     "Queue +3 to your next Parley roll",
     influenceDmg3: "Deal 3 Influence damage outside an exchange",
     coverTracks:   "−2 Suspicion",
-    favorPlus2:    "+2 Favor with a chosen courtier (your side)",
-    doubleAgent:   "Flip a courtier — −1 to the opponent, +1 to you",
+    favorPlus2:    "+2 Favor with a chosen observer (your side)",
+    doubleAgent:   "Flip an observer — −1 to the opponent, +1 to you",
     oppRollMinus2: "Queue −2 to your opponent's next Parley roll",
     stirThePot:    "+2 Suspicion — destabilize the court (defection favors the influence leader)",
     discardStolen: "Your opponent discards a random STOLEN secret",
-    freezePurse:   "No marks may be spent by either side next exchange"
+    freezePurse:   "No marks may be spent by either side next exchange",
+    recess:        "Recess — nobody loses Influence in the next exchange",
+    strikeRecord:  "Strike the last exchange from the record (Influence, Suspicion, scandal and the round go back)",
+    namePrice:     "Name the price — every observer's favor, both sides, whispered to you",
+    counterfeit:   "Your next STOLEN receipt plays as earned (no Suspicion, no betrayal)",
+    rewriteStake:  "Rewrite the stake — change what this Parley is for",
+    decree:        "Sovereign Writ — you win the next exchange outright",
+    favorAllPlus1: "+1 Favor with every observer (your side)"
   });
 
   // A secret's effect field may be compound: "rollPlus2+coverTracks" (or
@@ -203,15 +219,15 @@
     return { effect: "clearScandal", ok };
   }
   async function _effectFavorPlus1(actor, side, scenario) {
-    const courtier = await _pickCourtier("Choose courtier — +1 favor toward your side");
+    const courtier = await _pickCourtier("Choose observer — +1 favor toward your side");
     if (!courtier) return { effect: "favorPlus1", cancelled: true };
     await scenario.adjustFavor(courtier, side.factionId, +1);
     return { effect: "favorPlus1", courtier: courtier.name };
   }
   async function _effectFavorShift(actor, side, scenario) {
-    const c1 = await _pickCourtier("Choose first courtier — −1 favor toward opponent");
+    const c1 = await _pickCourtier("Choose first observer — −1 favor toward opponent");
     if (!c1) return { effect: "favorShift", cancelled: true };
-    const c2 = await _pickCourtier("Choose second courtier — −1 favor toward opponent");
+    const c2 = await _pickCourtier("Choose second observer — −1 favor toward opponent");
     if (!c2) return { effect: "favorShift", cancelled: true };
     await scenario.adjustFavor(c1, side.oppFactionId, -1);
     await scenario.adjustFavor(c2, side.oppFactionId, -1);
@@ -220,12 +236,15 @@
 
   async function _pickCourtier(prompt) {
     const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
-    if (tokens.length === 0) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); return null; }
+    // The live Parley names its audience (judges, jury, crowd, court — 2026-11-11); "observer" otherwise.
+    const W = game.bbttcc?.api?.raid?.audienceWords?.(game.bbttcc?.api?.raid?._lastCourtly?.getState?.()) || { one: "observer", many: "observers", One: "Observer" };
+    prompt = String(prompt || "").replace(/\bobserver\b/g, W.one);
+    if (tokens.length === 0) { ui.notifications?.warn?.(`No ${W.many} on this scene — mark one with the 🎭 button on its token HUD.`); return null; }
     const opts = tokens.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)}</option>`).join("");   // token id → the token's actor, the favor every reader sees (2026-10-28)
     return new Promise(resolve => {
       new Dialog({
         title: "Receipt",
-        content: `<form><p>${esc(prompt)}</p><div class="form-group"><label>Courtier</label><select name="cid">${opts}</select></div></form>`,
+        content: `<form><p>${esc(prompt)}</p><div class="form-group"><label>${esc(W.One)}</label><select name="cid">${opts}</select></div></form>`,
         buttons: {
           ok: { label: "Choose", callback: html => {
             const id = html[0].querySelector("[name=cid]").value;
@@ -254,13 +273,13 @@
     return { effect: "coverTracks", suspicion: "-2" };
   }
   async function _effectFavorPlus2(actor, side, scenario) {
-    const courtier = await _pickCourtier("Choose courtier — +2 favor toward your side");
+    const courtier = await _pickCourtier("Choose observer — +2 favor toward your side");
     if (!courtier) return { effect: "favorPlus2", cancelled: true };
     await scenario.adjustFavor(courtier, side.factionId, +2);
     return { effect: "favorPlus2", courtier: courtier.name };
   }
   async function _effectDoubleAgent(actor, side, scenario) {
-    const courtier = await _pickCourtier("Choose courtier — flip them: −1 from opponent, +1 to you");
+    const courtier = await _pickCourtier("Choose observer — flip them: −1 from opponent, +1 to you");
     if (!courtier) return { effect: "doubleAgent", cancelled: true };
     await scenario.adjustFavor(courtier, side.oppFactionId, -1);
     await scenario.adjustFavor(courtier, side.factionId, +1);
@@ -281,8 +300,61 @@
     return { effect: "discardStolen", discarded: discarded || "nothing to discard" };
   }
   async function _effectFreezePurse(actor, side, scenario) {
-    const lock = scenario.lockSpend(1, 0);
+    const lock = await scenario.lockSpend(1, 0);
     return { effect: "freezePurse", lock };
+  }
+
+  // ── Halloween hoard (2026-10-31) — the reality-bending receipts ───────────
+  async function _effectRecess(actor, side, scenario) {
+    if (typeof scenario.queueTruce !== "function") return { effect: "recess", errored: true };
+    scenario.queueTruce(`receipt:recess:${actor.name}`);
+    return { effect: "recess", queued: "no Influence lost next exchange" };
+  }
+  async function _effectStrikeRecord(actor, side, scenario) {
+    if (typeof scenario.undoLastExchange !== "function") return { effect: "strikeRecord", errored: true };
+    const r = await scenario.undoLastExchange(`receipt:strikeRecord:${actor.name}`);
+    if (!r?.ok) { ui.notifications?.warn?.(`The Room Remembers Differently: ${r?.why || "nothing to strike"}.`); return { effect: "strikeRecord", cancelled: true }; }
+    return { effect: "strikeRecord", round: r.round };
+  }
+  async function _effectNamePrice(actor, side, scenario) {
+    if (typeof scenario.revealCourt !== "function") return { effect: "namePrice", errored: true };
+    const r = await scenario.revealCourt(side.side, `receipt:namePrice:${actor.name}`);
+    return { effect: "namePrice", courtiers: r?.courtiers };
+  }
+  async function _effectCounterfeit(actor, side, scenario) {
+    if (typeof scenario.armCounterfeit !== "function") return { effect: "counterfeit", errored: true };
+    scenario.armCounterfeit(side.side, `receipt:counterfeit:${actor.name}`);
+    return { effect: "counterfeit", queued: "next stolen receipt plays as earned" };
+  }
+  async function _effectRewriteStake(actor, side, scenario) {
+    if (typeof scenario.setGoal !== "function") return { effect: "rewriteStake", errored: true };
+    const st = scenario.getState?.() || {};
+    if (st.performance) { ui.notifications?.warn?.("Rewrite the Stake: a performance keeps its crowd — there is no agenda to amend."); return { effect: "rewriteStake", cancelled: true }; }
+    const GOALS = { persuade: "Persuade", deceive: "Deceive", unnoticed: "Stay unnoticed" };
+    const opts = Object.entries(GOALS).filter(([k]) => k !== st.goal).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("");
+    const pick = await new Promise(resolve => {
+      new Dialog({
+        title: "Rewrite the Stake",
+        content: `<form><p>This Parley is for <b>${esc(st.goalLabel || st.goal || "?")}</b>. Amend the agenda — what is it for now?</p><div class="form-group"><label>Goal</label><select name="goal">${opts}</select></div></form>`,
+        buttons: { ok: { label: "Amend", callback: html => resolve(html[0].querySelector("[name=goal]").value) }, cancel: { label: "Cancel", callback: () => resolve(null) } },
+        default: "ok", close: () => resolve(null)
+      }, { width: 340 }).render(true);
+    });
+    if (!pick) return { effect: "rewriteStake", cancelled: true };
+    const ok = await scenario.setGoal(pick, `receipt:rewriteStake:${actor.name}`);
+    return ok ? { effect: "rewriteStake", goal: GOALS[pick] } : { effect: "rewriteStake", skipped: "unchanged" };
+  }
+  async function _effectDecree(actor, side, scenario) {
+    if (typeof scenario.queueDecree !== "function") return { effect: "decree", errored: true };
+    scenario.queueDecree(side.side, `receipt:decree:${actor.name}`);
+    return { effect: "decree", queued: "next exchange is yours" };
+  }
+  async function _effectFavorAllPlus1(actor, side, scenario) {
+    const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);
+    const seen = new Set(); let n = 0;
+    for (const t of tokens) { const c = t?.actor; if (!c || seen.has(c.id)) continue; seen.add(c.id); await scenario.adjustFavor(c, side.factionId, +1); n++; }
+    if (!n) ui.notifications?.warn?.("No observers at this table — the round of drinks finds nobody.");
+    return { effect: "favorAllPlus1", courtiers: n ? (() => { const W = game.bbttcc?.api?.raid?.audienceWords?.(scenario?.getState?.()) || {}; return `${n} ${n === 1 ? (W.one || "observer") : (W.plural || "observers")}`; })() : undefined };
   }
 
   const HANDLERS = Object.freeze({
@@ -300,7 +372,14 @@
     oppRollMinus2: _effectOppRollMinus2,
     stirThePot:    _effectStirThePot,
     discardStolen: _effectDiscardStolen,
-    freezePurse:   _effectFreezePurse
+    freezePurse:   _effectFreezePurse,
+    recess:        _effectRecess,
+    strikeRecord:  _effectStrikeRecord,
+    namePrice:     _effectNamePrice,
+    counterfeit:   _effectCounterfeit,
+    rewriteStake:  _effectRewriteStake,
+    decree:        _effectDecree,
+    favorAllPlus1: _effectFavorAllPlus1
   });
 
   async function playSecret(actorId, itemId, opts = {}) {
@@ -375,7 +454,10 @@
     // Consume item, fire suspicion bump, broadcast.
     // A receipt that ENDS the Parley was already expired with the rest of this table's receipts (2026-10-28).
     if (actor.items?.has(item.id)) await actor.deleteEmbeddedDocuments("Item", [item.id]);
-    if (secretMeta.acquisition === "stolen") {
+    // Counterfeit Truth (2026-10-31): an armed side's next stolen receipt plays as earned — no Suspicion, no betrayal memory.
+    const counterfeited = secretMeta.acquisition === "stolen" && !!scenario.consumeCounterfeit?.(side.side);
+    if (counterfeited) { try { await ChatMessage.create({ content: `<p><i>${esc(item.name)} passes as earned — the notary's seal holds.</i></p>`, speaker: { alias: "Bad Eden Parley" } }); } catch (_e) {} }
+    if (secretMeta.acquisition === "stolen" && !counterfeited) {
       try { await scenario.raiseSuspicion(2, `played stolen secret: ${item.name}`); } catch (e) { console.warn(TAG, e); }
     }
     // What happened, in words (2026-10-22 — the card used to print the raw result object).
@@ -408,7 +490,7 @@
     try {
       const src = secretMeta.source;
       const addMemory = game.bbttcc?.mal?.npc?.addMemory;
-      if (src?.npcActorId && typeof addMemory === "function") {
+      if (!counterfeited && src?.npcActorId && typeof addMemory === "function") {
         const npc = game.actors?.get(String(src.npcActorId));
         if (npc) {
           const oppName = game.actors?.get(side.oppFactionId)?.name || "the other side";
