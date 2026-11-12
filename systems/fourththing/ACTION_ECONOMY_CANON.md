@@ -91,6 +91,17 @@ Tier Clarity is T1 1 · T2 2 · T3 3 · T4 4; a TCC pays 1 less; an Invoke never
 slots are already spent this round is disabled in the Invoke dialog and refused by `castManifestation`. Chaotic still adds
 one damage die of the same size; Hermetic still casts a Working one tier above the caster with no reach cost.
 
+**Cast roll (combat balance 2026-11-12).** A Steward's cast is 2d10 + Intent + Channel + Align (+ passive Clarity AEs, castBonus)
+− Noise vs the **Steward cast DC ladder** T1 15 · T2 19 · T3 22 · T4 25 (`FT.CAST_DC_BY_TIER_STEWARD`, `ftTierCastDC(tier, actor)`).
+Current Clarity is the cost pool — it is **not** added to the roll (with it in, a full pool meant casts never failed and
+routine casts overshot into Tears). Tuned so a tier-entry Steward fails ~10% and a top-of-tier one ~1–3%. Foes and named NPCs
+keep the old ladder (12/14/16/18) with Clarity in the roll. Overshoot (Reality Ripple / Tear / Rupture / Sundering) is measured
+on the total **without** Clarity, and its Blood Debt is booked through `game.fourththing.bloodDebt.add` (source `overshoot`).
+
+**Expert dice (2026-11-12).** Aptitude rank 3 keeps Proficient's reroll-lowest and then floors both dice at 4 (mechanic
+`reroll_low_floor_4`). A Master / Legendary extra die never joins a disadvantage roll — disadvantage is 3d10 keep the worst 2
+for every rank.
+
 ---
 
 ## 3. Reactions — Canonical Triggers

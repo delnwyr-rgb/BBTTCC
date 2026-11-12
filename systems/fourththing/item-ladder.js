@@ -4,8 +4,9 @@
  * GRADED ARMS  `flags.fourththing.grade = { rank:1|2|3, name, attack?, damage?, defense? }`
  *   • weapon: +rank to hit (read HERE, only for the weapon being swung — attackTest's itemUuid) and +rank damage (baked
  *     into system.damage.formula as a "+N" tail so cards, sim and lint all see it).
- *   • armor / shield: +rank on guardBonus (always) and on resolveBonus when it is > 0 — the existing rank-scaled armor
- *     path; no engine read needed. Never evasionBonus (Evasion retired 2026-11-11: a base's evasion folds into guard first,
+ *   • armor / shield: +rank on guardBonus (always); Resolve +rank when the base resolveBonus is > 0, else BODY armour
+ *     gets +⌈rank/2⌉ (combat balance 2026-11-12, package C — shields / helms / boots unchanged) — the existing
+ *     rank-scaled armor path (scale + Expert+ flat); no engine read needed. Never evasionBonus (Evasion retired 2026-11-11: a base's evasion folds into guard first,
  *     guard = max(g, e) + ⌊min(g, e)/2⌋, then the rank lands on Guard). The flag documents it for lint and the sheet.
  *   • grade raises the item one tier per rank (price follows the rubric); Inlaid = free · Circuited = attuned · Crowned = soulbound.
  * BOUND WORKINGS  `flags.fourththing.working = { power:{name,img,system}, charges:{value,max,recoverPer}, tier }` on a HOST item

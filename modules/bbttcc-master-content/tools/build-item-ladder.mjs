@@ -114,9 +114,17 @@ for (const { name, ranks } of GRADE_BASES) {
         }
         if (e0 !== 0) v.system.evasionBonus = 0; }
       v.system.guardBonus = (Number(v.system.guardBonus) || 0) + rank; bumped.push(`Guard +${v.system.guardBonus}`);
-      if (Number(v.system.resolveBonus) > 0) { v.system.resolveBonus = Number(v.system.resolveBonus) + rank; bumped.push(`Resolve +${v.system.resolveBonus}`); }
+      let resolveAdd = 0;
+      if (Number(v.system.resolveBonus) > 0) { resolveAdd = rank; v.system.resolveBonus = Number(v.system.resolveBonus) + rank; bumped.push(`Resolve +${v.system.resolveBonus}`); }
+      // Combat balance 2026-11-12 (package C): graded BODY armour with no base Resolve also gains ⌈rank/2⌉ Resolve
+      // (Inlaid +1 · Circuited +1 · Crowned +2) — Resolve stopped growing with the grade while Stress damage kept
+      // climbing. Shields and head / feet / hand pieces are unchanged. Once resolveBonus > 0 the engine's rank-scaled
+      // armor path (_ftArmorStatRaw: scale + the Expert+ flat) applies to it like any other Resolve piece.
+      else if (frame === "armor" && !(v.system.tags || []).some(t => /^(shield|buckler|helm|helmet|hat|hood|boots|footwear|gloves|gauntlets)$/i.test(String(t)))) {
+        resolveAdd = Math.ceil(rank / 2); v.system.resolveBonus = resolveAdd; bumped.push(`Resolve +${v.system.resolveBonus}`);
+      }
       defense = bumpedDefense(v);
-      lines.push(`<strong>+${rank} on its Guard${bumped.length > 1 ? " and Resolve" : ""}</strong> → ${bumped.join(", ")} (rank-scaled like all armor: Trained half, Proficient full).`);
+      lines.push(`<strong>+${rank} on its Guard${resolveAdd ? ` and +${resolveAdd} on its Resolve` : ""}</strong> → ${bumped.join(", ")} (rank-scaled like all armor: Trained half, Proficient full).`);
     }
     lines.push(`Grade raises it to <strong>Tier ${ROMAN[tier]}</strong> · ${G.bound === "free" ? "free to wield" : G.bound === "attuned" ? "attuned (one slot)" : "soulbound — one bearer, no sale"}.`);
     const ri = structuredClone(r); ri.tier = ROMAN[tier]; ri.bound = G.bound; ri.origin = "forged"; ri.signature = ri.signature || G.blurb;

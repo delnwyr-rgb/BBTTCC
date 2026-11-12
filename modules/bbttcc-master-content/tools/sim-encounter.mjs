@@ -1,5 +1,8 @@
 #!/usr/bin/env node
-/* sim-encounter.mjs — offline tactical-combat Monte Carlo for the NPC pack vs kitted Stewards.  `bin/ft-sim-encounter` symlinks here.
+/* ⚠ SUPERSEDED (combat balance 2026-11-12) by sim-combat.mjs → `bin/ft-sim-combat` — full rules (Surge, manifestations, Last Stand,
+ *   overshoot, the A–J fix package) and the chassis read straight from threat-chassis.js. Kept for its 2026-10-06 per-monster
+ *   tables; its rules below are the 2026-10-06 ones (Evasion, pre-retune chassis via --chassis) and are not maintained.
+ * sim-encounter.mjs — offline tactical-combat Monte Carlo for the NPC pack vs kitted Stewards.  `bin/ft-sim-encounter` symlinks here.
  * Usage: ft-sim-encounter <npcs.jsonl> <items.jsonl> [--n 2000] [--tier 2] [--name "Ash Wolf"] [--chassis system|file.json] [--normalize] [--no-resist] [--json out.json]
  *   --chassis system = the live threat chassis (threat-chassis.js) · --normalize = clamp weapon dice to the tier budget
  *   --no-resist = ignore resist / vuln / immunity on BOTH sides. Diff a run with and without it: a verdict that only

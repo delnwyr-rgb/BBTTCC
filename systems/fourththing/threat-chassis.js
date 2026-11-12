@@ -16,25 +16,31 @@
  *   • legendary legendary actions per round, by bracket (bosses at EVERY tier — ruled 2026-10-06)
  * Targets (ruled 2026-10-06): 3 lights vs 1 Steward = fair · medium vs 1 Steward = fair, 3–4 rounds ·
  * heavy = take a partner · boss = full party, someone likely drops ("mob and pitchfork time").
- * Tuned against four kitted Steward paths with bin/ft-sim-encounter --chassis (v1 = tuning run "c4").
- * Retune HERE only — the sim reads the same numbers via --chassis.
+ * Tuned against four kitted Steward paths with bin/ft-sim-encounter --chassis (v1 = tuning run "c4");
+ * retuned (combat balance 2026-11-12) with bin/ft-sim-combat (final package, N=2000).
+ * Retune HERE only — bin/ft-sim-combat imports this table as its CONFIG.chassis default.
  *
  * Who: actorKind(actor) === "monster" (lineage/bestiary-flagged). Named NPCs (type character +
  * entityKind npc) level like Stewards and are NOT chassis'd. World setting `threatChassis` turns it off.
  */
 
 export const THREAT_CHASSIS = {
-  version: 1,
+  version: 2,   // 2 = combat balance 2026-11-12 retune
+  // Retuned (combat balance 2026-11-12): was attack [0,3,4,4] damage [0,3,4,5] defense [0,3,5,5]
+  // rank [2,4,5,5], medium pool [2,1.5,1.5,1.5] strikes [1,2,2,3], heavy pool [3,3,3,3] strikes [2,2,3,3].
+  // Smooths the L6/L11/L16 tier-entry cliffs (monsters are built at L8/13/18, so the old defense row
+  // stacked a second jump on the builder's). rank 5 → 4 at T3/T4 removes the free Legendary rescue
+  // (_legendaryCanSave); attack carries a +1 refund at T3/T4 for it. Sim: bin/ft-sim-combat.
   //            T1 T2 T3 T4
-  attack:     [ 0, 3, 4, 4 ],
-  damage:     [ 0, 3, 4, 5 ],
-  defense:    [ 0, 3, 5, 5 ],
-  rank:       [ 2, 4, 5, 5 ],
+  attack:     [ 0, 0, 2, 3 ],
+  damage:     [ 0, 2, 3, 5 ],
+  defense:    [ 0, 1, 2, 3 ],
+  rank:       [ 2, 4, 4, 4 ],
   mobSize: 3,
   bracket: {
     light:  { pool: [0.6, 0.6, 0.6, 0.6], strikes: [1, 1, 1, 2], legendary: [0, 0, 0, 0] },
-    medium: { pool: [2,   1.5, 1.5, 1.5], strikes: [1, 2, 2, 3], legendary: [0, 0, 0, 0] },
-    heavy:  { pool: [3,   3,   3,   3  ], strikes: [2, 2, 3, 3], legendary: [0, 0, 0, 0] },
+    medium: { pool: [1.5, 1.25, 1.25, 1.25], strikes: [1, 1, 1, 2], legendary: [0, 0, 0, 0] },
+    heavy:  { pool: [3,   2.5,  2.5,  2.5 ], strikes: [2, 2, 2, 3], legendary: [0, 0, 0, 0] },
     boss:   { pool: [5,   5,   5,   4  ], strikes: [2, 3, 3, 3], legendary: [1, 1, 1, 2] }
   }
 };

@@ -389,12 +389,29 @@ const FT = {
   // reaching to T3 now rolls at DC 16, which (paired with the tier-scaled
   // misfire column) makes the cost of stretch tangible. Per-cast UI/manual
   // overrides still allowed (5..30) for GM scene-pressure modifiers.
-  CAST_DC_BY_TIER: { 1: 12, 2: 14, 3: 16, 4: 18 }
+  CAST_DC_BY_TIER: { 1: 12, 2: 14, 3: 16, 4: 18 },
+  // Steward cast DC ladder (combat balance 2026-11-12). A Steward's cast roll no longer adds current Clarity
+  // (Clarity is the cost pool, not a bonus — a full pool made every cast auto-pass and overshoot into Tears).
+  // Tuned so a tier-entry Steward fails ~10% and a top-of-tier one ~1–3% (T4 tops out ~6%). Foes and named
+  // NPCs (_ftIsFoeActor) keep CAST_DC_BY_TIER and their Clarity in the roll — their odds are unchanged.
+  CAST_DC_BY_TIER_STEWARD: { 1: 15, 2: 19, 3: 22, 4: 25 }
 };
 
-function ftTierCastDC(tier) {
+// The baseline cast DC for a manifestation tier. `actor` picks the ladder (combat balance 2026-11-12):
+// a Steward (anything _ftIsFoeActor rejects) reads CAST_DC_BY_TIER_STEWARD, a foe CAST_DC_BY_TIER.
+function ftTierCastDC(tier, actor = null) {
   const t = Math.max(1, Math.min(4, Number(tier) || 1));
-  return FT.CAST_DC_BY_TIER?.[t] ?? 15;
+  const ladder = (actor && _ftIsFoeActor(actor)) ? FT.CAST_DC_BY_TIER : (FT.CAST_DC_BY_TIER_STEWARD ?? FT.CAST_DC_BY_TIER);
+  return ladder?.[t] ?? 15;
+}
+// The inverse: the manifestation tier a cast DC stands for, on the caster's ladder (nearest rung, ties go up).
+// Replaces the inline (dc − 10) / 2 back-derivation, which only knew the 12/14/16/18 ladder (combat balance 2026-11-12).
+function ftTierFromCastDC(dc, actor = null) {
+  const ladder = (actor && _ftIsFoeActor(actor)) ? FT.CAST_DC_BY_TIER : (FT.CAST_DC_BY_TIER_STEWARD ?? FT.CAST_DC_BY_TIER);
+  const d = Number(dc) || ladder[1];
+  let best = 1;
+  for (let t = 2; t <= 4; t++) if (Math.abs(ladder[t] - d) <= Math.abs(ladder[best] - d)) best = t;
+  return best;
 }
 
 // Save DC ladder (owner ruling 2026-08-22): 11 + tier×2 + the caster's channel
@@ -5871,7 +5888,7 @@ const _FT_SURGE_MENU = [
     fiction: "Whatever they call armor, it stops mattering for one breath.",
     wired: false },
   { cost: 2, key: "stitch", tier: 1, bucket: "heal",
-    label: "Stitch — heal self 2d6 + Tier",
+    label: "Stitch — heal self (Tier+1)d6 + Tier",   // combat balance 2026-11-12 (was 2d6 + Tier)
     fiction: "Soma re-knits along the seams you remember.",
     wired: true },
   // Cost 3
@@ -5901,7 +5918,7 @@ const _FT_SURGE_MENU = [
     fiction: "You name what is happening. It listens.",
     wired: false },
   { cost: 4, key: "field-patch", tier: 1, bucket: "heal",
-    label: "Field Patch — heal ally 2d6 + Tier (in reach)",
+    label: "Field Patch — heal ally (Tier+1)d6 + Tier, their lower track (in reach)",   // combat balance 2026-11-12
     fiction: "Hands move faster than the wound can close.",
     wired: true },
   // Cost 5
@@ -7090,7 +7107,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   // target (you don't have to target yourself to drink your own Stitch). Returns total.
   // 10-30: data-target-first — the baked recipient WINS over a live target (Boaz's Stitch healed the Marauder he
   // had targeted for his axe: the baked uuid was only a no-target fallback).
-  const postHealCard = async (formula, label, targetUuid, { extraTracks = [] } = {}) => {
+  const postHealCard = async (formula, label, targetUuid, { extraTracks = [], track = "integrity" } = {}) => {
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = Math.max(0, Number(roll.total) || 0);
@@ -7099,7 +7116,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
     // understands (data-parts → per-track follow-up applies, op carries over).
     const parts     = extraTracks.map(tr => ({ amount: total, type: "", track: tr }));
     const partsAttr = parts.length ? ` data-parts='${JSON.stringify(parts)}'` : "";
-    const trackNote = parts.length ? ` (Integrity + ${extraTracks.map(ftCap).join(" + ")})` : "";
+    const trackNote = parts.length ? ` (${ftCap(track)} + ${extraTracks.map(ftCap).join(" + ")})` : (track !== "integrity" ? ` (${ftCap(track)})` : "");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       rolls: [roll],
@@ -7108,7 +7125,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
         <div class="ft-dmg-row">
           <span class="ft-dmg-label">Healing</span>
           <span class="ft-dmg-formula">${formula} = <b>${total}</b></span>
-          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${partsAttr}${targetUuid ? ` data-target-uuid="${targetUuid}" data-target-first="1"` : ""}>✚ Apply Healing${trackNote}${targetUuid ? "" : " to target"}</button>
+          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="${track}"${partsAttr}${targetUuid ? ` data-target-uuid="${targetUuid}" data-target-first="1"` : ""}>✚ Apply Healing${trackNote}${targetUuid ? "" : " to target"}</button>
         </div>
       </div>`
     });
@@ -7117,7 +7134,8 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
 
   if (effectKey === "stitch") {
     // Stitch mends BOTH pools — the rolled total lands on Integrity AND Stress.
-    const total = await postHealCard(`2d6 + ${tier}`, "Stitch", actor.uuid, { extraTracks: ["stress"] });
+    // Combat balance 2026-11-12: (Tier+1)d6 + Tier (was a flat 2d6 + Tier, which fell behind T2+ damage).
+    const total = await postHealCard(`${(Number(tier) || 1) + 1}d6 + ${tier}`, "Stitch", actor.uuid, { extraTracks: ["stress"] });
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Stitch — rolled <b>${total}</b> healing (roll posted below); click <b>Apply Healing</b> to mend Integrity <i>and</i> Stress.</p>`;
   }
 
@@ -7126,8 +7144,14 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
     if (!tok?.actor) {
       return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.</p>`;
     }
-    const total = await postHealCard(`2d6 + ${tier}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid);
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> for <b>${ftEscapeHtml(tok.actor.name)}</b>; click <b>Apply Healing</b>.</p>`;
+    // Combat balance 2026-11-12: (Tier+1)d6 + Tier, and the heal goes to the target's LOWER-percentage track —
+    // Dying → Integrity first; Incapacitated (Stress 0) → Stress, which lifts it exactly as an Integrity heal lifts
+    // Dying (the Stress → 0 updateActor detector clears it once Stress is back above 0). Ties go to Integrity.
+    const _pSys = tok.actor.system?.system ?? tok.actor.system;
+    const _pPct = (k) => { const t = _pSys?.derived?.[k]; const m = Number(t?.max) || 0; return m > 0 ? (Number(t?.value) || 0) / m : 1; };
+    const _pTrack = (!_ftIsDying(tok.actor) && (_ftIsIncapacitated(tok.actor) || _pPct("stress") < _pPct("integrity"))) ? "stress" : "integrity";
+    const total = await postHealCard(`${(Number(tier) || 1) + 1}d6 + ${tier}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid, { track: _pTrack });
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> ${ftCap(_pTrack)} for <b>${ftEscapeHtml(tok.actor.name)}</b>; click <b>Apply Healing</b>.</p>`;
   }
 
   if (effectKey === "rallying-cry") {
@@ -8232,7 +8256,7 @@ function _ftAffiliationOPContext(actor) {
 }
 
 // ─── Bulwark (Pool archetype) — "eat the blow" generation + Surge spends ──────
-// The wall converts impact into power: when a Bulwark takes integrity damage it
+// The wall converts impact into power: when a Bulwark takes damage (either track — combat balance 2026-11-12) it
 // banks +1 Surge (capped +2/combat-round). Self-only (distinct from Soul-Smith's
 // ally-aura forge), no Burn (Pool, not Burn). Foe-gated. Called from
 // _applyDamageToActor in a try/catch so it can never break damage apply.
@@ -9745,7 +9769,7 @@ async function castManifestation(actor, item, {
   // Tier-scaled DC (2026-05-06). Programmatic callers that omit `difficulty`
   // get the per-tier baseline; UI callers pass the dialog input which
   // pre-fills with the tier baseline but is overrideable.
-  if (difficulty == null) difficulty = ftTierCastDC(manTier);
+  if (difficulty == null) difficulty = ftTierCastDC(manTier, actor);   // Steward vs foe ladder (combat balance 2026-11-12)
 
   // Self-target (2026-11-08, Target Shape retired): with no token targeted, a self-range working or a
   // beneficial one (heal / ward / buff) lands on the caster — so a self-ward actually lands. Area
@@ -15101,9 +15125,9 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
       const _tip = `+1 Align on ${ftAlignmentPairsLabel(sephirah)}${_locked ? " — set by your Sephirotic Alignment" : ""}`;
       return `<div class="ft-cast-field" data-tooltip="${_tip}"><label>Sephirah${_locked ? ' <span style="opacity:0.55;font-weight:400;font-size:0.78em">— your alignment</span>' : ""}</label>
       <select name="sephirah"${_locked ? " disabled" : ""}>${mkOpts(ftSephirothFor(sephirah), sephirah)}</select></div>`; })()}
-    <div class="ft-cast-field" data-tooltip="Tier baseline DC: T1 12 · T2 14 · T3 16 · T4 18. Override for GM scene pressure (cover, ritual aids, hostile resonance).">
-      <label>Difficulty (DC) <span style="opacity:0.55;font-weight:400;font-size:0.78em">— T${manTier} baseline ${ftTierCastDC(manTier)}</span></label>
-      <input type="number" name="difficulty" value="${ftTierCastDC(manTier)}" min="5" max="30"/></div>
+    <div class="ft-cast-field" data-tooltip="Tier baseline DC: ${[1, 2, 3, 4].map(t => `T${t} ${ftTierCastDC(t, actor)}`).join(" · ")}${_ftIsFoeActor(actor) ? "" : " (Steward ladder — your Clarity pays the cost and is not added to the roll)"}. Override for GM scene pressure (cover, ritual aids, hostile resonance).">
+      <label>Difficulty (DC) <span style="opacity:0.55;font-weight:400;font-size:0.78em">— T${manTier} baseline ${ftTierCastDC(manTier, actor)}</span></label>
+      <input type="number" name="difficulty" value="${ftTierCastDC(manTier, actor)}" min="5" max="30"/></div>
     <div class="ft-cast-field" title="Pull the punch by up to your tier. The amount you reduce is banked as a +1d4 Restraint die against the same target on your next roll. Helps avoid Reality Tears.">
       <label>Restraint pull</label>
       <input type="number" name="restraintReduction" value="0" min="0" max="${stewardTier}"/>
@@ -17423,7 +17447,7 @@ Hooks.once("init", function () {
   globalThis.FT_APT_COLUMN_TIPS = {
     name:    "Aptitude — what you're rolling. Hover the name to see its canonical label; the colored tag is your rank tier.",
     attr:    "Faculty — the attribute added to this aptitude's roll. Each aptitude is keyed to one Faculty.",
-    rank:    "Rank pips (0–5). Click to set: 0 Untrained · 1 Trained (no fumble) · 2 Proficient (reroll lowest) · 3 Expert (floor 4) · 4 Master (3d10 drop lowest) · 5 Legendary (1/scene auto-succeed).",
+    rank:    "Rank pips (0–5). Click to set: 0 Untrained · 1 Trained (no fumble) · 2 Proficient (reroll lowest) · 3 Expert (reroll lowest + floor 4) · 4 Master (3d10 drop lowest) · 5 Legendary (1/scene auto-succeed).",
     ae:      "Active Effect bonus — flat bonus from items, manifestations, or conditions currently affecting this aptitude.",
     total:   "Total bonus added to this aptitude's 2d10. Total = Faculty + Rank + AE."
   };
@@ -17615,6 +17639,9 @@ Hooks.once("init", function () {
     const lines = [];
     const patch = {};
     let misfire = null;
+    // Blood Debt goes through the ledger (combat balance 2026-11-12, review J): the raw value write skipped
+    // bloodDebt.ledger and the bloodDebtChanged hook, so Redemption / the sheet never saw an overshoot's debt.
+    let debtAdd = 0;
 
     if (band.key === "ripple") {
       lines.push("Cosmetic ripple — lights flicker, dust lifts, animals flinch.");
@@ -17629,7 +17656,7 @@ Hooks.once("init", function () {
       }
       lines.push("Hairline reality fracture. Sub-tier NPCs are <b>shaken</b> 1 round.");
     } else if (band.key === "rupture") {
-      patch["system.bloodDebt.value"] = debtCur + 1;
+      debtAdd = 1;
       lines.push(`Blood Debt ${debtCur} → ${debtCur + 1}.`);
       try {
         const m = new Roll("1d10");
@@ -17640,7 +17667,7 @@ Hooks.once("init", function () {
       } catch (e) { /* misfire is decorative */ }
       lines.push("Visible 10 ft warp. <b>Adversary / Watcher takes notice.</b>");
     } else if (band.key === "sundering") {
-      patch["system.bloodDebt.value"]      = debtCur + 1;
+      debtAdd = 1;
       patch["system.magic.clarity.value"]  = Math.max(0, claCur - 1);
       lines.push(`Blood Debt ${debtCur} → ${debtCur + 1} · Clarity ${claCur} → ${Math.max(0, claCur - 1)}.`);
       lines.push("Law-of-nature break in 30 ft for 1 round. <b>Adversary draws a Beat.</b>");
@@ -17648,6 +17675,16 @@ Hooks.once("init", function () {
 
     if (Object.keys(patch).length) {
       try { await actor.update(patch); } catch (e) { console.warn("Roll for Initiation | overshoot patch failed", e); }
+    }
+    if (debtAdd > 0) {
+      try {
+        const _bd = game.fourththing?.bloodDebt;
+        if (typeof _bd?.add === "function") {
+          await _bd.add(actor, { value: debtAdd, source: "overshoot", tag: band.key, note: `Reality ${band.label} — overshoot +${over}${target ? ` vs. ${target.name}` : ""}` });
+        } else {
+          await actor.update({ "system.bloodDebt.value": debtCur + debtAdd });
+        }
+      } catch (e) { console.warn("Roll for Initiation | overshoot Blood Debt failed", e); }
     }
 
     const misfireHtml = misfire
@@ -18054,7 +18091,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // summed by the aeClarity/aeNoise walker). Foundry applies an AE on
     // system.magic.castBonus to this field; we read it exactly once.
     const _aeCastBonus = Number(sys.magic?.castBonus) || 0;
-    const posTotal = attrI + attrC + clarity + totalAlign + aeIntent + aeChannel + aeClarity + _castTierBonus - _castRadPen + _aeCastBonus;
+    // Combat balance 2026-11-12: a Steward's CURRENT Clarity no longer rides the cast roll (it's the cost pool — a full
+    // pool meant casts never failed and overshot into Tears); the Steward DC ladder (CAST_DC_BY_TIER_STEWARD) absorbs it.
+    // Foes keep it, with their old ladder. Passive Clarity AEs (aeClarity) and castBonus still add.
+    const _clarityInRoll = _ftIsFoeActor(actor) ? clarity : 0;
+    const posTotal = attrI + attrC + _clarityInRoll + totalAlign + aeIntent + aeChannel + aeClarity + _castTierBonus - _castRadPen + _aeCastBonus;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; double-10
     // base flags Act Again. Same engine as Engage/Steward — keeps all three
     // tactical roll paths visually + mechanically consistent.
@@ -18155,7 +18196,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor:  buildMagicChatHTML({ label, intent, channel, sephirah,
                                     attrIntent: attrI, attrChannel: attrC,
-                                    clarity, noise: totalNoise, alignMod: totalAlign,
+                                    clarity: _clarityInRoll, noise: totalNoise, alignMod: totalAlign,   // what the roll added (combat balance 2026-11-12)
                                     total, difficulty, success, misfireData, diceResults,
                                     terrainLabel: terrain.terrainLabel,
                                     explosionDice, surgeBanked: explosions, doubleTen,
@@ -18189,8 +18230,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     // Reality Tear — manifestations are always on; difficulty is the DC.
     if (success) {
+      // Overshoot is measured WITHOUT Clarity (combat balance 2026-11-12): a deep pool used to push routine casts
+      // into Tear / Rupture bands. Foes still roll it; it just doesn't count toward the margin.
       await game.fourththing.rolls.applyOvershoot(actor, {
-        target, total, dc: Number(difficulty), kind: "manifestation", optIn: true
+        target, total: total - _clarityInRoll - aeClarity, dc: Number(difficulty), kind: "manifestation", optIn: true
       });
     }
 
@@ -18350,7 +18393,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const abDisSaves = (target.appliedEffects ?? target.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.aurablade?.disSavesAll);
     const abAutoSave = target.flags?.fourththing?.aurablade?.oneShot?.autoSucceedSave;
     const abAutoHit  = !!abAutoSave && Array.isArray(abAutoSave.attrs) && abAutoSave.attrs.includes(attr) && (Number(abAutoSave.uses) || 0) > 0;
-    const totalBonus = attrVal + aeAttr;
+    // Foe save proficiency (combat balance 2026-11-12, review H): a chassis monster resists with tier + chassis rank
+    // (+3 / +6 / +7 / +8 at T1–T4) — its authored faculty alone fell to a 1–5% save at T3/T4. derived.threat is null
+    // for Stewards and named NPCs, so they're untouched. The save DC ladder (ftFormulaSaveDC) is unchanged.
+    const _thr = target?.system?.derived?.threat;
+    const _foeSave = _thr ? (Number(_thr.tier) || 0) + (Number(_thr.rank) || 0) : 0;
+    if (_foeSave) aeContribs.push({ src: `threat T${Number(_thr.tier) || 1}`, label: "save proficiency", value: _foeSave });
+    const totalBonus = attrVal + aeAttr + _foeSave;
     // Cosmic Linguist — The Sentence: while the caster holds the stance, its targets resist at disadvantage.
     const clSentence = !!caster?.flags?.fourththing?.modes?.clSentence;
     // Imposed (techniques R5, 2026-09-21): forces 3d10kl2 on this defense check; consumed by it.
@@ -18440,7 +18489,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Non-fixed mode = the formula ladder. Tier from the item's manifestation
     // block when present; otherwise back-derived from the tiered cast DC.
     const _mfTier    = Number((item?.system?.system ?? item?.system)?.manifestation?.tier)
-      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
+      || ftTierFromCastDC(castDc, actor);   // the caster's ladder (combat balance 2026-11-12; was (dc − 10) / 2)
     const dc         = ftSaveDCFor(actor, resolution, _mfTier, channel);   // a Steward's DC is the ladder, never a typed number (2026-11-08)
     const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
 
@@ -18819,11 +18868,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const surgeAllowed = _ftSurgeAllowed(actor);
     const explodes     = (_attkMode === "normal") && surgeAllowed;
-    const baseN        = 2 + (_attkMode !== "normal" ? 1 : 0) + (_masterPool ? 1 : 0) + _snapDie;
+    // Combat balance 2026-11-12 (review manifest-01): the Master/Legendary die joins only a non-disadvantage
+    // roll. It used to add a die AND flip disadvantage to keep-best — 4d10kh2, better than a plain roll.
+    const baseN        = 2 + (_attkMode !== "normal" ? 1 : 0) + (_masterPool && _attkMode !== "disadvantage" ? 1 : 0) + _snapDie;
     const dropCount    = baseN - 2;
-    // Disadvantage keeps the WORST 2 — unless Master/Legendary, whose pool always
-    // keeps the BEST 2 (the rank layers on top, mitigating disadvantage).
-    const keepBest     = !(_attkMode === "disadvantage" && !_masterPool);
+    // Disadvantage keeps the WORST 2 for every rank (combat balance 2026-11-12); Master/Legendary
+    // softens it only through the rank bonus, never by turning it into keep-best.
+    const keepBest     = _attkMode !== "disadvantage";
 
     const baseFormula  = `${baseN}d10${explodes ? "x10" : ""} + ${total_mod}`;
     // Surge dice-mods (cinderwake / wrath-cascade / bonus-die) ride only a normal
@@ -18848,7 +18899,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Proficient (reroll-lowest) + Shape-B / Aid / Snap-Strike reroll grants.
     const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent, target: target?.actor ?? target ?? null });
     consumeBankedBonus(actor, _atkCb).catch(() => {});
-    if (_rankData.mechanic === "reroll_low") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · Proficient`, mode: "reroll-lowest" });
+    // Expert keeps Proficient's reroll, then floors (combat balance 2026-11-12: reroll_low_floor_4, as the sheet promises).
+    if (_rankData.mechanic === "reroll_low" || _rankData.mechanic === "reroll_low_floor_4") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · ${_rankData.label}`, mode: "reroll-lowest" });
     // NPC automation (2026-10-06): "rerolls the lowest die on attacks against a creature that hasn't acted" & kin
     let _npcAtkMods = { rerolls: [], damage: null };
     try { _npcAtkMods = game.fourththing.npcAuto?.attackMods?.(actor, itemUuid ? fromUuidSync(itemUuid) : null, target?.actor ?? target) ?? _npcAtkMods; } catch (_e) {}
@@ -18865,9 +18917,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     await consumeAnnotationReroll(actor, rerollResult.applied);
     await consumeAidReroll(actor, rerollResult.applied);
 
-    // Expert (floor-4): no base die can show below 4. Floor the whole pool before
-    // the keep so a floored die can survive the drop (matches the Aptitude roll).
-    if (_rankData.mechanic === "floor_4") {
+    // Expert (reroll lowest, then floor 4): no base die can show below 4. Floor the whole pool after
+    // the reroll and before the keep so a floored die can survive the drop (matches the Aptitude roll).
+    if (_rankData.mechanic === "floor_4" || _rankData.mechanic === "reroll_low_floor_4") {   // after the reroll (combat balance 2026-11-12)
       for (const r of baseResults) { const v = Number(r.result) || 0; if (v < 4) r.result = 4; }
     }
 
@@ -18898,7 +18950,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (doubleTen) await actor.setFlag("fourththing", "actAgainAvailable", true);   // 10-29: double 10 gives the Action back
 
     if (dropCount > 0) {
-      const poolLabel = _masterPool
+      const poolLabel = (_masterPool && _attkMode !== "disadvantage")   // combat balance 2026-11-12: no rank die at disadvantage
         ? (_rankData.mechanic === "legendary" ? "Legendary" : "Master")
         : (_snapDie && _attkMode === "normal" ? "Snap Strike" : _attkMode === "advantage" ? "Advantage" : "Disadvantage");
       _rankPoolNote = `${poolLabel}: ${baseN}d10 keep ${keepBest ? "best 2" : "worst 2"}${droppedVals.length ? ` (dropped ${droppedVals.join(", ")})` : ""}`;
@@ -19825,7 +19877,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Soul-Smith subclass Spark generation (Victory/Reclaimer on a defeat, Bound Light on ally damage).
       try { await _ftSoulSmithSparkGen(actor, dmg, (newVal <= 0 && cur > 0)); }
       catch (e) { console.warn("[ft] soul-smith spark gen failed", e); }
-      // Bulwark "eat the blow": taking integrity damage banks the wall Surge (Pool).
+    }
+    // Bulwark "eat the blow": taking damage on EITHER track banks the wall Surge (Pool). Combat balance 2026-11-12:
+    // was Integrity-only, so a Bulwark facing Stress damage (now Resolve-targeted) generated nothing. Cap unchanged.
+    if (dmg > 0) {
       try { await _ftBulwarkOnDamage(actor, dmg); }
       catch (e) { console.warn("[ft] bulwark eat-the-blow hook failed", e); }
     }
@@ -21269,7 +21324,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     };
 
     const _mfTierAS = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier)
-      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
+      || ftTierFromCastDC(castDc, caster);   // the caster's ladder (combat balance 2026-11-12; was (dc − 10) / 2)
     const dc = ftSaveDCFor(caster, cfg, _mfTierAS, channel);
     const globalSaveAttr = cfg?.saveAttribute || "body";
     const overrides = (cfg?.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object")
@@ -22698,7 +22753,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
             if (ch.key === `system.attributes.${attrKey}.value`) aeAttr += Number(ch.value) || 0;
           }
         }
-        const total = attrVal + aeAttr;
+        // (combat balance 2026-11-12, H) chassis monsters add their save proficiency (tier + rank) on the
+        // shake-off save too — same bonus _ftTargetResistRoll gives on the first save.
+        const _thrCS = (actor.system?.system ?? actor.system)?.derived?.threat;
+        const _foeSaveCS = _thrCS ? (Number(_thrCS.tier) || 0) + (Number(_thrCS.rank) || 0) : 0;
+        const total = attrVal + aeAttr + _foeSaveCS;
         const roll  = new Roll(`${_ftXd10(actor)} + ${total}`);
         await roll.evaluate();
         const dieResults = roll.dice?.[0]?.results ?? [];

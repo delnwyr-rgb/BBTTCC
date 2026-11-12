@@ -574,7 +574,7 @@
     { label: "Untrained",  color: "#546e7a", desc: "Natural 1+1 always fumbles." },
     { label: "Trained",    color: "#78909c", desc: "+1 · a natural 1+1 no longer auto-fails." },
     { label: "Proficient", color: "#4a90d9", desc: "+2 · reroll the lowest die, keep the new result." },
-    { label: "Expert",     color: "#27ae60", desc: "+3 · neither die can show below 4." },
+    { label: "Expert",     color: "#27ae60", desc: "+3 · still reroll the lowest die; after it, neither die can show below 4." },   // combat balance 2026-11-12
     { label: "Master",     color: "#e8c84a", desc: "+4 · roll 3d10, drop the lowest." },
     { label: "Legendary",  color: "#eb5757", desc: "+5 · 1/scene: auto-succeed DC ≤ 20, or +10 to the roll." }
   ];

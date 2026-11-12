@@ -41,8 +41,10 @@ export const SKILL_RANK_DATA = {
        mechanic: "reroll_low",
        desc: "+2. Reroll the lowest die, keep new result." },
   3: { label: "Expert",     color: "#27ae60", bonus: 3,
-       mechanic: "floor_4",
-       desc: "+3. Neither die can show below 4." },
+       // combat balance 2026-11-12: Expert keeps Proficient's reroll, then floors — what the cumulative
+       // sheet tooltip always promised (was floor_4 alone; the reroll was lost at rank 3).
+       mechanic: "reroll_low_floor_4",
+       desc: "+3. Still reroll the lowest die; after the reroll, neither die can show below 4." },
   4: { label: "Master",     color: "#e8c84a", bonus: 4,
        mechanic: "3d10_drop",
        desc: "+4. Roll 3d10, drop the lowest." },
@@ -148,15 +150,14 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const isFumble = !innate && rank === 0 && baseDice.length > 0 && baseDice.every(v => v === 1);
 
   // Apply rank mechanics to get the "adjusted" per-die value before explosion bonuses.
-  // - floor_4 (rank 3): bump any sub-4 up to 4. Explosion triggers on the ORIGINAL die only.
-  // - reroll_low (rank 2): reroll lowest die; if higher, replace. A rerolled 10 still explodes.
+  // - reroll_low (rank 2) / reroll_low_floor_4 (rank 3): reroll lowest die; if higher, replace. A rerolled 10 still explodes.
+  // - floor_4 / reroll_low_floor_4 (rank 3): AFTER the rerolls, bump any sub-4 up to 4. Explosion triggers
+  //   on the un-floored die only. (combat balance 2026-11-12: the floor used to run first, so a reroll could undo it.)
   const explodeTriggers = [...baseDice];  // values used to decide if a die explodes
   const adjusted        = [...baseDice];  // values used for the base sum
   let rerollNote = null;
-
-  if (rankData.mechanic === "floor_4") {
-    for (let i = 0; i < adjusted.length; i++) adjusted[i] = Math.max(4, adjusted[i]);
-  }
+  const _rankRerolls = rankData.mechanic === "reroll_low" || rankData.mechanic === "reroll_low_floor_4";
+  const _rankFloors  = rankData.mechanic === "floor_4" || rankData.mechanic === "reroll_low_floor_4";
 
   // Shape B reroll grants — passive items granting reroll-lowest/highest on
   // this check (e.g. "advantage on Body checks" from a heritage feat).
@@ -169,20 +170,20 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const aeRerollLowSource  = aeRerollGrants.find(g => g.mode === "reroll-lowest")?.sourceItemName;
   const aeRerollHighSource = aeRerollGrants.find(g => g.mode === "reroll-highest")?.sourceItemName;
 
-  if (rankData.mechanic === "reroll_low" || aeRerollLowSource) {
+  if (_rankRerolls || aeRerollLowSource) {
     const minVal = Math.min(...adjusted);
     const minIdx = adjusted.indexOf(minVal);
     const reroll = new Roll("1d10");
     await reroll.evaluate();
     const rerollVal = reroll.total;
-    const srcTag = rankData.mechanic === "reroll_low"
-      ? "Proficient"
+    const srcTag = _rankRerolls
+      ? rankData.label
       : aeRerollLowSource;
     if (rerollVal > minVal) {
       adjusted[minIdx]        = rerollVal;
       explodeTriggers[minIdx] = rerollVal;   // reroll can explode
       rerollNote = `↑ rerolled ${minVal} → ${rerollVal} (${srcTag})`;
-      if (rankData.mechanic !== "reroll_low") rerollApplied.push({ mode: "reroll-lowest", source: aeRerollLowSource });
+      if (!_rankRerolls) rerollApplied.push({ mode: "reroll-lowest", source: aeRerollLowSource });
     } else {
       rerollNote = `↑ rerolled ${minVal} → ${rerollVal} kept original (${srcTag})`;
     }
@@ -206,6 +207,13 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
       highNote = `↓ rerolled ${maxVal} → ${rerollVal} kept original (${aeRerollHighSource})`;
     }
     rerollNote = rerollNote ? `${rerollNote} · ${highNote}` : highNote;
+  }
+  // Expert floor runs after every reroll (combat balance 2026-11-12). floorAdd feeds the card note.
+  let floorAdd = 0;
+  if (_rankFloors) {
+    for (let i = 0; i < adjusted.length; i++) {
+      if (adjusted[i] < 4) { floorAdd += 4 - adjusted[i]; adjusted[i] = 4; }
+    }
   }
   // Banked bonuses FIRST: they splice aidBanked by snapshot index, and the Aid
   // reroll consume shifts those indices (wrong/no entry dropped otherwise).
@@ -272,10 +280,7 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   // Mechanic note for the chat card.
   let mechNote = null;
   if (poolSize === 3) mechNote = "3d10 keep best 2";
-  else if (rankData.mechanic === "floor_4") {
-    const floorAdd = adjusted.reduce((s, v, i) => s + (v - baseDice[i]), 0);
-    if (floorAdd > 0) mechNote = `floor 4 (+${floorAdd})`;
-  }
+  else if (_rankFloors && floorAdd > 0) mechNote = `floor 4 (+${floorAdd})`;   // combat balance 2026-11-12: counted at the floor, not vs the pre-reroll dice
   // 10-29: name the flat check bonuses on the card (both cards print mechNote).
   if (checkBonuses.length) {
     const cbNote = checkBonuses.map(b => `${b.bonus > 0 ? "+" : ""}${b.bonus} ${b.source}`).join(", ");
@@ -2619,7 +2624,7 @@ export async function openSpendSkillPoints(actor) {
     content: `<div class="ft-cast-dialog">
       <p style="font-size:0.78rem;opacity:0.65;margin:0 0 0.5rem">
         Each rank costs 1 point. Rank milestones unlock mechanics:
-        Rank 2 = reroll low · Rank 3 = floor 4 · Rank 4 = 3d10 drop · Rank 5 = legendary
+        Rank 2 = reroll low · Rank 3 = reroll low + floor 4 · Rank 4 = 3d10 drop · Rank 5 = legendary
       </p>
       <div id="ft-sp-remaining" style="font-size:0.82rem;font-weight:600;color:#e8c84a;margin-bottom:0.5rem">
         Points remaining: <span id="ft-sp-val">${points}</span>

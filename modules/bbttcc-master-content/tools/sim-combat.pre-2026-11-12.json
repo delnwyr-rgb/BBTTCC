@@ -1,0 +1,19 @@
+{
+  "_note": "bin/ft-sim-combat --config this file = the live combat rules BEFORE the 2026-11-12 combat balance package (A-J).",
+  "chassis": {
+    "attack": [0, 3, 4, 4], "damage": [0, 3, 4, 5], "defense": [0, 3, 5, 5], "rank": [2, 4, 5, 5],
+    "pool": { "light": [0.6, 0.6, 0.6, 0.6], "medium": [2, 1.5, 1.5, 1.5], "heavy": [3, 3, 3, 3], "boss": [5, 5, 5, 4] },
+    "strikes": { "light": [1, 1, 1, 2], "medium": [1, 2, 2, 3], "heavy": [2, 2, 3, 3], "boss": [2, 3, 3, 3] }
+  },
+  "rankMechanic": ["plain", "plain", "rerollLow", "floor4", "kh3", "kh3"],
+  "masterDisFix": false,
+  "eatBlowAnyTrack": false,
+  "stitchDice": [null, "2d6", "2d6", "2d6", "2d6"],
+  "patchDice": [null, "2d6", "2d6", "2d6", "2d6"],
+  "fieldPatchMode": "integrity",
+  "castClarityInRoll": true,
+  "castDC": [0, 12, 14, 16, 18],
+  "castOvExcludeClarity": false,
+  "gradeResolveR0": null,
+  "foeSaveProf": null
+}
