@@ -56,8 +56,9 @@
       <a class="item" data-tab="combat">Conflict</a>
       <a class="item" data-tab="skills">Aptitudes</a>
       <a class="item" data-tab="powers">Manifestations</a>
-      {{#unless alpha.tabs}}<a class="item" data-tab="features">Principles</a>
-      <a class="item" data-tab="effects">States</a>{{/unless}}
+      {{!-- Principles restored for every seat (Dave 2026-11-12: "Players need to see their powers") — out of the Alpha cut --}}
+      <a class="item" data-tab="features">Principles</a>
+      {{#unless alpha.tabs}}<a class="item" data-tab="effects">States</a>{{/unless}}
       <a class="item" data-tab="inventory">Inventory</a>
       {{#unless alpha.tabs}}<a class="item" data-tab="tikkun">The Work</a>{{/unless}}
     </nav>
