@@ -5059,7 +5059,8 @@ function ftBuildManifestationRow(item, kind = "power") {
     isWeaponForm: kind === "weapon",
     desc: mf.concept || system.effect || system.flavor || system.description?.value || "",
     signature: mf.signature || "",
-    thirdThing: mf.thirdThing || ""
+    thirdThing: mf.thirdThing || "",
+    glance: ftManifestGlance(item?.actor ?? null, item, kind)   // the row's rules line (Dave 2026-11-12)
   };
 }
 function ftCollectManifestationLenses(actor) {
@@ -15420,6 +15421,120 @@ function ftItemGlance(actor, item) {
     }
     return "";
   } catch (e) { console.warn("[fourththing] ftItemGlance failed", item?.name, e); return ""; }
+}
+
+// MANIFESTATION GLANCE (Dave 2026-11-12: "add the mechanical effects to the line descriptions of manifestations, so the
+// players don't have to open them to see what's up"). Returns { nums, text } for the Manifestations / Conflict rows:
+//   nums — worked out for THIS caster: the cast roll (Intent + Channel + alignment + effects + castBonus − Noise − Strain/
+//          radiation, the static part of magicTest's posTotal; terrain + Surge one-shots are situational and left out)
+//          vs the tier's cast DC; damage / healing dice with the Intent faculty folded in (ftRollManifestationDamage);
+//          the target's save (faculty + ftSaveDCFor) and the states it lands. A Form weapon reads its Strike line
+//          (ftItemGlance: to-hit · damage) instead of the cast roll.
+//   text — the authored rules line (system.effect), or one built from the structure when a player-made power has none.
+function ftManifestGlance(actor, item, kind = "power") {
+  try {
+    if (!item) return null;
+    const sys = item.system ?? {};
+    const mf  = ftNormalizeManifestationData(sys, kind);
+    const tier = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+    const sgn = (n) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
+    const FAC = (k) => FT.FACULTIES?.[k]?.label ?? ftCap(k);
+    const nums = [];
+    const intent  = ftItemIntent(item, "violence");
+    const channel = String(sys.channel ?? "soul");
+    const src = actor ? ftSourceSystem(actor) : null;
+    const live = actor ? (actor.system?.system ?? actor.system ?? {}) : {};
+
+    if (kind === "weapon") {
+      // A Form with no damage dice (a bound tool like Atlas Prism) has no Strike worth quoting — skip "+4 to hit · 0+2".
+      const _wf = String(sys.damage?.formula ?? (typeof sys.damage === "string" ? sys.damage : "")).trim();
+      const _wdr = ftNormalizeDamageRoll(sys);
+      const _hasDice = /\d*d\d/i.test(_wf) || (_wdr.op === "damage" && _wdr.number > 0);
+      const g = (actor && _hasDice) ? ftItemGlance(actor, item) : "";
+      if (g) nums.push(g);
+    } else if (actor) {
+      const attrI = Number(src?.attributes?.[intent]?.value) || 0;
+      const attrC = Number(src?.attributes?.[channel]?.value) || 0;
+      const rawSys = actor.system?.system ?? actor.system;
+      const seph = ftEffectiveSephirah(actor, sys.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet");
+      let aeI = 0, aeC = 0, aeClar = 0, aeNoise = 0;
+      for (const effect of actor.appliedEffects ?? []) {
+        if (effect.disabled) continue;
+        for (const ch of effect.changes ?? []) {
+          if (ch.type !== "add") continue;
+          const v = Number(ch.value) || 0;
+          if (ch.key === `system.attributes.${intent}.value`) aeI += v;
+          else if (ch.key === `system.attributes.${channel}.value`) aeC += v;
+          else if (ch.key === "system.magic.clarity.value") aeClar += v;
+          else if (ch.key === "system.magic.noise.value") aeNoise += v;
+        }
+      }
+      const foe = _ftIsFoeActor(actor);
+      const clarityInRoll = foe ? (Number(src?.magic?.clarity?.value) || 0) : 0;
+      const pen = _ftRadiationBite(actor).rollPenalty + _ftStrainBite(actor).rollPenalty;
+      const noise = (Number(src?.magic?.noise?.value) || 0) + aeNoise;
+      const castMod = attrI + attrC + clarityInRoll + ftAlignmentMod(seph, intent, channel) + aeI + aeC + aeClar
+        + (Number(live?.magic?.castBonus) || 0) - pen - noise;
+      nums.push(`Cast ${sgn(castMod)} vs DC ${ftTierCastDC(tier, actor)}`);
+    }
+
+    // Damage / healing (a Form weapon's damage is already in its Strike line).
+    const dr = ftNormalizeDamageRoll(sys);
+    if (kind !== "weapon" && dr.op !== "none" && dr.number > 0) {
+      const fac = (actor && dr.attribute) ? (Number(live?.attributes?.[dr.attribute]?.value) || 0) : 0;
+      const flat = (Number(dr.bonus) || 0) + fac;
+      const dice = `${dr.number}${dr.die}${flat ? sgn(flat).replace("−", "-") : ""}`;
+      if (dr.op === "heal") {
+        nums.push(`Heals ${dice} ${dr.track === "stress" ? "Stress" : "Integrity"}`);
+      } else {
+        const t = actor ? ftOutgoingDamageType(actor, dr.type) : dr.type;
+        const extra = ftCollectExtraDamageParts(item).map(p => `+ ${p.formula} ${FT.DAMAGE_TYPES?.[p.type]?.label?.toLowerCase() ?? p.type}`);
+        nums.push([`${dice} ${FT.DAMAGE_TYPES?.[t]?.label?.toLowerCase() ?? t}`, ...extra].join(" "));
+      }
+    }
+
+    // The target's save + what lands.
+    const res = mf.resolution ?? {}, ap = mf.appliedStates ?? {};
+    const states = (ap.states ?? []).map(k => FT.CONDITIONS?.[k]?.label ?? ftCap(k));
+    const dcFor = (cfg) => ftSaveDCFor(actor, cfg, tier, kind === "weapon" ? null : channel);
+    if (res.shape === "save") {
+      nums.push(`${FAC(res.saveAttribute)} save DC ${dcFor(res)} (${res.onSave === "half" ? "half" : "negates"})`);
+    } else if (res.shape === "contested") {
+      nums.push(`Contested vs ${FAC(res.contestTargetAttribute)}`);
+    } else if (res.shape === "attack") {
+      nums.push("Attack roll vs defense");
+    } else if (res.hitSave && states.length) {
+      nums.push(`${FAC(res.saveAttribute)} save DC ${dcFor(res)} vs states`);
+    }
+    if (states.length) {
+      const durMap = { "1-round": "1 rd", "2-rounds": "2 rds", "3-rounds": "3 rds", scene: "scene", "until-saved": "until saved" };
+      const each = ap.saveEachRound && ap.duration !== "until-saved"
+        ? ` · ${FAC(ap.saveAttribute)} DC ${dcFor(ap)} each round` : (ap.duration === "until-saved" ? ` · ${FAC(ap.saveAttribute)} DC ${dcFor(ap)}` : "");
+      nums.push(`${states.join(", ")} (${durMap[ap.duration] ?? ap.duration}${each})`);
+    }
+
+    // The rules line.
+    const strip = (s) => String(s ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+    let text = strip(sys.effect) || strip(mf.mechanicalHook);
+    if (!text) {
+      const bits = [];
+      const STAT = { guard: "Guard", resolve: "Resolve", initiative: "Initiative", evasion: "Evasion" };
+      for (const m of mf.appliedEffects?.modifiers ?? []) {
+        if (!m?.stat) continue;
+        const v = Number(m.value) || 0;
+        bits.push(`${m.op === "-" ? "−" : "+"}${Math.abs(v)} ${STAT[m.stat] ?? FT.FACULTIES?.[m.stat]?.label ?? ftCap(m.stat)}`);
+      }
+      for (const r of mf.appliedEffects?.resists ?? []) bits.push(`resist ${FT.DAMAGE_TYPES?.[r]?.label?.toLowerCase() ?? r}`);
+      for (const r of mf.appliedEffects?.immunes ?? []) bits.push(`immune ${FT.DAMAGE_TYPES?.[r]?.label?.toLowerCase() ?? r}`);
+      if (mf.area?.shape && mf.area.shape !== "none" && Number(mf.area.size) > 0) bits.push(`${Math.round(Number(mf.area.size) / 5)}-sq ${mf.area.shape}`);
+      const dur = ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, "");
+      if (dur && mf.duration !== "instant") bits.push(dur.toLowerCase());
+      text = bits.join(" · ");
+    }
+    if (!nums.length && !text) return null;
+    const nStr = nums.join(" · ");
+    return { nums: nStr, text, title: [nStr, text].filter(Boolean).join(" — ") };
+  } catch (e) { console.warn("[fourththing] ftManifestGlance failed", item?.name, e); return null; }
 }
 
 function buildAttackDialogHTML(actor, item) {

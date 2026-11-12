@@ -4143,6 +4143,18 @@
   opacity: 0.86;
 }
 /* 2026-11-12 (Dave): the row's second line says what the item DOES (to hit + damage, heal amount) — not italic colour. */
+/* Manifestation glance (Dave 2026-11-12): the rules line under each manifestation row — worked-out numbers in bold,
+   then the effect text. Wraps (no ellipsis) so the whole rule reads without opening the row. */
+.ft-item-summary:has(> .ft-manifest-glance) { flex-wrap: wrap; }
+.ft-manifest-glance {
+  flex: 1 0 100%;
+  padding: 0 0 0.1rem 2.1rem;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: #c9d3df;
+  white-space: normal;
+}
+.ft-manifest-glance b { color: #e6ebf2; font-weight: 600; margin-right: 0.4rem; }
 .ft-inv-glance {
   flex: 0 1 auto;
   color: #e6ebf2;

@@ -530,6 +530,7 @@
               <button type="button" data-action="ftItemEdit"   data-item-id="{{m.id}}" class="ft-item-edit">⚙</button>
               <button type="button" data-action="ftItemDelete" data-item-id="{{m.id}}" class="ft-power-delete">✕</button>
             </div>
+            {{#if m.glance}}<div class="ft-manifest-glance" title="{{m.glance.title}}">{{#if m.glance.nums}}<b>{{m.glance.nums}}</b>{{/if}}{{#if m.glance.text}}<span>{{m.glance.text}}</span>{{/if}}</div>{{/if}}
           </summary>
           <div class="ft-manifest-detail">
             {{#if m.signature}}<div class="ft-manifest-signature">Signature: {{m.signature}}</div>{{/if}}
