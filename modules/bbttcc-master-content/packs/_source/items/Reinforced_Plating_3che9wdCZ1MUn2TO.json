@@ -35,7 +35,8 @@
             "saleBack": 12
           },
           "tier": "I",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · +2 Integrity max per rig tier"
         }
       }
     }

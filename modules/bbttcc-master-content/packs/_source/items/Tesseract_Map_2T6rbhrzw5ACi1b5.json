@@ -45,7 +45,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "1/turn: preview a travel encounter · 1/Soma Break: retcon last leg as safe"
         }
       }
     }

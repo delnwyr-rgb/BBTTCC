@@ -48,7 +48,8 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A single spiralled horn of energy-sheathed alloy, mounted on the prow. Subtle it is not.</p><p><b>Energy Ramming Horn.</b> Once per scene, the rig may ram: 6d10 kinetic to the target, which is pushed 2 squares.</p>"
+          "lore": "<p>A single spiralled horn of energy-sheathed alloy, mounted on the prow. Subtle it is not.</p><p><b>Energy Ramming Horn.</b> Once per scene, the rig may ram: 6d10 kinetic to the target, which is pushed 2 squares.</p>",
+          "glance": "Rig module · 1/scene ram: 6d10 kinetic, push 2 sq"
         }
       },
       "rigGear": {

@@ -4142,6 +4142,17 @@
   font-size: 0.78rem;
   opacity: 0.86;
 }
+/* 2026-11-12 (Dave): the row's second line says what the item DOES (to hit + damage, heal amount) — not italic colour. */
+.ft-inv-glance {
+  flex: 0 1 auto;
+  color: #e6ebf2;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
 .ft-inv-origin {
   flex: 0 0 auto;
   font-size: 0.7rem;

@@ -45,7 +45,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Double Materials in Ruins/Urban · reroll lowest on vehicle repair"
         }
       },
       "rerolls": [

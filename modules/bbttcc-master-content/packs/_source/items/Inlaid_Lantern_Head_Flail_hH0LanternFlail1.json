@@ -30,7 +30,7 @@
       "light-source"
     ],
     "effect": "A flail, Inlaid: +1 to hit and +1 damage. The hollow iron head holds a candle that will not go out — bright light 4 squares while it is in your hand.",
-    "flavor": "A carved iron pumpkin on a chain, grinning, lit from inside.",
+    "flavor": "",
     "manifestation": {
       "tier": 1,
       "family": "form",
@@ -63,7 +63,7 @@
       }
     },
     "description": {
-      "value": "<p>Gloomgill kept it by the quiz lectern for the guests who answered wrong. The face is cut into the iron and the candle behind it has burned since the marsh went dark, and it is cheerful about it, which is worse.</p><p><em>A flail, Inlaid: +1 to hit and +1 damage. The hollow iron head holds a candle that will not go out — bright light 4 squares while it is in your hand.</em></p>",
+      "value": "<p><em>A flail, Inlaid: +1 to hit and +1 damage. The hollow iron head holds a candle that will not go out — bright light 4 squares while it is in your hand.</em></p>",
       "chat": ""
     }
   },

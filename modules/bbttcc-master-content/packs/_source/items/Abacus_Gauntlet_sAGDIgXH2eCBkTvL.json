@@ -45,7 +45,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "+1 Economy/Logistics checks · 1/Soma Break: negate a raid-prep shortfall"
         }
       },
       "passives": {

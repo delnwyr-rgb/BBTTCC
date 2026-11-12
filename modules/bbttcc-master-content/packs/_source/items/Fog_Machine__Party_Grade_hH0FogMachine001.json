@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>The Chuckle Creek showrunner's. It made the series finale look like a series finale. The reservoir refills itself between scenes because that is what reservoirs do on television.</p><p><strong>Bound Working — Dry Ice:</strong> A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Dry Ice:</strong> A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -111,7 +111,7 @@
               "stealth"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'It worked at the finale. Finales are mostly fog.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

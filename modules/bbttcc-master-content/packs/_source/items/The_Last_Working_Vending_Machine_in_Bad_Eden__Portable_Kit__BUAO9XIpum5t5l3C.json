@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><strong>The Trade.</strong> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
+      "value": "<p><strong>The Trade.</strong> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><b>The Trade.</b> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
+          "lore": "<p><b>The Trade.</b> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
           "materialOf": [
             "pre-fall-electronics",
             "vending-machine-soul",
@@ -56,7 +56,8 @@
             "saleBack": 0,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 405
-          }
+          },
+          "glance": "1/session: trade a Tier I item for a random swap (1d6)"
         }
       }
     }

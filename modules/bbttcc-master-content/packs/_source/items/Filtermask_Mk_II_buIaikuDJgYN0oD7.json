@@ -34,7 +34,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Reroll lowest die on Body checks vs gases"
         }
       },
       "rerolls": [

@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><strong>Pocket Noon.</strong> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
+      "value": "<p><strong>Pocket Noon.</strong> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><b>Pocket Noon.</b> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
+          "lore": "<p><b>Pocket Noon.</b> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover.</p>",
           "materialOf": [
             "pre-fall-electronics",
             "summer-memory",
@@ -54,7 +54,8 @@
             "notes": "TI tool stamp",
             "bound": "free",
             "saleBack": 12
-          }
+          },
+          "glance": "1/scene: allies in a Near zone reroll lowest on Resolve vs fear · enemies visible"
         }
       }
     }

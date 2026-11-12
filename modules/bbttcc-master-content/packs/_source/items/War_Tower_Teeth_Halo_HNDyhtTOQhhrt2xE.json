@@ -48,7 +48,8 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A ring of serrated emitters around a war tower's crown. Anything that bites the tower gets bitten back.</p><p><b>Reactive Bite.</b> When a creature or rig strikes the mounted rig in melee, it takes 2d8 electrical. Stacks with sanctum shields.</p>"
+          "lore": "<p>A ring of serrated emitters around a war tower's crown. Anything that bites the tower gets bitten back.</p><p><b>Reactive Bite.</b> When a creature or rig strikes the mounted rig in melee, it takes 2d8 electrical. Stacks with sanctum shields.</p>",
+          "glance": "Rig module · melee attackers take 2d8 electrical"
         }
       },
       "rigGear": {

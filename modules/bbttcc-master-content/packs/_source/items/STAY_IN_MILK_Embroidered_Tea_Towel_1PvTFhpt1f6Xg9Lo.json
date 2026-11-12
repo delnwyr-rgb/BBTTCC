@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Hand-embroidered. Cross-stitched. The advice is, on examination, slightly off. The advice is also, on examination, somehow correct in this specific timeline. Folded once and tucked into a belt or backpack. The corner pokes out of your gear like a small flag of misplaced parental concern.</p><p><strong>Bad Advice Resistance.</strong> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
+      "value": "<p><strong>Bad Advice Resistance.</strong> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>Hand-embroidered. Cross-stitched. The advice is, on examination, slightly off. The advice is also, on examination, somehow correct in this specific timeline. Folded once and tucked into a belt or backpack. The corner pokes out of your gear like a small flag of misplaced parental concern.</p><p><b>Bad Advice Resistance.</b> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
+          "lore": "<p><b>Bad Advice Resistance.</b> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
           "materialOf": [
             "sept-cloth",
             "blessed-thread",
@@ -53,7 +53,8 @@
             "notes": "TI talisman",
             "bound": "free",
             "saleBack": 24
-          }
+          },
+          "glance": "Reroll lowest on Resolve vs charm / social pressure"
         }
       },
       "rerolls": [

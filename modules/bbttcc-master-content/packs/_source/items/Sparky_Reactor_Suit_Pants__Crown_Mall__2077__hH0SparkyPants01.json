@@ -18,7 +18,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Yellow padded trousers, the paw on one hip, knees out. Dewey of Chuckle Creek traded them for a ride on your rig and did not need them, because nothing there hurts. His brother had the top but got too big. The set was never complete in any one town. That was the whole trouble with that Halloween.</p><p><em>Evasion +1 and +2 on Athletics checks while worn — the knees are gone because the kid who wore them ran everywhere, and the pants remember how.</em></p><p>Worn (costume) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
+      "value": "<p><em>Evasion +1 and +2 on Athletics checks while worn — the knees are gone because the kid who wore them ran everywhere, and the pants remember how.</em></p><p>Worn (costume) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
       "chat": ""
     }
   },
@@ -59,7 +59,8 @@
             "notes": "TI vestment × bound free",
             "bound": "free",
             "saleBack": 30
-          }
+          },
+          "glance": "Worn: Guard +1 · +2 Athletics · Sparky set 1/3"
         }
       },
       "passives": {

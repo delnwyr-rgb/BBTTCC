@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><strong>Currency of the Frontier-Formerly-Known.</strong> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
+      "value": "<p><strong>Currency of the Frontier-Formerly-Known.</strong> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><b>Currency of the Frontier-Formerly-Known.</b> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
+          "lore": "<p><b>Currency of the Frontier-Formerly-Known.</b> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
           "materialOf": [
             "pre-fall-paper",
             "borderline-irrational-state-pride"
@@ -52,7 +52,8 @@
             "notes": "TII trade-good",
             "bound": "free",
             "saleBack": 24
-          }
+          },
+          "glance": "1/session: counts as a Tier II trade good, then returns"
         }
       }
     }

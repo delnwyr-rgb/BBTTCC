@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
+      "value": "<p><strong>Mild Authority.</strong> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><b>Mild Authority.</b> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
+          "lore": "<p><b>Mild Authority.</b> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree.</p>",
           "materialOf": [
             "sacred-gold",
             "borderline-irrational-state-pride",
@@ -55,7 +55,8 @@
             "saleBack": 28,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 180
-          }
+          },
+          "glance": "Worn visibly, 1/scene: the other party hears one more sentence"
         }
       }
     }

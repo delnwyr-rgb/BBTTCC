@@ -43,7 +43,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Reroll lowest vs mild radiation and spores"
         }
       },
       "rerolls": [

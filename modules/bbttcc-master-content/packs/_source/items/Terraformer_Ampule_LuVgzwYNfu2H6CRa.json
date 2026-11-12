@@ -49,7 +49,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Expend: cleanse a 6 sq hazard · Wasteland: regional Darkness −1"
         }
       }
     },

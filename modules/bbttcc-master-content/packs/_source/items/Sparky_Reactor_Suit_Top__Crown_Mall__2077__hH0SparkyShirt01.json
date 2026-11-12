@@ -18,7 +18,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Padded yellow, the trefoil paw over the heart, DUCK AND GLOW! across the shoulders. Bucky Sorrel of Stillwater sold it to you off his own back for buttons, and was wearing another one underneath. Sparky the Reactor Pup taught a generation of children what to do when the sirens went. The sirens went.</p><p><em>Guard +1 while worn, and it is a reactor suit — it says so on the back — so radiation on a hex bites one level softer (the radiation engine reads it like any rad gear).</em></p><p>Worn (costume) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
+      "value": "<p><em>Guard +1 while worn, and it is a reactor suit — it says so on the back — so radiation on a hex bites one level softer (the radiation engine reads it like any rad gear).</em></p><p>Worn (costume) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
       "chat": ""
     }
   },
@@ -59,7 +59,8 @@
             "notes": "TI vestment × bound free",
             "bound": "free",
             "saleBack": 30
-          }
+          },
+          "glance": "Worn: Guard +1 · radiation 1 level softer · Sparky set 1/3"
         }
       }
     },

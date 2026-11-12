@@ -45,7 +45,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Resist psychic · 1/Soma Break: negate charm/fear for you + allies in 6 sq"
         }
       },
       "grants": {

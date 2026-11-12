@@ -36,7 +36,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "1/Soma Break: fly 8 sq for 10 min · overland travel −25%"
         }
       }
     }

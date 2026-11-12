@@ -37,7 +37,8 @@
             "legacyMarks": 90
           },
           "tier": "II",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · engineer's repair check +2"
         }
       }
     }

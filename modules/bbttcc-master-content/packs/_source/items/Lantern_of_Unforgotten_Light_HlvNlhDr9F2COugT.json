@@ -51,7 +51,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Allies in 4 sq reroll lowest vs Darkness fear · 1/Soma Break: suppress 1 Darkness level"
         }
       },
       "passives": {

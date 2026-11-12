@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Hollis Varn wore it on the hand he held out. He had a rate for everyone and a reason for every rate, and the ring made both sound settled. It will do the same for you, which is not entirely a gift.</p><p><em>+1 on Intimidation and Streetwise checks while worn. Every bridge has a price; the ring remembers which hand to hold out.</em></p><p>Worn (ring) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>+1 on Intimidation and Streetwise checks while worn. Every bridge has a price; the ring remembers which hand to hold out.</em></p><p>Worn (ring) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -56,7 +56,8 @@
             "saleBack": 28,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 180
-          }
+          },
+          "glance": "Worn: +1 Intimidation · +1 Streetwise"
         }
       },
       "passives": {

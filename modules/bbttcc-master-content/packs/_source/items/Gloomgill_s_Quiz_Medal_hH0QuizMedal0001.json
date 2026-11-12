@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>The marsh quizmaster gave these out, once a decade, to the one guest who got every question right. There are three in the world. The other two are on the bottom of the marsh, still pinned to the winners.</p><p><em>+2 on Lore and +1 on Occult checks while pinned on. Gloomgill asked the questions; whoever wears this knew the answers.</em></p><p>Worn (pin) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>+2 on Lore and +1 on Occult checks while pinned on. Gloomgill asked the questions; whoever wears this knew the answers.</em></p><p>Worn (pin) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -57,7 +57,8 @@
             "saleBack": 34,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 540
-          }
+          },
+          "glance": "Worn: +2 Lore · +1 Occult"
         }
       },
       "passives": {

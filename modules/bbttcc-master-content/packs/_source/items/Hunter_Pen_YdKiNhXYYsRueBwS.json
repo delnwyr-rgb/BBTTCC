@@ -37,7 +37,8 @@
             "saleBack": 12
           },
           "tier": "I",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · food while deployed"
         }
       }
     }

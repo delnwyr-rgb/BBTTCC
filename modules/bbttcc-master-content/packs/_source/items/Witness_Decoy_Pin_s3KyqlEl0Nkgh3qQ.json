@@ -53,7 +53,8 @@
             "notes": "TI consumable × tech 2.0 × rarity 2",
             "bound": "free",
             "saleBack": 16
-          }
+          },
+          "glance": "Single use: a decoy stands in your place for 1 round"
         }
       }
     }

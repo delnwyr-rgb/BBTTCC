@@ -50,7 +50,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Allies in 6 sq: +1 Guard defending a hex"
         }
       },
       "passives": {

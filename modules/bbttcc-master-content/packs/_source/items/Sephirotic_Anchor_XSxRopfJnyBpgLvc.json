@@ -51,7 +51,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Plant 10 min: 12 sq sanctuary · enemies attack at disadvantage"
         }
       }
     }

@@ -182,7 +182,7 @@
               "event"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'Your account has been locked for suspicious activity. The suspicious activity was \"charging at the Pactkeeper.\"'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

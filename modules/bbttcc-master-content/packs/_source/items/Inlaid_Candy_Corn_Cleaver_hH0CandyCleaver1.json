@@ -29,7 +29,7 @@
       "cleaver"
     ],
     "effect": "A machete, Inlaid: +1 to hit and +1 damage. Confiscated from a child in 2077 and sharpened since by someone who was not one.",
-    "flavor": "Orange at the back, yellow at the edge, white where it bites.",
+    "flavor": "",
     "manifestation": {
       "tier": 1,
       "family": "form",
@@ -62,7 +62,7 @@
       }
     },
     "description": {
-      "value": "<p>Hollis Varn's. The blade is painted in three stripes like the candy and the paint has never chipped, which is not how paint works. He used it at the toll bar on the people who argued about the rate. There were not many arguments.</p><p><em>A machete, Inlaid: +1 to hit and +1 damage. Confiscated from a child in 2077 and sharpened since by someone who was not one.</em></p>",
+      "value": "<p><em>A machete, Inlaid: +1 to hit and +1 damage. Confiscated from a child in 2077 and sharpened since by someone who was not one.</em></p>",
       "chat": ""
     }
   },

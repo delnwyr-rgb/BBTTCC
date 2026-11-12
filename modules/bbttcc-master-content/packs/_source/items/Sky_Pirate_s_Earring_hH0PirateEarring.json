@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Sklar Bjrornholt wore one; the other is on whoever took the last ship before this one. The bead is a drop of the high cold sky, and it wants to be up there, and it will pull you along.</p><p><em>Initiative +2 and +1 on Piloting checks while worn. Valhaulan boarders move first or not at all.</em></p><p>Worn (trinket) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>Initiative +2 and +1 on Piloting checks while worn. Valhaulan boarders move first or not at all.</em></p><p>Worn (trinket) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -56,7 +56,8 @@
             "saleBack": 34,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 540
-          }
+          },
+          "glance": "Worn: initiative +2 · +1 Piloting"
         }
       },
       "passives": {

@@ -18,7 +18,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+      "value": "<p><strong>Structural Foam.</strong> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
       "chat": ""
     }
   },
@@ -43,7 +43,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><b>Structural Foam.</b> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+          "lore": "<p><b>Structural Foam.</b> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
           "materialOf": [
             "expanded-polyurethane",
             "team-spirit",

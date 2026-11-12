@@ -37,7 +37,8 @@
             "legacyMarks": 270
           },
           "tier": "III",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · +1 Guard fitted · toggle: harder to target"
         }
       }
     }

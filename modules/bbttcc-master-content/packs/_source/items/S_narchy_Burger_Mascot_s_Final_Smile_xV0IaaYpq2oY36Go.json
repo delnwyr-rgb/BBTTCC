@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><strong>Mascot's Last Dignity.</strong> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
+      "value": "<p><strong>Mascot's Last Dignity.</strong> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><b>Mascot's Last Dignity.</b> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember Snarky Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
+          "lore": "<p><b>Mascot's Last Dignity.</b> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember Snarky Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
           "materialOf": [
             "enamel-pin",
             "pre-fall-signage",
@@ -53,7 +53,8 @@
             "notes": "TI talisman",
             "bound": "free",
             "saleBack": 24
-          }
+          },
+          "glance": "Reroll lowest on your first Intimidate/Mock check each scene"
         }
       },
       "rerolls": [

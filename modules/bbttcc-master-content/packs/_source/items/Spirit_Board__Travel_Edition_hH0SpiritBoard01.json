@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Soft Landing's. The kids played it at the state function the night the ground went soft, and it told them something, and then the Mayor banged the gavel and they never finished asking. It still wants to finish.</p><p><strong>Bound Working — Ask the Board:</strong> One target within 6 squares: Soul defense vs Cast DC. On a fail they are Compelled for 1 round — they answer one question truthfully, and the planchette moves on its own to confirm it.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Ask the Board:</strong> One target within 6 squares: Soul defense vs Cast DC. On a fail they are Compelled for 1 round — they answer one question truthfully, and the planchette moves on its own to confirm it.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -113,7 +113,7 @@
               "truth"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'Everyone pushes the planchette. The trick is the board pushes back.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

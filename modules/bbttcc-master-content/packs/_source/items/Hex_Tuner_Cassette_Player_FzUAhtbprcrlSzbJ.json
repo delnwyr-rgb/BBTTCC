@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
+      "value": "<p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><b>Side A — GENERIC MOTIVATIONAL.</b> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><b>Side B — EMERGENCY ONLY.</b> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
+          "lore": "<p><b>Side A — GENERIC MOTIVATIONAL.</b> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><b>Side B — EMERGENCY ONLY.</b> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence.</p>",
           "materialOf": [
             "pre-fall-electronics",
             "ley-tuned-magnetic-tape",
@@ -56,7 +56,8 @@
             "saleBack": 14,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 90
-          }
+          },
+          "glance": "1/scene: you + 1 ally reroll lowest on next Resolve · 1/session: all allies, whole scene"
         }
       },
       "npcAuto": {

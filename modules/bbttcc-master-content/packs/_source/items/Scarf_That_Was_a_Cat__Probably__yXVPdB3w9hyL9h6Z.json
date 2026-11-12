@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +2 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+      "value": "<p><strong>Companion-Texture.</strong> +2 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
       "chat": ""
     }
   },
@@ -45,7 +45,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><b>Companion-Texture.</b> +2 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+          "lore": "<p><b>Companion-Texture.</b> +2 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
           "materialOf": [
             "wool",
             "memory",

@@ -39,7 +39,8 @@
             "legacyMarks": 90
           },
           "tier": "II",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · makes ingots/parts while parked (half while deployed)"
         }
       }
     }

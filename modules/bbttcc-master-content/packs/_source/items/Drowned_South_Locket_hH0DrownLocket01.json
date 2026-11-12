@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>The Ferryman kept it against his chest for the river's sake. Open it and there is water in it, river water, and the water is not still. Wear it and the Drowned South will carry you across instead of down.</p><p><em>Resolve +1 while worn, and you cannot drown — the locket holds one breath, and it is always the next one.</em></p><p>Worn (amulet) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>Resolve +1 while worn, and you cannot drown — the locket holds one breath, and it is always the next one.</em></p><p>Worn (amulet) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -57,7 +57,8 @@
             "saleBack": 28,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 180
-          }
+          },
+          "glance": "Worn: Resolve +1 · can't drown"
         }
       }
     }

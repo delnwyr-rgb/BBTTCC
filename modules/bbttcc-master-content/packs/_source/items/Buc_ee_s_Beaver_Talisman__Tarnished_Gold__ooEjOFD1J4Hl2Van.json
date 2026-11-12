@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><strong>Cleanest Bathrooms in the Wasteland.</strong> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
+      "value": "<p><strong>Cleanest Bathrooms in the Wasteland.</strong> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><b>Cleanest Bathrooms in the Wasteland.</b> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
+          "lore": "<p><b>Cleanest Bathrooms in the Wasteland.</b> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor.</p>",
           "materialOf": [
             "sacred-gold",
             "borderline-irrational-state-pride",
@@ -55,7 +55,8 @@
             "saleBack": 28,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 180
-          }
+          },
+          "glance": "+1 market negotiation · 1/session: save a failing deal (owe a favor)"
         }
       },
       "passives": {

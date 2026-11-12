@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><strong>Pulse-Memory.</strong> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+      "value": "<p><strong>Pulse-Memory.</strong> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><b>Pulse-Memory.</b> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><b>Drawback.</b> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+          "lore": "<p><b>Pulse-Memory.</b> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><b>Drawback.</b> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
           "materialOf": [
             "yesodium",
             "anchor-quartz",
@@ -55,7 +55,8 @@
             "saleBack": 0,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 340
-          }
+          },
+          "glance": "+1 Soul-channel casting · −1 persuading Lyrenn elders"
         }
       }
     }

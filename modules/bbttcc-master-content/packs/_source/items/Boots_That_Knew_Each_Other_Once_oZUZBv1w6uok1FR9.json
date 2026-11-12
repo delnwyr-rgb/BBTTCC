@@ -18,7 +18,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+      "value": "<p><strong>Mismatched Stride.</strong> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky.</p>",
       "chat": ""
     }
   },
@@ -43,7 +43,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><b>Mismatched Stride.</b> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+          "lore": "<p><b>Mismatched Stride.</b> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky.</p>",
           "materialOf": [
             "road-leather",
             "two-different-stories"

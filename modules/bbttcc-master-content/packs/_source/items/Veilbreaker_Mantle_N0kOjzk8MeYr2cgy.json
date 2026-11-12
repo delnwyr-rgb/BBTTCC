@@ -51,7 +51,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "+1 Soul · +1 Insight · 1/scene: ignore first Darkness-caused failure"
         }
       },
       "passives": {

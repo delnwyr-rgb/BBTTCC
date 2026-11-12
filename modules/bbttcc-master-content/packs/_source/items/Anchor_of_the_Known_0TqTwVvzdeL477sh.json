@@ -51,7 +51,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "1/Soma Break: plant in hex → 2 steps safer on the travel table for a turn"
         }
       }
     },

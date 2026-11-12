@@ -34,7 +34,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Overland: always know the nearest aligned hex of your Domain"
         }
       }
     }

@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Desenitarius Maarg wore it on the old roads and took a dream from everyone who paid the toll, and kept them here, in the stone, like coins. Wear it and the dreams press back against whatever presses in. Attunes to one wearer; it is particular about company.</p><p><em>Surge cap +1 and resistance to psychic harm while worn. The Collector kept everyone else's dreams in it; it has room for yours to run hotter.</em></p><p>Worn (ring) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>Surge cap +1 and resistance to psychic harm while worn. The Collector kept everyone else's dreams in it; it has room for yours to run hotter.</em></p><p>Worn (ring) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -57,7 +57,8 @@
             "saleBack": 40,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 1620
-          }
+          },
+          "glance": "Worn: Surge cap +1 · resist psychic"
         }
       }
     }

@@ -80,7 +80,8 @@
             "saleBack": 100
           },
           "tier": "I",
-          "frame": "vehicle"
+          "frame": "vehicle",
+          "glance": "Rig frame · Personal · Mobile · 1 seat + 1 weapon"
         }
       }
     }

@@ -18,7 +18,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Yellow vinyl, goggles painted on, elastic that never lost its stretch because nothing in Soft Landing wears out. It was under the row of small sneakers at the castle door, face down, where a kid drops a mask the second the grown-ups stop looking. The inside still smells like running.</p><p><em>Resolve +1 and +2 on Performance checks while worn — behind the goggles you could be anybody, which is the point of a mask.</em></p><p>Worn (mask) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
+      "value": "<p><em>Resolve +1 and +2 on Performance checks while worn — behind the goggles you could be anybody, which is the point of a mask.</em></p><p>Worn (mask) — equip it on the sheet (◇ → ◆) for the benefit. Part of the Sparky set: wear all three and the Wendigo don't take you.</p>",
       "chat": ""
     }
   },
@@ -59,7 +59,8 @@
             "notes": "TI vestment × bound free",
             "bound": "free",
             "saleBack": 30
-          }
+          },
+          "glance": "Worn: Resolve +1 · +2 Performance · Sparky set 1/3"
         }
       },
       "passives": {

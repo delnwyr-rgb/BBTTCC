@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Bucky Sorrel's, from the lemonade concession, used to weigh the haul on the thirty-first. It still measures in 2077 candy. Put anything on it and it tells you what that thing would have fetched at the end of the night, and it is never as much as you hoped.</p><p><strong>Bound Working — Weigh It:</strong> Set the scale before one target within 6 squares: Mind defense vs Cast DC. On a fail it tells them exactly what they are worth, in candy, and they are Shaken for 1 round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Weigh It:</strong> Set the scale before one target within 6 squares: Mind defense vs Cast DC. On a fail it tells them exactly what they are worth, in candy, and they are Shaken for 1 round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -111,7 +111,7 @@
               "truth"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'Everybody wants to know. Nobody wants to know in fun-size.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

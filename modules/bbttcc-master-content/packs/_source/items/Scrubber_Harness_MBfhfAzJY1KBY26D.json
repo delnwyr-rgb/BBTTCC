@@ -45,7 +45,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Hexes 1 radiation level cooler · 2/Soma Break: clear an adjacent ally's radiation"
         }
       }
     },

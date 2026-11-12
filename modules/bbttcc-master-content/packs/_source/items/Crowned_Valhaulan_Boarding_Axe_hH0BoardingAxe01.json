@@ -30,7 +30,7 @@
       "capstone"
     ],
     "effect": "A boarding axe, Crowned: +3 to hit and +3 damage; soulbound — keyed to the hand that took it from Sklar, it will not be sold. On a hit, push the target 1 square: Boarding Call.",
-    "flavor": "Blue steel, Valhaulan script down the haft, a name you cannot read and will come to.",
+    "flavor": "",
     "manifestation": {
       "tier": 1,
       "family": "form",
@@ -63,7 +63,7 @@
       }
     },
     "description": {
-      "value": "<p>Sklar Bjrornholt's. It has gone over the rail of eleven ships and come back every time. The script on the haft is the new hand, the one Etta knows, and it spells the axe's name, and the axe will tell you the name the first time you kill with it and never again.</p><p><em>A boarding axe, Crowned: +3 to hit and +3 damage; soulbound — keyed to the hand that took it from Sklar, it will not be sold. On a hit, push the target 1 square: Boarding Call.</em></p>",
+      "value": "<p><em>A boarding axe, Crowned: +3 to hit and +3 damage; soulbound — keyed to the hand that took it from Sklar, it will not be sold. On a hit, push the target 1 square: Boarding Call.</em></p>",
       "chat": ""
     }
   },

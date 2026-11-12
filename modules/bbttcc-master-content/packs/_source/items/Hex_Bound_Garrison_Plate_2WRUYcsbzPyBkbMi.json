@@ -39,7 +39,8 @@
             "legacyMarks": 270
           },
           "tier": "III",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · stationary only: registers the holding"
         }
       }
     }

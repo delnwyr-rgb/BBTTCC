@@ -45,7 +45,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Reroll lowest die investigating ruins · 1/Soma Break: auto-find a cache (Urban Wreckage)"
         }
       },
       "rerolls": [

@@ -62,7 +62,8 @@
             "rubric": "gear-2026-11-03",
             "legacyMarks": 270
           },
-          "chargesMax": 1
+          "chargesMax": 1,
+          "glance": "1/scene: replay the last confession spoken within 6 sq"
         }
       }
     }

@@ -74,7 +74,8 @@
             "saleBack": 28,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 180
-          }
+          },
+          "glance": "1/scene: reroll lowest on an Intrigue or Economy check"
         }
       },
       "rerolls": [

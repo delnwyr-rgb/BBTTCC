@@ -49,7 +49,8 @@
             "tierClamp": true,
             "table": null
           },
-          "signals": {}
+          "signals": {},
+          "glance": "Illuminated+ · 1/week: purify a Corrupted Spark or global Darkness −1"
         }
       }
     }

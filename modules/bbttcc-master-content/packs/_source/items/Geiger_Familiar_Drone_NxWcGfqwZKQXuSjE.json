@@ -34,7 +34,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Action: maps radiation + Spark traces within 60 sq for 10 min"
         }
       }
     },

@@ -31,7 +31,7 @@
       "pre-fall"
     ],
     "effect": "A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.",
-    "flavor": "The light comes on by itself when something is on the step.",
+    "flavor": "",
     "manifestation": {
       "tier": 1,
       "family": "form",
@@ -64,7 +64,7 @@
       }
     },
     "description": {
-      "value": "<p>Compliance Engine PRIME's perimeter arm, re-barrelled by a hex gunsmith who did not ask what the light was for. The light is for knowing who is on the porch. It still knows.</p><p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen. (2 charges, recovers per scene.)</p>",
+      "value": "<p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen. (2 charges, recovers per scene.)</p>",
       "chat": ""
     }
   },
@@ -170,7 +170,7 @@
               "light"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'Trick or treat. The porch decides which.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

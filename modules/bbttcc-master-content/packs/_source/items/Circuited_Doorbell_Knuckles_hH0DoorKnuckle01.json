@@ -31,7 +31,7 @@
       "doorbell"
     ],
     "effect": "Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.",
-    "flavor": "Ding. Dong. Ditch.",
+    "flavor": "",
     "manifestation": {
       "tier": 1,
       "family": "form",
@@ -64,7 +64,7 @@
       }
     },
     "description": {
-      "value": "<p>Kickflip Lazarus wore them for the run-back and gave them to the one who skated it clean. Four doorbell buttons on a brass bar; hit something and every porch on Mallwalker Lane rings at once, two hundred years late.</p><p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per scene.)</p>",
+      "value": "<p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per scene.)</p>",
       "chat": ""
     }
   },
@@ -170,7 +170,7 @@
               "evade"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'The sport of kings. Very short kings.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

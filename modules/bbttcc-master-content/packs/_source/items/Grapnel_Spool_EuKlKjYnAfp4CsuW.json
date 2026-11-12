@@ -34,7 +34,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "10 sq line · reroll lowest on climb/jump · pull Medium (Violence DC 13)"
         }
       },
       "rerolls": [

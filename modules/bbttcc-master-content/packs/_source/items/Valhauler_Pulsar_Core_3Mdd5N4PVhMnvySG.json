@@ -48,7 +48,8 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>The super-core of a Valhauler war-rig: a pulsar bottled in witness-glass.</p><p><b>Pulsar Overdrive.</b> Mounted pulsar weapons step their damage die up one size.</p><p><b>Outrun It.</b> Once per Soma Break, the rig skips one travel encounter and takes +2 on its next opposed roll.</p>"
+          "lore": "<p>The super-core of a Valhauler war-rig: a pulsar bottled in witness-glass.</p><p><b>Pulsar Overdrive.</b> Mounted pulsar weapons step their damage die up one size.</p><p><b>Outrun It.</b> Once per Soma Break, the rig skips one travel encounter and takes +2 on its next opposed roll.</p>",
+          "glance": "Rig module · pulsar weapons +1 die size · 1/Soma Break: skip a travel encounter"
         }
       },
       "rigGear": {

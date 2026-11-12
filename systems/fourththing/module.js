@@ -15266,6 +15266,112 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
 </div>`;
 }
 
+// ITEM GLANCE (Dave 2026-11-12: "clarity on functionality over color") — the inventory row's one-line "what it does",
+// in the slot the ⟡ signature (colour) used to fill. Read from the same inputs the Strike / Use paths read, so it can't
+// drift from play:
+//   • weapon → "+N to hit · XdY+M type": attackTest's standing bonus (Intent faculty + aptitude rank + item rank grants +
+//     AE faculty/aptitude bonuses + standing attack checkBonuses + the grade's +N − radiation/strain/stagger) and the
+//     damage roll (weapon formula + Intent faculty + its AE bonus), plus any extra damage parts. Situational one-shots
+//     (flank, aim, signal, banked aid, surge) are left out — they belong to one swing, not the weapon.
+//   • consumable → its consume effects in plain words ("Heals 1d6+1 Integrity").
+//   • a host with a bound Working → the Working and its charges.
+function ftItemGlance(actor, item) {
+  try {
+    if (!actor || !item) return "";
+    const sgn = (n) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
+    if (item.type === "weapon") {
+      const intent  = ftItemIntent(item, "violence");
+      const skill   = ftResolveWeaponSkill(actor, item.system?.skill, item.system?.category);
+      const srcSys  = ftSourceSystem(actor);
+      const attrVal = Number(srcSys?.attributes?.[intent]?.value) || 0;
+      const skillVal = (Number(srcSys?.skills?.[skill]?.value) || 0) + (Number(rankGrantsOf(actor)[skill]) || 0);
+      let aeAttr = 0, aeSkill = 0;
+      for (const effect of actor.appliedEffects ?? []) {
+        if (effect.disabled) continue;
+        for (const change of effect.changes ?? []) {
+          if (change.type !== "add") continue;
+          const v = Number(change.value) || 0;
+          if (change.key === `system.attributes.${intent}.value`) aeAttr += v;
+          else if (change.key === `system.skills.${skill}.value`) aeSkill += v;
+        }
+      }
+      const cb = collectCheckBonuses(actor, { context: "attack", skill, attribute: intent })
+        .filter(b => !Number.isInteger(b._bankedIndex))
+        .reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+      const grade = Number(item.flags?.fourththing?.grade?.attack) || 0;
+      const threat = actor.system?.derived?.threat ?? null;
+      const tierBonus = (typeof _ftIsFoeActor === "function" && _ftIsFoeActor(actor)) ? _ftCasterTier(actor) : 0;
+      const pen = _ftRadiationBite(actor).rollPenalty + _ftStrainBite(actor).rollPenalty
+        + (((actor.system?.system ?? actor.system)?.conditions?.staggered === true) ? 2 : 0);
+      const toHit = attrVal + skillVal + aeAttr + aeSkill + cb + grade + tierBonus + (Number(threat?.attack) || 0) - pen;
+
+      let f = String(item.system?.damage?.formula ?? "").trim();
+      let t = String(item.system?.damage?.type ?? "kinetic");
+      if (!f) {
+        const dr = (item.system?.damageRoll || typeof item.system?.damage === "string") ? ftNormalizeDamageRoll(item.system) : null;
+        if (dr?.op === "damage" && Number(dr.number) > 0 && dr.die) {
+          f = `${dr.number}${dr.die}${Number(dr.bonus) ? sgn(Number(dr.bonus)) : ""}`;
+          if (dr.type) t = String(dr.type);
+        }
+      }
+      t = ftOutgoingDamageType(actor, t);
+      const facMod = attrVal + aeAttr + (Number(threat?.damage) || 0);
+      let dmg = "";
+      if (f) {
+        // Fold the faculty into a trailing flat term so "1d8+2" + 3 reads "1d8+5", not "1d8+2+3".
+        const m = f.replace(/\s+/g, "").match(/^(.*?)([+-]\d+)?$/);
+        const flat = (Number(m?.[2]) || 0) + facMod;
+        dmg = `${m?.[1] || f}${flat ? sgn(flat).replace("−", "-") : ""}`;
+      }
+      const tLabel = FT.DAMAGE_TYPES?.[t]?.label?.toLowerCase() ?? t;
+      const extra = ftCollectExtraDamageParts(item).map(p => `${p.formula} ${FT.DAMAGE_TYPES?.[p.type]?.label?.toLowerCase() ?? p.type}`);
+      return [`${sgn(toHit)} to hit`, dmg ? `${dmg} ${tLabel}` : "", ...extra.map(x => `+ ${x}`)].filter(Boolean).join(" · ");
+    }
+
+    const rfi = RfiItems.get(item);
+    const consume = rfi?.consume;
+    if (consume && Array.isArray(consume.effects) && consume.effects.length) {
+      const TRACK = { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise", radiation: "Radiation",
+                      burn: "Surge", bloodDebt: "Blood Debt", frameDice: "Frame Dice", accessDice: "Access Dice", ruin: "Ruin charges" };
+      const amt = (e) => Number.isFinite(e.delta) ? String(e.delta) : (e.formula != null ? String(e.formula) : (e.amount != null ? String(e.amount) : ""));
+      const bits = [];
+      for (const e of consume.effects) {
+        if (e?.kind === "track") {
+          const name = TRACK[e.track] ?? String(e.track);
+          const a = amt(e);
+          if (e.op === "setMax") bits.push(`${name} to full`);
+          else if (e.op === "set") bits.push(`${name} set to ${a}`);
+          else if (e.op === "add") bits.push((e.track === "integrity" || e.track === "stress") ? `Heals ${a} ${name}` : `+${a} ${name}`);
+          else if (e.op === "subtract") bits.push(`−${a} ${name}`);
+        } else if (e?.kind === "condition") {
+          const lab = FT.CONDITIONS?.[String(e.condition).toLowerCase()]?.label ?? e.condition;
+          bits.push(e.op === "remove" ? `Cures ${lab}` : `Inflicts ${lab}`);
+        } else if (e?.kind === "drink") {
+          const lab = (k) => FT.FACULTIES?.[k]?.label ?? k;
+          bits.push(`${lab(e.up)} +${e.formula ?? "1d4"}${e.down ? `, ${lab(e.down)} −same` : ""} (scene)`);
+        } else if (e?.kind === "faculty") {
+          const lab = FT.FACULTIES?.[e.faculty]?.label ?? e.faculty;
+          const a = e.formula ?? e.amount ?? "";
+          bits.push(`${lab} ${String(a).startsWith("-") ? a : `+${a}`}${e.mode === "checks" ? " on checks" : ""}`);
+        } else if (e?.kind === "mutation") {
+          bits.push(e.op === "cleanseAll" || e.op === "clear" ? "Cures all mutations" : `Cures ${Math.max(1, Number(e.count) || 1)} mutation${Number(e.count) > 1 ? "s" : ""}`);
+        }
+      }
+      const tgt = String(consume.target ?? "self").toLowerCase();
+      if (bits.length && (tgt === "target" || tgt === "targeted")) bits.push("on a target");
+      if (consume.limit && Number(consume.limit.uses) > 0) bits.push(`${consume.limit.uses}/${consume.limit.window === "soma-break" ? "Soma Break" : (consume.limit.window || "session")}`);
+      return bits.join(" · ");
+    }
+
+    const w = item.flags?.fourththing?.working;
+    if (w?.power?.name) {
+      const c = w.charges ?? {};
+      return `Working: ${w.power.name}${Number(c.max) ? ` · ${Number(c.value) || 0}/${Number(c.max)} charges` : ""}`;
+    }
+    return "";
+  } catch (e) { console.warn("[fourththing] ftItemGlance failed", item?.name, e); return ""; }
+}
+
 function buildAttackDialogHTML(actor, item) {
   const sysData  = actor.system?.system ?? actor.system;
   const skills   = sysData?.skills     ?? {};
@@ -24135,10 +24241,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const isEquipped = i.type === "armor"
           ? !!i.system?.equipped
           : !!i.getFlag("fourththing", "equipped");
-        const dmg = i.system?.damage?.formula;
-        const dmgType = i.system?.damage?.type;
         const stat = i.type === "weapon"
-            ? `${dmg ?? ""}${dmgType ? ` ${dmgType}` : ""}${i.system?.category ? ` · ${i.system.category}` : ""}`.trim()
+            ? String(i.system?.category ?? "")   // 2026-11-12: to-hit + damage live in the glance line
           : i.type === "armor"
             ? (() => {
                 const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
@@ -24193,7 +24297,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           tier:  rfi?.tier ?? null,
           frame: rfi?.frame ?? null,
           origin: rfi?.origin ?? null,
-          signature: rfi?.signature ?? "",
+          // 2026-11-12 (Dave): the row's second line is FUNCTION, not colour — computed glance, else the authored one.
+          glance: ftItemGlance(actor, i) || String(rfi?.glance ?? ""),
           // Proficiency flag for the inventory row warning badge.
           notProficient,
           profTip,
@@ -26888,10 +26993,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const isEquipped = i.type === "armor"
           ? !!i.system?.equipped
           : !!i.getFlag("fourththing", "equipped");
-        const dmg     = i.system?.damage?.formula;
-        const dmgType = i.system?.damage?.type;
         const stat = i.type === "weapon"
-            ? `${dmg ?? ""}${dmgType ? ` ${dmgType}` : ""}${i.system?.category ? ` · ${i.system.category}` : ""}`.trim()
+            ? String(i.system?.category ?? "")   // 2026-11-12: to-hit + damage live in the glance line
           : i.type === "armor"
             ? (() => {
                 const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
@@ -26933,7 +27036,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           stat, qty: qty > 1 ? qty : null, isEquipped,
           rfi: rfi ?? null,
           tier: rfi?.tier ?? null, frame: rfi?.frame ?? null, origin: rfi?.origin ?? null,
-          signature: rfi?.signature ?? "",
+          glance: ftItemGlance(actor, i) || String(rfi?.glance ?? ""),   // 2026-11-12: function, not colour
           notProficient, profTip, profSkill: prof?.label ?? "",
           isConsumable: !!rfi?.consume,
           charges: Number(rfi?.charges ?? 0) || null

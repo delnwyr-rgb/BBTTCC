@@ -14,7 +14,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Laminated, which is why it survived. Gerald wore it to every meeting including the last one. It confers no authority whatsoever and everyone who sees it behaves as though it does, which is the only kind of authority there has ever been.</p><p><em>Surge cap +1 and +1 on Diplomacy checks while worn. It says ASSISTANT REGIONAL MANAGER, and things that read it tend to wait their turn.</em></p><p>Worn (amulet) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
+      "value": "<p><em>Surge cap +1 and +1 on Diplomacy checks while worn. It says ASSISTANT REGIONAL MANAGER, and things that read it tend to wait their turn.</em></p><p>Worn (amulet) — equip it on the sheet (◇ → ◆) for the benefit.</p>",
       "chat": ""
     }
   },
@@ -57,7 +57,8 @@
             "saleBack": 34,
             "rubric": "gear-2026-11-03",
             "legacyMarks": 540
-          }
+          },
+          "glance": "Worn: Surge cap +1 · +1 Diplomacy"
         }
       },
       "passives": {

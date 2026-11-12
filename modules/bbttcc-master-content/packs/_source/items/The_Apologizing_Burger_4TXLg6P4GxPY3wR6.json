@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A wrapped burger that murmurs faint apologies through the wax paper. Listen, I don't know either. I've stopped asking. Some chef in Allesh Gilliam started making them after the Shattering and people just kept eating them. The bun is good. The meat is real-ish. The apologies are sincere.</p><p><strong>One-Time Snack.</strong> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
+      "value": "<p><strong>One-Time Snack.</strong> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A wrapped burger that murmurs faint apologies through the wax paper. Listen, I don't know either. I've stopped asking. Some chef in Allesh Gilliam started making them after the Shattering and people just kept eating them. The bun is good. The meat is real-ish. The apologies are sincere.</p><p><b>One-Time Snack.</b> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
+          "lore": "<p><b>One-Time Snack.</b> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
           "materialOf": [
             "bad-eden-meat",
             "wax-paper",
@@ -54,7 +54,8 @@
             "notes": "TI consumable stamp",
             "bound": "free",
             "saleBack": 4
-          }
+          },
+          "glance": "Eat: heals 1d4 Stress + 1 Integrity"
         }
       }
     }

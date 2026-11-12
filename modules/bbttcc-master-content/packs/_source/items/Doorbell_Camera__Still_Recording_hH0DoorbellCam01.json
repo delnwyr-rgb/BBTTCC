@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>From Miss June's rare inventory: the camera from a porch on Mallwalker Lane, the night of the thirty-first. It has footage. It will show you the footage if you hold it to your eye, and it will also show you the next thirty seconds, which it should not have.</p><p><strong>Bound Working — Playback:</strong> Review the last thirty seconds from every angle: hidden or invisible things within 6 squares are revealed to you until your next turn, and you may not be surprised this round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Playback:</strong> Review the last thirty seconds from every angle: hidden or invisible things within 6 squares are revealed to you until your next turn, and you may not be surprised this round.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -113,7 +113,7 @@
               "reveal"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'It saw the kid come to the door. It is still seeing it.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

@@ -36,7 +36,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "Reaction: halve electrical/thermal/radiation damage · 3/session"
         }
       },
       "triggers": [

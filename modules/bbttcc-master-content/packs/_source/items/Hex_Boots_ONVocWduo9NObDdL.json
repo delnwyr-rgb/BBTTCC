@@ -39,7 +39,8 @@
           "bound": "free",
           "origin": "looted",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "glance": "1/leg: party Travel Check DC −2 (min 10) while you walk point"
         }
       }
     }

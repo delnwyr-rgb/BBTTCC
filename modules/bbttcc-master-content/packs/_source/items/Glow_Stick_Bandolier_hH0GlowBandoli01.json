@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Stillwater parade-marshal issue. Glow sticks are supposed to die by morning; these have been going since 2077 because the parade has not ended. Crack one and for a round the dark remembers it is supposed to be a party.</p><p><strong>Bound Working — Crack and Shake:</strong> Crack a stick and the parade route lights up: you and every ally within 3 squares gain Evasion +1 for 1 round, and the area is brightly lit until your next turn.</p><p>3 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Crack and Shake:</strong> Crack a stick and the parade route lights up: you and every ally within 3 squares gain Evasion +1 for 1 round, and the area is brightly lit until your next turn.</p><p>3 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -111,7 +111,7 @@
               "ward"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'Green means go. Nobody at the parade ever decided what red meant.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

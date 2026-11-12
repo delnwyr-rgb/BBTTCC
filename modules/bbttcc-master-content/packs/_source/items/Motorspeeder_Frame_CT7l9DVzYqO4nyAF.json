@@ -82,7 +82,8 @@
             "saleBack": 100
           },
           "tier": "I",
-          "frame": "vehicle"
+          "frame": "vehicle",
+          "glance": "Rig frame · Personal · Mobile · pilot + 1"
         }
       }
     }

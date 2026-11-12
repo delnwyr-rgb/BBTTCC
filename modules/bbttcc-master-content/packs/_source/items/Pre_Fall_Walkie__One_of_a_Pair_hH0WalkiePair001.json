@@ -15,7 +15,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>Chuckle Creek. The new episode needed a prop and this was in the drawer. It has no batteries and it works, and sometimes when you key it the other one keys back, from somewhere that is not Chuckle Creek, and a courteous voice says thank you for the directions.</p><p><strong>Bound Working — Over.:</strong> Key the walkie: one ally within 12 squares hears you clear as a bell and gains Resolve +2 for 1 round. Occasionally someone else answers. Do not answer back.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
+      "value": "<p><strong>Bound Working — Over.:</strong> Key the walkie: one ally within 12 squares hears you clear as a bell and gains Resolve +2 for 1 round. Occasionally someone else answers. Do not answer back.</p><p>2 charges, recovers per scene. Cast it from the Manifestations tab like any power — it spends a charge instead of Clarity (Noise and misfire still apply).</p>",
       "chat": ""
     }
   },
@@ -113,7 +113,7 @@
               "steady"
             ],
             "category": "manifestation",
-            "flavor": "Mal: 'The other one is out there. Somebody has it. Somebody is very polite about it.'",
+            "flavor": "",
             "manifestation": {
               "tier": 1,
               "family": "working",

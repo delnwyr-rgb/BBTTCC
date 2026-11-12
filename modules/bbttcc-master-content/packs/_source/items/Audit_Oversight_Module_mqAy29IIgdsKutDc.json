@@ -48,7 +48,8 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A bolted-on ledger-brain for an Auditor's rig. Every lie told within its hearing gets a footnote.</p><p><b>Aura of Accountability.</b> While mounted on a rig, enemies within 15 squares take −2 on Intrigue checks to deceive or to file a false report.</p>"
+          "lore": "<p>A bolted-on ledger-brain for an Auditor's rig. Every lie told within its hearing gets a footnote.</p><p><b>Aura of Accountability.</b> While mounted on a rig, enemies within 15 squares take −2 on Intrigue checks to deceive or to file a false report.</p>",
+          "glance": "Rig module · enemies within 15 sq: −2 Intrigue to deceive"
         }
       },
       "rigGear": {

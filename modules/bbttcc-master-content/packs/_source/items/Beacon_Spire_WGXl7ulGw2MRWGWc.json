@@ -40,7 +40,8 @@
             "legacyMarks": 90
           },
           "tier": "II",
-          "frame": "tool"
+          "frame": "tool",
+          "glance": "Rig module · stationary beacon"
         }
       }
     }
