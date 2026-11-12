@@ -205,6 +205,7 @@ import {
 import { threatFor, registerThreatChassisSetting, registerThreatChassisHooks } from "./threat-chassis.js";
 import { ItemLadder, registerItemLadderHooks, workingCharges, spendWorkingCharge, refillWorkingCharges } from "./item-ladder.js";
 import { registerNpcAutomation } from "./npc-automation.js";
+import { ARMOR_LINES, armorLineRanks, accessoryCap, isTwoHandedWeapon, inferArmorSlot, inferArmorLine, gearAccessorySlot, computeLinesArmor, describeLineRanks, LINE_RANK_NAMES } from "./armor-lines.js";   // Dave's armor LINES model (2026-11-12), setting armorModel
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -13709,6 +13710,13 @@ function _ftEquipProficiency(actor, item) {
   try { if (actorKind(actor) === "monster") return null; } catch (_e) {}
   const sysData = actor?.system?.system ?? actor?.system ?? {};
   const skills  = sysData?.skills ?? {};
+  // ARMOR LINES (2026-11-12): body armor gates on its line's rank (faculty − 2); shields + accessories are never gated.
+  if (item?.type === "armor" && _ftArmorLinesOn(actor)) {
+    if (_ftArmorLineSlot(item) !== "body") return null;
+    const line = _ftArmorLineOf(item), def = ARMOR_LINES[line];
+    const rank = ftArmorLines(actor, sysData)[line] ?? 0;
+    return { skillKey: line, rank, label: `${def.label} armor (${ftCap(def.faculty)} 3+)`, trained: rank >= 1, line };
+  }
   let skillKey = null;
   if (item?.type === "armor")       skillKey = _ftArmorGateSkill(item);
   else if (item?.type === "weapon") skillKey = ftResolveWeaponSkill(actor, item?.system?.skill, item?.system?.category);
@@ -14051,7 +14059,14 @@ function ftComputeDefenses(actor, sys) {
       // weight tag is present. Untrained armor delivers the material but not
       // the practice; resistance grants are dormant.
       // 10-29: monsters skip the gate, matching ftComputeArmorBonus (ruling 2026-09-04).
-      if (item.type === "armor" && !_monsterWearer) {
+      // Rule 4 (2026-11-12, both models): a shield under a two-handed weapon grants no resistances either.
+      if (item.type === "armor" && (_ftArmorLinesOn(actor) ? _ftArmorLineSlot(item) : _ftArmorSlot(item)) === "shield" && _ftActorWieldsTwoHanded(actor)) continue;
+      if (item.type === "armor" && !_monsterWearer && _ftArmorLinesOn(actor)) {
+        // ARMOR LINES (2026-11-12): counted pieces only; a BODY armor needs line rank ≥ 1 (faculty ≥ 3); shields and
+        // accessories always (every Path is proficient with a shield; accessories are never gated).
+        if (!_ftArmorCountedIds(actor, sys)?.has(item.id)) continue;
+        if (_ftArmorLineSlot(item) === "body" && !((ftArmorLines(actor, sys)[_ftArmorLineOf(item)] ?? 0) >= 1)) continue;
+      } else if (item.type === "armor" && !_monsterWearer) {
         if (!_ftArmorCountedIds(actor, sys)?.has(item.id)) continue;   // one per slot (2026-11-03): an uncounted piece grants no resistances either
         const skillKey = _ftArmorGateSkill(item);
         const rank = sys?.skills?.[skillKey]?.value ?? 0;
@@ -14782,8 +14797,86 @@ function _ftArmorSlot(item) {
   if (frame === "vestment") return "vestment";
   return "body";
 }
+// ─── ARMOR MODEL SWITCH (Dave 2026-11-12) ────────────────────────────────────────────────────────────────────────────
+// World setting `fourththing.armorModel`: "weights" (default — light/medium/heavy gated by Plating/Bracing/Fitting, the
+// model above and below) | "lines" (four armor LINES ranked by faculty − 2, one body armor, flat shield, accessories
+// capped at ceil(best line rank / 2) — pure math in armor-lines.js). Monsters keep the weights path under both (they
+// wear hides natively, ruling 2026-09-04). The two-handed-no-shield rule runs under BOTH.
+function _ftArmorModel() {
+  try { return game.settings.get("fourththing", "armorModel") === "lines" ? "lines" : "weights"; } catch (_e) { return "weights"; }
+}
+function _ftArmorLinesOn(actor) {
+  if (_ftArmorModel() !== "lines") return false;
+  try { if (actorKind(actor) === "monster") return false; } catch (_e) {}
+  return true;
+}
+// Rule 4 (standing ruling, both models): an equipped two-handed weapon (tag "two-handed"/"two handed", or a two-handed
+// family by name — armor-lines.js isTwoHandedWeapon) means a shield gives nothing (no defense, no resistances).
+function _ftActorWieldsTwoHanded(actor) {
+  for (const it of actor?.items ?? []) {
+    if (it.type !== "weapon") continue;
+    if (!(it.flags?.fourththing?.equipped === true || it.system?.equipped === true)) continue;
+    if (isTwoHandedWeapon({ name: it.name, tags: it.system?.tags, category: it.system?.category })) return true;
+  }
+  return false;
+}
+/** Lines-model slot: system.armorSlot, else inferred (armor-lines.js inferArmorSlot / gearAccessorySlot). */
+function _ftArmorLineSlot(item) {
+  if (item?.type === "gear") return gearAccessorySlot(item.system?.slot);
+  return inferArmorSlot({ slot: item?.system?.armorSlot, tags: item?.system?.tags, frame: item?.flags?.fourththing?.rfi?.item?.frame });
+}
+/** Lines-model line of a BODY armor: system.armorLine, else inferred (armor-lines.js inferArmorLine). */
+function _ftArmorLineOf(item) {
+  return inferArmorLine({ line: item?.system?.armorLine, tags: item?.system?.tags, guard: _ftArmorGuardRaw(item), resolve: _ftArmorStatRaw(item, "resolve"), name: item?.name });
+}
+function _ftArmorFaculties(actor, sys) {
+  const at = (sys ?? actor?.system?.system ?? actor?.system)?.attributes ?? {};
+  const out = {};
+  for (const k of ["violence", "intrigue", "presence", "body", "mind", "soul"]) out[k] = Number(at?.[k]?.value ?? 0) || 0;
+  return out;
+}
+/** { "guard-body": rank, … } from the actor's faculties (rank = faculty − 2, 0..5). Model-independent. */
+function ftArmorLines(actor, sys) { return armorLineRanks(_ftArmorFaculties(actor, sys)); }
+/** The lines-model computation for an actor (equipped armor + worn gear with a Guard/Resolve grant). */
+function ftComputeArmorLines(actor, sys) {
+  const pieces = [];
+  for (const item of actor?.items ?? []) {
+    if (item.type === "armor") {
+      if (item.system?.equipped === false) continue;
+      const slot = _ftArmorLineSlot(item);
+      pieces.push({ id: item.id, name: item.name, kind: "armor", slot, line: slot === "body" ? _ftArmorLineOf(item) : null,
+        guard: _ftArmorGuardRaw(item), resolve: _ftArmorStatRaw(item, "resolve") });
+    } else if (item.type === "gear" && FT.WORN_GEAR_SLOTS.has(String(item.system?.slot || ""))) {
+      if (!item.getFlag?.("fourththing", "equipped")) continue;
+      const g = _ftArmorGuardRaw(item), r = _ftArmorStatRaw(item, "resolve");
+      if (!g && !r) continue;
+      pieces.push({ id: item.id, name: item.name, kind: "gear", slot: _ftArmorLineSlot(item), guard: g, resolve: r });
+    }
+  }
+  const faculties = _ftArmorFaculties(actor, sys);
+  const ranks = armorLineRanks(faculties);
+  const res = computeLinesArmor({ pieces, ranks, twoHanded: _ftActorWieldsTwoHanded(actor), scale: FT.ARMOR_RANK_SCALE });
+  const lineText = describeLineRanks(ranks, faculties);
+  res.faculties = faculties;
+  res.tips = {
+    guard:   `Armor lines (Guard): ${lineText.filter(t => t.startsWith("Guard")).join(" · ")}. Accessories add at most +${res.caps.guard} Guard (now +${res.accessory.guard}).`,
+    resolve: `Armor lines (Resolve): ${lineText.filter(t => t.startsWith("Resolve")).join(" · ")}. Accessories add at most +${res.caps.resolve} Resolve (now +${res.accessory.resolve}).`
+  };
+  return res;
+}
+/** game.fourththing.armorBreakdown(actor) — the active model's rows, totals and (lines) ranks/caps. */
+function ftArmorBreakdown(actor) {
+  if (!actor) return null;
+  const sys = actor.system?.system ?? actor.system;
+  const model = _ftArmorModel();
+  const r = ftComputeArmorBonus(actor, sys);
+  return { model: _ftArmorLinesOn(actor) ? "lines" : "weights", setting: model, guard: r.guard, resolve: r.resolve, breakdown: r.breakdown,
+    ranks: r.ranks ?? ftArmorLines(actor, sys), caps: r.caps ?? null, accessory: r.accessory ?? null, tips: r.tips ?? null };
+}
+
 function _ftArmorCountedIds(actor, sys) {
   try { if (actorKind(actor) === "monster") return null; } catch (_e) {}
+  if (_ftArmorLinesOn(actor)) return ftComputeArmorLines(actor, sys).countedIds;
   const best = new Map();
   for (const item of actor.items) {
     if (item.type !== "armor" || item.system?.equipped === false) continue;
@@ -14817,6 +14910,10 @@ function ftComputeArmorBonus(actor, sys) {
   let monsterWearer = false;
   try { monsterWearer = actorKind(actor) === "monster"; } catch (_e) {}
 
+  // ARMOR LINES (setting armorModel = "lines", 2026-11-12): the whole computation lives in armor-lines.js.
+  if (!monsterWearer && _ftArmorModel() === "lines") return ftComputeArmorLines(actor, sys);
+
+  const twoHanded = _ftActorWieldsTwoHanded(actor);   // rule 4 (both models): a two-handed weapon = the shield gives nothing
   const countedArmor = _ftArmorCountedIds(actor, sys);
   for (const item of actor.items) {
     if (item.type !== "armor") continue;
@@ -14824,6 +14921,10 @@ function ftComputeArmorBonus(actor, sys) {
     if (a.equipped === false) continue;
     if (countedArmor && !countedArmor.has(item.id)) {
       result.breakdown.push({ item: `${item.name} (not counted: one per slot)`, skill: null, rank: 0, guard: 0, resolve: 0 });
+      continue;
+    }
+    if (twoHanded && _ftArmorSlot(item) === "shield") {
+      result.breakdown.push({ item: `${item.name} (no benefit: two-handed weapon)`, skill: null, rank: 0, guard: 0, resolve: 0, twoHanded: true });
       continue;
     }
 
@@ -17336,6 +17437,13 @@ Hooks.once("init", function () {
     // trained } or null for ungated items. Market uses it to warn a buyer
     // before they spend marks on gear they can't yet use.
     equipProficiency: _ftEquipProficiency,
+    // ARMOR LINES (2026-11-12): armorLines(actor) → { "guard-body": rank, … } (faculty − 2, 0..5; model-independent);
+    // armorBreakdown(actor) → { model, guard, resolve, breakdown, ranks, caps, accessory, tips } for the active model;
+    // armorModel() → "weights" | "lines"; isTwoHandedWeapon({name, tags, category}).
+    armorLines: (actor) => (actor ? ftArmorLines(actor) : null),
+    armorBreakdown: ftArmorBreakdown,
+    armorModel: _ftArmorModel,
+    isTwoHandedWeapon,
     // Schema-migration framework — debug/repair surface for macros & console.
     //   game.fourththing.migrations.run()            → apply pending migrations
     //   game.fourththing.migrations.run({force:true})→ re-run all (idempotent)
@@ -17604,7 +17712,8 @@ Hooks.once("init", function () {
   // Tooltip lookups for sheet labels — single source of truth
   Handlebars.registerHelper("ftFacultyTip", key => FT_FACULTY_TIPS[key] ?? "");
   Handlebars.registerHelper("ftPoolTip",    key => FT_POOL_TIPS[key]    ?? "");
-  Handlebars.registerHelper("ftDefenseTip", key => FT_DEFENSE_TIPS[key] ?? "");
+  // 2026-11-12: optional 2nd arg = extra text (the armor-lines rank line, derived.armorLines.<def>Tip); Handlebars passes its options hash last.
+  Handlebars.registerHelper("ftDefenseTip", (key, extra) => (FT_DEFENSE_TIPS[key] ?? "") + (typeof extra === "string" && extra ? ` — ${extra}` : ""));
   Handlebars.registerHelper("ftAptColTip",  key => FT_APT_COLUMN_TIPS[key] ?? "");
   // Fallback comparison/math helpers (some Foundry builds omit these)
   Handlebars.registerHelper("gte",          (a, b) => a >= b);
@@ -17646,6 +17755,10 @@ Hooks.once("init", function () {
   // no Action/Bonus/Reaction lockouts, no movement-budget nags, the sheet's Action Economy block hidden. The slots still
   // reset each turn and may still be written, so flipping this back on loses nothing.
   game.settings.register("fourththing", "actionEconomy", { name: "Steward sheet tracks action economy", hint: "Off (default): the Combat Tracker is the authority — the sheet neither gates Action/Bonus/Reaction nor nags about movement. On: the pre-2026-09-21 lockouts and the sheet's Action Economy block return.", scope: "world", config: true, type: Boolean, default: false });
+  // ARMOR MODEL (Dave 2026-11-12): "weights" = light/medium/heavy gated by Plating/Bracing/Fitting (live default);
+  // "lines" = four armor lines ranked by faculty − 2, one body armor, flat shield, capped accessories, no penalties,
+  // mid-combat swap gates (armor-lines.js + ftComputeArmorLines). Flip only after the armor packs are re-seeded.
+  game.settings.register("fourththing", "armorModel", { name: "Armor model", hint: "Weights (default): light/medium/heavy armor gated by the Plating/Bracing/Fitting aptitudes. Lines: Guard-Body / Guard-Intrigue / Resolve-Soul / Resolve-Mind armor ranked by faculty − 2, one body armor, a flat shield, accessories capped at half your best line rank, and mid-combat swaps cost your Action (body armor can't be swapped in a fight).", scope: "world", config: true, type: String, choices: { weights: "Weights (light / medium / heavy)", lines: "Lines (Guard-Body / Guard-Intrigue / Resolve-Soul / Resolve-Mind)" }, default: "weights", requiresReload: true });
   // THE RECIPE BOOK (2026-09-20): { common:[slugs], factions:{actorId:[slugs]}, stewards:{actorId:[slugs]} } — see RfiCrafting.recipes.
   // Steward sheet watermark (2026-10-07): the Avuncular Order sigil behind the character sheet (CSS .ft-character-sheet::before).
   game.settings.register("fourththing", "sheetWatermark", { name: "Steward sheet watermark", hint: "Show the Avuncular Order sigil as a faint watermark behind steward sheets.", scope: "client", config: true, type: Boolean, default: true,
@@ -22423,6 +22536,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       sys.derived.resolve.value += armorBonus.resolve;
       _wouldBeEvasion           += armorBonus.legacyEvasion;
       sys.derived.armorBreakdown = armorBonus.breakdown;
+      // ARMOR LINES (2026-11-12): ranks / caps / tooltip text for the sheet (null under "weights").
+      sys.derived.armorLines = armorBonus.tips ? { ranks: armorBonus.ranks, caps: armorBonus.caps, accessory: armorBonus.accessory, guardTip: armorBonus.tips.guard, resolveTip: armorBonus.tips.resolve } : null;
 
       // Phase 1 codified action — Dodge: +2 Guard and +2 Resolve while flag set (Evasion retired 2026-11-11, ruling 3).
       // Cleared on _onFtNewTurn (i.e., expires at start of your next turn).
@@ -24451,7 +24566,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                 return [
                   gB ? `Guard ${sgn(gB)}`     : "",
                   rB ? `Resolve ${sgn(rB)}`   : "",
-                  i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
+                  _ftArmorLinesOn(actor) ? `[${_ftArmorLineSlot(i) === "body" ? ARMOR_LINES[_ftArmorLineOf(i)].label : _ftArmorLineSlot(i)}]`   // armor lines (2026-11-12)
+                    : i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                 ].filter(Boolean).join(" · ");
               })()
           : (() => {
@@ -27203,7 +27319,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                 return [
                   gB ? `Guard ${sgn(gB)}`     : "",
                   rB ? `Resolve ${sgn(rB)}`   : "",
-                  i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
+                  _ftArmorLinesOn(actor) ? `[${_ftArmorLineSlot(i) === "body" ? ARMOR_LINES[_ftArmorLineOf(i)].label : _ftArmorLineSlot(i)}]`   // armor lines (2026-11-12)
+                    : i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                 ].filter(Boolean).join(" · ");
               })()
           : (() => {
@@ -32328,10 +32445,65 @@ Hooks.on("updateItem", (item, changed, _opts, userId) => {
     if (userId !== game.user?.id || item?.type !== "armor" || changed?.system?.equipped !== true) return;
     const actor = item.parent; if (!actor?.items) return;
     try { if (actorKind(actor) === "monster") return; } catch (_e) {}
-    const slot = _ftArmorSlot(item);
-    const off = actor.items.filter(i => i.type === "armor" && i.id !== item.id && i.system?.equipped !== false && _ftArmorSlot(i) === slot).map(i => ({ _id: i.id, "system.equipped": false }));
-    if (off.length) actor.updateEmbeddedDocuments("Item", off);
+    // ARMOR LINES (2026-11-12): lines slots (helm/boots/necklace/ring/…); rings are never auto-removed — four count, best first.
+    const lines = _ftArmorLinesOn(actor);
+    const slotOf = lines ? _ftArmorLineSlot : _ftArmorSlot;
+    const slot = slotOf(item);
+    if (lines && slot === "ring") return;
+    const off = actor.items.filter(i => i.type === "armor" && i.id !== item.id && i.system?.equipped !== false && slotOf(i) === slot).map(i => ({ _id: i.id, "system.equipped": false }));
+    if (off.length) actor.updateEmbeddedDocuments("Item", off, { ftArmorSwap: true });   // the swap rides on the equip's cost (equip gate below)
   } catch (e) { console.warn("[fourththing] armor slot swap failed", e); }
+});
+// ARMOR LINES — MID-COMBAT SWAPS (Dave 2026-11-12, rule 7; setting armorModel = "lines" only). One preUpdateItem gate
+// covers every equip path (sheet ⛨ toggle, inventory, Combat Dock, macros/API — they all end in an Item update):
+//   • outside an active combat (or the actor isn't a combatant, or is a foe): free.
+//   • BODY armor on/off in an active combat: refused with a notification.
+//   • any other armor piece (shield, helm, boots, necklace, ring) or worn accessory gear: costs the Action
+//     (system.actions.actionUsed); refused when the Action is already spent or committed to Strikes.
+//   • the GM is never gated (GM override — fix-ups, NPCs, rulings at the table) and pays no Action.
+//   • the auto take-off of the old piece in that slot ({ftArmorSwap:true}) rides on the equip's cost.
+//   Not gated: creating an already-equipped item on the actor (drag-drop) — that's an inventory change, not a swap.
+function _ftArmorEquipGate(item, changes, options) {
+  if (options?.ftArmorSwap || game.user?.isGM) return true;
+  const actor = item?.parent;
+  if (!actor || actor.documentName !== "Actor" || !_ftArmorLinesOn(actor)) return true;
+  let toggled = false, slot = null;
+  if (item.type === "armor") {
+    const next = foundry.utils.getProperty(changes, "system.equipped");
+    if (next === undefined || (next !== false) === (item.system?.equipped !== false)) return true;
+    toggled = true; slot = _ftArmorLineSlot(item);
+  } else if (item.type === "gear" && FT.WORN_GEAR_SLOTS.has(String(item.system?.slot || ""))) {
+    const next = foundry.utils.getProperty(changes, "flags.fourththing.equipped");
+    if (next === undefined || !!next === !!item.getFlag?.("fourththing", "equipped")) return true;
+    const armorish = _ftArmorGuardRaw(item) || _ftArmorStatRaw(item, "resolve") || ["ring", "amulet", "boots"].includes(String(item.system?.slot));
+    if (!armorish) return true;
+    toggled = true; slot = _ftArmorLineSlot(item);
+  }
+  if (!toggled || !_ftInActiveCombat(actor) || _ftIsFoeActor(actor)) return true;
+  const verb = (item.type === "armor" ? item.system?.equipped !== false : !!item.getFlag?.("fourththing", "equipped")) ? "take off" : "put on";
+  if (slot === "body") {
+    ui.notifications?.warn(`${actor.name} can't ${verb} body armor in the middle of a fight.`);
+    return false;
+  }
+  // Follows ACTION_ECONOMY_CANON: the sheet only enforces Actions when "Steward sheet tracks action economy" is on;
+  // otherwise the Combat Tracker is the authority, so the swap goes through with a reminder (lead call 2026-11-12).
+  if (!_ftActionEconomyOn()) {
+    ui.notifications?.info(`${actor.name}: swapping ${item.name} mid-fight costs your Action this round.`);
+    return true;
+  }
+  const acts = (actor.system?.system ?? actor.system)?.actions;
+  if (!acts) return true;   // no action slots on this actor type — nothing to spend
+  if (acts.actionUsed || _ftMidStrikes(actor)) {
+    ui.notifications?.warn(`${actor.name}: swapping ${item.name} mid-fight costs your Action, and it's already ${acts.actionUsed ? "spent" : "committed to Strikes"} this round.`);
+    return false;
+  }
+  actor.update({ "system.actions.actionUsed": true }).catch(e => console.warn("[fourththing] armor swap action debit failed", e));
+  ui.notifications?.info(`${actor.name} spends the Action to ${verb} ${item.name}.`);
+  return true;
+}
+Hooks.on("preUpdateItem", (item, changes, options) => {
+  try { if (_ftArmorEquipGate(item, changes, options) === false) return false; }
+  catch (e) { console.warn("[fourththing] armor equip gate failed", e); }
 });
 // 2026-05-26 — Refresh the HUD/banner status strip the moment a rig condition
 // AE (overheat / suppressed) lands or clears, so negative conditions surface

@@ -608,6 +608,8 @@
       "resolveBonus": 0,
       "resistances": [],
       "armorSkill": "fitting",
+      "armorLine": "",
+      "armorSlot": "",
       "equipped": true,
       "tags": [],
       "category": "armor",

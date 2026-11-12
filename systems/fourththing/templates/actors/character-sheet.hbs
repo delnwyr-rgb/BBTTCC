@@ -112,12 +112,12 @@
           <label>Strikes</label>
           <span>{{derived.strikes.value}}<small style="opacity:.6">/rd</small></span>
         </div>
-        <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'guard'}}">
+        <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'guard' derived.armorLines.guardTip}}">
           <label>Guard</label>
           <span>{{derived.guard.value}}</span>
           <button type="button" data-action="ftDefenseRoll" data-defense="guard" class="ft-def-roll" data-tooltip="Roll a Guard check (2d10x10 + Guard).">⚀</button>
         </div>
-        <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'resolve'}}">
+        <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'resolve' derived.armorLines.resolveTip}}">
           <label>Resolve</label>
           <span>{{derived.resolve.value}}</span>
           <button type="button" data-action="ftDefenseRoll" data-defense="resolve" class="ft-def-roll" data-tooltip="Roll a Resolve check (2d10x10 + Resolve).">⚀</button>

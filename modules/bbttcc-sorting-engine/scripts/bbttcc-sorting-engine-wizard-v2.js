@@ -1341,6 +1341,21 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     return map;
   }
 
+  /** True under the system's armor LINES model (RFI only — the D&D port keeps its own armor rules). */
+  _armorLinesOn() {
+    if (isDnd()) return false;
+    try { return game.settings.get("fourththing", "armorModel") === "lines"; } catch (_e) { return false; }
+  }
+  /** "Armor you can wear: Guard-Body Proficient, …" from the current faculty allocation (rank = faculty − 2, 0..5). */
+  _armorLinesText() {
+    const f = this._faculties || this._defaultFacultyDistribution();
+    const RANKS = ["Untrained", "Trained", "Proficient", "Expert", "Master", "Legendary"];
+    const LINES = [["Guard-Body", "body"], ["Guard-Intrigue", "intrigue"], ["Resolve-Soul", "soul"], ["Resolve-Mind", "mind"]];
+    const worn = LINES.map(([label, fac]) => [label, fac, Math.max(0, Math.min(5, (Number(f?.[fac]) || 0) - 2))]).filter(([, , r]) => r >= 1)
+      .map(([label, fac, r]) => `${label} ${RANKS[r]} (${facLabel(fac)} ${Number(f?.[fac]) || 0})`);
+    return `Armor you can wear: <strong>${worn.length ? worn.join(", ") : "none yet — a faculty of 3+ in Body, Intrigue, Soul or Mind opens an armor line"}</strong>. Any Path can carry a shield; accessories add up to half your best line rank.`;
+  }
+
   _buildChargenAptitudesHtml() {
     const APTITUDES = aptitudeList();
     const slots = this._chargenAptitudes;
@@ -1349,13 +1364,19 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     // (armor skills are filtered out of the pick list), and the feature grants were invisible.
     const ARMOR_LABEL = { plating: "Plating (heavy armor)", bracing: "Bracing (medium armor + shields)", fitting: "Fitting (light armor)" };
     const aptLabel = new Map(APTITUDES.map(([k, l]) => [k, String(l).replace(/\s*\(.*\)\s*$/, "")]));
-    const classGrants = [...autoGranted.entries()].filter(([, src]) => String(src).startsWith("Class ("));
+    // ARMOR LINES (Dave 2026-11-12, system setting fourththing.armorModel = "lines"): armor training comes from faculties,
+    // not the Path — drop the Plating/Bracing/Fitting grants here and show the lines the chosen faculties unlock.
+    const armorLines = this._armorLinesOn();
+    const classGrants = [...autoGranted.entries()].filter(([k, src]) => String(src).startsWith("Class (") && !(armorLines && ARMOR_LABEL[k]));
     const armorFirst = classGrants.sort(([a], [b]) => (ARMOR_LABEL[b] ? 1 : 0) - (ARMOR_LABEL[a] ? 1 : 0));
     const grantsLine = classGrants.length
       ? `<p class="bbttcc-twv2-section-note" data-path-grants style="margin:0 0 0.4rem;color:#8fb9ff">Your Path grants (rank&nbsp;1): <strong>${armorFirst
           .map(([k]) => ARMOR_LABEL[k] || aptLabel.get(k) || (k.charAt(0).toUpperCase() + k.slice(1))).join(", ")}</strong></p>`
       : "";
-    return `${grantsLine}
+    const armorLine = armorLines
+      ? `<p class="bbttcc-twv2-section-note" data-armor-lines style="margin:0 0 0.4rem;color:#8fb9ff">${this._armorLinesText()}</p>`
+      : "";
+    return `${grantsLine}${armorLine}
       <div class="bbttcc-twv2-chargen-aptitude-grid">
         ${[0, 1, 2].map(i => {
           const cur = slots[i] || "";
@@ -1740,6 +1761,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           this._faculties = f;
           this._validateFaculties(root);
           this._updateFinalizeGate(root);
+          // ARMOR LINES (2026-11-12): the "Armor you can wear" line follows the faculty picks.
+          const _al = root.querySelector("[data-armor-lines]");
+          if (_al) _al.innerHTML = this._armorLinesText();
         });
       });
       this._validateFaculties(root);

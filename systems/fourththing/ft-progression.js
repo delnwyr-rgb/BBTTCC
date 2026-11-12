@@ -744,8 +744,13 @@ export function collectCheckBonuses(actor, query = {}) {
     if (g.when && !_grantWhenOk(actor, g.when, query)) return false;
     return true;
   };
+  // ARMOR LINES (Dave 2026-11-12, rule 6): no armor penalties — under armorModel "lines" the worn −Intrigue rows that the
+  // evasion-retired migration put on armor/shield items ({worn:true, attribute:"intrigue", bonus<0} on type "armor") are ignored.
+  let _armorLines = false;
+  try { _armorLines = game.settings.get("fourththing", "armorModel") === "lines"; } catch (_e) { _armorLines = false; }
   for (const item of actor.items ?? []) for (const g of item.flags?.fourththing?.passives?.checkBonus ?? []) {
     if (g?.worn === true && !_itemWorn(item)) continue;   // 2026-11-11: worn-only rows (heavy armor's −1 Intrigue) — per item, so they stack
+    if (_armorLines && item.type === "armor" && g?.worn === true && g?.attribute === "intrigue" && Number(g?.bonus) < 0) continue;
     if (match(g)) out.push({ bonus: Number(g.bonus), source: item.name, note: g.note ?? null });
   }
   // 2026-11-11 (Dave — radiation mutations' old "−N Evasion" drawbacks): an active ActiveEffect may carry
