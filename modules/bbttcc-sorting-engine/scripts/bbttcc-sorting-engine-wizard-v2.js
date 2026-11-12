@@ -990,7 +990,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
                 <div class="bbttcc-twv2-section-title">${dnd ? "Yesod — Skill Picks" : "Yesod — Aptitude Picks"}</div>
                 <p class="bbttcc-twv2-section-note">${dnd
                   ? `Choose <strong>3 free skill proficiencies</strong> at character creation — the Bad Eden twin of RFI's three free aptitudes. Your Archetype and class add their own skills afterwards; anything already proficient is greyed out there.`
-                  : `Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Fitting, Bracing) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
+                  : `Choose <strong>3 free aptitudes</strong> at character creation. Your Path's grants are listed below, armor training included. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
                 ${chargenAptitudesHtml}
               </div>
             </div>
@@ -1211,6 +1211,48 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     return Array.from(new Set(grants));
   }
 
+  // 2026-11-12 (Dave): the class's level-1 FEATURES carry their own aptitude stamps on top of the
+  // L1 PLAN above (Bulwark: Athletics; Shadow Courier: Stealth + Tinkering; Wyrdlens: Lore + Occult;
+  // Pactkeeper: Melee). The picker only knew the PLAN, so it offered those as free picks and the pick
+  // was dropped at finalize. Read them from the class doc: advancement level-1 ItemGrant items →
+  // enabled AEs flagged aptitudeStamp (or a "Tier 1 Proficiencies" AE) adding system.skills.<k>.value.
+  // Returns [{ skill, item }] (item = feature name, the promoter's ledger key). Cached per class.
+  async _classL1FeatureGrants(className) {
+    if (!className || isDnd()) return [];
+    this._featGrantCache ??= new Map();
+    if (this._featGrantCache.has(className)) return this._featGrantCache.get(className);
+    const out = [];
+    try {
+      const idx = await _loadPackIndex("path");
+      const norm = _normalizeOptionName(className);
+      const entry = idx ? (idx.get(norm) || _fuzzyFindEntry(idx, norm)) : null;
+      const pack = entry ? _pack(entry.packKey) : null;
+      const cls = pack ? await pack.getDocument(entry.id) : null;
+      const PROF_RE = /tier 1 proficiencies|\bt1 skills\b|tier 1 skills/i;
+      const ALIAS = { weave: "fitting", warding: "bracing", weaver: "fitting" };
+      for (const adv of (cls?.system?.advancement ?? [])) {
+        if (!adv || adv.type !== "ItemGrant" || Number(adv.level) !== 1) continue;
+        for (const ref of (adv.configuration?.items ?? [])) {
+          const uuid = typeof ref === "string" ? ref : ref?.uuid;
+          if (!uuid) continue;
+          let feat = null; try { feat = await fromUuid(uuid); } catch (_e) {}
+          for (const e of (feat?.effects ?? [])) {
+            if (e.disabled) continue;
+            if (!e.flags?.fourththing?.aptitudeStamp && !PROF_RE.test(String(e.name ?? ""))) continue;
+            for (const c of (e.changes ?? e.system?.changes ?? [])) {
+              const m = String(c?.key ?? "").match(/^system\.skills\.([a-zA-Z0-9_]+)\.value$/);
+              if (!m || !(Number(c.value) > 0 || ["upgrade", "override"].includes(c?.type))) continue;
+              const skill = ALIAS[m[1]] ?? m[1];
+              if (!out.some(g => g.skill === skill)) out.push({ skill, item: feat.name });
+            }
+          }
+        }
+      }
+    } catch (e) { WARN(`class L1 feature-grant scan failed for ${className}`, e); }
+    this._featGrantCache.set(className, out);
+    return out;
+  }
+
   // Map<aptitudeKey, sourceLabel> — populated by _recomputeAutoGrants() before
   // each review render. Empty during descent or before first compute. Sources
   // include: the class L1 plan (path), plus any item-description grants picked
@@ -1252,6 +1294,10 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (cls) {
       for (const k of this._classL1Grants(cls)) {
         if (!map.has(k)) map.set(k, `Class (${cls})`);
+      }
+      // 2026-11-12: plus the level-1 feature stamps (see _classL1FeatureGrants).
+      for (const g of await this._classL1FeatureGrants(cls)) {
+        if (!map.has(g.skill)) map.set(g.skill, `Class (${cls})`);
       }
     }
 
@@ -1299,7 +1345,17 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const APTITUDES = aptitudeList();
     const slots = this._chargenAptitudes;
     const autoGranted = this._autoGrantedAptitudes();
-    return `
+    // 2026-11-12 (Dave): show what the Path actually grants — armor training never appeared anywhere
+    // (armor skills are filtered out of the pick list), and the feature grants were invisible.
+    const ARMOR_LABEL = { plating: "Plating (heavy armor)", bracing: "Bracing (medium armor + shields)", fitting: "Fitting (light armor)" };
+    const aptLabel = new Map(APTITUDES.map(([k, l]) => [k, String(l).replace(/\s*\(.*\)\s*$/, "")]));
+    const classGrants = [...autoGranted.entries()].filter(([, src]) => String(src).startsWith("Class ("));
+    const armorFirst = classGrants.sort(([a], [b]) => (ARMOR_LABEL[b] ? 1 : 0) - (ARMOR_LABEL[a] ? 1 : 0));
+    const grantsLine = classGrants.length
+      ? `<p class="bbttcc-twv2-section-note" data-path-grants style="margin:0 0 0.4rem;color:#8fb9ff">Your Path grants (rank&nbsp;1): <strong>${armorFirst
+          .map(([k]) => ARMOR_LABEL[k] || aptLabel.get(k) || (k.charAt(0).toUpperCase() + k.slice(1))).join(", ")}</strong></p>`
+      : "";
+    return `${grantsLine}
       <div class="bbttcc-twv2-chargen-aptitude-grid">
         ${[0, 1, 2].map(i => {
           const cur = slots[i] || "";
@@ -2079,6 +2135,24 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
             // Mirror into the local view so step 2 sees the grant as a conflict.
             skills[k] = { ...(skills[k] || {}), value: 1 };
           }
+
+          // 1b) 2026-11-12: class L1 FEATURE grants the pipeline's promoter missed (e.g. Sox, Courier, had
+          // no Stealth/Tinkering). Only when the source rank is 0 AND the promoter's ledger has no entry for
+          // (feature|skill) — the ledger entry is written with it, so a later promote pass can't add a 2nd rank.
+          const featGrants = await this._classL1FeatureGrants(this._effective("path"));
+          const ledger = foundry.utils.deepClone(created.getFlag?.("fourththing", "aptitudePromotions") ?? {});
+          let ledgerDirty = false;
+          for (const g of featGrants) {
+            const lk = `${String(g.item ?? "").toLowerCase().replace(/\s+/g, " ").trim()}|${g.skill}`;
+            const cur = Number(skills[g.skill]?.value ?? 0);
+            if (cur > 0 || ledger[lk]) continue;
+            updates[`system.skills.${g.skill}.value`] = 1;
+            classApplied.push(g.skill);
+            skills[g.skill] = { ...(skills[g.skill] || {}), value: 1 };
+            ledger[lk] = { delta: 1, item: g.item, at: Date.now(), by: "sorting-engine-finalize" };
+            ledgerDirty = true;
+          }
+          if (ledgerDirty) updates["flags.fourththing.aptitudePromotions"] = ledger;
 
           // 2) Chargen picks — rank-0 only, conflicts reported in chat
           const applied = [];
