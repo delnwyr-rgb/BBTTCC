@@ -3647,13 +3647,11 @@ async function _openCLMetaphor(actor) {
         <div class="ft-cast-field"><label>Replace defense</label>
           <select name="from">
             <option value="guard">Guard</option>
-            <option value="evasion">Evasion</option>
             <option value="resolve">Resolve</option>
           </select></div>
         <div class="ft-cast-field"><label>...with this defense's value</label>
           <select name="to">
             <option value="guard">Guard</option>
-            <option value="evasion">Evasion</option>
             <option value="resolve" selected>Resolve</option>
           </select></div>
       </div>
@@ -7462,7 +7460,8 @@ export async function openDreamwalkerDestinyPulse(actor) {
         foes: { label: "Enemies −2 to hit", callback: () => resolve("foes") },
         soc:  { label: "+2 Insight / Diplomacy / Perception", callback: () => resolve("soc") } }, default: "def", close: () => resolve(null) }).render(true));
       if (!pick) return false;
-      const changes = pick === "def" ? ["guard", "evasion", "resolve"].map(k => ({ key: `system.derived.${k}.aeBonus`, mode: 2, value: "2", priority: 20 }))
+      const changes = pick === "def" ? ["guard", "resolve"].map(k =>   // Evasion retired 2026-11-11
+ ({ key: `system.derived.${k}.aeBonus`, mode: 2, value: "2", priority: 20 }))
         : pick === "soc" ? ["insight", "diplomacy", "perception"].map(k => ({ key: `system.skills.${k}.value`, mode: 2, value: "2", priority: 20 })) : [];
       const label = pick === "def" ? "+2 to all defense checks" : pick === "foes" ? "enemies −2 to attack rolls against them (GM applies)" : "+2 Insight / Diplomacy / Perception";
       await _ftAEOn(tgt, { name: `Destiny Thread (${label})`, img: "icons/magic/perception/third-eye-blue-red.webp", origin: actor.uuid, duration: { seconds: 3600, rounds: 600 }, changes, flags: { fourththing: { destinyThread: pick } } });

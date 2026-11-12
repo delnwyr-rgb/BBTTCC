@@ -162,15 +162,10 @@
       </div>
 
       <div class="ft-defenses flexrow">
-        <div class="ft-def-stat" data-tooltip="Guard — physical defense (Violence + Body + armor).">
+        <div class="ft-def-stat" data-tooltip="Guard — defense vs. Integrity damage (Violence + Body + armor).">
           <label>Guard</label>
           <input type="number" name="system.derived.guard.value" value="{{system.derived.guard.value}}" min="0"/>
           <button type="button" data-action="ftDefenseRoll" data-defense="guard" class="ft-def-roll" data-tooltip="Guard check">⚀</button>
-        </div>
-        <div class="ft-def-stat" data-tooltip="Evasion — agility defense (Intrigue + Body + armor).">
-          <label>Evasion</label>
-          <input type="number" name="system.derived.evasion.value" value="{{system.derived.evasion.value}}" min="0"/>
-          <button type="button" data-action="ftDefenseRoll" data-defense="evasion" class="ft-def-roll" data-tooltip="Evasion check">⚀</button>
         </div>
         <div class="ft-def-stat" data-tooltip="Resolve — willpower defense (Presence + Soul + armor).">
           <label>Resolve</label>
@@ -319,7 +314,7 @@
     <div class="ft-combat-actions" style="display:flex; gap:.2rem; flex-wrap:wrap;">
       <button type="button" data-action="ftCombatAction" data-combat-action="dash"      class="ft-npc-tool" data-tooltip="Spend your action to add your walk speed to your movement budget for this turn.">🏃 Dash</button>
       <button type="button" data-action="ftCombatAction" data-combat-action="disengage" class="ft-npc-tool {{#if ftFlags.combat.disengaged}}used{{/if}}" data-tooltip="Your movement does not provoke attacks of opportunity until end of turn.">🚶 Disengage</button>
-      <button type="button" data-action="ftCombatAction" data-combat-action="dodge"     class="ft-npc-tool {{#if ftFlags.combat.dodging}}used{{/if}}"    data-tooltip="+2 to Guard, Evasion, and Resolve until your next turn.">🛡 Dodge</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="dodge"     class="ft-npc-tool {{#if ftFlags.combat.dodging}}used{{/if}}"    data-tooltip="+2 to Guard and Resolve until your next turn.">🛡 Dodge</button>
       <button type="button" data-action="ftCombatAction" data-combat-action="hold"      class="ft-npc-tool {{#if ftFlags.combat.holding}}used{{/if}}"    data-tooltip="Set a trigger condition. Your action becomes a reaction you can fire when the trigger fires.">⏳ Hold</button>
       <button type="button" data-action="ftCombatAction" data-combat-action="aid"       class="ft-npc-tool" data-tooltip="Aid a targeted ally — they gain a banked reroll-lowest on their next roll this scene.">🤝 Aid</button>
       <button type="button" data-action="ftCombatAction" data-combat-action="hide"      class="ft-npc-tool {{#if ftFlags.combat.hidden}}used{{/if}}"     data-tooltip="Roll Stealth (Intrigue). On a high roll vs. observers' Perception, you become hidden.">🌑 Hide</button>

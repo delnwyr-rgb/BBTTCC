@@ -265,7 +265,7 @@
     ["violence","Violence"], ["intrigue","Intrigue"], ["presence","Presence"],
     ["body","Body"], ["mind","Mind"], ["soul","Soul"]
   ];
-  const DEFENSES = [ ["guard","Guard"], ["evasion","Evasion"], ["resolve","Resolve"] ];
+  const DEFENSES = [ ["guard","Guard"], ["resolve","Resolve"] ];   // Evasion retired 2026-11-11
 
   // ── dnd5e (the Bad Eden 5E build) ───────────────────────────────────────
   // Same tray, dnd5e-native contents: ability checks / saves / skills, items

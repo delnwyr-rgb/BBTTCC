@@ -333,7 +333,7 @@ async function setCond(a, k, want) {
   try { return (await game.fourththing.toggleCondition(a, k)) === want || (sysOf(a)?.conditions?.[k] === true) === want; } catch (_e) { return false; }
 }
 async function defenseAE(a, df, B, rounds, label) {
-  const KEY = { guard: "system.derived.guard.aeBonus", evasion: "system.derived.evasion.aeBonus", resolve: "system.derived.resolve.aeBonus" };
+  const KEY = { guard: "system.derived.guard.aeBonus", resolve: "system.derived.resolve.aeBonus" };   // Evasion retired 2026-11-11
   const changes = Object.entries(df).filter(([k]) => KEY[k]).map(([k, m]) => ({ key: KEY[k], mode: 2, value: String(m * B), priority: 20 }));
   if (!changes.length) return;
   try {

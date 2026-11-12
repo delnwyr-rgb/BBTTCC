@@ -568,7 +568,7 @@ export function collectRerolls(actor, query = {}) {
       if (!g || !g.context || !g.mode) continue;
       // context match — exact, OR "check" matches anything skill/attribute-shaped
       // Techniques R4 (2026-09-21): "defense" and "save" are the same roll family
-      // (Guard / Evasion / Resolve checks and manifestation saves); "initiative"
+      // (Guard / Resolve checks and manifestation saves); "initiative"
       // is queried by FourthThingCombat.rollInitiative.
       const ctxMatch = g.context === wantContext
         || (g.context === "check" && (wantContext === "check" || wantContext === "save" || wantContext === "attack"))
@@ -688,9 +688,11 @@ export function collectRerolls(actor, query = {}) {
 // ─── Passive readers added 2026-10-07 (regimen pass 7) ────────────────────────
 // flags.fourththing.passives.aura = { radius, who:"allies"|"all"|"enemies", includeSelf?, requires?:{equipped?,active?},
 //   rerolls:[{context,skill?,attribute?,vs,mode,when?}], checkBonus:[{context?,skill?,attribute?,bonus,note}],
-//   defenseBonus:{guard?,evasion?,resolve?}, walkSquares?, ignoreForcedMovementSquares?, note }
+//   defenseBonus:{guard?,resolve?} (legacy evasion folds into guard), walkSquares?, ignoreForcedMovementSquares?, note }
 // flags.fourththing.passives.ranks = { <skill>: N }            → added to the SOURCE rank on every roll
-// flags.fourththing.passives.checkBonus = [{context?,skill?,attribute?,bonus,when?,note}] → flat, itemised on the card
+// flags.fourththing.passives.checkBonus = [{context?,skill?,attribute?,bonus,when?,note,worn?}] → flat, itemised on the card
+//   worn:true (2026-11-11, Evasion retired — heavy pieces' −1 Evasion became −1 Intrigue checks) → the row counts only
+//   while its item is worn: armor reads system.equipped, anything else flags.fourththing.equipped; undefined = worn.
 // actor.flags.fourththing.aidBanked[] may hold { kind:"bonus", bonus, context?, skill?, attribute?, from } — consumed at roll time
 function _auraRequiresOk(item, aura) {
   const r = aura?.requires; if (!r) return true;
@@ -737,11 +739,26 @@ export function collectCheckBonuses(actor, query = {}) {
     if (g.when && !_grantWhenOk(actor, g.when, query)) return false;
     return true;
   };
-  for (const item of actor.items ?? []) for (const g of item.flags?.fourththing?.passives?.checkBonus ?? []) if (match(g)) out.push({ bonus: Number(g.bonus), source: item.name, note: g.note ?? null });
+  for (const item of actor.items ?? []) for (const g of item.flags?.fourththing?.passives?.checkBonus ?? []) {
+    if (g?.worn === true && !_itemWorn(item)) continue;   // 2026-11-11: worn-only rows (heavy armor's −1 Intrigue) — per item, so they stack
+    if (match(g)) out.push({ bonus: Number(g.bonus), source: item.name, note: g.note ?? null });
+  }
+  // 2026-11-11 (Dave — radiation mutations' old "−N Evasion" drawbacks): an active ActiveEffect may carry
+  // flags.fourththing.checkBonus rows (same shape as item passives); they count while the effect is on and not disabled.
+  for (const e of actor.effects ?? []) {
+    if (e.disabled || e.isSuppressed) continue;
+    for (const g of e.flags?.fourththing?.checkBonus ?? []) if (match(g)) out.push({ bonus: Number(g.bonus), source: e.name, note: g.note ?? null });
+  }
   for (const src of collectAuraSources(actor)) for (const g of src.aura.checkBonus ?? []) if (match(g)) out.push({ bonus: Number(g.bonus), source: `${src.actor.name} · ${src.item.name}`, note: g.note ?? null, _aura: true });
   const banked = actor.flags?.fourththing?.aidBanked;
   if (Array.isArray(banked)) banked.forEach((b, i) => { if (b?.kind === "bonus" && match({ ...b, when: null })) out.push({ bonus: Number(b.bonus), source: `Banked: ${b.from || b.source || "ally"}`, note: b.note ?? null, _bankedIndex: i }); });
   return out;
+}
+/** Is this item worn right now? Armor → system.equipped; other items → flags.fourththing.equipped. Undefined = worn
+ *  (matches the "armored" case in _grantWhenOk). 2026-11-11. */
+function _itemWorn(item) {
+  if (item?.type === "armor") return item.system?.equipped ?? true;
+  return item?.flags?.fourththing?.equipped ?? true;
 }
 /** Drop the banked bonus entries that were just applied. */
 export async function consumeBankedBonus(actor, applied) {
@@ -751,10 +768,19 @@ export async function consumeBankedBonus(actor, applied) {
   for (const i of idx) banked.splice(i, 1);
   try { await actor.update({ "flags.fourththing.aidBanked": banked }); } catch (e) { console.warn("banked bonus consume failed", e); }
 }
-/** Aura-granted defense bonus for one defense ("guard" | "evasion" | "resolve"). */
+/** Aura-granted defense bonus for one defense ("guard" | "resolve"). Evasion retired 2026-11-11: a legacy
+ *  defenseBonus.evasion > 0 folds into Guard per aura source as max(g, e) + floor(min(g, e) / 2); asking for
+ *  "evasion" returns 0. */
 export function auraDefenseBonus(actor, which) {
+  if (which === "evasion") return 0;
   let n = 0;
-  for (const s of collectAuraSources(actor)) n += Number(s.aura.defenseBonus?.[which]) || (which === "guard" ? Number(s.aura.guardBonus) || 0 : 0);
+  for (const s of collectAuraSources(actor)) {
+    const db = s.aura.defenseBonus;
+    if (which === "guard") {
+      const g = Number(db?.guard) || Number(s.aura.guardBonus) || 0, e = Number(db?.evasion) || 0;
+      n += e > 0 ? Math.max(g, e) + Math.floor(Math.min(g, e) / 2) : g;
+    } else n += Number(db?.[which]) || 0;
+  }
   return n;
 }
 /** Aura-granted extra walk, in squares. */

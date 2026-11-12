@@ -868,7 +868,7 @@ export async function openRigBuilder({ seed = null } = {}) {
     <div data-bbttcc-chiprow="infrastructure" id="bbttcc-rb-infra-chips" style="display:none; margin-top:0.25rem;"></div>
     <ul class="ft-manifest-dialog-list" style="margin-top:0.4rem;">
       <li><b>Rig / Facility:</b> a template chip seeds bracket, mobility, capacity, and tags. Override anything afterwards.</li>
-      <li>Bracket × Tier sets the integrity envelope; Guard/Evasion/Resolve derive from bracket at render time.</li>
+      <li>Bracket × Tier sets the integrity envelope; Guard/Resolve derive from bracket at render time.</li>
       <li><b>Infrastructure:</b> a template builds a structure with a material bill — it has Plates, a Threshold, and a collapse profile. Flimsy by design.</li>
     </ul>
   </div>

@@ -2132,8 +2132,11 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const expiresTurn = permanent ? null : (turnNow + turns - 1);
           const checkBonus = Array.isArray(row.checkBonus) ? row.checkBonus.filter(g => g && Number(g.bonus)).map(g => ({ context: g.context || "check", skill: g.skill || null, attribute: g.attribute || null, bonus: Number(g.bonus), note: g.note || name })) : [];
           const ranks = (row.ranks && typeof row.ranks === "object") ? row.ranks : null;
+          // Evasion retired 2026-11-11 (Dave): an authored evasion > 0 folds into guard as max(g, e) + ⌊min(g, e)/2⌋.
           const defenseBonus = (row.defenseBonus && typeof row.defenseBonus === "object")
-            ? Object.fromEntries(["guard", "evasion", "resolve"].filter(k => Number(row.defenseBonus[k])).map(k => [k, Number(row.defenseBonus[k])])) : null;
+            ? (() => { const g0 = Number(row.defenseBonus.guard) || 0, e0 = Number(row.defenseBonus.evasion) || 0;
+                       const g = e0 > 0 ? Math.max(g0, e0) + Math.floor(Math.min(g0, e0) / 2) : g0;
+                       return Object.fromEntries([["guard", g], ["resolve", Number(row.defenseBonus.resolve) || 0]].filter(([, n]) => n)); })() : null;
           const group = String(row.group || "").trim() || null;
           const relief = Math.max(0, Math.floor(Number(row.strainRelief) || 0));
           const who = [];

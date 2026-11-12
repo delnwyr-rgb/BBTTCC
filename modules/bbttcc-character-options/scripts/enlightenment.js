@@ -83,7 +83,6 @@ const EFFECTS = {
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
       { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
-      { key: "system.derived.evasion.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.meditation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
@@ -100,7 +99,6 @@ const EFFECTS = {
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
       { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
-      { key: "system.derived.evasion.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.derived.stress.aeBonus",  mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "5", priority: 20 },
       { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },

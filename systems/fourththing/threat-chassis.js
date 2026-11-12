@@ -10,7 +10,7 @@
  *   • attack   flat to-hit, on top of faculty + foe tier bonus          (a Steward's levels, folded)
  *   • rank     innate aptitude rank for its strikes — shapes the dice    (2 reroll-lowest · 4+ 3d10kh2)
  *   • damage   flat damage on a weapon hit
- *   • defense  flat Guard / Evasion / Resolve
+ *   • defense  flat Guard / Resolve (Evasion retired 2026-11-11 — a creature's would-be Evasion folds into Guard, higher wins)
  *   • pool     × Integrity and Stress max, by bracket
  *   • strikes  Strikes per round, by bracket (the GM spends them; foes aren't gated)
  *   • legendary legendary actions per round, by bracket (bosses at EVERY tier — ruled 2026-10-06)

@@ -238,24 +238,18 @@
 
     {{!-- COMBAT TAB ----------------------------------------------------- --}}
     <div class="tab combat{{#if (eq activeTab "combat")}} active{{/if}}" data-tab="combat">
-      {{!-- Contact Defenses (B11.A — 2026-05-12). Guard/Evasion/Resolve trio
+      {{!-- Contact Defenses (B11.A — 2026-05-12; Evasion retired 2026-11-11). Guard/Resolve
            derived from frame bracket + tier. Read-only; bracket changes via
            equipping a different frame item or GM-editing integrity.bracket. --}}
       <section class="ft-rig-contact-defenses">
         <div class="ft-block-title">Contact Defenses
-          <span class="ft-block-hint" data-tooltip="Guard/Evasion/Resolve = bracket base + tier. Equip a different frame item or edit the bracket to change.">{{defenseDerived.formulaHint}}</span>
+          <span class="ft-block-hint" data-tooltip="Guard/Resolve = bracket base + tier. Equip a different frame item or edit the bracket to change.">{{defenseDerived.formulaHint}}</span>
         </div>
         <div class="ft-rig-summary ft-rig-stat-grid">
-          <div class="ft-rig-stat-tile" data-tooltip="Guard — attack DC for melee, ramming, point-blank fire. High for Heavy / Siege brackets.">
+          <div class="ft-rig-stat-tile" data-tooltip="Guard — attack DC for anything that does Integrity damage: melee, ramming, gunfire, area blasts. Evading, swerving and sail trim move it.">
             <div class="ft-rig-stat-label">Guard</div>
             <div class="ft-rig-stat-row">
               <span class="ft-rig-stat-val ft-rig-stat-val-text">{{defenseDerived.guard}}</span>
-            </div>
-          </div>
-          <div class="ft-rig-stat-tile" data-tooltip="Evasion — attack DC for area, precision, and ranged fire at distance. High for Personal / Light brackets.">
-            <div class="ft-rig-stat-label">Evasion</div>
-            <div class="ft-rig-stat-row">
-              <span class="ft-rig-stat-val ft-rig-stat-val-text">{{defenseDerived.evasion}}</span>
             </div>
           </div>
           <div class="ft-rig-stat-tile" data-tooltip="Resolve — DC for EMP, demoralize, command-override effects. Flat across brackets, tier-scaled.">

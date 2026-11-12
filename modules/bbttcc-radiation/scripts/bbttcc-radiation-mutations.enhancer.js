@@ -34,7 +34,10 @@
     initiative: "system.derived.initiative.bonus",
     integrity:  "system.derived.integrity.aeBonus",
     stress:     "system.derived.stress.aeBonus",
-    casting:    "system.magic.castBonus"
+    casting:    "system.magic.castBonus",
+    // 2026-11-11 (Dave): Evasion is retired. A mutation's +Evasion is Guard now; its −Evasion drawback is that much off
+    // Intrigue checks — not an AE change but a flags.fourththing.checkBonus row on the mutation's AE (ft-progression reads it).
+    intrigueCheck: "check:intrigue"
   };
   const DEF_LABEL = {
     [K.guard]:      "Guard",
@@ -43,7 +46,8 @@
     [K.initiative]: "Initiative",
     [K.integrity]:  "Max Integrity",
     [K.stress]:     "Max Stress",
-    [K.casting]:    "Casting"
+    [K.casting]:    "Casting",
+    [K.intrigueCheck]: "on Intrigue checks"
   };
 
   // ----- Helpers -------------------------------------------------------------
@@ -96,41 +100,41 @@
   const TABLES = {
     minor: [
       { name: "Chromatic Freckles", description: "Specks of bioluminescent color bloom across the skin, pulsing faintly when radiation is nearby.",
-        effects: [{ key: K.resolve, value: 1 }, { key: K.evasion, value: -1 }] },
+        effects: [{ key: K.resolve, value: 1 }, { key: K.intrigueCheck, value: -1 }] },
       { name: "Static Halo", description: "Hair and clothing cling with a constant static charge, crackling in the dark.",
         effects: [{ key: K.initiative, value: 1 }, { key: K.casting, value: -1 }] },
       { name: "Echo Breath", description: "Every breath leaves a faint, shimmering trail that lingers for a heartbeat.",
-        effects: [{ key: K.evasion, value: 1 }, { key: K.integrity, value: -1 }] },
+        effects: [{ key: K.guard, value: 1 }, { key: K.integrity, value: -1 }] },
       { name: "Glass Nails", description: "Fingernails and toenails look like translucent glass, refracting ambient light.",
         effects: [{ key: K.guard, value: 1 }, { key: K.integrity, value: -1 }] }
     ],
     significant: [
       { name: "Leyline Sight", description: "You can vaguely see the flow of leyline fractures as ghostly currents in the air.",
-        effects: [{ key: K.casting, value: 2 }, { key: K.evasion, value: -2 }] },
+        effects: [{ key: K.casting, value: 2 }, { key: K.intrigueCheck, value: -2 }] },
       { name: "Fractured Shadow", description: "Your shadow moves a half-beat out of sync, sometimes lagging, sometimes leaping ahead.",
-        effects: [{ key: K.evasion, value: 2 }, { key: K.initiative, value: -1 }] },
+        effects: [{ key: K.guard, value: 2 }, { key: K.initiative, value: -1 }] },
       { name: "Radiant Whispers", description: "Exposure left a buzzing chorus in your mind; sometimes it mutters warnings, sometimes temptations.",
         effects: [{ key: K.stress, value: 3 }, { key: K.resolve, value: -1 }] },
       { name: "Phase-Soft Bones", description: "Your bones feel lighter, occasionally bending instead of breaking under stress.",
-        effects: [{ key: K.evasion, value: 2 }, { key: K.integrity, value: -3 }] }
+        effects: [{ key: K.guard, value: 2 }, { key: K.integrity, value: -3 }] }
     ],
     major: [
       { name: "Twin Afterimage", description: "A faint afterimage of you lags behind, visible to those attuned to the Weird.",
-        effects: [{ key: K.evasion, value: 3 }, { key: K.resolve, value: -2 }] },
+        effects: [{ key: K.guard, value: 3 }, { key: K.resolve, value: -2 }] },
       { name: "Starlit Veins", description: "Veins glow like constellations when you exert yourself or channel power.",
-        effects: [{ key: K.integrity, value: 2 }, { key: K.guard, value: 1 }, { key: K.evasion, value: -2 }] },
+        effects: [{ key: K.integrity, value: 2 }, { key: K.guard, value: 1 }, { key: K.intrigueCheck, value: -2 }] },
       { name: "Gravity Skip", description: "For a heartbeat at a time, gravity forgets about you. Steps become long, drifting arcs.",
-        effects: [{ key: K.initiative, value: 3 }, { key: K.evasion, value: 1 }, { key: K.guard, value: -2 }] },
+        effects: [{ key: K.initiative, value: 3 }, { key: K.guard, value: -1 }] },   // was +1 Evasion / −2 Guard (2026-11-11: net −1 Guard)
       { name: "Echoed Voice", description: "Your voice always sounds like it’s speaking from two places at once.",
         effects: [{ key: K.resolve, value: 3 }, { key: K.stress, value: -2 }] }
     ],
     cataclysmic: [
       { name: "Localized Event Horizon", description: "Space warps subtly around you; small objects bend toward or away from you in erratic pulses.",
-        effects: [{ key: K.guard, value: 4 }, { key: K.evasion, value: -2 }] },
+        effects: [{ key: K.guard, value: 4 }, { key: K.intrigueCheck, value: -2 }] },
       { name: "Radiant Core", description: "A burning point of light sometimes shines from within your chest, like a captured star.",
-        effects: [{ key: K.casting, value: 3 }, { key: K.integrity, value: 3 }, { key: K.evasion, value: -3 }] },
+        effects: [{ key: K.casting, value: 3 }, { key: K.integrity, value: 3 }, { key: K.intrigueCheck, value: -3 }] },
       { name: "Temporal Blur", description: "People looking at you sometimes see you a few moments ahead or behind your actual actions.",
-        effects: [{ key: K.initiative, value: 4 }, { key: K.evasion, value: 2 }, { key: K.resolve, value: -3 }] },
+        effects: [{ key: K.initiative, value: 4 }, { key: K.guard, value: 2 }, { key: K.resolve, value: -3 }] },
       { name: "Qliphotic Echo", description: "You carry a faint imprint of the Inverse Tree; certain Qliphotic entities recognize you on sight.",
         effects: [{ key: K.resolve, value: 4 }, { key: K.stress, value: 2 }, { key: K.integrity, value: -4 }] }
     ]
@@ -173,8 +177,9 @@
       disabled: false,
       // mode 2 = ADD. Defense aeBonus is the single-application channel (see header).
       // the aeBonus channels translate to dnd5e's own bonus fields (bbttcc-core dice.aeKey) — 2026-10-08
-      changes: mut.effects.map(e => ({ key: game.bbttcc?.dice?.aeKey?.(e.key) ?? e.key, mode: 2, value: String(e.value), priority: 20 })),
-      flags:  { [MOD]: { mutationId: mut.id, mutation: true } }
+      changes: mut.effects.filter(e => e.key !== K.intrigueCheck).map(e => ({ key: game.bbttcc?.dice?.aeKey?.(e.key) ?? e.key, mode: 2, value: String(e.value), priority: 20 })),
+      flags:  { [MOD]: { mutationId: mut.id, mutation: true },
+                fourththing: { checkBonus: mut.effects.filter(e => e.key === K.intrigueCheck).map(e => ({ context: "check", attribute: "intrigue", bonus: Number(e.value), note: `Mutation: ${mut.name}` })) } }
     }]).catch(err => console.warn(TAG, "applyMutationEffects failed:", err));
   }
 

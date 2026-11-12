@@ -55,10 +55,10 @@ const stewardSheetTour = {
       text: "Integrity is the meat's hit points — run out and the body stops cooperating.\nStress is psychic load: manifestation strain, horror, overreach. It recovers with rest and scene breaks; maxing it out breaks something you'd rather keep."
     },
     {
-      id: "defenses", title: "Guard · Evasion · Resolve",
+      id: "defenses", title: "Guard · Resolve",
       pre: '.ft-tabs a[data-tab="core"]',
       selector: ".ft-defenses",
-      text: "Your three defenses. Guard turns hits aside, Evasion keeps you from being hit at all, Resolve holds the mind together against fear, coercion and the uncanny.\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The small labels underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
+      text: "Your two defenses. Guard stands against anything that would hurt your body (Integrity damage); Resolve holds the mind together against fear, coercion and the uncanny (Stress damage).\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The small labels underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
     },
     {
       id: "tabs", title: "The tabs",
@@ -892,10 +892,10 @@ const rigSheetTour = {
       speak: "A rig with no crew is just expensive terrain."
     },
     {
-      id: "defenses", title: "Combat — the three DCs",
+      id: "defenses", title: "Combat — the two DCs",
       pre: 'nav.ft-tabs a.item[data-tab="combat"]',
       selector: ".ft-rig-contact-defenses",
-      text: "Guard is the DC against melee and rams, Evasion against ranged, Resolve against EMP and demoralize effects — bracket base plus tier.\nBelow, the defense table cycles resist/immune/vulnerable per damage type."
+      text: "Guard is the DC against anything that does hull damage — melee, rams, gunfire; evading and sail trim move it. Resolve is the DC against EMP and demoralize effects — bracket base plus tier.\nBelow, the defense table cycles resist/immune/vulnerable per damage type."
     },
     {
       id: "weapons", title: "Weapons & heat",

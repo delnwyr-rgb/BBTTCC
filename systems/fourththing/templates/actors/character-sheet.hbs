@@ -116,11 +116,6 @@
           <span>{{derived.guard.value}}</span>
           <button type="button" data-action="ftDefenseRoll" data-defense="guard" class="ft-def-roll" data-tooltip="Roll a Guard check (2d10x10 + Guard).">⚀</button>
         </div>
-        <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'evasion'}}">
-          <label>Evasion</label>
-          <span>{{derived.evasion.value}}</span>
-          <button type="button" data-action="ftDefenseRoll" data-defense="evasion" class="ft-def-roll" data-tooltip="Roll an Evasion check (2d10x10 + Evasion).">⚀</button>
-        </div>
         <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'resolve'}}">
           <label>Resolve</label>
           <span>{{derived.resolve.value}}</span>
@@ -780,7 +775,7 @@
                   data-tooltip="Your movement does not provoke attacks of opportunity until end of turn.">🚶 Disengage</button>
           <button type="button" data-action="ftCombatAction" data-combat-action="dodge"
                   class="ft-combat-action-btn {{#if ftFlags.combat.dodging}}active{{/if}}"
-                  data-tooltip="+2 to Guard, Evasion, and Resolve until your next turn.">🛡 Dodge</button>
+                  data-tooltip="+2 to Guard and Resolve until your next turn.">🛡 Dodge</button>
           <button type="button" data-action="ftCombatAction" data-combat-action="hold"
                   class="ft-combat-action-btn {{#if ftFlags.combat.holding}}active{{/if}}"
                   data-tooltip="Set a trigger condition. Your action becomes a reaction you can fire when the trigger fires.">⏳ Hold</button>

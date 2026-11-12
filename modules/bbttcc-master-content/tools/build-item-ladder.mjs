@@ -67,7 +67,8 @@ function restampMech(html, { tier, price, defense, damage, requires }) {
   if (requires) h = h.replace(/(<strong>Requires:<\/strong>\s*)[A-Za-z]+/g, `$1${cap(requires)}`);
   return h;
 }
-const bumpedDefense = v => [["guardBonus", "Guard"], ["evasionBonus", "Evasion"], ["resolveBonus", "Resolve"]].filter(([k]) => Number(v.system[k]) !== 0).map(([k, l]) => `${l} ${Number(v.system[k]) > 0 ? "+" : ""}${Number(v.system[k])}`).join(", ");
+// Evasion retired 2026-11-11 (Dave): the Defense line shows Guard / Resolve only.
+const bumpedDefense = v => [["guardBonus", "Guard"], ["resolveBonus", "Resolve"]].filter(([k]) => Number(v.system[k]) !== 0).map(([k, l]) => `${l} ${Number(v.system[k]) > 0 ? "+" : ""}${Number(v.system[k])}`).join(", ");
 
 // ── GRADED ARMS ───────────────────────────────────────────────────────────────────────────────────────
 const GRADE_MATS = {
@@ -100,10 +101,22 @@ for (const { name, ranks } of GRADE_BASES) {
       lines.push(`<strong>+${rank} to hit and +${rank} damage</strong> with this weapon (the hit bonus is read from the weapon you swing).`);
     } else {
       grade.defense = rank; const bumped = [];
-      for (const [k, label] of [["guardBonus", "Guard"], ["evasionBonus", "Evasion"], ["resolveBonus", "Resolve"]]) if (Number(v.system[k]) > 0) { v.system[k] = Number(v.system[k]) + rank; bumped.push(`${label} +${v.system[k]}`); }
-      if (!bumped.length) { v.system.guardBonus = rank; bumped.push(`Guard +${rank}`); }
+      // Evasion retired 2026-11-11 (Dave): fold the base's evasion first — a positive one into Guard as
+      // max(g, e) + ⌊min(g, e)/2⌋; a negative one (heavy pieces) becomes the worn −1 Intrigue checkBonus — then the
+      // rank lands on Guard (always) and Resolve (only if > 0). Never on evasionBonus.
+      { const g0 = Number(v.system.guardBonus) || 0, e0 = Number(v.system.evasionBonus) || 0;
+        if (e0 > 0) v.system.guardBonus = Math.max(g0, e0) + Math.floor(Math.min(g0, e0) / 2);
+        if (e0 < 0) {
+          v.flags ??= {}; v.flags.fourththing ??= {}; v.flags.fourththing.passives ??= {};
+          const cb = Array.isArray(v.flags.fourththing.passives.checkBonus) ? v.flags.fourththing.passives.checkBonus : [];
+          if (!cb.some(row => row?.worn === true && row?.attribute === "intrigue")) cb.push({ context: "check", attribute: "intrigue", bonus: -1, note: "Heavy — hard to be subtle in this", worn: true });
+          v.flags.fourththing.passives.checkBonus = cb;
+        }
+        if (e0 !== 0) v.system.evasionBonus = 0; }
+      v.system.guardBonus = (Number(v.system.guardBonus) || 0) + rank; bumped.push(`Guard +${v.system.guardBonus}`);
+      if (Number(v.system.resolveBonus) > 0) { v.system.resolveBonus = Number(v.system.resolveBonus) + rank; bumped.push(`Resolve +${v.system.resolveBonus}`); }
       defense = bumpedDefense(v);
-      lines.push(`<strong>+${rank} on each of its defense bonuses</strong> → ${bumped.join(", ")} (rank-scaled like all armor: Trained half, Proficient full).`);
+      lines.push(`<strong>+${rank} on its Guard${bumped.length > 1 ? " and Resolve" : ""}</strong> → ${bumped.join(", ")} (rank-scaled like all armor: Trained half, Proficient full).`);
     }
     lines.push(`Grade raises it to <strong>Tier ${ROMAN[tier]}</strong> · ${G.bound === "free" ? "free to wield" : G.bound === "attuned" ? "attuned (one slot)" : "soulbound — one bearer, no sale"}.`);
     const ri = structuredClone(r); ri.tier = ROMAN[tier]; ri.bound = G.bound; ri.origin = "forged"; ri.signature = ri.signature || G.blurb;
@@ -224,4 +237,4 @@ const ITEMS = ${JSON.stringify(all, null, 1)};
 })();
 `);
 console.log(`build-item-ladder: ${graded.length} graded + ${workings.length} bound Workings → ${OUT}${DUMP ? ` · dump ${DUMP}` : ""}${MANIFEST ? ` · manifest ${MANIFEST}` : ""}`);
-for (const { folder, v } of all) { const r = v.flags.fourththing.rfi.item; console.log(`  [${folder}] ${v.name.padEnd(44)} T${String(r.tier).padEnd(3)} ${r.bound.padEnd(9)} ${String(r.price.marks).padStart(5)} marks ${v.type === "weapon" ? v.system.damage.formula : `G${v.system.guardBonus} E${v.system.evasionBonus} R${v.system.resolveBonus}`}`); }
+for (const { folder, v } of all) { const r = v.flags.fourththing.rfi.item; console.log(`  [${folder}] ${v.name.padEnd(44)} T${String(r.tier).padEnd(3)} ${r.bound.padEnd(9)} ${String(r.price.marks).padStart(5)} marks ${v.type === "weapon" ? v.system.damage.formula : `G${v.system.guardBonus} R${v.system.resolveBonus}`}`); }

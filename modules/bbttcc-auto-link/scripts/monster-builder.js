@@ -585,7 +585,7 @@ export async function openMonsterBuilder() {
 
   <div class="ft-manifest-dialog-section" style="margin-top:0.7rem;">
     <div class="ft-prev-label">Tracks</div>
-    <div class="ft-prev-align-note">Integrity = physical track; Stress = mind/soul track. Guard / Evasion / Resolve derive at commit from tier + role.</div>
+    <div class="ft-prev-align-note">Integrity = physical track; Stress = mind/soul track. Guard / Resolve derive at commit from tier + role.</div>
   </div>
   <div class="ft-cast-grid">
     <div class="ft-cast-field"><label>Integrity (Max)</label><input type="number" data-bbttcc-field="integrity" value="25" min="1" step="1"/></div>
@@ -860,6 +860,7 @@ async function _commit(root) {
   const stressMax = Math.max(1, Number(read("stress"))    || Math.floor(integMax * _lineageStressRatio(root)));
 
   const guard   = 10 + tierNum + (isBoss ? 2 : 0);
+  // Evasion retired 2026-11-11 (Dave, ruling 4): a stealth role's old +2 Evasion edge folds into Guard, higher wins.
   const evasion = guard + (role === "stealth" ? 2 : 0);
   const resolve = guard + (role === "caster"  ? 2 : 0);
 
@@ -909,7 +910,7 @@ async function _commit(root) {
       details:    { level: LEVEL_BY_TIER[tierNum] ?? tierNum, tier: tierNum, statPoints: 0, skillPoints: 0 },
       faction:    { id: factionId || null, loyalty: 0 },
       attributes, skills: {},
-      derived: { integrity: { value: integMax, max: integMax }, stress: { value: stressMax, max: stressMax }, guard: { value: guard }, evasion: { value: evasion }, resolve: { value: resolve } },
+      derived: { integrity: { value: integMax, max: integMax }, stress: { value: stressMax, max: stressMax }, guard: { value: Math.max(guard, evasion) }, resolve: { value: resolve } },
       magic: { clarity: { value: 2, max: 5 }, noise: { value: 0, max: 10 }, sephirah },
       resources: {
         frameDice: { current: 0, max: 0 }, ruinCharges: { current: 0, max: 0 }, pace: { current: 0, max: 0 },

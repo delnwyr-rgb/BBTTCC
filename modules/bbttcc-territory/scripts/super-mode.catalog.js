@@ -40,7 +40,7 @@ export const SUPER_CATALOG = [
   {"key": "moral_high_ground", "label": "Moral High Ground", "grade": 3, "pools": {"softpower": 1.0}, "s": "Strike", "c": "resolve", "d": 0, "f": ["calmed"], "r": "Win: Loyalty +1."},
   {"key": "overclock_the_golems", "label": "Overclock the Golems", "grade": 3, "pools": {"economy": 0.5, "violence": 0.5}, "s": "Boon", "atk": 1, "aa": "all", "st": 1},
   {"key": "prayer_pulse", "label": "Prayer Pulse", "grade": 3, "pools": {"faith": 0.6667, "softpower": 0.3333}, "s": "Mend", "h": 1, "r": "Win: Loyalty +1."},
-  {"key": "quantum_shield", "label": "Quantum Shield", "grade": 3, "pools": {"economy": 0.6061, "faith": 0.3939}, "s": "Ward", "t": 1, "df": {"guard": 1, "evasion": 1}},
+  {"key": "quantum_shield", "label": "Quantum Shield", "grade": 3, "pools": {"economy": 0.6061, "faith": 0.3939}, "s": "Ward", "t": 1, "df": {"guard": 1}},
   {"key": "radiant_retaliation", "label": "Radiant Retaliation", "grade": 3, "pools": {"faith": 0.6061, "violence": 0.3939}, "s": "Strike", "c": "resolve", "d": 1, "dt": "radiant", "r": "Double vs Qliphothic (GM). Win: Loyalty +1, foe Domain Darkness +1."},
   {"key": "siege_breaker_volley", "label": "Siege Breaker Volley", "grade": 3, "pools": {"violence": 0.7879, "logistics": 0.2121}, "s": "Strike", "c": "guard", "d": 1, "r": "Strips cover and Braced."},
   {"key": "total_mobilization", "label": "Total Mobilization", "grade": 3, "pools": {"logistics": 0.6061, "economy": 0.3939}, "s": "Boon", "atk": 1, "r": "All allies +10 ft and a free Dash this round."},
