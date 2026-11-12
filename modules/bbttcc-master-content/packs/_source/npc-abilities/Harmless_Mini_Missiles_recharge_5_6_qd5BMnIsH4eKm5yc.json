@@ -23,7 +23,7 @@
       "tier-i",
       "lineage-pre-fall"
     ],
-    "effect": "Cone 3 squares. — targets roll vs Evasion (DC 12). Half damage on success.",
+    "effect": "Cone 3 squares. — targets roll vs Intrigue (DC 12). Half damage on success.",
     "flavor": "“That was a demonstration.”",
     "manifestation": {
       "tier": 1,

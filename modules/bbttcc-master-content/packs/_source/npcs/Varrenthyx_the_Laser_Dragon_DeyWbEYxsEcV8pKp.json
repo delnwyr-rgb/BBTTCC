@@ -352,7 +352,7 @@
           "boss",
           "signature"
         ],
-        "effect": "12 squares. line, 1 square. wide. Evasion vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
+        "effect": "12 squares. line, 1 square. wide. Intrigue vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -404,7 +404,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Line — 12 squares</strong> Evasion check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
+          "value": "<p><strong>Line — 12 squares</strong> Intrigue check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
           "chat": ""
         }
       },
@@ -1598,7 +1598,7 @@
           "laser",
           "boss"
         ],
-        "effect": "ULTIMATE (1/scene, at or below half Integrity). Dumps the capacitor in a 6 squares. sphere centered on itself. Evasion vs DC 18. Fail: 5d10 energy and Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered the following turn (overheated).",
+        "effect": "ULTIMATE (1/scene, at or below half Integrity). Dumps the capacitor in a 6 squares. sphere centered on itself. Intrigue vs DC 18. Fail: 5d10 energy and Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered the following turn (overheated).",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -1651,7 +1651,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Ultimate — 1/scene below half Integrity.</strong> 6 squares sphere. Evasion vs DC 18. Fail: <code>5d10</code> energy + Blinded. Half on success. Dragon Staggered next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
+          "value": "<p><strong>Ultimate — 1/scene below half Integrity.</strong> 6 squares sphere. Intrigue vs DC 18. Fail: <code>5d10</code> energy + Blinded. Half on success. Dragon Staggered next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
           "chat": ""
         }
       },

@@ -103,7 +103,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.",
+            "effect": "A bank of stage fog boils out around you until your next turn: Guard +2 while it stands, and you may move 2 squares unseen as part of the cast.",
             "tags": [
               "bound-working",
               "halloween-hoard",
@@ -172,7 +172,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "+",
                     "value": 2
                   }
@@ -182,7 +182,7 @@
               }
             },
             "description": {
-              "value": "<p>A bank of stage fog boils out around you until your next turn: Evasion +2 while it stands, and you may move 2 squares unseen as part of the cast.</p>",
+              "value": "<p>A bank of stage fog boils out around you until your next turn: Guard +2 while it stands, and you may move 2 squares unseen as part of the cast.</p>",
               "chat": ""
             }
           }

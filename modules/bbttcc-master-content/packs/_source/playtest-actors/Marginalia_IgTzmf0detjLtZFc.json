@@ -4597,7 +4597,7 @@
           "track": "stress"
         },
         "damageParts": [],
-        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion −2 for 1 round.",
+        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Guard −2 for 1 round.",
         "tags": [
           "mal-voiced",
           "stress",
@@ -4680,7 +4680,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "-",
                 "value": 2
               }
@@ -4696,7 +4696,7 @@
           }
         },
         "description": {
-          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion −2 for 1 round.</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> 1 Round</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Guard −2 for 1 round.</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> 1 Round</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {
@@ -6624,7 +6624,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion → 10).",
+        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Guard → 10).",
         "tags": [
           "mal-voiced",
           "cc",
@@ -6715,7 +6715,7 @@
           }
         },
         "description": {
-          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion → 10).</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> 1 Round</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Guard → 10).</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> 1 Round</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {

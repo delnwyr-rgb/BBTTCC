@@ -3740,7 +3740,7 @@
             "id": "8Z6yhEzqW06qK7a2",
             "pack": "items",
             "identifier": "",
-            "hash": "e8559d05ad0e"
+            "hash": "60d5fba5de57"
           }
         },
         "fourththing": {
@@ -4327,7 +4327,7 @@
       "img": "icons/weapons/swords/shortsword-guard-brass.webp",
       "system": {
         "description": {
-          "value": "<p><em>Carried in the inside seam, not the belt.</em></p><p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p><p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n",
+          "value": "<p><em>Carried in the inside seam, not the belt.</em></p><p>Quiet Word: +1 AC vs the first attack each round while attuned and equipped.</p><p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to AC against the first attack each round.</p>\n",
           "chat": ""
         },
         "identified": true,
@@ -4496,7 +4496,7 @@
             "id": "NgE3NC7b7tJJGirU",
             "pack": "items",
             "identifier": "",
-            "hash": "0bd08570af80"
+            "hash": "d4d29bedd248"
           }
         },
         "fourththing": {
@@ -4521,7 +4521,7 @@
               "signals": {
                 "parry": true
               },
-              "lore": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>",
+              "lore": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Guard against the first attack each round.</p>",
               "materialOf": [
                 "bronze-nail",
                 "hex-script",
@@ -7749,7 +7749,7 @@
       "img": "icons/weapons/fist/claw-gauntlet-gray.webp",
       "system": {
         "description": {
-          "value": "<p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 15 feet without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per short rest.)</p>",
+          "value": "<p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 15 feet without provoking anything and take AC +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per short rest.)</p>",
           "chat": ""
         },
         "identified": true,
@@ -7920,7 +7920,7 @@
             "id": "hH0DoorKnuckle01",
             "pack": "items",
             "identifier": "",
-            "hash": "0b668badef80"
+            "hash": "81082df203fc"
           }
         },
         "fourththing": {
@@ -11966,7 +11966,7 @@
       "img": "icons/weapons/guns/rifle-brown.webp",
       "system": {
         "description": {
-          "value": "<p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 60 feet: Evasion defense against your spell save DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen. (2 charges, recovers per short rest.)</p>",
+          "value": "<p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 60 feet: Constitution defense against your spell save DC. On a fail they are lit for 1 round — AC −2, and nothing they do is unseen. (2 charges, recovers per short rest.)</p>",
           "chat": ""
         },
         "identified": true,
@@ -12138,7 +12138,7 @@
             "id": "hH0PorchCarbine1",
             "pack": "items",
             "identifier": "",
-            "hash": "3b34f0aadfe1"
+            "hash": "bbab732bed6b"
           }
         },
         "fourththing": {
@@ -28910,7 +28910,7 @@
             "id": "hH0FogMachine001",
             "pack": "items",
             "identifier": "",
-            "hash": "7a7ab60616df"
+            "hash": "40b223b8289c"
           }
         },
         "fourththing": {
@@ -30869,7 +30869,7 @@
             "id": "hH0GlowBandoli01",
             "pack": "items",
             "identifier": "",
-            "hash": "f4a3a98dd7b0"
+            "hash": "8b2b154c237c"
           }
         },
         "fourththing": {
@@ -35301,7 +35301,7 @@
       "img": "icons/weapons/guns/rifle-hunting-scoped-sight.webp",
       "system": {
         "description": {
-          "value": "<p><em>Loud where it counts. Quiet otherwise.</em></p><p>Long-arm ballistic. Two-handed.</p><p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — The Record Shows (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>The Record Shows</strong>: it appears among your Spells as “The Record Shows ⟡ Hunting Rifle of the Record” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a long rest.</li>\n  <li><em>One target within 30 feet is marked for the scene: Evasion −2 while their every move is a matter of record.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+          "value": "<p><em>Loud where it counts. Quiet otherwise.</em></p><p>Long-arm ballistic. Two-handed.</p><p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — The Record Shows (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>The Record Shows</strong>: it appears among your Spells as “The Record Shows ⟡ Hunting Rifle of the Record” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a long rest.</li>\n  <li><em>One target within 30 feet is marked for the scene: AC −2 while their every move is a matter of record.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
           "chat": ""
         },
         "identified": true,
@@ -35473,7 +35473,7 @@
             "id": "sQmhSSqyT4dsPgtc",
             "pack": "items",
             "identifier": "",
-            "hash": "663e6cd6de3e"
+            "hash": "12f862083956"
           }
         },
         "fourththing": {
@@ -73329,7 +73329,7 @@
             "id": "fXKQj4Ikfoaz6NwF",
             "pack": "items",
             "identifier": "",
-            "hash": "bae723b0a4da"
+            "hash": "dcb9b04578f9"
           }
         },
         "fourththing": {

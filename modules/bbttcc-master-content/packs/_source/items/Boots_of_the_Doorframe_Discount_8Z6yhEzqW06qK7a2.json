@@ -130,7 +130,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.",
+            "effect": "Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Guard for the scene.",
             "tags": [
               "starter-kit",
               "dreamwalker",
@@ -206,7 +206,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "+",
                     "value": 1
                   }
@@ -216,7 +216,7 @@
               }
             },
             "description": {
-              "value": "<p>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.</p>"
+              "value": "<p>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Guard for the scene.</p>"
             }
           },
           "flags": {

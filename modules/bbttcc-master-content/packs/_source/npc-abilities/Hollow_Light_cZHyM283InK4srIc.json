@@ -23,7 +23,7 @@
       "shape-line",
       "signature"
     ],
-    "effect": "An 18-square line of false radiance, one square wide. Each creature in the line rolls an Evasion check vs DC 18. Fail: full damage to Stress and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat Body vs DC 18 at end of turns to clear the blindness. Success: half damage, eyes shut in time.",
+    "effect": "An 18-square line of false radiance, one square wide. Each creature in the line rolls an Intrigue check vs DC 18. Fail: full damage to Stress and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat Body vs DC 18 at end of turns to clear the blindness. Success: half damage, eyes shut in time.",
     "flavor": "Brilliant gold, and wrong all the way through.",
     "manifestation": {
       "tier": 1,

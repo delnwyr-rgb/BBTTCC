@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.",
+    "effect": "One target within 6 squares is marked for the scene: Guard −2 while their every move is a matter of record.",
     "tags": [
       "starter-kit",
       "debuff",
@@ -107,7 +107,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "-",
             "value": 2
           }
@@ -117,7 +117,7 @@
       }
     },
     "description": {
-      "value": "<p>One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.</p>"
+      "value": "<p>One target within 6 squares is marked for the scene: Guard −2 while their every move is a matter of record.</p>"
     }
   },
   "flags": {

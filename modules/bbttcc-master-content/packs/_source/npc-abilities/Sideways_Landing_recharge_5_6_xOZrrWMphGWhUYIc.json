@@ -25,7 +25,7 @@
       "boss",
       "signature"
     ],
-    "effect": "Cone 6 squares. — targets roll vs Evasion (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.",
+    "effect": "Cone 6 squares. — targets roll vs Intrigue (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.",
     "flavor": "Valhaulan airships always land sideways.",
     "manifestation": {
       "tier": 1,

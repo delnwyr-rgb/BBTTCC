@@ -580,7 +580,7 @@
           "aoe",
           "signature"
         ],
-        "effect": "The Inferno detonates. Every creature within 6 squares rolls an Evasion check vs DC 18. Fail: 4d8 thermal (hot) AND 4d8 psychic to Stress — the collective pain of all who came before, delivered at once. Success: half of each.",
+        "effect": "The Inferno detonates. Every creature within 6 squares rolls an Intrigue check vs DC 18. Fail: 4d8 thermal (hot) AND 4d8 psychic to Stress — the collective pain of all who came before, delivered at once. Success: half of each.",
         "flavor": "A blinding green blast with a screaming skull at its heart.",
         "manifestation": {
           "tier": 1,

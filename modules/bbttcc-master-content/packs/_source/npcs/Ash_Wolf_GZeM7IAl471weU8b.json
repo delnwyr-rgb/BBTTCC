@@ -725,7 +725,7 @@
           "aoe",
           "shape-line"
         ],
-        "effect": "Line 3 squares. — targets roll vs Evasion (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
+        "effect": "Line 3 squares. — targets roll vs Intrigue (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "It runs along the burn and lets the burn run along it.",
         "manifestation": {
           "tier": 1,
@@ -771,7 +771,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature in a 3 squares line the wolf moves through rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> thermal (cinder) + violence; half on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line.<br/><em>Recharges on a Soma Break.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 3 squares line the wolf moves through rolls <strong>Intrigue</strong> vs DC 11. Hit: <code>1d6</code> thermal (cinder) + violence; half on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line.<br/><em>Recharges on a Soma Break.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
           "chat": ""
         }
       },

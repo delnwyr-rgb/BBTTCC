@@ -717,7 +717,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 2 squares. — targets roll vs Evasion (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
+        "effect": "Radius 2 squares. — targets roll vs Intrigue (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
         "flavor": "Wound it and it just becomes a wider problem.",
         "manifestation": {
           "tier": 1,
@@ -763,7 +763,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature within 2 squares when the swarm is bloodied (half Integrity or lower) rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> poison (stinging-mist) + violence; half on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.</p><p><em>Wound it and it just becomes a wider problem.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature within 2 squares when the swarm is bloodied (half Integrity or lower) rolls <strong>Intrigue</strong> vs DC 11. Hit: <code>1d6</code> poison (stinging-mist) + violence; half on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.</p><p><em>Wound it and it just becomes a wider problem.</em></p>",
           "chat": ""
         }
       },

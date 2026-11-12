@@ -64,7 +64,7 @@
       }
     },
     "description": {
-      "value": "<p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen. (2 charges, recovers per scene.)</p>",
+      "value": "<p><em>A carbine, Circuited: +2 to hit and +2 damage; attunes to one hand. Under the barrel, a porchlight that was a perimeter light once.</em></p><p><strong>Bound Working — Porchlight:</strong> Light one target within 12 squares: Body defense vs Cast DC. On a fail they are lit for 1 round — Guard −2, and nothing they do is unseen. (2 charges, recovers per scene.)</p>",
       "chat": ""
     }
   },
@@ -162,7 +162,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen.",
+            "effect": "Light one target within 12 squares: Body defense vs Cast DC. On a fail they are lit for 1 round — Guard −2, and nothing they do is unseen.",
             "tags": [
               "bound-working",
               "halloween-hoard",
@@ -231,7 +231,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "-",
                     "value": 2
                   }
@@ -241,7 +241,7 @@
               }
             },
             "description": {
-              "value": "<p>Light one target within 12 squares: Evasion defense vs Cast DC. On a fail they are lit for 1 round — Evasion −2, and nothing they do is unseen.</p>",
+              "value": "<p>Light one target within 12 squares: Body defense vs Cast DC. On a fail they are lit for 1 round — Guard −2, and nothing they do is unseen.</p>",
               "chat": ""
             }
           }

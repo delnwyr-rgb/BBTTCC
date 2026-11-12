@@ -816,7 +816,7 @@
           "boss",
           "ultimate"
         ],
-        "effect": "Sphere 6 squares. — targets roll vs Evasion (DC 13). Half damage on success. ULTIMATE — usable only at or below half Integrity. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.",
+        "effect": "Sphere 6 squares. — targets roll vs Intrigue (DC 13). Half damage on success. ULTIMATE — usable only at or below half Integrity. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.",
         "flavor": "If he cannot have the toll, nobody has the bridge.",
         "manifestation": {
           "tier": 1,

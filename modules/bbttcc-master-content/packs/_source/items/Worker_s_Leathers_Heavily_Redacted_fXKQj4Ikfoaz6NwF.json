@@ -134,7 +134,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "One ally within 6 squares (or yourself) gains Evasion +2 for the scene — hard to hit what's mostly black bars.",
+            "effect": "One ally within 6 squares (or yourself) gains Guard +2 for the scene — hard to hit what's mostly black bars.",
             "tags": [
               "starter-kit",
               "ward",
@@ -208,7 +208,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "+",
                     "value": 2
                   }
@@ -218,7 +218,7 @@
               }
             },
             "description": {
-              "value": "<p>One ally within 6 squares (or yourself) gains Evasion +2 for the scene — hard to hit what's mostly black bars.</p>"
+              "value": "<p>One ally within 6 squares (or yourself) gains Guard +2 for the scene — hard to hit what's mostly black bars.</p>"
             }
           },
           "flags": {

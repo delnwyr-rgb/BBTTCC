@@ -571,7 +571,7 @@
         "tags": [
           "aoe"
         ],
-        "effect": "The Tyrant rips a soul-infused chunk off its own body and hurls it at a point within 12 squares. Each creature within 2 squares of impact rolls an Evasion check vs DC 16. Fail: 3d8 kinetic AND 2d8 qliphothic to Stress — the chunk screams on the way in. Success: half of each.",
+        "effect": "The Tyrant rips a soul-infused chunk off its own body and hurls it at a point within 12 squares. Each creature within 2 squares of impact rolls an Intrigue check vs DC 16. Fail: 3d8 kinetic AND 2d8 qliphothic to Stress — the chunk screams on the way in. Success: half of each.",
         "flavor": "A golden goblet full of screaming souls, incoming.",
         "manifestation": {
           "tier": 1,

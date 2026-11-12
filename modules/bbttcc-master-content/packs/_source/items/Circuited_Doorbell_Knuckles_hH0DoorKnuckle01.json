@@ -64,7 +64,7 @@
       }
     },
     "description": {
-      "value": "<p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per scene.)</p>",
+      "value": "<p><em>Brass knuckles, Circuited: +2 to hit and +2 damage; attunes to one hand. Each knuckle is a doorbell button. Each one rings.</em></p><p><strong>Bound Working — Ding-Dong Ditch:</strong> Ring and run: step 3 squares without provoking anything and take Guard +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it. (2 charges, recovers per scene.)</p>",
       "chat": ""
     }
   },
@@ -162,7 +162,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.",
+            "effect": "Ring and run: step 3 squares without provoking anything and take Guard +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.",
             "tags": [
               "bound-working",
               "halloween-hoard",
@@ -231,7 +231,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "+",
                     "value": 2
                   }
@@ -241,7 +241,7 @@
               }
             },
             "description": {
-              "value": "<p>Ring and run: step 3 squares without provoking anything and take Evasion +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.</p>",
+              "value": "<p>Ring and run: step 3 squares without provoking anything and take Guard +2 until your next turn. Best used immediately after a hit, which is the only time anyone has ever used it.</p>",
               "chat": ""
             }
           }

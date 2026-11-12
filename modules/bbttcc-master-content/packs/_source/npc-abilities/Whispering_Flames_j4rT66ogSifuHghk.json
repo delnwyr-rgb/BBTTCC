@@ -22,7 +22,7 @@
       "aoe",
       "shape-cone"
     ],
-    "effect": "A torrent of fiery ravens in a 6-square cone. Each creature rolls an Evasion check vs DC 18. Fail: 3d10 kinetic AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.",
+    "effect": "A torrent of fiery ravens in a 6-square cone. Each creature rolls an Intrigue check vs DC 18. Fail: 3d10 kinetic AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.",
     "flavor": "The cloud leans toward you and becomes beaks.",
     "manifestation": {
       "tier": 1,

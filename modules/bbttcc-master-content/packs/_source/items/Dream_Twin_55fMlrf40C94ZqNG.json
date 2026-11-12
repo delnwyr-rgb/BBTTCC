@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "One ally within 6 squares, sustained for the scene: +2 Evasion while the twin shadows them.",
+    "effect": "One ally within 6 squares, sustained for the scene: +2 Guard while the twin shadows them.",
     "tags": [
       "starter-kit",
       "dreamwalker",
@@ -101,7 +101,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 2
           }
@@ -111,7 +111,7 @@
       }
     },
     "description": {
-      "value": "<p>One ally within 6 squares, sustained for the scene: +2 Evasion while the twin shadows them.</p>"
+      "value": "<p>One ally within 6 squares, sustained for the scene: +2 Guard while the twin shadows them.</p>"
     }
   },
   "flags": {

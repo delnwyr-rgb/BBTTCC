@@ -2495,7 +2495,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Plant the standard: one ally you can see within 6 squares gains Evasion +2 for the scene, so long as you can see them.",
+        "effect": "Plant the standard: one ally you can see within 6 squares gains Guard +2 for the scene, so long as you can see them.",
         "tags": [
           "starter-kit",
           "ward",
@@ -2569,7 +2569,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 2
               }
@@ -2579,7 +2579,7 @@
           }
         },
         "description": {
-          "value": "<p>Plant the standard: one ally you can see within 6 squares gains Evasion +2 for the scene, so long as you can see them.</p>"
+          "value": "<p>Plant the standard: one ally you can see within 6 squares gains Guard +2 for the scene, so long as you can see them.</p>"
         }
       },
       "flags": {

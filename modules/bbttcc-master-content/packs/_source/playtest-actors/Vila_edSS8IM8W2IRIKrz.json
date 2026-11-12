@@ -6938,7 +6938,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion → 10).",
+        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Guard → 10).",
         "tags": [
           "mal-voiced",
           "cc",
@@ -8657,7 +8657,7 @@
           "track": "stress"
         },
         "damageParts": [],
-        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion −2 for 1 round.",
+        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Guard −2 for 1 round.",
         "tags": [
           "mal-voiced",
           "stress",
@@ -8740,7 +8740,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "-",
                 "value": 2
               }

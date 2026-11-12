@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Self, sustained for the scene: +1 Evasion and +1 Initiative while your double is on the field.",
+    "effect": "Self, sustained for the scene: +1 Guard and +1 Initiative while your double is on the field.",
     "tags": [
       "starter-kit",
       "dreamwalker",
@@ -100,7 +100,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 1
           },
@@ -115,7 +115,7 @@
       }
     },
     "description": {
-      "value": "<p>Self, sustained for the scene: +1 Evasion and +1 Initiative while your double is on the field.</p>"
+      "value": "<p>Self, sustained for the scene: +1 Guard and +1 Initiative while your double is on the field.</p>"
     }
   },
   "flags": {

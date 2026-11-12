@@ -15518,7 +15518,7 @@ function ftManifestGlance(actor, item, kind = "power") {
     let text = strip(sys.effect) || strip(mf.mechanicalHook);
     if (!text) {
       const bits = [];
-      const STAT = { guard: "Guard", resolve: "Resolve", initiative: "Initiative", evasion: "Evasion" };
+      const STAT = { guard: "Guard", resolve: "Resolve", initiative: "Initiative", evasion: "Guard" };   // Evasion retired → Guard
       for (const m of mf.appliedEffects?.modifiers ?? []) {
         if (!m?.stat) continue;
         const v = Number(m.value) || 0;

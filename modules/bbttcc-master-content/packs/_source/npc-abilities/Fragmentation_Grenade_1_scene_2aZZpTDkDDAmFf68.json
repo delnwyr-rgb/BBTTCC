@@ -25,7 +25,7 @@
       "shape-radius",
       "rfi-scrubbed"
     ],
-    "effect": "Radius 2 squares. within 12 squares. — targets roll vs Evasion (DC 13). Half damage on success. 1 per scene.",
+    "effect": "Radius 2 squares. within 12 squares. — targets roll vs Intrigue (DC 13). Half damage on success. 1 per scene.",
     "flavor": "Pull pin. Throw. Apologize later.",
     "manifestation": {
       "tier": 1,
@@ -71,7 +71,7 @@
       }
     },
     "description": {
-      "value": "<p><strong>Area Attack.</strong> Each creature in a 2-square. radius within 12 squares. rolls <strong>Evasion</strong> vs DC 13. Hit: <code>4d6</code> kinetic + violence; half on success.<br/><em>1 per scene.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
+      "value": "<p><strong>Area Attack.</strong> Each creature in a 2-square. radius within 12 squares. rolls <strong>Intrigue</strong> vs DC 13. Hit: <code>4d6</code> kinetic + violence; half on success.<br/><em>1 per scene.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
       "chat": ""
     }
   },

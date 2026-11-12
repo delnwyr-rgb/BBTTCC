@@ -3110,7 +3110,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "One ally within 6 squares, sustained for the scene: +2 Evasion while the twin shadows them.",
+        "effect": "One ally within 6 squares, sustained for the scene: +2 Guard while the twin shadows them.",
         "tags": [
           "starter-kit",
           "dreamwalker",
@@ -3186,7 +3186,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 2
               }
@@ -3196,7 +3196,7 @@
           }
         },
         "description": {
-          "value": "<p>One ally within 6 squares, sustained for the scene: +2 Evasion while the twin shadows them.</p>"
+          "value": "<p>One ally within 6 squares, sustained for the scene: +2 Guard while the twin shadows them.</p>"
         }
       },
       "flags": {
@@ -3432,7 +3432,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Self, sustained for the scene: +1 Evasion and +1 Initiative while your double is on the field.",
+        "effect": "Self, sustained for the scene: +1 Guard and +1 Initiative while your double is on the field.",
         "tags": [
           "starter-kit",
           "dreamwalker",
@@ -3507,7 +3507,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 1
               },
@@ -3522,7 +3522,7 @@
           }
         },
         "description": {
-          "value": "<p>Self, sustained for the scene: +1 Evasion and +1 Initiative while your double is on the field.</p>"
+          "value": "<p>Self, sustained for the scene: +1 Guard and +1 Initiative while your double is on the field.</p>"
         }
       },
       "flags": {
@@ -5541,7 +5541,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.",
+        "effect": "Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Guard for the scene.",
         "tags": [
           "starter-kit",
           "dreamwalker",
@@ -5617,7 +5617,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 1
               }
@@ -5627,7 +5627,7 @@
           }
         },
         "description": {
-          "value": "<p>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.</p>"
+          "value": "<p>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Guard for the scene.</p>"
         }
       },
       "flags": {

@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Self or one ally within 6 squares: +2 Evasion for the scene — they keep being where the attack was going to have been.",
+    "effect": "Self or one ally within 6 squares: +2 Guard for the scene — they keep being where the attack was going to have been.",
     "tags": [
       "starter-kit",
       "wyrdlens",
@@ -101,7 +101,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 2
           }
@@ -111,7 +111,7 @@
       }
     },
     "description": {
-      "value": "<p>Self or one ally within 6 squares: +2 Evasion for the scene — they keep being where the attack was going to have been.</p>"
+      "value": "<p>Self or one ally within 6 squares: +2 Guard for the scene — they keep being where the attack was going to have been.</p>"
     }
   },
   "flags": {

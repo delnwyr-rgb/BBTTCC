@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.11.0",
-    "at": "2026-11-09",
+    "at": "2026-11-12",
     "overridesApplied": 0
   },
   "actors": [
@@ -491,7 +491,7 @@
           "img": "icons/equipment/body/suit-biohazard-protection.webp",
           "system": {
             "description": {
-              "value": "<p><em>A torrent of green and purple, malformed helices visible in the stream.</em></p><p>60-foot cone of caustic slime. Dexterity saving throw vs DC 18. Fail: full damage and the body briefly mutates in a painful, wrong direction — the target also gains 5 RP as the flesh forgets its blueprint. Success: half damage, no mutation.</p>",
+              "value": "<p><em>A torrent of green and purple, malformed helices visible in the stream.</em></p><p>60-foot cone of caustic slime. DC 18 Dexterity saving throw. Fail: full damage and the body briefly mutates in a painful, wrong direction — the target also gains 5 RP as the flesh forgets its blueprint. Success: half damage, no mutation.</p>",
               "chat": ""
             },
             "identified": true,
@@ -1295,7 +1295,7 @@
             "id": "P8e2EX1lbLBFk2gL",
             "pack": "npcs",
             "identifier": "Abomination of Excess",
-            "hash": "3db8d904ede2"
+            "hash": "5a6aaf09f7d8"
           }
         }
       }
@@ -1771,7 +1771,7 @@
           "img": "icons/magic/air/weather-sunlight-sky.webp",
           "system": {
             "description": {
-              "value": "<p><em>Brilliant gold, and wrong all the way through.</em></p><p>An 90-foot line of false radiance, one square wide. Each creature in the line rolls an Dexterity saving throw vs DC 18. Fail: full damage  and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat DC 18 Constitution saving throw at end of turns to clear the blindness. Success: half damage, eyes shut in time.</p>",
+              "value": "<p><em>Brilliant gold, and wrong all the way through.</em></p><p>An 90-foot line of false radiance, one square wide. Each creature in the line rolls an DC 18 Dexterity saving throw. Fail: full damage  and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat DC 18 Constitution saving throw at end of turns to clear the blindness. Success: half damage, eyes shut in time.</p>",
               "chat": ""
             },
             "identified": true,
@@ -2547,7 +2547,7 @@
             "id": "yQZAnkNsEcE5kKtg",
             "pack": "npcs",
             "identifier": "Angel of Hollow Glory",
-            "hash": "adb02c2e8a4e"
+            "hash": "a25a8b2b4675"
           }
         }
       }
@@ -5342,7 +5342,7 @@
           "img": "icons/magic/fire/beam-jet-stream-embers.webp",
           "system": {
             "description": {
-              "value": "<p>Line 15 feet. — targets roll Dexterity saving throw (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 15 feet line the wolf moves through rolls <strong>Evasion</strong> vs DC 11. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line.<br/><em>Recharges on a long rest.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
+              "value": "<p>Line 15 feet. — targets roll vs Dexterity (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 15 feet line the wolf moves through rolls <strong>Dexterity</strong> vs DC 11. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line.<br/><em>Recharges on a long rest.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -5643,7 +5643,7 @@
             "id": "GZeM7IAl471weU8b",
             "pack": "npcs",
             "identifier": "Ash Wolf",
-            "hash": "64480842734d"
+            "hash": "641deb89d812"
           }
         }
       }
@@ -7982,7 +7982,7 @@
           "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
           "system": {
             "description": {
-              "value": "<p>Radius 10 feet. — targets roll Dexterity saving throw (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><strong>Area Attack.</strong> Each creature within 10 feet when the swarm is bloodied (half hit points or lower) rolls <strong>Evasion</strong> vs DC 11. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><em>Wound it and it just becomes a wider problem.</em></p>",
+              "value": "<p>Radius 10 feet. — targets roll vs Dexterity (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><strong>Area Attack.</strong> Each creature within 10 feet when the swarm is bloodied (half hit points or lower) rolls <strong>Dexterity</strong> vs DC 11. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><em>Wound it and it just becomes a wider problem.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -8298,7 +8298,7 @@
             "id": "juFbGL3HEuoWcuHV",
             "pack": "npcs",
             "identifier": "Bog-Skitter Swarm",
-            "hash": "075f5744ff4d"
+            "hash": "eeeac81b5f7d"
           }
         }
       }
@@ -11844,7 +11844,7 @@
           "img": "icons/magic/fire/beam-jet-stream-embers.webp",
           "system": {
             "description": {
-              "value": "<p>Cone 20 feet. — targets roll Dexterity saving throw (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet cone below the hawk (must be airborne to use) rolls <strong>Evasion</strong> vs DC 12. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Her wings shed cinder when she beats them hard. She is beating them hard now.</em></p>",
+              "value": "<p>Cone 20 feet. — targets roll vs Dexterity (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet cone below the hawk (must be airborne to use) rolls <strong>Dexterity</strong> vs DC 12. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Her wings shed cinder when she beats them hard. She is beating them hard now.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -12159,7 +12159,7 @@
             "id": "8l45F9lX2Cuzqk7B",
             "pack": "npcs",
             "identifier": "Cinder-Hawk Mother",
-            "hash": "6dd00dd00e44"
+            "hash": "0418913ba4dd"
           }
         }
       }
@@ -13726,7 +13726,7 @@
           "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
           "system": {
             "description": {
-              "value": "<p>Cone 30 feet. — targets roll Dexterity saving throw (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><strong>Area Attack.</strong> Each creature in a 30-foot cone makes a saving throw (DC 16). On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><em>“You are outside the permitted area. You have always been outside the permitted area.”</em></p>",
+              "value": "<p>Cone 30 feet. — targets roll vs Dexterity (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><strong>Area Attack.</strong> Each creature in a 30-foot cone makes a saving throw (DC 16). On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><em>“You are outside the permitted area. You have always been outside the permitted area.”</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -14272,7 +14272,7 @@
             "id": "qDuH7PdGNGGqeChb",
             "pack": "npcs",
             "identifier": "Compliance Engine PRIME",
-            "hash": "8f4321635280"
+            "hash": "10b52f535b95"
           }
         }
       }
@@ -22945,7 +22945,7 @@
           "img": "icons/magic/fire/explosion-fireball-small-orange.webp",
           "system": {
             "description": {
-              "value": "<p>Each creature in a 20-foot radius within 60 feet rolls Dexterity saving throw (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet radius within 60 feet rolls <strong>Evasion</strong> vs DC 16. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
+              "value": "<p>Each creature in a 20-foot radius within 60 feet rolls vs Dexterity (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet radius within 60 feet rolls <strong>Dexterity</strong> vs DC 16. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -23869,7 +23869,7 @@
             "id": "LQS2jaeFhzFMDpxA",
             "pack": "npcs",
             "identifier": "Gilbert, Attendant Eternal",
-            "hash": "1da4fe6d7681"
+            "hash": "63534bb5ee08"
           }
         }
       }
@@ -32969,7 +32969,7 @@
           "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
           "system": {
             "description": {
-              "value": "<p>Sphere 30 feet. — targets roll Dexterity saving throw (DC 13). Half damage on success. ULTIMATE — usable only at or below half hit points. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.</p><p><em>If he cannot have the toll, nobody has the bridge.</em></p>",
+              "value": "<p>Sphere 30 feet. — targets roll vs Dexterity (DC 13). Half damage on success. ULTIMATE — usable only at or below half hit points. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.</p><p><em>If he cannot have the toll, nobody has the bridge.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -33301,7 +33301,7 @@
             "id": "UpHwUANX26OoCqoH",
             "pack": "npcs",
             "identifier": "Hollis Varn, Reeve of the Broken Bridge",
-            "hash": "4b9ae4f6da83"
+            "hash": "a06ffebec5ed"
           }
         }
       }
@@ -33779,7 +33779,7 @@
           "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
           "system": {
             "description": {
-              "value": "<p><em>A blinding green blast with a screaming skull at its heart.</em></p><p>The Inferno detonates. Every creature within 30 feet rolls an Dexterity saving throw vs DC 18. Fail: 4d8 thermal (hot) AND 4d8 psychic damage — the collective pain of all who came before, delivered at once. Success: half of each.</p>",
+              "value": "<p><em>A blinding green blast with a screaming skull at its heart.</em></p><p>The Inferno detonates. Every creature within 30 feet rolls an DC 18 Dexterity saving throw. Fail: 4d8 thermal (hot) AND 4d8 psychic damage — the collective pain of all who came before, delivered at once. Success: half of each.</p>",
               "chat": ""
             },
             "identified": true,
@@ -34513,7 +34513,7 @@
             "id": "vpPWkftzLsEwoY9k",
             "pack": "npcs",
             "identifier": "Inferno of Cruelty",
-            "hash": "ba0f7f50826a"
+            "hash": "9a4e4ca87abd"
           }
         }
       }
@@ -37988,7 +37988,7 @@
           "img": "icons/weapons/thrown/bomb-fuse-black.webp",
           "system": {
             "description": {
-              "value": "<p>Cone 15 feet. — targets roll Dexterity saving throw (DC 12). Half damage on success.</p><p><strong>Area Attack.</strong> Each creature in a 15-foot cone makes a saving throw (DC 12). </p><p><em>“That was a demonstration.”</em></p>",
+              "value": "<p>Cone 15 feet. — targets roll vs Dexterity (DC 12). Half damage on success.</p><p><strong>Area Attack.</strong> Each creature in a 15-foot cone makes a saving throw (DC 12). </p><p><em>“That was a demonstration.”</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -38293,7 +38293,7 @@
             "id": "wxmlLpURBWJW2zHJ",
             "pack": "npcs",
             "identifier": "Mechanism 52603",
-            "hash": "f37ac153f1d3"
+            "hash": "22b0411951f8"
           }
         }
       }
@@ -47207,7 +47207,7 @@
           "img": "icons/weapons/thrown/bomb-fuse-black.webp",
           "system": {
             "description": {
-              "value": "<p>Radius 10 feet within 60 feet. — targets roll Dexterity saving throw (DC 13). Half damage on success. 1 per short rest.</p><p><strong>Area Attack.</strong> Each creature in a 10-foot radius within 60 feet rolls <strong>Evasion</strong> vs DC 13. <br/><em>1 per short rest.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
+              "value": "<p>Radius 10 feet within 60 feet. — targets roll vs Dexterity (DC 13). Half damage on success. 1 per short rest.</p><p><strong>Area Attack.</strong> Each creature in a 10-foot radius within 60 feet rolls <strong>Dexterity</strong> vs DC 13. <br/><em>1 per short rest.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -47536,7 +47536,7 @@
             "id": "a3iLY82GvIfBScr2",
             "pack": "npcs",
             "identifier": "Razor Raider",
-            "hash": "39dace9dfff5"
+            "hash": "ffb3878f33c4"
           }
         }
       }
@@ -55073,7 +55073,7 @@
           "img": "icons/skills/movement/feet-winged-boots-brown.webp",
           "system": {
             "description": {
-              "value": "<p>Cone 30 feet. — targets roll Dexterity saving throw (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><strong>Area Attack.</strong> Each creature in a 30-foot cone makes a saving throw (DC 17). On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><em>Valhaulan airships always land sideways.</em></p>",
+              "value": "<p>Cone 30 feet. — targets roll vs Dexterity (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><strong>Area Attack.</strong> Each creature in a 30-foot cone makes a saving throw (DC 17). On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><em>Valhaulan airships always land sideways.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -55576,7 +55576,7 @@
             "id": "tlGzp9UpQU3PwKdB",
             "pack": "npcs",
             "identifier": "Sklar Bjrornholt",
-            "hash": "484a5160a04f"
+            "hash": "8e770139cd30"
           }
         }
       }
@@ -59936,7 +59936,7 @@
           "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
           "system": {
             "description": {
-              "value": "<p><em>The cloud leans toward you and becomes beaks.</em></p><p>A torrent of fiery ravens in a 30-foot cone. Each creature rolls an Dexterity saving throw vs DC 18. Fail: 3d10 bludgeoning AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.</p>",
+              "value": "<p><em>The cloud leans toward you and becomes beaks.</em></p><p>A torrent of fiery ravens in a 30-foot cone. Each creature rolls an DC 18 Dexterity saving throw. Fail: 3d10 bludgeoning AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.</p>",
               "chat": ""
             },
             "identified": true,
@@ -60806,7 +60806,7 @@
             "id": "knO0GK8qKCeyNC6N",
             "pack": "npcs",
             "identifier": "The Ashen Horde",
-            "hash": "c7065045cee3"
+            "hash": "17721e3f4150"
           }
         }
       }
@@ -61622,7 +61622,7 @@
           "img": "icons/magic/water/wave-water-teal.webp",
           "system": {
             "description": {
-              "value": "<p>Sphere 30 feet. — targets roll Dexterity saving throw (DC 14). Half damage on success. ULTIMATE — usable only at or below half hit points. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><em>The flood never left. It was only waiting for the fare.</em></p>",
+              "value": "<p>Sphere 30 feet. — targets roll vs Dexterity (DC 14). Half damage on success. ULTIMATE — usable only at or below half hit points. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><em>The flood never left. It was only waiting for the fare.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -61941,7 +61941,7 @@
             "id": "MHVUvyZbNGxeWytB",
             "pack": "npcs",
             "identifier": "The Ferryman of the Drowned South",
-            "hash": "2a9967e97891"
+            "hash": "eec4efed86c4"
           }
         }
       }
@@ -62498,7 +62498,7 @@
           "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
           "system": {
             "description": {
-              "value": "<p><em>A golden goblet full of screaming souls, incoming.</em></p><p>The Tyrant rips a soul-infused chunk off its own body and hurls it at a point within 60 feet. Each creature within 10 feet of impact rolls an Dexterity saving throw vs DC 16. Fail: 3d8 bludgeoning AND 2d8 qliphothic damage — the chunk screams on the way in. Success: half of each.</p>",
+              "value": "<p><em>A golden goblet full of screaming souls, incoming.</em></p><p>The Tyrant rips a soul-infused chunk off its own body and hurls it at a point within 60 feet. Each creature within 10 feet of impact rolls an DC 16 Dexterity saving throw. Fail: 3d8 bludgeoning AND 2d8 qliphothic damage — the chunk screams on the way in. Success: half of each.</p>",
               "chat": ""
             },
             "identified": true,
@@ -63072,7 +63072,7 @@
             "id": "m1Wzc1wbRFO7kl7j",
             "pack": "npcs",
             "identifier": "The Gilded Tyrant",
-            "hash": "15428cec2197"
+            "hash": "4c0e6a0f1b06"
           }
         }
       }
@@ -66568,7 +66568,7 @@
           "img": "icons/creatures/abilities/dragon-breath-purple.webp",
           "system": {
             "description": {
-              "value": "<p>60 feet line, 5 feet wide. Dexterity saving throw, DC 18. Fail: Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.</p><p><strong>Line — 60 feet</strong> Dexterity saving throw vs DC 18. Fail: Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
+              "value": "<p>60 feet line, 5 feet wide. DC 18 Dexterity saving throw. Fail: Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.</p><p><strong>Line — 60 feet</strong> DC 18 Dexterity saving throw. Fail: Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -67292,7 +67292,7 @@
           "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
           "system": {
             "description": {
-              "value": "<p>ULTIMATE (1/short rest, at or below half hit points). Dumps the capacitor in a 30 feet sphere centered on itself. Dexterity saving throw, DC 18. Fail: Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered (speed halved, −2 to attack rolls) the following turn (overheated).</p><p><strong>Ultimate — 1/short rest below half hit points.</strong> 30 feet sphere. Dexterity saving throw, DC 18. Fail: Blinded. Half on success. Dragon Staggered (speed halved, −2 to attack rolls) next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
+              "value": "<p>ULTIMATE (1/short rest, at or below half hit points). Dumps the capacitor in a 30 feet sphere centered on itself. DC 18 Dexterity saving throw. Fail: Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered (speed halved, −2 to attack rolls) the following turn (overheated).</p><p><strong>Ultimate — 1/short rest below half hit points.</strong> 30 feet sphere. DC 18 Dexterity saving throw. Fail: Blinded. Half on success. Dragon Staggered (speed halved, −2 to attack rolls) next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -67605,7 +67605,7 @@
             "id": "DeyWbEYxsEcV8pKp",
             "pack": "npcs",
             "identifier": "Varrenthyx, the Laser Dragon",
-            "hash": "b7abf1eaf8cc"
+            "hash": "742925478182"
           }
         }
       }

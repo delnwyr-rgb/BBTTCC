@@ -819,7 +819,7 @@
           "boss",
           "ultimate"
         ],
-        "effect": "Sphere 6 squares. — targets roll vs Evasion (DC 14). Half damage on success. ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.",
+        "effect": "Sphere 6 squares. — targets roll vs Intrigue (DC 14). Half damage on success. ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.",
         "flavor": "The flood never left. It was only waiting for the fare.",
         "manifestation": {
           "tier": 1,

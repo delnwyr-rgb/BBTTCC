@@ -25,7 +25,7 @@
       "boss",
       "signature"
     ],
-    "effect": "12 squares. line, 1 square. wide. Evasion vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
+    "effect": "12 squares. line, 1 square. wide. Intrigue vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -77,7 +77,7 @@
       }
     },
     "description": {
-      "value": "<p><strong>Line — 12 squares</strong> Evasion check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
+      "value": "<p><strong>Line — 12 squares</strong> Intrigue check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
       "chat": ""
     }
   },

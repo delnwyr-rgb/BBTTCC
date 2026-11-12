@@ -814,7 +814,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Each creature in a 4-square. radius within 12 squares. rolls vs Evasion (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
+        "effect": "Each creature in a 4-square. radius within 12 squares. rolls vs Intrigue (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "Boiling butter, hard candy, carbonation spray, and nostalgic malice.",
         "manifestation": {
           "tier": 1,
@@ -860,7 +860,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature in a 4 squares radius within 12 squares rolls <strong>Evasion</strong> vs DC 16. Hit: <code>6d8</code> energy + presence; half on success. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a Soma Break.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 4 squares radius within 12 squares rolls <strong>Intrigue</strong> vs DC 16. Hit: <code>6d8</code> energy + presence; half on success. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a Soma Break.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
           "chat": ""
         }
       },

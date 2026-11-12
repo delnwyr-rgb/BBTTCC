@@ -25,7 +25,7 @@
       "boss",
       "signature"
     ],
-    "effect": "Cone 6 squares. — targets roll vs Evasion (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.",
+    "effect": "Cone 6 squares. — targets roll vs Intrigue (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.",
     "flavor": "“You are outside the permitted area. You have always been outside the permitted area.”",
     "manifestation": {
       "tier": 1,

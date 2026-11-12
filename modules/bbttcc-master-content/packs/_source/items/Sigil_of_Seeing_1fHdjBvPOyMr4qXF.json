@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "One ally within 6 squares, sustained for the scene: +1 Evasion and +1 Initiative while the sigil glows.",
+    "effect": "One ally within 6 squares, sustained for the scene: +1 Guard and +1 Initiative while the sigil glows.",
     "tags": [
       "starter-kit",
       "wyrdlens",
@@ -102,7 +102,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 1
           },
@@ -117,7 +117,7 @@
       }
     },
     "description": {
-      "value": "<p>One ally within 6 squares, sustained for the scene: +1 Evasion and +1 Initiative while the sigil glows.</p>"
+      "value": "<p>One ally within 6 squares, sustained for the scene: +1 Guard and +1 Initiative while the sigil glows.</p>"
     }
   },
   "flags": {

@@ -103,7 +103,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "Crack a stick and the parade route lights up: you and every ally within 3 squares gain Evasion +1 for 1 round, and the area is brightly lit until your next turn.",
+            "effect": "Crack a stick and the parade route lights up: you and every ally within 3 squares gain Guard +1 for 1 round, and the area is brightly lit until your next turn.",
             "tags": [
               "bound-working",
               "halloween-hoard",
@@ -172,7 +172,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "+",
                     "value": 1
                   }
@@ -182,7 +182,7 @@
               }
             },
             "description": {
-              "value": "<p>Crack a stick and the parade route lights up: you and every ally within 3 squares gain Evasion +1 for 1 round, and the area is brightly lit until your next turn.</p>",
+              "value": "<p>Crack a stick and the parade route lights up: you and every ally within 3 squares gain Guard +1 for 1 round, and the area is brightly lit until your next turn.</p>",
               "chat": ""
             }
           }

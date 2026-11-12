@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.",
+    "effect": "Self, sustained for the scene: +2 Guard while you watch the composition instead of the punches.",
     "tags": [
       "starter-kit",
       "wyrdlens",
@@ -100,7 +100,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 2
           }
@@ -110,7 +110,7 @@
       }
     },
     "description": {
-      "value": "<p>Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.</p>"
+      "value": "<p>Self, sustained for the scene: +2 Guard while you watch the composition instead of the punches.</p>"
     }
   },
   "flags": {

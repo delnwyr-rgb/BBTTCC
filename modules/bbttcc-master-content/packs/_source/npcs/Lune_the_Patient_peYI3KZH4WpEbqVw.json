@@ -2183,7 +2183,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Self or one ally within 6 squares: +2 Evasion for the scene — they keep being where the attack was going to have been.",
+        "effect": "Self or one ally within 6 squares: +2 Guard for the scene — they keep being where the attack was going to have been.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -2259,7 +2259,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 2
               }
@@ -2269,7 +2269,7 @@
           }
         },
         "description": {
-          "value": "<p>Self or one ally within 6 squares: +2 Evasion for the scene — they keep being where the attack was going to have been.</p>"
+          "value": "<p>Self or one ally within 6 squares: +2 Guard for the scene — they keep being where the attack was going to have been.</p>"
         }
       },
       "flags": {
@@ -2549,7 +2549,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "One creature within 6 squares, sustained for the scene: −2 Evasion while you keep the angle open for your allies.",
+        "effect": "One creature within 6 squares, sustained for the scene: −2 Guard while you keep the angle open for your allies.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -2624,7 +2624,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "-",
                 "value": 2
               }
@@ -2634,7 +2634,7 @@
           }
         },
         "description": {
-          "value": "<p>One creature within 6 squares, sustained for the scene: −2 Evasion while you keep the angle open for your allies.</p>"
+          "value": "<p>One creature within 6 squares, sustained for the scene: −2 Guard while you keep the angle open for your allies.</p>"
         }
       },
       "flags": {
@@ -3628,7 +3628,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.",
+        "effect": "Self, sustained for the scene: +2 Guard while you watch the composition instead of the punches.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -3703,7 +3703,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 2
               }
@@ -3713,7 +3713,7 @@
           }
         },
         "description": {
-          "value": "<p>Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.</p>"
+          "value": "<p>Self, sustained for the scene: +2 Guard while you watch the composition instead of the punches.</p>"
         }
       },
       "flags": {
@@ -4677,7 +4677,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "One ally within 6 squares, sustained for the scene: +1 Evasion and +1 Initiative while the sigil glows.",
+        "effect": "One ally within 6 squares, sustained for the scene: +1 Guard and +1 Initiative while the sigil glows.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -4754,7 +4754,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 1
               },
@@ -4769,7 +4769,7 @@
           }
         },
         "description": {
-          "value": "<p>One ally within 6 squares, sustained for the scene: +1 Evasion and +1 Initiative while the sigil glows.</p>"
+          "value": "<p>One ally within 6 squares, sustained for the scene: +1 Guard and +1 Initiative while the sigil glows.</p>"
         }
       },
       "flags": {

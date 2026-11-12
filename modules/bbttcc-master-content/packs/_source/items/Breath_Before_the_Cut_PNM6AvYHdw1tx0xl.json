@@ -25,7 +25,7 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Sustained vestment (self): Evasion +1 and Initiative +1 for the scene.",
+    "effect": "Sustained vestment (self): Guard +1 and Initiative +1 for the scene.",
     "tags": [
       "starter-kit",
       "ward",
@@ -99,7 +99,7 @@
       "appliedEffects": {
         "modifiers": [
           {
-            "stat": "evasion",
+            "stat": "guard",
             "op": "+",
             "value": 1
           },
@@ -114,7 +114,7 @@
       }
     },
     "description": {
-      "value": "<p>Sustained vestment (self): Evasion +1 and Initiative +1 for the scene.</p>"
+      "value": "<p>Sustained vestment (self): Guard +1 and Initiative +1 for the scene.</p>"
     }
   },
   "flags": {

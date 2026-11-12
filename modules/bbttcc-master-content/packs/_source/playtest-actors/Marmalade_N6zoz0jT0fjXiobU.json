@@ -5504,7 +5504,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "One creature within 6 squares, sustained for the scene: −2 Evasion while you keep the angle open for your allies.",
+        "effect": "One creature within 6 squares, sustained for the scene: −2 Guard while you keep the angle open for your allies.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -5579,7 +5579,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "-",
                 "value": 2
               }
@@ -6550,7 +6550,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.",
+        "effect": "Self, sustained for the scene: +2 Guard while you watch the composition instead of the punches.",
         "tags": [
           "starter-kit",
           "wyrdlens",
@@ -6625,7 +6625,7 @@
           "appliedEffects": {
             "modifiers": [
               {
-                "stat": "evasion",
+                "stat": "guard",
                 "op": "+",
                 "value": 2
               }

@@ -60,7 +60,7 @@
       }
     },
     "description": {
-      "value": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Long-arm ballistic. Two-handed.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 12 / 40 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — The Record Shows (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>The Record Shows</strong>: it appears among your Manifestations as “The Record Shows ⟡ Hunting Rifle of the Record” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->"
+      "value": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Long-arm ballistic. Two-handed.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 12 / 40 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — The Record Shows (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>The Record Shows</strong>: it appears among your Manifestations as “The Record Shows ⟡ Hunting Rifle of the Record” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>One target within 6 squares is marked for the scene: Guard −2 while their every move is a matter of record.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->"
     }
   },
   "flags": {
@@ -170,7 +170,7 @@
               "track": "integrity"
             },
             "damageParts": [],
-            "effect": "One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.",
+            "effect": "One target within 6 squares is marked for the scene: Guard −2 while their every move is a matter of record.",
             "tags": [
               "starter-kit",
               "debuff",
@@ -252,7 +252,7 @@
               "appliedEffects": {
                 "modifiers": [
                   {
-                    "stat": "evasion",
+                    "stat": "guard",
                     "op": "-",
                     "value": 2
                   }
@@ -262,7 +262,7 @@
               }
             },
             "description": {
-              "value": "<p>One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.</p>"
+              "value": "<p>One target within 6 squares is marked for the scene: Guard −2 while their every move is a matter of record.</p>"
             }
           },
           "flags": {
