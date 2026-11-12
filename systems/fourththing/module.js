@@ -8039,7 +8039,8 @@ async function ftEndSceneManifestationEffects(actor) {
     const f = e.flags?.fourththing ?? {};
     // Marks (2026-11-08): scene-long ones end here, and a "next-turn" one too (out of combat no turn will end it).
     return f.appliedManifestation?.durationKind === "scene" || f.manifestationEffect?.durationKind === "scene"
-      || ["scene", "next-turn"].includes(f.manifestationMark?.durationKind);
+      || ["scene", "next-turn"].includes(f.manifestationMark?.durationKind)
+      || f.drink?.durationKind === "scene";   // Gullywasher drinks (2026-11-11)
   }).map(e => e.id);
   if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
   return ids.length;
@@ -14181,6 +14182,7 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   const updates = {};
   const summary = [];
   const conditionOps = [];
+  const drinkOps = [];
 
   for (const eff of (consume.effects ?? [])) {
     if (eff.kind === "track") {
@@ -14217,6 +14219,29 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       // canonical toggle so it lands as a native status AE (token icon + States
       // tab + immunity-aware), not a bare boolean.
       conditionOps.push({ key, on: eff.op !== "remove" });
+    } else if (eff.kind === "drink") {
+      // DRINKS (Dave 2026-11-11, the Gullywasher): { kind:"drink", up, down?, formula:"1d4"|"2", slot?:"drink", duration?:"scene" }.
+      // Rolls ONCE: +N to the `up` faculty, the same N off `down` (never below 0 — it stops there). One drink per slot at a
+      // time (a new one replaces the last); a scene drink ends at Scene Break / combat end with the other scene-long effects.
+      const up = FT.FACULTIES?.[eff.up] ? eff.up : null;
+      const down = FT.FACULTIES?.[eff.down] ? eff.down : null;
+      if (!up) { summary.push(`<li>unknown faculty: ${ftEscapeHtml(String(eff.up))}</li>`); continue; }
+      const formula = String(eff.formula ?? "1d4");
+      const roll = await new Roll(formula).evaluate();
+      const n = Math.max(0, Math.trunc(Number(roll.total) || 0));
+      const curDown = down ? Math.max(0, Number(foundry.utils.getProperty(recipient, `system.attributes.${down}.value`) ?? 0)) : 0;
+      const m = down ? Math.min(n, curDown) : 0;
+      const slot = String(eff.slot || "drink");
+      const lab = (k) => FT.FACULTIES[k]?.label ?? k;
+      const changes = [{ key: `system.attributes.${up}.value`, mode: (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD ?? 2), value: String(n) }];
+      if (down && m) changes.push({ key: `system.attributes.${down}.value`, mode: (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD ?? 2), value: String(-m) });
+      drinkOps.push({ slot, data: {
+        name: item.name, img: item.img, origin: item.uuid, transfer: false, disabled: false, changes,
+        description: `${lab(up)} +${n}${down ? `, ${lab(down)} −${m}` : ""} until the scene ends.`,
+        flags: { fourththing: { drink: { slot, durationKind: String(eff.duration || "scene"), up, down, n, m, itemId: item.id } } }
+      } });
+      const rollTag = /d/i.test(formula) ? ` (${ftEscapeHtml(formula)} → ${n})` : "";
+      summary.push(`<li><b>${ftEscapeHtml(lab(up))} +${n}</b>${down ? `, <b>${ftEscapeHtml(lab(down))} −${m}</b>${m < n ? ` (stops at 0)` : ""}` : ""}${rollTag} — until the scene ends</li>`);
     } else if (eff.kind === "mutation") {
       // Gene-cleanse — cure radiation mutations. op "cleanseAll"/"clear" purges
       // every mutation; otherwise cure up to `count` (default 1), letting the
@@ -14246,6 +14271,15 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
     const cur = !!foundry.utils.getProperty(recipient, `system.conditions.${key}`);
     if (cur !== on) await game.fourththing.toggleCondition(recipient, key);
     summary.push(`<li>condition ${on ? "applied" : "cleared"}: <b>${FT.CONDITIONS[key].label ?? key}</b></li>`);
+  }
+
+  // Drinks: one per slot — the last one in the slot goes, the new one lands (owner/GM; else relayed to the GM).
+  for (const { slot, data } of drinkOps) {
+    if (!_relay) {
+      const prev = recipient.effects.filter(e => e.flags?.fourththing?.drink?.slot === slot).map(e => e.id);
+      if (prev.length) { await recipient.deleteEmbeddedDocuments("ActiveEffect", prev); summary.push(`<li>the last drink wears off</li>`); }
+      await recipient.createEmbeddedDocuments("ActiveEffect", [data]);
+    } else if ((await _ftApplyEffectsToTarget(recipient, [data])) === "none") summary.push(`<li><i>no GM online — drink not applied</i></li>`);
   }
 
   // Bucket B: clone the item's `applyOnUse` template Active Effects onto the
