@@ -5004,6 +5004,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
                     source: "bbttcc-campaign",
                     campaignId: campaign.id,
                     beatId: beat.id,
+                    // the reward card reads ctx.beatLabel — without it the Loyalty line was announced as "Boss Behavior" (Dave 2026-11-11)
+                    beatLabel: `Convictions — ${String(beat.label || beat.id || "a choice").replace(/^.*? - /, "")}`,
                     factionId,
                     logType: "aaepolitics"
                   }
