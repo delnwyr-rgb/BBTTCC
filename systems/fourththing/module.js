@@ -1800,7 +1800,8 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // Reaction / AoO / bonus Strikes have already spent their pool — those callers pass rangeConfirm:false (warn only).
   if (!options.skipRangeCheck && !(await _ftCheckRange(actor, item, null, { confirm: options.rangeConfirm !== false }))) return;
 
-  const intent  = ftItemIntent(item, "violence");   // attack + damage faculty (2026-11-08)
+  const intent  = ftMeleeIntentFor(actor, item);   // attack + damage faculty (2026-11-08); melee finesse V/I (2026-11-12)
+  const _intentChoices = ftMeleeIntentChoices(actor, item);
   const skill   = item?.system?.skill    ?? "melee";
   let   dmgF    = item?.system?.damage?.formula      ?? "";
   let   dmgT    = item?.system?.damage?.type         ?? "kinetic";
@@ -1856,7 +1857,9 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
         callback: async (html) => {
           const defense      = html.find("[name='defense']").val()        || "guard";
           const defVal       = parseInt(html.find("[name='defenseValue']").val()) || 14;
-          const selIntent    = html.find("[name='intent']").val()         || intent;
+          const _pickIntent  = html.find("[name='intent']").val()         || intent;
+          // Only a melee-finesse weapon may change its Intent here (the select is disabled otherwise).
+          const selIntent    = _intentChoices ? (_intentChoices.includes(_pickIntent) ? _pickIntent : intent) : intent;
           const selSkill     = html.find("[name='skill']").val()          || skill;
           // A Form can't strike for free (2026-11-08, teeth P18): until this scene's activation is paid the cost is
           // charged whatever the box says.
@@ -2492,6 +2495,29 @@ function ftItemIntent(itemOrSystem, fallback = "violence") {
   const sys = itemOrSystem?.system ?? itemOrSystem ?? {};
   const v = String(sys?.intent ?? "").toLowerCase();
   return FT_FACULTY_KEYS.includes(v) ? v : fallback;
+}
+
+// MELEE FINESSE (Dave ruling 2026-11-12): a Steward's MELEE weapon (category melee / unarmed) whose Intent is
+// Violence may attack AND deal damage with Intrigue instead — the player's choice in the Engage dialog, defaulting to
+// the higher faculty. Stewards only: foes (_ftIsFoeActor) keep the weapon's Intent. Engine-made Forms
+// (flags.fourththing.manifested) keep their authored Intent; ranged and thrown weapons are unchanged.
+// ftMeleeIntentChoices → ["violence","intrigue"] when the choice applies, else null.
+function ftMeleeIntentChoices(actor, item) {
+  try {
+    if (!actor || !item || item.type !== "weapon") return null;
+    if (item.flags?.fourththing?.manifested) return null;
+    if (!ftWeaponCategoryTraits(item.system?.category).isMelee) return null;
+    if (ftItemIntent(item, "violence") !== "violence") return null;
+    if (_ftIsFoeActor(actor)) return null;
+    return ["violence", "intrigue"];
+  } catch (_e) { return null; }
+}
+// The faculty a weapon swings with for this actor: the higher of Violence / Intrigue when finesse applies (ties → Violence).
+function ftMeleeIntentFor(actor, item) {
+  const base = ftItemIntent(item, "violence");
+  if (!ftMeleeIntentChoices(actor, item)) return base;
+  const a = (actor.system?.system ?? actor.system)?.attributes ?? {};
+  return (Number(a.intrigue?.value) || 0) > (Number(a.violence?.value) || 0) ? "intrigue" : "violence";
 }
 
 function ftDamageRollDefaults() {
@@ -15304,7 +15330,7 @@ function ftItemGlance(actor, item) {
     if (!actor || !item) return "";
     const sgn = (n) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
     if (item.type === "weapon") {
-      const intent  = ftItemIntent(item, "violence");
+      const intent  = ftMeleeIntentFor(actor, item);   // melee finesse (2026-11-12)
       const skill   = ftResolveWeaponSkill(actor, item.system?.skill, item.system?.category);
       const srcSys  = ftSourceSystem(actor);
       const attrVal = Number(srcSys?.attributes?.[intent]?.value) || 0;
@@ -15419,7 +15445,8 @@ function buildAttackDialogHTML(actor, item) {
 
   // Weapon-driven defaults: skill via alias resolver (legacy "ranged"→firearms),
   // intent from authored field, target defense from the damage (Stress → Resolve, else Guard — ftAttackDefenseFor).
-  const intent       = ftItemIntent(item, "violence");   // any of six; drives attack AND damage (2026-11-08)
+  const intent       = ftMeleeIntentFor(actor, item);   // any of six; drives attack AND damage (2026-11-08); melee finesse (2026-11-12)
+  const _finesse     = ftMeleeIntentChoices(actor, item);
   const resolvedSkill = ftResolveWeaponSkill(actor, item?.system?.skill, item?.system?.category);
   const preferredDefense = ftWeaponTargetDefense(item);
 
@@ -15461,7 +15488,7 @@ function buildAttackDialogHTML(actor, item) {
     const label = v?.label || _ftSkillMasterLookup[k] || ftCap(String(k).replace(/_/g, " "));
     return `<option value="${k}" ${k === resolvedSkill ? "selected" : ""}>${label}</option>`;
   }).join("");
-  const intentOpts = Object.entries(FT.FACULTIES).map(([k, v]) =>
+  const intentOpts = Object.entries(FT.FACULTIES).filter(([k]) => !_finesse || _finesse.includes(k)).map(([k, v]) =>
     `<option value="${k}" ${k === intent ? "selected" : ""}>${v.label}</option>`
   ).join("");
   const costAssessment = item ? ftAssessManifestationCost(actor, item, "weapon") : null;
@@ -15511,7 +15538,7 @@ function buildAttackDialogHTML(actor, item) {
   ${benefBanner}
   ${flankBanner}
   <div class="ft-cast-grid">
-    <div class="ft-cast-field" data-tooltip="Set on the weapon — it attacks and deals damage with this faculty."><label>Intent</label><select name="intent"${item ? " disabled" : ""}>${intentOpts}</select></div>
+    <div class="ft-cast-field" data-tooltip="${_finesse ? "Melee: attack and deal damage with Violence or Intrigue — your pick (defaults to the higher)." : "Set on the weapon — it attacks and deals damage with this faculty."}"><label>Intent</label><select name="intent"${item && !_finesse ? " disabled" : ""}>${intentOpts}</select></div>
     <div class="ft-cast-field"><label>Skill</label><select name="skill">${skillOpts}</select></div>
     <div class="ft-cast-field"><label>Target defense</label><select name="defense">${defOpts}</select></div>
     <div class="ft-cast-field"><label>Defense value</label>
@@ -24056,7 +24083,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const dmgF = String(sys?.damage?.formula ?? "").trim();
         const dmgT = String(sys?.damage?.type ?? "kinetic");
         const skill = String(sys?.skill ?? "melee");
-        const intent = ftItemIntent(sys, "violence");
+        const intent = ftMeleeIntentFor(actor, it);   // melee finesse (2026-11-12)
         const rangeText = _ftWeaponRangeChip(sys);   // AR4 (2026-10-26): fourththing short/long in squares — the dnd5e `range.value` read left the chip blank
         return {
           id: it.id,
@@ -26823,7 +26850,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         formula: i.system?.damage?.formula ?? "",
         type:    i.system?.damage?.type ?? "",
         skill:   i.system?.skill ?? "violence",
-        intent:  ftItemIntent(i, "violence"),
+        intent:  ftMeleeIntentFor(actor, i),   // melee finesse (2026-11-12)
         category: i.system?.category ?? "",
       }));
       const TYPE_LABELS = { class: "Path", subclass: "Doctrine", race: "Ancestry", species: "Ancestry" };
