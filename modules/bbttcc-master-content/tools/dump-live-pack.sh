@@ -20,7 +20,7 @@ PACK="${1:?pack dir name, e.g. npcs — or a Data-relative pack path like system
 DATA=/home/foundry/foundry-emberdata/Data; [[ $INST == foundry ]] && DATA=/home/foundry/foundryuserdata/Data
 "${SSH[@]}" "set -e; T=\$(mktemp -d); cp -r '$DATA/$([[ "$PACK" == */* ]] && echo "$PACK" || echo "modules/bbttcc-master-content/packs/$PACK")' \$T/db; rm -f \$T/db/LOCK
 cd \$T && node -e '
-const {ClassicLevel}=require(\"/home/foundry/foundry-ember-backup/resources/app/node_modules/classic-level\");
+const {ClassicLevel}=require(\"/home/foundry/foundry-ember/resources/app/node_modules/classic-level\");
 (async()=>{const db=new ClassicLevel(\"db\",{valueEncoding:\"json\"});const o=[];
 for await(const [k,v] of db.iterator())o.push(JSON.stringify({k,v}));await db.close();process.stdout.write(o.join(\"\\n\"));})();'
 rm -rf \$T" > "$OUT"

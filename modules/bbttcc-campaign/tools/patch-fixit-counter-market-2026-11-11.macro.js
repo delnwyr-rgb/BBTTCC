@@ -1,7 +1,7 @@
 /*
  * patch-fixit-counter-market-2026-11-11.macro.js — Dave (2026-11-11): "NONE of these choices make sense anymore … we're just going to
  * turn this into the beat that unlocks the Fixit Farm Market. Mara did her roleplaying bits in the other two quests here."
- *  1. fixit_general_store_coversation (the Counter) takes Dave's text (typo: "know one knows" → "no one knows") and its three
+ *  1. fixit_general_store_coversation (the Counter) takes Dave's text (typo: "know one knows" → "no one knows"; first sentence completed per Dave) and its three
  *     questions go (fixit_general_store_coversation_1/2/3 are unreachable now and kept).
  *  2. New answer beat ans_fixit_counter_shop (the Arc Bay "Anything for sale?" shape: dialog, repeatable, evergreen, Mara speaking,
  *     Counter interior): openMarket on Furrier's Fixit Farm with activate:true — the market switches ON and stays on (unlocked).
@@ -20,7 +20,7 @@
   const ch = (label, next) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "" });
 
   const TEXT = [
-    "The Counter is the town general store, and is named after the slab of reinforced metal worn smooth at the edges. It is famously impervious to harm, and no one knows why.",
+    "The Counter is the town general store, and is named after the slab of reinforced metal worn smooth at the edges that runs down its center. It is famously impervious to harm, and no one knows why.",
     "This monument to ignorance has upon its surface a myriad of items for purchase. The walls also have stuff too.",
     "Mara Quickhands, in addition to acting in her official capacity as Lucky Chief, also runs The Counter.",
     "Mara Quickhands is steel that has been wrapped in velveteen, and then given several espressos.",

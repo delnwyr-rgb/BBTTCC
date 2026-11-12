@@ -1,0 +1,108 @@
+{
+  "name": "Circuited Scrap Helm",
+  "type": "armor",
+  "img": "icons/equipment/head/cap-steel.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "helm",
+      "salvaged",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A steel skull-cap hammered from sheet, lined with quilted cloth and chin-strapped with whatever was handy. Worn over a hood, under a hat, or on its own by people who have been hit in the head once already and formed an opinion. Pairs with any armor; stacks with none of the arguments.</p><p>No signature. One size fits most.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +3</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 105 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +3 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Keeps the rain and the rebar off.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A steel skull-cap hammered from sheet, lined with quilted cloth and chin-strapped with whatever was handy. Worn over a hood, under a hat, or on its own by people who have been hit in the head once already and formed an opinion. Pairs with any armor; stacks with none of the arguments.</p><p>No signature. One size fits most.</p>",
+          "materialOf": [
+            {
+              "key": "sheet-steel",
+              "qty": 1
+            },
+            {
+              "key": "quilted-liner",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 105,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor (Circuited +2 on TI Scrap Helm) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 42
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "75V6FJPMD5bpowLk",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1794459019685,
+    "modifiedTime": 1794459019712,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!75V6FJPMD5bpowLk"
+}

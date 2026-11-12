@@ -1,0 +1,108 @@
+{
+  "name": "Inlaid Flak Jacket",
+  "type": "armor",
+  "img": "icons/equipment/chest/jacket-modern-military.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "bracing",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "medium",
+      "jacket",
+      "ballistic",
+      "graded",
+      "grade-inlaid"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A canvas field jacket with steel plates sewn into the chest and back panels over a quilted liner — the faction line-infantry pattern, issued by the crate alongside the Service Rifle. Heavier than it looks and warmer than anyone wants in a Bad Eden summer, but it stops what a militia expects to be shot with.</p><p>No signature, no harmonization. Name on the tape.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +3</li>\n  <li><strong>Requires:</strong> Bracing (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 90 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 on each of its defense bonuses</strong> → Guard +3 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier II</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Canvas on the outside, sheet-steel on the inside, a faction stencil on the back.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A canvas field jacket with steel plates sewn into the chest and back panels over a quilted liner — the faction line-infantry pattern, issued by the crate alongside the Service Rifle. Heavier than it looks and warmer than anyone wants in a Bad Eden summer, but it stops what a militia expects to be shot with.</p><p>No signature, no harmonization. Name on the tape.</p>",
+          "materialOf": [
+            {
+              "key": "road-canvas",
+              "qty": 1
+            },
+            {
+              "key": "sheet-steel",
+              "qty": 1
+            },
+            {
+              "key": "quilted-liner",
+              "qty": 1
+            },
+            {
+              "key": "sept-silver",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 90,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1 on TI Flak Jacket) × bound free",
+            "bound": "free",
+            "saleBack": 36
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "uS33M4DPWGLJhAIp",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1794459019680,
+    "modifiedTime": 1794459019708,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!uS33M4DPWGLJhAIp"
+}

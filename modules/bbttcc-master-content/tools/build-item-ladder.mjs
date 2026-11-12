@@ -78,6 +78,10 @@ const GRADE_BASES = [
   // T1 baseline arms (all three grades)
   ..."Maul|Hand Axe|Combat Knife|Sap|Slug Pistol|Bolt-Driver|Hunting Rifle|Knuckle Dusters".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
   ..."Patrolman's Plate|Bulwark Hauberk|Worker's Leathers|Drifter's Weave|Initiate's Robe|Pressed Buckler".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
+  // 2026-11-11 (Dave: "expand the list of circuited/crowned/inlaid items to include all of the standard weapons and armor") — the rest
+  // of the T1 Baseline Weapons / T1 Baseline Armor folders, all three grades.
+  ..."Auto Pistol|Carbine|Felling Axe|Greatsword|Holdout Pistol|Hunting Bow|Longsword|Mace|Machine Pistol|Machete|Pump Shotgun|Quarterstaff|Sawed-Off Shotgun|Service Rifle|Shortsword|Slugger Bat|Spear|Warhammer".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
+  ..."Ballistic Vest|Flak Jacket|Riding Leathers|Riot Armor|Riot Shield|Scrap Helm|Scrap Plate|Tactical Harness".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
   // T2 arms — two grades (a Crowned T2 would read T4+, past the ladder)
   ..."Laser Pistol, Rad|Steelweave Hauberk|Septhide Vestments|Wardiron Targe".split("|").map(n => ({ name: n, ranks: [1, 2] }))
 ];

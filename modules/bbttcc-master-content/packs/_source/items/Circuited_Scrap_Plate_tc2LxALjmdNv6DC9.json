@@ -1,0 +1,112 @@
+{
+  "name": "Circuited Scrap Plate",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-banded-steel-studded.webp",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": 0,
+    "resolveBonus": 3,
+    "resistances": [],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "heavy",
+      "plate",
+      "salvaged",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Riveted plates of salvaged sheet — car doors, signage, a pre-Fall refrigerator — strapped over a gambeson by whoever had the rivets and the afternoon. No two suits match and none of them fit, but the weight on your shoulders is the weight of knowing you'll walk out. The Bulwark's second suit; the bandit's first.</p><p>No signature. Every dent is a previous owner.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Heavy</li>\n  <li><strong>Defense:</strong> Guard +4, Resolve +3</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 105 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +4, Resolve +3 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Someone's car door. Now it's yours.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Riveted plates of salvaged sheet — car doors, signage, a pre-Fall refrigerator — strapped over a gambeson by whoever had the rivets and the afternoon. No two suits match and none of them fit, but the weight on your shoulders is the weight of knowing you'll walk out. The Bulwark's second suit; the bandit's first.</p><p>No signature. Every dent is a previous owner.</p>",
+          "materialOf": [
+            {
+              "key": "rivet-plate",
+              "qty": 1
+            },
+            {
+              "key": "sheet-steel",
+              "qty": 1
+            },
+            {
+              "key": "gambeson",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 105,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor (Circuited +2 on TI Scrap Plate) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 42
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "tc2LxALjmdNv6DC9",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1794459019686,
+    "modifiedTime": 1794459019712,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!tc2LxALjmdNv6DC9"
+}
