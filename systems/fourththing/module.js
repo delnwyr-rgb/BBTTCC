@@ -23774,34 +23774,34 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const skillAE      = getAllSkillAEBonuses ? getAllSkillAEBonuses(actor) : {};
       const attrAE       = getAllAttrAEBonuses  ? getAllAttrAEBonuses(actor)  : {};
 
-      // Display-only slang relabel for Aptitudes. Schema/keys/labels in template.json
-      // stay canonical (powers, grants, and item descriptions still reference the
-      // straight names) — we only swap the visible label and attach a reluctant
-      // "fine, it's the real name" tooltip per row.
+      // Aptitude nicknames (Dave 11-12: swapped). The sheet shows the standard
+      // name; the slang nickname rides in the hover as "aka <nickname>".
+      // Schema/keys/labels in template.json stay canonical.
       const SLANG_APTITUDE = {
-        brawl:        { label: "Throwing Hands",                tip: "Fine, Brawl" },
-        melee:        { label: "Sword Energy",                  tip: "Melee, whatever" },
-        firearms:     { label: "Pew Pew",                       tip: "Firearms ... sure, I guess" },
-        athletics:    { label: "Touched Grass",                 tip: "Whatever, Athletics" },
-        stealth:      { label: "Low-Key",                       tip: "Fine, it's Stealth" },
-        hacking:      { label: "Goblin Mode (Online)",          tip: "Hacking. Sure." },
-        tinkering:    { label: "Jank-Crafting",                 tip: "OK fine, Tinkering" },
-        streetwise:   { label: "Knows a Guy",                   tip: "Streetwise, I guess" },
-        fitting:      { label: "Cassius Clay Energy",           tip: "Fitting — light armor, worn right" },
-        diplomacy:    { label: "Yapping",                       tip: "Diplomacy, ugh" },
-        intimidation: { label: "Big Mad",                       tip: "Fine — Intimidation" },
-        empathy:      { label: "I Feel You Boo",                tip: "Empathy ... sure" },
-        performance:  { label: "Main Character Moment",         tip: "Performance, I guess" },
-        perception:   { label: "Check That Shit Out",           tip: "Fine, Perception" },
-        investigation:{ label: "Sleuthing Hours",               tip: "Investigation, whatever" },
-        lore:         { label: "Reads the Wiki",                tip: "Lore. Sure." },
-        occult:       { label: "Spooky Knowledge",              tip: "Occult, I guess" },
-        faith:        { label: "Touched by an Angel or Whatever", tip: "Fine, Faith" },
-        meditation:   { label: "Logged Off",                    tip: "Meditation, whatever" },
-        ritual:       { label: "Ceremonial Vibes",              tip: "Ritual, sure" },
-        insight:      { label: "Lie Detector",                  tip: "Insight ... sure, I guess" },
-        bracing:      { label: "Boundary Setting (Lit.)",       tip: "Bracing — medium armor, worn braced" },
-        plating:      { label: "Tank Mode",                     tip: "Fine — Plating" }
+        brawl:         "Throwing Hands",
+        melee:         "Sword Energy",
+        firearms:      "Pew Pew",
+        athletics:     "Touched Grass",
+        stealth:       "Low-Key",
+        hacking:       "Goblin Mode (Online)",
+        tinkering:     "Jank-Crafting",
+        streetwise:    "Knows a Guy",
+        fitting:       "Cassius Clay Energy",
+        diplomacy:     "Yapping",
+        intimidation:  "Big Mad",
+        empathy:       "I Feel You Boo",
+        performance:   "Main Character Moment",
+        perception:    "Check That Shit Out",
+        investigation: "Sleuthing Hours",
+        lore:          "Reads the Wiki",
+        occult:        "Spooky Knowledge",
+        faith:         "Touched by an Angel or Whatever",
+        meditation:    "Logged Off",
+        ritual:        "Ceremonial Vibes",
+        insight:       "Lie Detector",
+        bracing:       "Boundary Setting (Lit.)",
+        plating:       "Tank Mode",
+        piloting:      "Vroom Vroom"
       };
 
       // Ensure every master-list skill renders even on actors whose stored
@@ -23828,8 +23828,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           return [];
         }
         const slang = SLANG_APTITUDE[key];
-        const label = slang?.label ?? canonLabel;
-        const slangTooltip = slang?.tip ?? canonLabel;
+        const label = canonLabel;
+        const slangTooltip = slang ? `aka ${slang}` : canonLabel;
         const rank   = skill.value ?? 0;
         // Beeb's "Touched Grass +9 / Untrained" symptom traces to legacy actors
         // that ended up with skill.value > 5 from old chargen passes. The
