@@ -15552,7 +15552,7 @@ function ftManifestGlance(actor, item, kind = "power") {
       const _wdr = ftNormalizeDamageRoll(sys);
       const _hasDice = /\d*d\d/i.test(_wf) || (_wdr.op === "damage" && _wdr.number > 0);
       const g = (actor && _hasDice) ? ftItemGlance(actor, item) : "";
-      if (g) nums.push(g);
+      if (g) nums.push(_wdr.track === "stress" ? `${g} Stress` : g);   // a Stress-track Form says so ("1d6+3 psychic Stress")
     } else if (actor) {
       const attrI = Number(src?.attributes?.[intent]?.value) || 0;
       const attrC = Number(src?.attributes?.[channel]?.value) || 0;
@@ -15590,7 +15590,7 @@ function ftManifestGlance(actor, item, kind = "power") {
       } else {
         const t = actor ? ftOutgoingDamageType(actor, dr.type) : dr.type;
         const extra = ftCollectExtraDamageParts(item).map(p => `+ ${p.formula} ${FT.DAMAGE_TYPES?.[p.type]?.label?.toLowerCase() ?? p.type}`);
-        nums.push([`${dice} ${FT.DAMAGE_TYPES?.[t]?.label?.toLowerCase() ?? t}`, ...extra].join(" "));
+        nums.push([`${dice} ${FT.DAMAGE_TYPES?.[t]?.label?.toLowerCase() ?? t}${dr.track === "stress" ? " Stress" : ""}`, ...extra].join(" "));
       }
     }
 
@@ -15616,7 +15616,25 @@ function ftManifestGlance(actor, item, kind = "power") {
 
     // The rules line.
     const strip = (s) => String(s ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
-    let text = strip(sys.effect) || strip(mf.mechanicalHook);
+    // Authored prose keeps only the rules the numbers above don't already say (Dave 11-12 "stray lines"):
+    // sentences restating the dice or the on-hit state go (they drift — "fire"/"Shaken" vs the live thermal/Staggered),
+    // and so do colour sentences and " — colour" tails with no rule in them.
+    const COND = [...Object.keys(FT.CONDITIONS ?? {}), "shaken", "staggered", "compelled", "calmed", "restrained", "blinded", "burning", "prone", "charmed", "slowed"].join("|");
+    const TERM = new RegExp(String.raw`\d|\b(guard|resolve|initiative|integrity|stress|strain|noise|clarity|surge|dc|saves?|saving|defen[cs]e|advantage|disadvantage|reroll|resists?|immune|immunity|half|actions?|reactions?|rounds?|scenes?|turns?|sq|squares?|ft|ally|allies|enem(y|ies)|targets?|creatures?|self|yourself|upkeep|range|reach|zone|sphere|cone|line|aura|sustained|handed|concealable|thrown|throw|finesse|versatile|heavy|light|silent|reload|nonlethal|brawl|melee|ranged|attacks?|hits?|damage|push|pull|fail|failed|success|rolls?|checks?|once|until|while|cast|attunes?|soulbound|heals?|gm|cover|ignores?|enduring|bound|bind|declare|wards?|may|can|can't|cannot|must|only|beyond|${COND})\b`, "i");
+    const TIGHT = new RegExp(String.raw`\d|\b(guard|resolve|integrity|stress|strain|dc|saves?|damage|squares?|rounds?|scenes?|actions?|until|${COND})\b`, "i");
+    const hasDice = nums.some(n => /\d*d\d+/.test(n)), hasStates = states.length > 0;
+    const rulesOnly = (s) => s.split(/(?<=[.!?])\s+(?=[A-Z"“])/).map(sen => {
+      let t = sen.replace(/\s+[—–]\s+([^—–]*)$/, (m, tail, off) => {
+        const head = sen.slice(0, off);
+        return (TIGHT.test(tail) || head.split("(").length > head.split(")").length) ? m : "";
+      });
+      if (t !== sen && !/[.!?]$/.test(t)) t += ".";
+      if (/^no (signature ability|rider)\b/i.test(t)) return "";
+      if (hasDice && /^(melee|ranged) attack( with [a-z]+)?: \d*d\d+[^.;]*\.$/i.test(t)) return "";
+      if (hasStates && /^on hit: [a-z]+ defen[cs]e vs cast dc or [a-z ]+ for (\d+|one) rounds?\.$/i.test(t)) return "";
+      return TERM.test(t) ? t : "";
+    }).filter(Boolean).join(" ");
+    let text = rulesOnly(strip(sys.effect)) || rulesOnly(strip(mf.mechanicalHook));
     if (!text) {
       const bits = [];
       const STAT = { guard: "Guard", resolve: "Resolve", initiative: "Initiative", evasion: "Guard" };   // Evasion retired → Guard
@@ -15629,7 +15647,7 @@ function ftManifestGlance(actor, item, kind = "power") {
       for (const r of mf.appliedEffects?.immunes ?? []) bits.push(`immune ${FT.DAMAGE_TYPES?.[r]?.label?.toLowerCase() ?? r}`);
       if (mf.area?.shape && mf.area.shape !== "none" && Number(mf.area.size) > 0) bits.push(`${Math.round(Number(mf.area.size) / 5)}-sq ${mf.area.shape}`);
       const dur = ftLabelFromMap(FT.MANIFESTATION_DURATIONS, mf.duration, "");
-      if (dur && mf.duration !== "instant") bits.push(dur.toLowerCase());
+      if (dur && mf.duration !== "instant" && kind !== "weapon") bits.push(dur.toLowerCase());   // a bound Form's "persistent" says nothing
       text = bits.join(" · ");
     }
     if (!nums.length && !text) return null;
