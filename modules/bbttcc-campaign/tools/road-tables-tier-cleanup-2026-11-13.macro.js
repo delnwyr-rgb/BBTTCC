@@ -24,15 +24,32 @@
  *   - enc_ash_wolves (+ its _outcomes / win / lose / run): Burn-Zone Alpha "fights beside three lights" (her bio) — the
  *     spawner now fields 3 Ash Wolves with her (encounter.also). Alpha heavy 4 + 3 lights = 7 points: L2 7/7, L3 7/8,
  *     L4 7/9 — all "average" (rows: plains/canyons/ashwastes t1, phaseGte 2).
- *   - gilbert_theater_fight: encounter.actorName "Gilbert, Eternally Cleaning Not Leaning Theater Attendant" matches no
- *     actor → "Gilbert, Attendant Eternal" (pack + world id LQS2jaeFhzFMDpxA, the beat's own speakerActorId).
- *     HELD by default (it would field a T3 heavy at storyPhase >= 3 ≈ L4): opt in with globalThis.__roadTierCleanupGilbert = true.
- *   - enc_desenitarius_maarg "Run the gauntlet": next was "" (the dialog just closed — no closure, nothing to read).
- *     → new outcome beat enc_desenitarius_maarg_gauntlet (the GM still calls the cost, as the choice promises); the failed
- *     courtesies (enc_desenitarius_maarg_parley_fail "So be it") lead there too.
+ *
+ * GILBERT AT THE END OF THE ARC (Dave 11-13: "let's have him and his quest show up when the players are lvl 9, at the end
+ * of the arc"). The engine has NO party-level gate: _resolveGateValue (bbttcc-campaign module.js) knows storyPhase, turn,
+ * hexesClaimed and the story meters only, and directorState.stewardLevelFloor is a level FLOOR the director raises
+ * Stewards to, not a condition. Level follows the act: PHASE_FLOORS[6] = { steward: 9, faction: 4 } — Act 6 is the last
+ * act of Part One and the act that puts the party at L9. So the whole Hidden Vault quest (Gilbert's quest — every
+ * story.quest "hidden_vault" beat + its hv_ / ans_hv_ answer beats) moves from { flag:"storyPhase", gte:3 } to gte:6:
+ *   - inject.requires gates the injector (hex door PolygonWood.a → enc_hidden_vault_approach), the Director, invitations,
+ *     the quest log's NOW/doors (readiness), AND executeBeat refuses any beat whose act (_beatActOf = that gte) is ahead
+ *     of storyPhase on every path except a forced run — so a chain choice can't walk in early either.
+ *   - campaign.story.quests.hidden_vault.act 3 → 6 (the quest log's act; the quest is evergreen, so it never act-seals).
+ *   - names: gilbert_theater_fight "Gilbert, Eternally Cleaning Not Leaning Theater Attendant" (matches no actor) →
+ *     "Gilbert, Attendant Eternal" (pack + world id LQS2jaeFhzFMDpxA, the beats' own speakerActorId); the hub
+ *     enc_hidden_vault_gilbert "Gilbert" (tier 1) → the same name, tier 3 (no sceneId, so it never stages a spawn);
+ *     gilbert_theater_intro (a dialog on a POV picture, 058mRogcNeTDsgvs) → actorName "" so the spawner never puts a
+ *     token on the picture (he still speaks via speakerActorId).
+ *   NOTE for Dave: a T3 heavy against L9 (budget Tier II, ENCOUNTER.budget L6–10) still reads one tier up on the chassis.
+ *
+ * MAARG SHELVED (Dave 11-13: "Let's shelve the Maarg beat for now."): every road-table row whose beatId starts
+ * enc_desenitarius_maarg (canyons/ashwastes t2+t3, generic_t4 cinematic intro) is REMOVED and never re-homed. The beats
+ * stay in the campaign, parked the house way (patch-defer-expansion-2026-10-21): { flag:"storyPhase", gte:9 } appended to
+ * inject.requires (acts run 0–6 — it never opens), original requires on beat._deferred. Nothing else routes to them (no hex
+ * door, quest, script, turnBeats entry or other beat's choice). The "Run the gauntlet" dead end (next "") is left for unshelving.
  *
  * DRY RUN by default; globalThis.__roadTierCleanupDry = false applies. Before any write a JournalEntry
- * "Road tables tier cleanup backup 2026-11-13" stores the before-JSON of encounterTables + every touched beat.
+ * "Road tables tier cleanup backup 2026-11-13" stores the before-JSON of encounterTables + every touched beat + touched story.quests defs.
  * Idempotent: a second run = 0 changes. Report → globalThis.__roadTierCleanupReport.
  */
 (async () => {
@@ -45,9 +62,6 @@
   // <plan> — pure (no Foundry globals below this line until </plan>)
   const PHASE = { 1: 2, 2: 4, 3: 7, 4: 10 };   // same ladder as expand-road-encounters-2026-11-13 (T3/T4 = Part Two, Dave to set)
   const MIRROR_T2 = true;                      // removed legacy T2 rows on t1 tables come back as phase-4 alpha mirrors
-  // HELD (review 11-13): the rename makes a T3 heavy actually spawn behind storyPhase >= 3 (~L4, Tier I) — a two-tier-up
-  // story fight, which Dave's ruling says never to field. Flip to true only once Dave re-gates the fight (phase 7) or accepts it.
-  const FIX_GILBERT = globalThis.__roadTierCleanupGilbert === true;
   const ROMAN = { I: 1, II: 2, III: 3, IV: 4 };
   const tierNum = (v) => { const n = ROMAN[String(v ?? "").trim().toUpperCase()] ?? Number(v); return Number.isFinite(n) && n >= 1 && n <= 4 ? n : null; };
 
@@ -69,19 +83,18 @@
 
   const ASH = { beats: ["enc_ash_wolves", "enc_ash_wolves_outcomes", "enc_ash_wolves_outcomes_win", "enc_ash_wolves_outcomes_lose", "enc_ash_wolves_outcomes_run"],
     lead: "Burn-Zone Alpha", wolf: "Ash Wolf", wolves: 3 };
-  const GILBERT = { beat: "gilbert_theater_fight", bad: "Gilbert, Eternally Cleaning Not Leaning Theater Attendant", good: "Gilbert, Attendant Eternal" };
-  const MAARG = { beat: "enc_desenitarius_maarg", choiceLabel: /^Run the gauntlet/, failBeat: "enc_desenitarius_maarg_parley_fail", gauntlet: "enc_desenitarius_maarg_gauntlet" };
-  const INJECT = { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit" };
-  const gauntletBeat = () => ({
-    id: MAARG.gauntlet, label: "Maarg — The Gauntlet", type: "outcome_trigger", timeScale: "leg", timePoints: 0,
-    tags: "travel " + SRC_TAG, politicalTags: "", outcomes: { success: null, failure: null }, inject: { ...INJECT }, actors: [], refs: {},
-    choices: [{ label: "Count heads", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
-    description: "Scatter. Not in a line — lines are what it notices. Rigs one way, walkers the other, everybody low and nobody brave.\n\n" +
-      "For a long minute the sky is the colour of a bruise and the road is somewhere else. Something vast passes over, or through, or near — it is genuinely hard to say which — and it does not look down. Or it does, and it simply doesn't care. Either way: it moves on.\n\n" +
-      "Now count heads. Count wagons. Count what's missing. (The GM calls what the gauntlet cost you.)",
-    memoryText: "The Domain ran Desenitarius Maarg's gauntlet on the road — scattered, endured, regrouped, and paid whatever the passing cost.",
-    playerFacing: true, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true
-  });
+  const BAD_GILBERT = "Gilbert, Eternally Cleaning Not Leaning Theater Attendant";
+  const GILBERT = {
+    quest: "hidden_vault", act: 6,   // Act 6 = PHASE_FLOORS[6] steward L9 — the end of Part One (module.js PHASE_FLOORS)
+    beatRe: /^(enc_hidden_vault_|gilbert_theater_|hv_|ans_hv_)/,
+    good: "Gilbert, Attendant Eternal",
+    names: {
+      gilbert_theater_fight: { from: [BAD_GILBERT], to: "Gilbert, Attendant Eternal" },
+      enc_hidden_vault_gilbert: { from: ["Gilbert"], to: "Gilbert, Attendant Eternal", tier: 3 },
+      gilbert_theater_intro: { from: [BAD_GILBERT], to: "" }   // POV picture — no token on a picture
+    }
+  };
+  const MAARG = { re: /^enc_desenitarius_maarg/, gate: 9 };   // shelved: rows removed, beats left in place behind the Act-9 park
 
   const clone = (v) => JSON.parse(JSON.stringify(v));
   const tableTier = (tid) => { const m = String(tid).match(/_t(\d)$/); return m ? Number(m[1]) : null; };
@@ -91,7 +104,7 @@
   /** ctx: { campaign, tables, nameTier: Map(name → tier) | null } */
   function plan(ctx) {
     const { campaign, tables } = ctx;
-    const out = { rowsRemove: [], rowsAdd: [], phaseRaise: [], beatEdits: [], beatsAdd: [], tierNotes: [], kept: [] };
+    const out = { rowsRemove: [], rowsAdd: [], phaseRaise: [], beatEdits: [], storyEdits: [], tierNotes: [], kept: [] };
     const beatById = new Map((campaign.beats || []).map(b => [b?.id, b]));
 
     const foeTierOf = (beatId) => {
@@ -111,6 +124,12 @@
     for (const [tid, t] of Object.entries(tables)) {
       const tt = tableTier(tid); if (!tt) continue;
       (t.entries || []).forEach((row, i) => {
+        // Maarg shelved (Dave 11-13): every row that leads to him goes, and is never re-homed
+        if (MAARG.re.test(String(row?.beatId || ""))) {
+          out.rowsRemove.push({ tableId: tid, index: i, beatId: row.beatId, row: clone(row), foeTier: null, why: "shelved" });
+          (removedIdx.get(tid) || removedIdx.set(tid, new Set()).get(tid)).add(i);
+          return;
+        }
         const F = foeTierOf(row?.beatId); if (!F) return;
         const cond = (row.conditions && typeof row.conditions === "object") ? row.conditions : {};
         if (F > tt) {
@@ -163,25 +182,51 @@
         bb.encounter.also = [...(Array.isArray(bb.encounter.also) ? bb.encounter.also : []), { actorName: ASH.wolf, count: ASH.wolves }];
       } });
     }
-    {
-      const b = beatById.get(GILBERT.beat);
-      if (!FIX_GILBERT) out.tierNotes.push(`gilbert: ${GILBERT.beat} rename HELD (T3 heavy at storyPhase>=3 = tier up) — set globalThis.__roadTierCleanupGilbert = true to apply`);
-      else if (b && String(b.encounter?.actorName || "") === GILBERT.bad)
-        out.beatEdits.push({ beatId: GILBERT.beat, what: `encounter.actorName → "${GILBERT.good}"`, apply: (bb) => { bb.encounter.actorName = GILBERT.good; } });
-      else if (!b) out.tierNotes.push(`gilbert: ${GILBERT.beat} missing`);
+    // Gilbert: the whole Hidden Vault quest waits for Act 6 (L9, end of Part One)
+    const reqArr = (r) => Array.isArray(r) ? r : (r && typeof r === "object" ? [r] : []);
+    const isSP = (c) => c && typeof c === "object" && String(c.flag) === "storyPhase" && c.gte != null;
+    const hvBeats = (campaign.beats || []).filter(b => b && (String(b.story?.quest || "") === GILBERT.quest || GILBERT.beatRe.test(String(b.id || ""))));
+    if (!hvBeats.length) out.tierNotes.push(`gilbert: no ${GILBERT.quest} beats found`);
+    for (const b of hvBeats) {
+      const sp = reqArr(b.inject?.requires).filter(isSP);
+      if (sp.length && sp.every(c => Number(c.gte) >= GILBERT.act)) continue;
+      out.beatEdits.push({ beatId: b.id, what: `inject.requires storyPhase ${sp.length ? sp.map(c => c.gte).join("/") : "-"} → gte ${GILBERT.act}`, apply: (bb) => {
+        bb.inject = bb.inject || {};
+        const arr = reqArr(bb.inject.requires).map(c => clone(c));
+        let had = false;
+        for (const c of arr) if (isSP(c)) { had = true; if (!(Number(c.gte) >= GILBERT.act)) c.gte = GILBERT.act; }
+        if (!had) arr.unshift({ flag: "storyPhase", gte: GILBERT.act });
+        bb.inject.requires = arr;
+      } });
     }
     {
-      if (!beatById.has(MAARG.gauntlet)) out.beatsAdd.push(gauntletBeat());
-      const b = beatById.get(MAARG.beat);
-      const ci = (b?.choices || []).findIndex(c => MAARG.choiceLabel.test(String(c?.label || "")));
-      if (ci >= 0 && !String(b.choices[ci].next || "").trim())
-        out.beatEdits.push({ beatId: MAARG.beat, what: `choice "${b.choices[ci].label}" next → ${MAARG.gauntlet}`, apply: (bb) => { bb.choices[ci].next = MAARG.gauntlet; } });
-      else if (ci < 0) out.tierNotes.push(`maarg: no "Run the gauntlet" choice on ${MAARG.beat}`);
-      const f = beatById.get(MAARG.failBeat);
-      const fi = (f?.choices || []).findIndex(c => String(c?.label || "") === "So be it");
-      if (fi >= 0 && !String(f.choices[fi].next || "").trim())
-        out.beatEdits.push({ beatId: MAARG.failBeat, what: `choice "So be it" next → ${MAARG.gauntlet}`, apply: (bb) => { bb.choices[fi].next = MAARG.gauntlet; } });
+      const q = campaign.story?.quests?.[GILBERT.quest];
+      if (!q) out.tierNotes.push(`gilbert: campaign.story.quests.${GILBERT.quest} missing — the code default act applies`);
+      else if (!(Number(q.act) >= GILBERT.act))
+        out.storyEdits.push({ key: GILBERT.quest, what: `story.quests.${GILBERT.quest}.act ${q.act} → ${GILBERT.act}`, apply: (c) => { c.story.quests[GILBERT.quest].act = GILBERT.act; } });
     }
+    for (const [id, fx] of Object.entries(GILBERT.names)) {
+      const b = beatById.get(id); if (!b) { out.tierNotes.push(`gilbert: ${id} missing`); continue; }
+      const cur = String(b.encounter?.actorName ?? "");
+      const tierOff = fx.tier != null && Number(b.encounter?.tier) !== fx.tier;
+      if (cur === fx.to && !tierOff) continue;
+      if (cur !== fx.to && !fx.from.includes(cur)) { out.tierNotes.push(`gilbert: ${id} actorName is "${cur}" — not the known bad name, left alone`); continue; }
+      out.beatEdits.push({ beatId: id, what: `encounter.actorName "${cur}" → "${fx.to}"${tierOff ? `, tier ${b.encounter?.tier ?? "-"} → ${fx.tier}` : ""}`, apply: (bb) => {
+        bb.encounter = bb.encounter || {}; bb.encounter.actorName = fx.to; if (fx.tier != null) bb.encounter.tier = fx.tier;
+      } });
+    }
+    // Maarg shelved: the beats stay, parked the house way (patch-defer-expansion-2026-10-21) — an Act-9 gate appended (the acts
+    // run 0–6, so it never opens; lint P10 reads it as deferred), original requires kept on beat._deferred for a restore.
+    for (const b of (campaign.beats || [])) {
+      if (!b || !MAARG.re.test(String(b.id || "")) || b._deferred) continue;
+      out.beatEdits.push({ beatId: b.id, what: `shelved — inject.requires += storyPhase gte ${MAARG.gate} (original on _deferred)`, apply: (bb) => {
+        const hadInject = bb.inject != null; bb.inject = bb.inject || {};
+        const orig = bb.inject.requires ?? null;
+        bb._deferred = { requires: orig == null ? null : clone(orig), hadInject, at: "2026-11-13", why: "Maarg shelved (Dave 11-13)" };
+        bb.inject.requires = [...reqArr(orig).map(c => clone(c)), { flag: "storyPhase", gte: MAARG.gate }];
+      } });
+    }
+    out.tierNotes.push(`gilbert: T3 heavy at Act ${GILBERT.act} (L9 = Tier II budget) still reads one tier up on ENCOUNTER.rate — Dave's ruling, flagged`);
     return out;
   }
 
@@ -190,7 +235,7 @@
     let n = 0;
     const byId = new Map((campaign.beats || []).map(b => [b?.id, b]));
     for (const e of pl.beatEdits) { const b = byId.get(e.beatId); if (b) { e.apply(b); n++; } }
-    for (const b of pl.beatsAdd) { campaign.beats.push(b); n++; }
+    for (const e of pl.storyEdits) { e.apply(campaign); n++; }
     for (const r of pl.phaseRaise) { const row = tables[r.tableId].entries[r.index]; row.conditions = { ...(row.conditions || {}), phaseGte: r.to }; n++; }
     const byTable = {};
     for (const r of pl.rowsRemove) (byTable[r.tableId] = byTable[r.tableId] || new Set()).add(r.index);
@@ -230,14 +275,15 @@
   } catch (e) { console.warn("[road-tier-cleanup] pack index failed", e); }
 
   const pl = plan({ campaign, tables, nameTier });
-  const changes = pl.rowsRemove.length + pl.rowsAdd.length + pl.phaseRaise.length + pl.beatEdits.length + pl.beatsAdd.length;
+  const changes = pl.rowsRemove.length + pl.rowsAdd.length + pl.phaseRaise.length + pl.beatEdits.length + pl.storyEdits.length;
   const report = {
     DRY_RUN, campaignId, changes,
-    rowsRemoved: pl.rowsRemove.map(r => `${r.tableId}:${r.beatId} (w${r.row.weight}, phase ${r.row.conditions?.phaseGte ?? "-"}, foe T${r.foeTier})`),
+    rowsRemoved: pl.rowsRemove.map(r => `${r.tableId}:${r.beatId} (w${r.row.weight}, phase ${r.row.conditions?.phaseGte ?? "-"}, ${r.why === "shelved" ? "SHELVED" : `foe T${r.foeTier}`})`),
     rowsAdded: pl.rowsAdd.map(h => `${h.tableId}:${h.row.beatId} (w${h.row.weight}, phase ${h.row.conditions.phaseGte}${h.why === "mirror" ? ", alphaMirror" : ""}${h.row.conditions.terrains ? ", terrains " + h.row.conditions.terrains.join("/") : ""})`),
     phaseRaised: pl.phaseRaise.map(r => `${r.tableId}:${r.beatId} ${r.from ?? "-"}→${r.to}`),
     beatEdits: pl.beatEdits.map(e => `${e.beatId}: ${e.what}`),
-    beatsAdded: pl.beatsAdd.map(b => b.id),
+    storyEdits: pl.storyEdits.map(e => e.what),
+    maargRowsRemoved: pl.rowsRemove.filter(r => r.why === "shelved").length,
     mirrorsKept: pl.kept.length,
     notes: pl.tierNotes,
     gilbertInPack: packNames ? packNames.has(GILBERT.good) : "unverified",
@@ -247,7 +293,8 @@
   if (!DRY_RUN && changes) {
     const touched = new Set([...pl.beatEdits.map(e => e.beatId)]);
     const backup = { at: new Date().toISOString(), campaignId, encounterTables: tablesBefore,
-      beatsBefore: (campaign.beats || []).filter(b => touched.has(b?.id)).map(b => JSON.parse(JSON.stringify(b))), beatsAdded: pl.beatsAdd.map(b => b.id) };
+      beatsBefore: (campaign.beats || []).filter(b => touched.has(b?.id)).map(b => JSON.parse(JSON.stringify(b))),
+      storyQuestsBefore: Object.fromEntries(pl.storyEdits.map(e => [e.key, JSON.parse(JSON.stringify(campaign.story?.quests?.[e.key] ?? null))])) };
     try {
       const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const existing = (game.journal?.contents ?? []).filter(j => String(j.name).startsWith(BACKUP_NAME)).length;
@@ -259,6 +306,6 @@
   }
 
   globalThis.__roadTierCleanupReport = report;
-  console.log(`[road-tier-cleanup] ${DRY_RUN ? "DRY RUN" : "APPLIED"} — −${pl.rowsRemove.length} / +${pl.rowsAdd.length} rows, ${pl.phaseRaise.length} phase gates raised, ${pl.beatEdits.length} beat edits, ${pl.beatsAdd.length} beats added`, report);
-  ui.notifications?.info(`Road tables tier cleanup ${DRY_RUN ? "dry run" : "applied"}: ${changes} changes (−${pl.rowsRemove.length}/+${pl.rowsAdd.length} rows, ${pl.phaseRaise.length} phase gates, ${pl.beatEdits.length + pl.beatsAdd.length} beat fixes).`);
+  console.log(`[road-tier-cleanup] ${DRY_RUN ? "DRY RUN" : "APPLIED"} — −${pl.rowsRemove.length} / +${pl.rowsAdd.length} rows, ${pl.phaseRaise.length} phase gates raised, ${pl.beatEdits.length} beat edits, ${pl.storyEdits.length} story edits`, report);
+  ui.notifications?.info(`Road tables tier cleanup ${DRY_RUN ? "dry run" : "applied"}: ${changes} changes (−${pl.rowsRemove.length}/+${pl.rowsAdd.length} rows, ${pl.phaseRaise.length} phase gates, ${pl.beatEdits.length + pl.storyEdits.length} beat/story fixes).`);
 })();
