@@ -60,6 +60,8 @@
 !dnd5e-table-kit/**
 !combat-dock/
 !combat-dock/**
+!rigs-5e/
+!rigs-5e/**
 !bad-eden-5e/
 !bad-eden-5e/**
 # …except its built LevelDB packs (built from content/*.json by tools/build-packs.mjs)
