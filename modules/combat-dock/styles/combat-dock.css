@@ -173,3 +173,16 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 #bbttcc-combat-dock.is-placed .cd-row > .cd-end { margin-left: auto; }
 #bbttcc-combat-dock.is-placed .cd-row > .cd-target { max-width: 100%; }
 #bbttcc-combat-dock.is-placed .cd-row > .cd-target:has(.cd-tgt-none) { flex-basis: 100%; order: 10; }
+
+/* 11-12: collapsible sections — the row label is a toggle; a folded row is just its label + count. */
+.cd-fold { background: none; border: 1px solid transparent; border-radius: 4px; padding: 1px 4px; cursor: pointer; }
+.cd-fold:hover { border-color: var(--cd-line); color: var(--cd-gold); }
+.cd-fold i { width: 8px; }
+.cd-fold-n { display: inline-block; min-width: 14px; padding: 0 4px; border-radius: 7px; background: rgba(214, 178, 106, 0.2); color: var(--cd-gold); font-size: 9px; letter-spacing: 0; }
+.cd-group.is-folded { opacity: 0.85; }
+/* Saves + skills: compact chips. */
+.cd-group.is-rolls .cd-ab { height: 22px; padding: 1px 6px; background: rgba(30, 40, 52, 0.9); border-color: rgba(106, 176, 214, 0.35); }
+.cd-group.is-rolls .cd-ab:hover:not([disabled]) { border-color: var(--cd-blue); }
+.cd-group.is-rolls .cd-ab i { color: var(--cd-blue); }
+/* Out of combat: a calmer frame. */
+#bbttcc-combat-dock.is-ooc { border-color: rgba(106, 176, 214, 0.45); }

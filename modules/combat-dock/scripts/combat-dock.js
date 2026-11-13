@@ -56,6 +56,12 @@
       name: "Combat Dock", hint: "Show the Combat Dock (initiative, abilities, targeting) along the bottom of the screen during combat.",
       scope: "client", config: true, type: Boolean, default: true, onChange: () => render()
     });
+    // 11-12 (Dave): "have it always available, whether combat is active or not" — on by default for plain D&D
+    // (combat-dock module); off in Bad Eden worlds, which already have the player HUD out of combat.
+    game.settings.register(MOD, "combatDockAlways", {
+      name: "Combat Dock: show out of combat", hint: "Keep the dock up outside combat (abilities, saves, skills, Surge) for your character — or, for the GM, the selected token. The initiative / turn bar appears when a combat starts.",
+      scope: "client", config: true, type: Boolean, default: MOD === "combat-dock", onChange: () => render()
+    });
     game.settings.register(MOD, "combatDockHideBars", {
       name: "Combat Dock: fold Foundry's bars", hint: "Players: hide the macro bar and fold the sidebar while the Combat Dock is up.",
       scope: "client", config: true, type: Boolean, default: true, onChange: () => render()
@@ -144,7 +150,17 @@
     if (c.scene && canvas?.scene && c.scene.id !== canvas.scene.id) return null;
     return c;
   }
-  function subject() {
+  // 11-12: out of combat (setting combatDockAlways) the dock drives the player's character / the GM's selected token.
+  function oocSubject() {
+    if (!setting("combatDockAlways", false)) return null;
+    const actor = hud()?.getSteward?.();
+    if (!actor) return null;
+    if (game.user.isGM && !canvas?.tokens?.controlled?.length && !actor.hasPlayerOwner && actor !== game.user.character) return null;
+    const token = actor.getActiveTokens?.(true)?.find?.(t => t.scene?.id === canvas?.scene?.id) ?? actor.getActiveTokens?.()?.[0] ?? null;
+    return { actor, token: token?.document ? token : (token?.object ?? null), combatant: null, ooc: true };
+  }
+  function subject() { return combatSubject() ?? oocSubject(); }
+  function combatSubject() {
     const c = combatHere(); if (!c) return null;
     if (game.user.isGM) {
       const cur = c.combatant;
@@ -241,6 +257,31 @@
     return { kind: "use5e", item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "bolt", cost, aim, rangeFt, group: kind };
   }
 
+  // ── Saving throws + skill checks (dnd5e, 2026-11-12) ───────────────────
+  const sgn = (n) => (Number(n) >= 0 ? "+" : "") + (Number(n) || 0);
+  const PROF_MARK = (m) => (Number(m) >= 2 ? "◆" : Number(m) >= 1 ? "●" : Number(m) > 0 ? "◐" : "");
+  function rollGroups5e(actor) {
+    const out = [], sys = actor?.system ?? {};
+    const abil = CONFIG.DND5E?.abilities ?? {};
+    const saves = Object.keys(abil).filter(k => sys.abilities?.[k]).map(k => {
+      const a = sys.abilities[k];
+      const mod = a.save?.value ?? a.save ?? a.mod ?? 0;
+      const prof = a.saveProf?.multiplier ?? a.proficient ?? 0;
+      const name = abil[k]?.abbreviation ?? k;
+      return { kind: "roll5e", roll: "save", key: `save:${k}`, abil: k, label: `${String(name).toUpperCase()} ${sgn(mod)}${PROF_MARK(prof) ? ` ${PROF_MARK(prof)}` : ""}`,
+        tip: `${abil[k]?.label ?? k} saving throw (${sgn(mod)})${prof ? " — proficient" : ""}`, icon: "shield-halved", aim: "none", cost: null };
+    });
+    if (saves.length) out.push({ id: "saves", label: "Saves", entries: saves });
+    const skl = CONFIG.DND5E?.skills ?? {};
+    const skills = Object.entries(sys.skills ?? {}).filter(([k]) => skl[k]).map(([k, v]) => {
+      const tot = v.total ?? v.mod ?? 0;
+      return { kind: "roll5e", roll: "skill", key: `skill:${k}`, skill: k, label: `${skl[k].label} ${sgn(tot)}${PROF_MARK(v.value) ? ` ${PROF_MARK(v.value)}` : ""}`,
+        tip: `${skl[k].label} check (${sgn(tot)}) · passive ${v.passive ?? 10 + Number(tot)}${v.value >= 2 ? " — expertise" : v.value >= 1 ? " — proficient" : ""}`, icon: "dice-d20", aim: "none", cost: null };
+    }).sort((a, b) => a.label.localeCompare(b.label));
+    if (skills.length) out.push({ id: "skills", label: "Skills", entries: skills });
+    return out;
+  }
+
   function buildGroups(actor) {
     const H = hud(); if (!H || !actor) return [];
     const groups = [];
@@ -255,6 +296,7 @@
       const ab = [...(s.abilities ?? []), ...(s.ancestry ?? [])];
       if (ab.length) groups.push({ id: "ability", label: "Abilities", entries: ab.map(i => entry5e(i)) });
       if (s.items?.length) groups.push({ id: "items", label: "Items", entries: s.items.map(i => entry5e(i)) });   // 11-12: potions & scrolls last
+      groups.push(...rollGroups5e(actor));   // 11-12 (Dave): saving throws + skill checks
       return groups;
     }
     const s = H.collectSections?.(actor) ?? {};
@@ -453,6 +495,14 @@
   // ── Fire ───────────────────────────────────────────────────────────────
   async function fire(entry, s, tokens) {
     const H = hud(); const actor = s.actor;
+    // 11-12: saves / skill checks roll for the actor and leave the user's targets alone.
+    if (entry.kind === "roll5e") {
+      try {
+        const event = window.event;
+        if (entry.roll === "save") return await actor.rollSavingThrow?.({ ability: entry.abil, event });
+        return await actor.rollSkill?.({ skill: entry.skill, event });
+      } catch (e) { warn(`roll failed: ${entry.label}`, e); return; }
+    }
     // The dock owns the target list: what was picked, else nothing at all.
     setTargets(tokens ?? []);
     try {
@@ -568,6 +618,12 @@
   // ── Render ─────────────────────────────────────────────────────────────
   let _collapsed = false;
   const COLL_KEY = () => `bbttcc-combat-dock-collapsed:${game.user?.id ?? "anon"}`;
+  const FOLD_KEY = () => `combat-dock-folded:${game.user?.id ?? "anon"}`;
+  function foldedGroups() { try { return new Set(JSON.parse(window.localStorage?.getItem(FOLD_KEY()) || "[]")); } catch (_e) { return new Set(); } }
+  function toggleFold(gid) {
+    const f = foldedGroups(); f.has(gid) ? f.delete(gid) : f.add(gid);
+    try { localStorage.setItem(FOLD_KEY(), JSON.stringify([...f])); } catch (_e) {}
+  }
   let _hotkeys = [];  // [{entry, s}] in hotkey order
 
   function ribbonHTML(c, s) {
@@ -610,7 +666,7 @@
     } catch (_e) {}
     let move = "";
     const { budget, used } = movementOf(s);
-    if (budget > 0) {
+    if (budget > 0 && !s.ooc) {
       const left = Math.max(0, budget - used), pct = Math.round(left / budget * 100);
       move = `<span class="cd-move" data-tooltip="Movement left this turn — ${used} ft used of ${budget}"><i class="fas fa-shoe-prints"></i><span class="cd-move-bar"><span style="width:${pct}%"></span></span>${left} of ${budget} ft left</span>`;
     }
@@ -651,11 +707,16 @@
     const groups = buildGroups(s.actor);
     const offTurn = !myTurn && !game.user.isGM;
     const out = [];
+    const folded = foldedGroups();
     for (const g of groups) {
-      // Off your turn: what the engine lets you take then — Bonus (any time, ruling U4) and Reaction.
-      const shown = g.entries.filter(e => !offTurn || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed" || e.cost === "free");
+      // Off your turn: what the engine lets you take then — Bonus (any time, ruling U4) and Reaction. Saves / checks always.
+      const shown = g.entries.filter(e => !offTurn || e.kind === "roll5e" || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed" || e.cost === "free");
       if (!shown.length) continue;
-      out.push(`<div class="cd-group"><span class="cd-group-label">${esc(g.label)}</span>` + shown.map(e => {
+      // 11-12 (Dave): every section folds — click its label. Remembered per user.
+      const isFolded = folded.has(g.id);
+      const labelBtn = `<button type="button" class="cd-group-label cd-fold" data-dock="fold" data-g="${esc(g.id)}" data-tooltip="${isFolded ? "Show" : "Hide"} ${esc(g.label)}"><i class="fas fa-caret-${isFolded ? "right" : "down"}"></i> ${esc(g.label)}${isFolded ? ` <span class="cd-fold-n">${shown.length}</span>` : ""}</button>`;
+      if (isFolded) { out.push(`<div class="cd-group is-folded">${labelBtn}</div>`); continue; }
+      out.push(`<div class="cd-group ${g.id === "saves" || g.id === "skills" ? "is-rolls" : ""}">${labelBtn}` + shown.map(e => {
         const spent = e.cost && slotSpent(s.actor, e.cost);
         let hk = "";
         if (!spent && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
@@ -663,7 +724,7 @@
         const costTag = { action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]
           ? `<span class="cd-cost cd-cost-${e.cost}" ${e.cost === "mixed" ? `data-tooltip="${_mixTip}"` : ""}>${{ action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]}</span>` : "";
         const tip = e.item ? (hud()?.synopsisFor?.(e.item) ?? esc(e.label)) : `<b>${esc(e.label)}</b><br>${esc(e.tip ?? "")}`;
-        const aimTag = { area: "◎", self: "", none: "" }[e.aim] ?? "🎯";
+        const aimTag = e.kind === "roll5e" ? "" : ({ area: "◎", self: "", none: "" }[e.aim] ?? "🎯");
         return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""}" ${spent ? "disabled" : ""}
           data-dock="fire" data-g="${esc(g.id)}" data-k="${esc(e.item?.id ?? e.key)}" data-tooltip="${esc(tip)}">
           ${hk ? `<span class="cd-hk">${hk}</span>` : ""}${e.emoji ? `<span class="cd-emoji">${e.emoji}</span>` : `<i class="fas fa-${esc(e.icon)}"></i>`}
@@ -687,9 +748,10 @@
   const renderSoon = foundry.utils.debounce(() => renderNow(), 60);
   function renderNow() {
     const c = combatHere();
-    const s = c ? subject() : null;
-    const active = !!(c && s && setting("combatDock", true) && hud());
-    applyBars(active);
+    const s = subject();
+    const active = !!(s && setting("combatDock", true) && hud());
+    const inCombat = !!(c && active);
+    applyBars(inCombat);
     let dock = document.getElementById(DOCK_ID);
     if (!active) {
       dock?.remove();
@@ -709,14 +771,15 @@
     const myTurn = isMyTurn(s);
     dock.classList.toggle("is-myturn", myTurn);
     dock.classList.toggle("is-collapsed", _collapsed);
-    const canEnd = myTurn || game.user.isGM;
+    dock.classList.toggle("is-ooc", !inCombat);
+    const canEnd = inCombat && (myTurn || game.user.isGM);
     if (_collapsed) {
       dock.classList.remove("is-placed", "is-sized"); dock.style.width = dock.style.height = dock.style.left = dock.style.top = "";
-      dock.innerHTML = `<button type="button" class="cd-pill" data-dock="expand"><i class="fas fa-crosshairs"></i> Combat · R${c.round}${myTurn ? " · YOUR TURN" : ""}</button>`;
+      dock.innerHTML = `<button type="button" class="cd-pill" data-dock="expand"><i class="fas fa-crosshairs"></i> ${inCombat ? `Combat · R${c.round}${myTurn ? " · YOUR TURN" : ""}` : esc(s.actor.name)}</button>`;
       drawMoveRing(s);
       return;
     }
-    const hint = myTurn ? `<span class="cd-turn-flag">YOUR TURN</span>`
+    const hint = !inCombat ? "" : myTurn ? `<span class="cd-turn-flag">YOUR TURN</span>`
       : `<span class="cd-wait" data-tooltip="${game.user.isGM ? "" : "Off your turn: Bonus Action + Reaction abilities only"}">${esc(c.combatant?.name ?? "")}'s turn</span>`;
     // Queued: three chips inline, the rest behind a "+N" with the full list on hover.
     const q = queuedChips(s.actor);
@@ -729,7 +792,7 @@
     dock.innerHTML = `
       <div class="cd-row">
         <span class="cd-grip" data-dock-grip data-tooltip="Drag to move the dock · double-click to put it back at the bottom"><i class="fas fa-grip-vertical"></i></span>
-        ${ribbonHTML(c, s)}
+        ${inCombat ? ribbonHTML(c, s) : ""}
         <span class="cd-who"><img src="${esc(s.token?.document?.texture?.src || s.actor.img)}" alt=""> ${esc(s.actor.name)}</span>
         ${hint}
         ${slotsHTML(s)}
@@ -738,10 +801,10 @@
         <span class="cd-queued">${offerChips()}${queuedHTML}</span>
         ${game.bbttcc?.superMode && s.actor?.type === "character" ? `<button type="button" class="cd-super" data-dock="super" data-tooltip="Super Mode: call a Draw from the coalition's maneuvers — everyone pledges marks, it fires on your turn">✦ Draw</button>` : ""}
         ${canEnd ? `<button type="button" class="cd-end" data-dock="end"><i class="fas fa-forward"></i> End Turn</button>` : ""}
-        <button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>
+        ${!inCombat ? "" : `<button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>`}
         <button type="button" class="cd-icon" data-dock="collapse" data-tooltip="Shrink the dock"><i class="fas fa-chevron-down"></i></button>
       </div>
-      <div class="cd-abilities">${abilitiesHTML(s, myTurn)}</div>
+      <div class="cd-abilities">${abilitiesHTML(s, myTurn || !inCombat)}</div>
       <span class="cd-resize" data-dock-resize data-tooltip="Drag to resize"></span>`;
     applyLayout(dock);
     drawMoveRing(s);
@@ -835,6 +898,7 @@
       const s = subject(); if (!s) return;
       switch (b.dataset.dock) {
         case "fire": { const e = findEntry(s, b.dataset.g, b.dataset.k); if (e) activate(e, s); return; }
+        case "fold": toggleFold(b.dataset.g); return render();
         case "offer": {
           const o = _offers.get(b.dataset.offer); _offers.delete(b.dataset.offer); render();
           const msg = o ? game.messages?.get?.(o.msgId) : null; if (!msg) return;
@@ -1000,7 +1064,8 @@
     const el = document.querySelector(`#${DOCK_ID} .cd-target`);
     if (el) el.innerHTML = targetLineHTML(subject());
   });
-  Hooks.on("controlToken", () => { if (game.user.isGM) renderSoon(); });
+  // 11-12: out of combat the dock follows the selected token for everyone (players without an assigned character too).
+  Hooks.on("controlToken", () => { if (game.user.isGM || !combatHere()) renderSoon(); });
   Hooks.on("updateToken", (doc) => { const s = subject(); if (s?.token && doc.id === s.token.id) renderSoon(); });
   Hooks.on("refreshToken", (tok) => { const s = subject(); if (s?.token && tok.id === s.token.id) drawMoveRing(s); });
   Hooks.on("createChatMessage", (msg) => {
