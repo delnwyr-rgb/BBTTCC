@@ -6,7 +6,8 @@
 //
 //   any d20  bonusDie       → advantage on the next d20 test (one extra die, keep best)
 //   attack   advAttack      → advantage                     (Snap Strike)
-//            powerSurge     → + Prof to the attack roll      (Power Surge)
+//            powerSurge     → + Prof to the attack roll, SPENT on the attack (hit or miss), and
+//                             + Prof to THAT attack's damage only (Power Surge; RFI Tier Surge twin)
 //            finalArgument  → auto-hit (roll option read by automation.js), then
 //                             max damage + Prof on the following damage roll
 //   damage   doomstrike     → + Prof d6                       (Doomstrike)
@@ -16,6 +17,8 @@
 //            crowningBlow   → critical with maximised dice     (Crowning Blow)
 //            ignoreResists  → message flag; automation applies with resistance ignored
 //            pressHarder    → melee only: + Prof flat damage           (Aurablade: Press Harder)
+//            (RFI parity 11-13: the HIT riders — doomstrike, crowningBlow, finalArgument, ignoreResists,
+//             absorbStrike, pressHarder — stay armed when this activity's last attack is a known miss)
 //   save     autoSaveOnce   → the save is marked resisted (forced success)  (Iron Word)
 //
 // reactionMiss is consumed by automation.js when damage would be applied.
@@ -79,6 +82,7 @@ function onPostRollConfig(rolls, config) {
   delete config[PENDING];
   if ( !rolls?.length ) return;   // dialog closed: nothing rolled, nothing spent
   if ( p.keys.size ) consume(p.actor, ...p.keys);
+  if ( p.clearSurgeDamage ) clearSurgeDamage(p.actor);
   for ( const effect of p.effects ?? [] ) {
     if ( p.actor?.isOwner ) effect.delete().catch(err => console.warn(`${ID} | could not expire effect`, effect.name, err));
     else ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM"), speaker: { alias: "Table Kit" },
@@ -189,13 +193,19 @@ function onPreRollAttack(config) {
   const actor = actorOf(config.subject);
   if ( !actor ) return;
   applyEffectAttackModes(config, actor);
-  const got = pick(config, actor, ["advAttack"]);
+  const got = pick(config, actor, ["advAttack", "powerSurge"]);
   if ( got.has("advAttack") ) config.advantage = true;
   // surge repricing mirror 2026-11-13 (Dave: heals = Nd6 × PB; Tier → PB)
-  // Power Surge (the RFI Tier Surge twin) stays armed for its damage half, like Final Argument.
-  if ( armed(actor, "powerSurge") ) {
+  // RFI parity 11-13 (Dave): Tier Surge is consumed on the Strike whether it hits or misses
+  // (module.js _ftReadSurgeOneShots → consumed, not consumedOnHit). So Power Surge is SPENT on this
+  // attack roll; its +PB damage half is re-armed as a separate one-shot for THIS activity's damage
+  // (armSurgeDamage on dnd5e.rollAttackV2, once the roll exists and only if it isn't a known miss).
+  if ( got.has("powerSurge") ) {
+    const prof = profOf(actor);
     config.rolls ??= [{}];
-    config.rolls[0].parts = [...(config.rolls[0].parts ?? []), String(profOf(actor))];
+    config.rolls[0].parts = [...(config.rolls[0].parts ?? []), String(prof)];
+    foundry.utils.setProperty(config.rolls[0], `options.${ID}PowerSurge`, prof);
+    config[PENDING].notes.push(`Power Surge: + ${prof} to this attack (spent, hit or miss) and + ${prof} to its damage.`);
   }
   // Final Argument and Crowning Blow stay armed for their damage half; flag this attack as a sure hit.
   if ( armed(actor, "finalArgument") || armed(actor, "crowningBlow") ) {
@@ -212,11 +222,112 @@ function onPreRollSave(config, dialog, message) {
 }
 
 /* -------------------------------------------- */
+/*  Attack outcome + Power Surge damage half    */
+/* -------------------------------------------- */
+
+// RFI parity 11-13: last attack per actor → { activity uuid, hit: true | false | null (no target / unknown) }.
+const lastAttack = new Map();
+// Power Surge damage half: flags.dnd5e-table-kit.surgeDamage = { activity, item, bonus, at, combat, round, turn }.
+// `surgeLocal` mirrors it on this client so an auto-damage roll right after the attack sees it before the
+// flag update round-trips; `surgeUsed` remembers each claimed half (actor uuid | at) so a flag whose arm or
+// clear is still in flight can never be claimed twice (review 11-13: auto-damage claims the half before the
+// arm update lands, so a clear that only checked actor.flags was a no-op and the arm then left it re-claimable).
+const SURGE_DMG = "surgeDamage";
+const surgeLocal = new Map();
+const surgeUsed = new Set();
+const surgeKey = (actor, s) => `${actor.uuid}|${s?.at}`;
+const SURGE_DMG_TTL = 10 * 60 * 1000;   // out of combat nothing ends a turn, so a stale half lapses after 10 min
+
+function rollHits(roll, ac) {
+  if ( roll?.options?.[`${ID}AutoHit`] ) return true;
+  if ( roll?.isCritical ) return true;
+  if ( roll?.isFumble ) return false;
+  if ( (ac === null) || (ac === undefined) || !Number.isFinite(Number(ac)) ) return null;
+  return roll.total >= Number(ac);
+}
+
+/** true = hit at least one target, false = missed every known target, null = no target to judge by. */
+function attackOutcome(roll) {
+  const usage = game.messages?.get?.(roll?.options?.originatingMessage);
+  const targets = usage?.system?.targets?.length ? usage.system.targets
+    : [...(game.user?.targets ?? [])].map(t => ({ ac: t.actor?.system?.attributes?.ac?.value ?? null }));
+  if ( roll?.options?.[`${ID}AutoHit`] || roll?.isCritical ) return true;
+  if ( roll?.isFumble ) return false;
+  const res = targets.map(t => rollHits(roll, t.ac)).filter(r => r !== null);
+  if ( !res.length ) {
+    const t = Number(roll?.options?.target);
+    return Number.isFinite(t) && (roll?.total !== undefined) ? roll.total >= t : null;
+  }
+  return res.some(Boolean);
+}
+
+const combatStamp = () => {
+  const c = game.combat;
+  return c?.started ? { combat: c.id, round: c.round, turn: c.turn } : { combat: null, round: null, turn: null };
+};
+
+function surgeDamageOf(actor) {
+  if ( !actor ) return null;
+  const s = surgeLocal.get(actor.uuid) ?? actor.flags?.[ID]?.[SURGE_DMG];
+  if ( !s?.bonus || surgeUsed.has(surgeKey(actor, s)) ) return null;
+  const now = combatStamp();
+  if ( s.combat ) {   // armed in combat: lapses once that turn is over
+    if ( (s.combat !== now.combat) || (s.round !== now.round) || (s.turn !== now.turn) ) return null;
+  } else if ( (Date.now() - (s.at ?? 0)) > SURGE_DMG_TTL ) return null;
+  return s;
+}
+
+function armSurgeDamage(actor, data) {
+  surgeLocal.set(actor.uuid, data);
+  actor.update({ [`flags.${ID}.${SURGE_DMG}`]: data })
+    .catch(err => console.warn(`${ID} | could not arm Power Surge damage`, err));
+}
+
+function clearSurgeDamage(actor) {
+  if ( !actor ) return;
+  const local = surgeLocal.get(actor.uuid);
+  const flag = actor.flags?.[ID]?.[SURGE_DMG];
+  for ( const s of [local, flag] ) if ( s?.at ) surgeUsed.add(surgeKey(actor, s));
+  surgeLocal.delete(actor.uuid);
+  if ( !local && !flag ) return;   // an arm still in flight is covered by surgeUsed; the null update lands after it
+  actor.update({ [`flags.${ID}.${SURGE_DMG}`]: null })
+    .catch(err => console.warn(`${ID} | could not clear Power Surge damage`, err));
+}
+
+function onRollAttack(rolls, { subject: activity }={}) {
+  const actor = actorOf(activity);
+  const roll = rolls?.[0];
+  if ( !actor || !roll ) return;
+  const hit = attackOutcome(roll);
+  lastAttack.set(actor.uuid, { activity: activity.uuid, hit });
+  // A new attack ends the previous attack's unclaimed Power Surge damage ("THAT attack's damage only");
+  // a Power Surge attack that didn't miss outright re-arms the half for itself.
+  const bonus = Number(roll.options?.[`${ID}PowerSurge`]) || 0;
+  if ( bonus && (hit !== false) ) {
+    armSurgeDamage(actor, { activity: activity.uuid, item: activity.item?.uuid ?? null, bonus, at: Date.now(), ...combatStamp() });
+  }
+  else if ( surgeLocal.has(actor.uuid) || actor.flags?.[ID]?.[SURGE_DMG] ) clearSurgeDamage(actor);
+}
+
+/** Turn end: the active GM clears every combatant's unclaimed Power Surge damage. */
+function onUpdateCombat(combat, change) {
+  if ( !(("turn" in change) || ("round" in change)) ) return;
+  surgeLocal.clear();
+  if ( !game.users?.activeGM?.isSelf ) return;
+  for ( const c of combat.combatants ?? [] ) {
+    if ( c.actor?.flags?.[ID]?.[SURGE_DMG] ) clearSurgeDamage(c.actor);
+  }
+}
+
+/* -------------------------------------------- */
 /*  Damage                                      */
 /* -------------------------------------------- */
 
 const DAMAGE_KEYS = ["doomstrike", "surgingCast", "wrathCascade", "cinderwake", "crowningBlow", "finalArgument",
-  "ignoreResists", "absorbStrike", "pressHarder", "powerSurge"];
+  "ignoreResists", "absorbStrike", "pressHarder"];
+// RFI parity 11-13 (module.js consumedOnHit: sundering-blow, doomstrike, crowning-blow, final-argument, max-dice):
+// these wait for a HIT — a damage roll after this activity's known miss leaves them armed.
+const HIT_KEYS = new Set(["doomstrike", "crowningBlow", "finalArgument", "ignoreResists", "absorbStrike", "pressHarder"]);
 
 function onPreRollDamage(config, dialog, message) {
   const activity = config.subject;
@@ -225,12 +336,24 @@ function onPreRollDamage(config, dialog, message) {
   const isWeapon = activity?.item?.type === "weapon";
   const isMelee = activity?.attack?.type?.value === "melee";
   const meleeOnly = new Set(["absorbStrike", "pressHarder"]);
-  const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && (!meleeOnly.has(k) || isMelee));
+  const last = lastAttack.get(actor.uuid);
+  const knownMiss = (last?.activity === activity?.uuid) && (last.hit === false);
+  const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && (!meleeOnly.has(k) || isMelee)
+    && !(knownMiss && HIT_KEYS.has(k)));
   const got = pick(config, actor, keys);
-  if ( !got.size ) return;
+  // Power Surge's damage half belongs to the attack that spent it: this activity only, once.
+  const surge = surgeDamageOf(actor);
+  const surgeHere = !!surge && ((surge.activity === activity?.uuid) || (!!surge.item && (surge.item === activity?.item?.uuid)));
+  if ( !got.size && !surgeHere ) return;
 
   const plan = config[ID] = {};
   const prof = profOf(actor);
+  if ( surgeHere ) {
+    const p = config[PENDING] ??= { actor, keys: new Set(), notes: [] };
+    p.clearSurgeDamage = true;
+    plan.flat = (plan.flat ?? 0) + Number(surge.bonus);
+    got.add("powerSurge");
+  }
   if ( got.has("crowningBlow") || got.has("finalArgument") || got.has("cinderwake") ) plan.maximize = true;
   if ( got.has("crowningBlow") || got.has("finalArgument") ) {
     config.isCritical = true;
@@ -238,8 +361,7 @@ function onPreRollDamage(config, dialog, message) {
   }
   if ( got.has("doomstrike") ) plan.extra = `${prof}d6x`;   // sixes explode
   // Final Argument: + Prof d6, maximised and doubled with the critical (it lands after dnd5e's crit doubling).
-  if ( got.has("finalArgument") ) plan.flat = prof * 6 * 2;
-  if ( got.has("powerSurge") ) plan.flat = (plan.flat ?? 0) + prof;
+  if ( got.has("finalArgument") ) plan.flat = (plan.flat ?? 0) + (prof * 6 * 2);
   if ( got.has("pressHarder") ) plan.flat = (plan.flat ?? 0) + prof;
   if ( got.has("surgingCast") ) plan.maxOne = true;
   if ( got.has("wrathCascade") ) plan.reroll = true;
@@ -290,6 +412,8 @@ function onPostDamageConfig(rolls, config) {
 export function activateRiders() {
   Hooks.on("dnd5e.preRollD20TestV2", onPreRollD20);
   Hooks.on("dnd5e.preRollAttackV2", onPreRollAttack);
+  Hooks.on("dnd5e.rollAttackV2", onRollAttack);              // before automation's auto-damage (activated after)
+  Hooks.on("updateCombat", onUpdateCombat);
   Hooks.on("dnd5e.preRollSavingThrowV2", onPreRollSave);
   Hooks.on("dnd5e.preRollDamageV2", onPreRollDamage);
   Hooks.on("dnd5e.postDamageRollConfiguration", onPostDamageConfig);

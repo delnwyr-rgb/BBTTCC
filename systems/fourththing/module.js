@@ -18290,6 +18290,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
     }
     const adjustedTotal = roll.total - pulled + bonus;
+    // NPC automation (loose ends 2026-11-13): a "wouldFailSave" passSave rule (Fractured Will — "check or save") also
+    // flips a failed CHECK — only when the check has a DC (a sheet roll has none, so nothing knows it failed). Combat only.
+    let _npcRescueCheck = null;
+    if (Number.isFinite(Number(dc)) && dc !== null && dc !== "" && adjustedTotal < Number(dc)) {
+      try { _npcRescueCheck = (await game.fourththing.npcAuto?.rescueSave?.(actor, { attr: skill || attribute, caster: target?.actor ?? target ?? null, kind: "check" })) ?? null; }
+      catch (e) { console.warn("[fourththing] npcAuto rescueSave (check)", e); }
+    }
 
     const noteBits = [];
     if (explosions > 0) noteBits.push(`+${explosions} Surge banked`);
@@ -18326,7 +18333,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor:  `<div class="fourththing-roll"><h3>${_cardTitle}</h3>
-                <p><b>Formula:</b> ${totalHtml}</p>${noteHtml}</div>`
+                <p><b>Formula:</b> ${totalHtml}</p>${noteHtml}${_npcRescueCheck?.note ?? ""}</div>`
     });
 
     // Reality Tear pass — uses the adjusted total so Restraint actually muffles overshoot.
@@ -18336,7 +18343,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       });
 
       // Phase C trigger: fire on-skill-fail / on-skill-success when DC is known.
-      const passed = adjustedTotal >= Number(dc);
+      const passed = adjustedTotal >= Number(dc) || !!_npcRescueCheck;
       const event  = passed ? "on-skill-success" : "on-skill-fail";
       const tags   = [skill, attribute].filter(Boolean);
       // 2026-10-07 (regimen pass 7): payload carries the target and the roll's arguments so an Offer
@@ -23192,7 +23199,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (_adaptiveCS) {
           try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); } catch (_e) {}
         }
-        const saved = _adaptiveCS ? true : (roll.total >= dc);
+        // NPC automation (loose ends 2026-11-13): Fractured Will and kin flip a failed shake-off save too (combat only)
+        let _npcRescueCS = null;
+        if (!_adaptiveCS && roll.total < dc) {
+          try { _npcRescueCS = (await game.fourththing.npcAuto?.rescueSave?.(actor, { attr: attrKey })) ?? null; } catch (e) { console.warn("[fourththing] npcAuto rescueSave (shake-off)", e); }
+        }
+        const saved = (_adaptiveCS || _npcRescueCS) ? true : (roll.total >= dc);
         const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
         const headerColor = saved ? "#4fc3ff" : "#ff7b7b";
         const headerLabel = saved ? "SHAKEN OFF" : "STILL AFFLICTED";
@@ -23204,7 +23216,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               <span class="ft-total">${roll.total}</span>
               <span class="ft-outcome">vs DC ${dc}${explos > 0 ? ` · +${explos} Surge` : ""}</span>
             </div>
-            ${meta.itemName ? `<p style="margin:0.2rem 0 0;font-size:0.74rem;opacity:0.7">From: ${ftEscapeHtml(meta.itemName)}</p>` : ""}
+            ${meta.itemName ? `<p style="margin:0.2rem 0 0;font-size:0.74rem;opacity:0.7">From: ${ftEscapeHtml(meta.itemName)}</p>` : ""}${_npcRescueCS?.note ?? ""}
           </div>`
         });
         if (saved) {

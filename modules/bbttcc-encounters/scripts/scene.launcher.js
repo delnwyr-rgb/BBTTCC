@@ -1665,6 +1665,7 @@ async function showTextStep(step, ctx) {
     log("Playing scenario", scenario.key, { scenario, ctx });
 
     const spawner = getSpawner();
+    const spawnScenes = new Set();   // maps this scenario staged — its spawned foes leave at Apply Outcome (2026-11-13)
 
     for (let i = 0; i < scenario.steps.length; i++) {
       const step = scenario.steps[i];
@@ -1695,6 +1696,7 @@ async function showTextStep(step, ctx) {
 
 
 await activateScene(scene);
+spawnScenes.add(scene.id);
 
 // Campaign / external scenarios may request a simple actor drop-in without a dedicated spawnerKey.
 // If provided, we ask the spawner interface to place them (idempotent via spawnedBy flag).
@@ -1757,6 +1759,14 @@ if (
     const outcomeChoice = await promptOutcomeForScenario(scenario, ctx);
     if (outcomeChoice) {
       await recordOutcomeInWarLog(scenario, ctx, outcomeChoice);
+      // The outcome is called: the foes the spawner dropped for this scenario leave its maps (Dave 2026-11-13). Pre-placed
+      // tokens and the Stewards stay. A skipped outcome (or a campaign scenario with no outcome set) leaves them — the
+      // fight's beats, End Combat, or the ride settling clear those.
+      try {
+        if (spawner && typeof spawner.clearSpawned === "function" && spawnScenes.size) {
+          await spawner.clearSpawned({ sceneIds: [...spawnScenes], reason: `${scenario.label || scenario.key}: ${outcomeChoice.label || outcomeChoice.key}` });
+        }
+      } catch (eClr) { warn("Clearing spawned foes after the outcome failed (non-blocking)", eClr); }
     }
 
     await autoReturnToParentScene(ctx);

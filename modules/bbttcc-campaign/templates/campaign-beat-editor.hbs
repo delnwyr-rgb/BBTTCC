@@ -193,6 +193,21 @@
             <input type="checkbox" name="encounter-party" {{#if beat.encounter.party}}checked{{/if}} />
           </div>
         </div>
+        <fieldset class="bbttcc-enc-also" data-tour="beats.encounterAlso">
+          <legend data-tooltip="{{bbttccTip 'beats' 'encounterAlso'}}">Also on the field</legend>
+          <input type="hidden" name="encounter-also-present" value="1" />
+          {{#each beat.encounter.also as |x i|}}
+            <div class="bbttcc-enc-also-row" style="display:flex; gap:6px; align-items:center; margin:2px 0;">
+              <input type="text" name="encounter-also-name" value="{{x.actorName}}" placeholder="Actor name, e.g. Raider Marauder 1" style="flex:1;" />
+              <span>×</span>
+              <input type="number" name="encounter-also-count" value="{{x.count}}" min="1" max="8" step="1" placeholder="1" style="width:60px;" />
+              <button type="button" class="bbttcc-button" data-action="remove-encounter-also" data-index="{{i}}" title="Remove this foe">✕</button>
+            </div>
+          {{else}}
+            <p class="bbttcc-muted" style="margin:2px 0;">No extra foes — only the named actor above.</p>
+          {{/each}}
+          <button type="button" class="bbttcc-button" data-action="add-encounter-also"><i class="fas fa-plus"></i> Add a foe</button>
+        </fieldset>
         <p class="bbttcc-muted">
           Stored on <code>beat.encounter</code>. Runtime can use <code>key</code> + <code>tier</code> for encounter routing / scaling.
         </p>
@@ -968,7 +983,9 @@
           <select name="world-questfx-state">
             <option value="" {{#unless qfx.state}}selected{{/unless}}>(none)</option>
             <option value="seen" {{#if (eq qfx.state "seen")}}selected{{/if}}>seen</option>
+            <option value="active" {{#if (eq qfx.state "active")}}selected{{/if}}>active</option>
             <option value="completed" {{#if (eq qfx.state "completed")}}selected{{/if}}>completed</option>
+            {{#if qfx.state}}{{#unless (or (eq qfx.state "seen") (eq qfx.state "active") (eq qfx.state "completed"))}}<option value="{{qfx.state}}" selected>{{qfx.state}}</option>{{/unless}}{{/if}}
           </select>
         </div>
 

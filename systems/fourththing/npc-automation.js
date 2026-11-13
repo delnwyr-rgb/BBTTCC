@@ -29,13 +29,17 @@
  *             "enemyDamaged" an enemy within `radius` squares just took damage (do.damage: the "every wound articulate" auras)
  *             "wouldFailSave" the OWNER is about to fail a save (any save card / manifestation save / contest) — do.passSave:true
  *                          turns that failure into a success (Fractured Will and kin). Needs `limit` (default 1 per combat);
- *                          only fires inside a combat. 2026-11-13.
+ *                          only fires inside a combat. 2026-11-13. Loose ends (later 11-13): also its turn-end shake-off saves
+ *                          (module.js _ftShakeOffSaves) and its plain checks WITH a DC (rolls.attributeTest — a check rolled
+ *                          from the sheet has no DC, so nothing can know it failed; the GM reads it).
  *   if        { melee:true (the Strike's weapon is Melee / Unarmed — struck / attacked / hit; false = only ranged / thrown /
  *               non-weapon sources; 2026-11-13), firstRound, targetNotActed, allyAdjacentToTarget, targetTag:[…], targetCondition:[…], weapon:"<item name>",
  *               damageType:[…], ownerNotAttacked, ownerBloodied, ownerNotBloodied, targetBloodied, ownerAirborne, targetNotAirborne,
  *               ownerMovedSquares:N (moved ≥ N squares this turn),
  *               critical:true (the hit's best base die showed a 10) | maxDie:N, chance:0.1 (a 1-in-10 roll), ownerHidden:true }
- *   do        { reroll, condition:{key, duration, save:{attr, dc}}, save:{attr, dc, onSave}, damage:{formula, type, track?},
+ *   do        { reroll, condition:{key, duration, save:{attr, dc}, endsWith?}, save:{attr, dc, onSave}, damage:{formula, type, track?},
+ *                 (condition.endsWith:"<key>" — 2026-11-13: the condition also ends the moment the subject loses <key>
+ *                  (Engulf's Blinded ends with its Restrained). Without a save it is only applied while the subject HAS <key>.)
  *               dot:{formula, type, ends:"action"|"rounds"|"condition", rounds, condition}, radiation:N,
  *                 (ends:"condition" — 2026-11-13: the DoT ticks only while the subject still has `dot.condition` (default:
  *                  this rule's do.condition.key); the first turn start without it drops the DoT, no damage. Re-applying
@@ -62,7 +66,8 @@
  *   who       with `radius` on hit / saveFail / struck / bloodied / zero / selfTurnStart / use: the rule runs against EVERY
  *             combatant in range ("enemies" | "allies" | "all") — a burst
  *   narrative true — the rule is the GM-fiat tier on purpose (prompt only); the lint stops counting it as automation
- *   limit     { per: "round" | "combat" | "scene", uses: 1 }
+ *   limit     { per: "round" | "combat" | "scene", uses: 1 }   ("scene" = stamped with the Combat's Scene id, but the use record
+ *             lives on the Combat's flags, so a NEW combat starts fresh — in practice "scene" spans one fight, like "combat")
  *   recharge  (on a WEAPON's npcAuto) { mode: "d6", min: 5 } | { mode: "combat" } | { mode: "nextTurn" } (fires every other turn)
  *             — spent on use, rolled back at turn start
  *   requires  (on a WEAPON's npcAuto) { ownerBloodied: true } — the Strike is refused until the owner is at or below half (ULTIMATES)
@@ -109,6 +114,21 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     return tr ? !!tr.isMelee : ["melee", "unarmed"].includes(String(it.system?.category ?? "").toLowerCase().trim());
   };
   const hasCondition = (a, k) => !!k && !!((a?.system?.system ?? a?.system ?? {}).conditions?.[k]);
+  // ── condition.endsWith (2026-11-13): "<cond> ends when <with> ends" ───────────────────────────────────
+  // The link lives on the SUBJECT (flags.fourththing.npcAutoEndsWith = [{ cond, with, source }]). Every way a condition is
+  // removed lands as an actor update of system.conditions.<key> = false: toggleCondition (module.js game.fourththing.
+  // toggleCondition), the applied-state AE delete (module.js preDeleteActiveEffect hook), the turn-end shake-off save
+  // (module.js _ftShakeOffSaves → eff.delete()) and expiry. The updateActor hook below then deletes <cond>'s AE(s) from
+  // that same source item and drops the link.
+  const ENDS_FLAG = "npcAutoEndsWith";
+  async function linkEnds(target, cond, withKey, source) {
+    if (!target || !cond || !withKey || cond === withKey) return;
+    try {
+      const cur = Array.isArray(target.getFlag?.(MOD, ENDS_FLAG)) ? target.getFlag(MOD, ENDS_FLAG) : [];
+      if (cur.some(e => e.cond === cond && e.with === withKey && e.source === source)) return;
+      if (target.isOwner || game.user.isGM) await target.setFlag(MOD, ENDS_FLAG, [...cur, { cond, with: withKey, source }]);
+    } catch (e) { console.warn("[npc-automation] endsWith link", e); }
+  }
   const disp = (actor) => tokenOf(actor)?.document?.disposition ?? (actor?.type === "character" ? 1 : -1);
   const hostile = (a, b) => disp(a) !== disp(b);
 
@@ -116,11 +136,14 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
   function limitKey(item, rule) { return `${item.uuid}#${(item.flags[MOD].npcAuto.rules ?? []).indexOf(rule)}`; }
   // 2026-11-13: a wouldFailSave rule without a limit is 1 per combat — an unlimited auto-pass is never what the prose means
   const limitOf = (rule) => rule.limit ?? (rule.on === "wouldFailSave" ? { per: "combat", uses: 1 } : null);
+  // per:"scene" stamp (review 2026-11-13): the COMBAT's scene, not the viewing client's canvas — limitOk runs on a player seat
+  // (rescueSave) while limitSpend runs on the GM; two different viewed scenes never matched, so the limit never bit.
+  const sceneStamp = (c) => `${c?.scene?.id ?? canvas?.scene?.id}`;
   function limitOk(item, rule) {
     const lim = limitOf(rule); if (!lim) return true;
     const c = game.combat, used = c?.getFlag?.(MOD, "npcAutoUses") ?? {};
     const k = limitKey(item, rule), rec = used[k];
-    const stamp = lim.per === "round" ? `${c?.id}:${c?.round}` : lim.per === "combat" ? `${c?.id}` : `${canvas?.scene?.id}`;
+    const stamp = lim.per === "round" ? `${c?.id}:${c?.round}` : lim.per === "combat" ? `${c?.id}` : sceneStamp(c);
     return !rec || rec.stamp !== stamp || rec.n < (lim.uses ?? 1);
   }
   async function limitSpend(item, rule) {
@@ -128,7 +151,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     if (!lim || !game.combat || !game.user.isGM) return;
     const c = game.combat, used = foundry.utils.deepClone(c.getFlag(MOD, "npcAutoUses") ?? {});
     const k = limitKey(item, rule);
-    const stamp = lim.per === "round" ? `${c.id}:${c.round}` : lim.per === "combat" ? `${c.id}` : `${canvas?.scene?.id}`;
+    const stamp = lim.per === "round" ? `${c.id}:${c.round}` : lim.per === "combat" ? `${c.id}` : sceneStamp(c);
     used[k] = used[k]?.stamp === stamp ? { stamp, n: used[k].n + 1 } : { stamp, n: 1 };
     await c.setFlag(MOD, "npcAutoUses", used);
   }
@@ -221,11 +244,18 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
         const dr = d.damage?.formula ? toDr(d.damage) : { op: "none" };
         // npcAutoChained (2026-11-13): a card posted BY a saveFail rule never re-fires that rule when it fails (onSaveFail)
         await postSavePrompt(actor, target, item, mf, dr, { castDc: Number(d.condition.save.dc) || 13, npcAutoChained: rule.on === "saveFail" });
+        if (d.condition.endsWith) await linkEnds(target, d.condition.key, d.condition.endsWith, item.name);
         lines.push(`${tName}: ${esc(d.condition.save.attr)} DC ${d.condition.save.dc} or <b>${esc(d.condition.key)}</b> — save card posted`);
         return;   // damage (if any) rides the save card
       }
-      await game.fourththing.applyManifestationStates(actor, target, item, { appliedStates: { states: [d.condition.key], duration: d.condition.duration || "1-round" } }, { castDc: 15 });
-      lines.push(`${tName}: <b>${esc(d.condition.key)}</b>`);
+      // endsWith (2026-11-13): a condition that ends with another one only lands while the subject has that other one
+      if (d.condition.endsWith && !hasCondition(target, d.condition.endsWith)) {
+        lines.push(`${tName}: not ${esc(d.condition.endsWith)} — no <b>${esc(d.condition.key)}</b>`);
+      } else {
+        await game.fourththing.applyManifestationStates(actor, target, item, { appliedStates: { states: [d.condition.key], duration: d.condition.duration || "1-round" } }, { castDc: 15 });
+        if (d.condition.endsWith) await linkEnds(target, d.condition.key, d.condition.endsWith, item.name);
+        lines.push(`${tName}: <b>${esc(d.condition.key)}</b>${d.condition.endsWith ? ` while ${esc(d.condition.endsWith)}` : ""}`);
+      }
     }
     if (d.save && !d.condition && target) {   // save-for-damage aura (no condition)
       const mf = { resolution: { saveAttribute: d.save.attr || "soul", saveDcMode: "fixed", saveDcFixed: Number(d.save.dc) || 13, onSave: d.save.onSave || "negate" }, appliedStates: {} };
@@ -509,17 +539,18 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       await card(caster, item, lines, "#d8a24a");
     },
     /** 2026-11-13: the OWNER is about to fail a save → a "wouldFailSave" passSave rule (Fractured Will and kin) flips it.
-     *  Called from module.js _ftTargetResistFinish (every save card / manifestation save / contest target roll). Combat
+     *  Called from module.js _ftTargetResistFinish (every save card / manifestation save / contest target roll), the
+     *  turn-end shake-off save (_ftShakeOffSaves) and rolls.attributeTest when it has a DC (kind:"check"). Combat
      *  only; the rule's limit (default 1 per combat) is spent here — a player seat relays the spend to the GM.
      *  Returns { source, note } when it fires, else null. */
-    async rescueSave(target, { attr = "", caster = null } = {}) {
+    async rescueSave(target, { attr = "", caster = null, kind = "save" } = {}) {
       if (!on() || !target || !game.combat) return null;
       for (const { item, rule } of rulesOf(target, "wouldFailSave")) {
         if (!rule.do?.passSave) continue;
         if (!limitOk(item, rule) || !predicateOk(rule.if, { actor: target, target: caster, item })) continue;
         // a player seat (a Form hit save rolled on the attacker's client) can't write the Combat — the GM records the spend
         if (!relayToGM("spend", { itemUuid: item.uuid, ruleIndex: (item.flags[MOD].npcAuto.rules ?? []).indexOf(rule) })) await limitSpend(item, rule);
-        const note = `<p style="font-size:0.78rem;color:#c9a2ff;margin:0.2rem 0 0">⚙ ${esc(item.name)} — ${esc(target.name)} would have failed${attr ? ` the ${esc(attr)} save` : ""}; it holds instead.${rule.do.prompt ? ` <i>${esc(rule.do.prompt)}</i>` : ""}</p>`;
+        const note = `<p style="font-size:0.78rem;color:#c9a2ff;margin:0.2rem 0 0">⚙ ${esc(item.name)} — ${esc(target.name)} would have failed${attr ? ` the ${esc(attr)} ${kind === "check" ? "check" : "save"}` : ""}; ${kind === "check" ? "it succeeds" : "it holds"} instead.${rule.do.prompt ? ` <i>${esc(rule.do.prompt)}</i>` : ""}</p>`;
         return { source: item.name, note };
       }
       return null;
@@ -654,6 +685,23 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       }
       await actor.setFlag(MOD, "npcAutoFired", { ...fired, bloodied: combatKey });
     }
+  });
+
+  // ── condition.endsWith: the linked condition ends with its anchor (2026-11-13) ─────────────────────────
+  Hooks.on("updateActor", async (actor, changes) => {
+    if (!isPrimaryGM()) return;
+    const conds = foundry.utils.getProperty(changes, "system.conditions"); if (!conds || typeof conds !== "object") return;
+    const links = actor.getFlag?.(MOD, ENDS_FLAG); if (!Array.isArray(links) || !links.length) return;
+    const ended = Object.keys(conds).filter(k => conds[k] === false && !hasCondition(actor, k));
+    const fire = links.filter(e => ended.includes(e.with)); if (!fire.length) return;
+    const lines = [];
+    for (const e of fire) {
+      const aes = (actor.effects ?? []).filter(x => x.flags?.[MOD]?.condition === e.cond && (x.flags?.[MOD]?.appliedManifestation?.itemName ?? null) === e.source);
+      for (const ae of aes) { try { await ae.delete(); } catch (err) { console.warn("[npc-automation] endsWith delete", err); } }
+      if (aes.length) lines.push(`${esc(actor.name)} is no longer ${esc(e.with)} — ${esc(e.cond)} ends too`);
+    }
+    try { await actor.setFlag(MOD, ENDS_FLAG, links.filter(e => !fire.includes(e))); } catch (_e) {}
+    if (lines.length) await card(actor, { name: fire[0].source || "Condition" }, lines, "#4aa3d8");
   });
 
   // ── reactions: ward an ally about to take damage (bbttcc-core damage interceptor) ─────────────────────

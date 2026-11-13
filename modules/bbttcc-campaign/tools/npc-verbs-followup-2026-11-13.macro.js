@@ -3,7 +3,7 @@
  * verbs the engine gained on 2026-11-13 (systems/fourththing/npc-automation.js):
  *   - if.melee (struck / attacked / hit / attack)       → Inferno of Cruelty › Soulfire Form, Please-Stop-Hitting-Yourself › Reflect The Blow
  *   - dot.ends:"condition" + dot.condition             → Angel of Hollow Glory › Golden Chains, Abomination of Excess › Engulf
- *   - on:"wouldFailSave" + do.passSave:true             → every "Fractured Will (N/scene)" (N per combat; Gloomgill skipped —
+ *   - on:"wouldFailSave" + do.passSave:true             → every "Fractured Will (N/scene)" (N per scene — loose ends 11-13; Gloomgill skipped —
  *                                                         Dave 11-13: no longer a combat)
  *   - Satariel Veil-Spinner › Web of Deceit posted TWO save cards against an already-Restrained target (the weapon rider's
  *     Violence DC 12 → restrained + shaken, plus a hit rule's Soul DC 12 → shaken). Now ONE card: the hit rule goes, the rider
@@ -12,8 +12,8 @@
  * Engulf shape: runDo RETURNS right after posting a do.condition.save card (npc-automation.js ~:224), so a saveFail rule that
  * carries both a condition save and a dot never queues the dot (the 11-12 shape). The failed Restrained card (the use rule) IS
  * the engulfing, so the saveFail rule lands Blinded OUTRIGHT (no save key → applyManifestationStates, no second card) and then
- * queues 2d6 chemical with ends:"condition", condition:"restrained". Blinded is until-saved: the target shakes it off with its own
- * each-round save (Body vs the Abomination's formula DC, first turn skipped) — it does NOT end with Restrained (no verb for that).
+ * queues 2d6 chemical with ends:"condition", condition:"restrained". Loose ends (later 11-13): Blinded is duration "scene" +
+ * condition.endsWith:"restrained" — it ends the moment Restrained does (creature-loose-ends-2026-11-13.macro.js emits the same shape).
  *
  * The 11-12 fix macro (creature-audit-fixes-2026-11-12.macro.js) emits the same shapes now, so re-running it never undoes this.
  * Every fix reads the CURRENT data and only writes what differs: a second run = 0. Shapes that are neither the original, the
@@ -40,15 +40,21 @@
   // the 2026-11-13 shapes (kept identical to creature-audit-fixes-2026-11-12.macro.js)
   const FW_REMINDER_LABEL = "reminder (no engine verb yet)";
   const isFwReminder = na => isObj(na) && Array.isArray(na.rules) && na.rules.length > 0 && na.rules.every(r => r?.on === "selfTurnStart" && r.narrative && r.label === FW_REMINDER_LABEL) && !na.recharge && !na.requires;
-  const fwUses = name => { const m = String(name ?? "").match(/\(\s*(\d+)\s*\/\s*(scene|combat|encounter|fight)\s*\)/i); return m ? Math.max(1, Number(m[1])) : 1; };
-  const fwWant = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: "combat", uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
+  // loose ends 2026-11-13: "(N/scene)" → per:"scene" (creature-loose-ends-2026-11-13.macro.js); fwOld = the morning per-combat shape
+  const FW_RE = /\(\s*(\d+)\s*\/\s*(scene|combat|encounter|fight)\s*\)/i;
+  const fwUses = name => { const m = String(name ?? "").match(FW_RE); return m ? Math.max(1, Number(m[1])) : 1; };
+  const fwPer = name => { const m = String(name ?? "").match(FW_RE); return m && m[2].toLowerCase() === "scene" ? "scene" : "combat"; };
+  const fwWant = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: fwPer(name), uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
+  const fwOld = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: "combat", uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
   const SOULFIRE_RULE = () => ({ on: "struck", if: { melee: true }, label: "Soulfire Form", do: { damage: { formula: "2d6", type: "thermal" } } });
   const REFLECT_RULE = () => ({ on: "struck", if: { melee: true }, limit: { per: "round", uses: 1 }, label: "Reflect The Blow", do: { save: { attr: "mind", dc: 15, onSave: "negate" }, damage: { formula: "2d8", type: "qliphothic" } } });
   const CHAINS_DOT = (d) => ({ formula: d?.formula || "2d8", type: d?.type || "psychic", ends: "condition", condition: "restrained" });
   const ENGULF_NA = () => ({ v: 1, rules: [
     { on: "use", label: "Engulf — Violence DC 18 or engulfed", do: { condition: { key: "restrained", duration: "until-saved", save: { attr: "violence", dc: 18 } }, damage: { formula: "2d6", type: "chemical" } } },
-    { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded; 2d6 chemical each turn while Restrained", do: { condition: { key: "blinded", duration: "until-saved" }, dot: { formula: "2d6", type: "chemical", ends: "condition", condition: "restrained" } } }
+    { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded while Restrained; 2d6 chemical each turn while Restrained", do: { condition: { key: "blinded", duration: "scene", endsWith: "restrained" }, dot: { formula: "2d6", type: "chemical", ends: "condition", condition: "restrained" } } }
   ] });
+  // any earlier Engulf saveFail shape (scene Blinded / second Violence card / action DoT / until-saved Blinded without endsWith)
+  const oldEngulfRule = r => r?.on === "saveFail" && (!r.do?.condition?.endsWith || !!r.do?.condition?.save || (!!r.do?.dot && r.do.dot.ends !== "condition"));
   const oldStruck = (r, real) => r?.on === "struck" && r.if?.melee === undefined && (!!real(r) || !!r.narrative);
   const WEB_OLD_EFFECT = "On a hit the target is Restrained by shadow-silk (escape: Violence check vs DC 12). While Restrained, the web shows the target its worst fear wearing a familiar face: Resolve check vs DC 12 or Shaken while the web holds.";
   const WEB_NEW_EFFECT = "On a hit the target rolls Violence vs DC 12; on a failure it is Restrained by shadow-silk and Shaken — the web shows it its worst fear wearing a familiar face. Each round it can shake off the silk (Violence) and the fear (Resolve).";
@@ -90,7 +96,7 @@
       if (SKIP_FW.has(bn)) continue;
       const na = NA(it), want = fwWant(it.name);
       if (same(stripRuntime(na), want)) continue;
-      if (!na || isFwReminder(na)) setNA(it, want, `T34-M10 Fractured Will → on:"wouldFailSave" passSave, ${fwUses(it.name)} per combat (name: ${it.name})`);
+      if (!na || isFwReminder(na) || same(stripRuntime(na), fwOld(it.name))) setNA(it, want, `T34-M10 Fractured Will → on:"wouldFailSave" passSave, ${fwUses(it.name)} per combat (name: ${it.name})`);
       else if ((na.rules ?? []).some(r => r?.on === "wouldFailSave")) skip(it, `already a wouldFailSave rule (hand-tuned?) — left alone: ${JSON.stringify(na)}`);
       else skip(it, `unexpected npcAuto — left alone: ${JSON.stringify(na).slice(0, 300)}`);
     }
@@ -119,7 +125,7 @@
       }
       case "Abomination of Excess": {
         const en = I("Engulf"), na = NA(en); if (!en) break;
-        if (na?.rules?.some(r => r.on === "saveFail" && (r.do?.condition?.duration === "scene" || r.do?.condition?.save || (r.do?.dot && r.do.dot.ends !== "condition")))) setNA(en, ENGULF_NA(),
+        if (na?.rules?.some(oldEngulfRule)) setNA(en, ENGULF_NA(),
           "T34-M6 Engulf: saveFail lands Blinded outright (no second Violence card — runDo returned before the DoT) + 2d6 chemical while Restrained");
         else if (!same(stripRuntime(na), ENGULF_NA())) skip(en, `unexpected Engulf shape — left alone: ${JSON.stringify(na).slice(0, 300)}`);
         break;

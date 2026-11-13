@@ -51,8 +51,12 @@
   // 2026-11-13 engine-verb shapes (kept identical to npc-verbs-followup-2026-11-13.macro.js)
   const FW_REMINDER_LABEL = "reminder (no engine verb yet)";
   const isFwReminder = na => isObj(na) && Array.isArray(na.rules) && na.rules.length > 0 && na.rules.every(r => r?.on === "selfTurnStart" && r.narrative && r.label === FW_REMINDER_LABEL) && !na.recharge && !na.requires;
-  const fwUses = name => { const m = String(name ?? "").match(/\(\s*(\d+)\s*\/\s*(scene|combat|encounter|fight)\s*\)/i); return m ? Math.max(1, Number(m[1])) : 1; };
-  const fwWant = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: "combat", uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
+  // loose ends 2026-11-13: "(N/scene)" → per:"scene" (creature-loose-ends-2026-11-13.macro.js); fwOld = the morning per-combat shape
+  const FW_RE = /\(\s*(\d+)\s*\/\s*(scene|combat|encounter|fight)\s*\)/i;
+  const fwUses = name => { const m = String(name ?? "").match(FW_RE); return m ? Math.max(1, Number(m[1])) : 1; };
+  const fwPer = name => { const m = String(name ?? "").match(FW_RE); return m && m[2].toLowerCase() === "scene" ? "scene" : "combat"; };
+  const fwWant = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: fwPer(name), uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
+  const fwOld = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: "combat", uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
   const SOULFIRE_RULE = () => ({ on: "struck", if: { melee: true }, label: "Soulfire Form", do: { damage: { formula: "2d6", type: "thermal" } } });
   const REFLECT_RULE = () => ({ on: "struck", if: { melee: true }, limit: { per: "round", uses: 1 }, label: "Reflect The Blow", do: { save: { attr: "mind", dc: 15, onSave: "negate" }, damage: { formula: "2d8", type: "qliphothic" } } });
   const CHAINS_DOT = (d) => ({ formula: d?.formula || "2d8", type: d?.type || "psychic", ends: "condition", condition: "restrained" });
@@ -60,8 +64,10 @@
   // after posting a condition-save card, which is what ate the 11-12 DoT) and queues 2d6 chemical that lives while Restrained does.
   const ENGULF_NA = () => ({ v: 1, rules: [
     { on: "use", label: "Engulf — Violence DC 18 or engulfed", do: { condition: { key: "restrained", duration: "until-saved", save: { attr: "violence", dc: 18 } }, damage: { formula: "2d6", type: "chemical" } } },
-    { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded; 2d6 chemical each turn while Restrained", do: { condition: { key: "blinded", duration: "until-saved" }, dot: { formula: "2d6", type: "chemical", ends: "condition", condition: "restrained" } } }
+    { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded while Restrained; 2d6 chemical each turn while Restrained", do: { condition: { key: "blinded", duration: "scene", endsWith: "restrained" }, dot: { formula: "2d6", type: "chemical", ends: "condition", condition: "restrained" } } }
   ] });
+  // any earlier Engulf saveFail shape (scene Blinded / second Violence card / action DoT / until-saved Blinded without endsWith)
+  const oldEngulfRule = r => r?.on === "saveFail" && (!r.do?.condition?.endsWith || !!r.do?.condition?.save || (!!r.do?.dot && r.do.dot.ends !== "condition"));
   // an old (pre-verb) struck rule: no melee predicate, and either the original executing rule or the 11-12 narrative stand-in
   const oldStruck = (r, real) => r?.on === "struck" && r.if?.melee === undefined && (!!real(r) || !!r.narrative);
 
@@ -126,10 +132,10 @@
       setNA(it, { ...stripRuntime(na ?? {}), ...ULT(na) }, why);
     };
     const remindIfBare = (it, prompt, why) => { if (it && !NA(it)) setNA(it, remind(prompt), why); };
-    // 2026-11-13: Fractured Will = on:"wouldFailSave" do.passSave, N per combat from the name ("N/scene" → N per combat).
+    // 2026-11-13: Fractured Will = on:"wouldFailSave" do.passSave, N uses from the name, per:"scene" for "(N/scene)" (loose ends 11-13).
     // Bare items and the 11-12 reminder shape are upgraded; anything else (hand-edited) is left alone.
-    const fractured = (why = "T34-M10 Fractured Will → on:\"wouldFailSave\" passSave, N per combat from the name (engine verb 2026-11-13)") => {
-      for (const it of IRall(/^Fractured Will/)) { const na = NA(it); if (!na || isFwReminder(na)) setNA(it, fwWant(it.name), why); }
+    const fractured = (why = "T34-M10 Fractured Will → on:\"wouldFailSave\" passSave, N per scene/combat from the name (engine verb 2026-11-13)") => {
+      for (const it of IRall(/^Fractured Will/)) { const na = NA(it); if (!na || isFwReminder(na) || same(stripRuntime(na), fwOld(it.name))) setNA(it, fwWant(it.name), why); }
     };
     const hitSave = (it, attr, dc, why) => {   // M13 data route: a hit rule that posts the save card → the existing saveFail rule fires
       if (!it) return; const na = NA(it) ?? { v: 1, rules: [] };
@@ -375,7 +381,7 @@
       case "Abomination of Excess": {
         const en = I("Engulf"), na = NA(en);
         // the original (Blinded for the scene) and the 11-12 shape (second Violence card + action DoT that never queued) → ENGULF_NA
-        if (na?.rules?.some(r => r.on === "saveFail" && (r.do?.condition?.duration === "scene" || r.do?.condition?.save || (r.do?.dot && r.do.dot.ends !== "condition")))) setNA(en, ENGULF_NA(),
+        if (na?.rules?.some(oldEngulfRule)) setNA(en, ENGULF_NA(),
           "T34-M6 Engulf: Blinded lasted the scene, Restrained 1 round, no ongoing 2d6 — now Restrained until-saved (Violence 18), Blinded on the failure, 2d6 chemical while Restrained (11-13 verbs)");
         fractured();
         break;

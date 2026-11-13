@@ -90,6 +90,7 @@ const BEATS_HELP = {
   encounterTier: "Tier — forwarded as scenario metadata to the Encounter Engine; the beat runner itself ignores it. Whether it scales anything depends on the encounter engine.",
   encounterActorName: "Actor Name — the foe for a story fight. When the beat's scene comes up, bbttcc-encounters drops a hostile token of this actor (world actor first, then the NPC Pack) unless one is already there.",
   encounterCount: "How many — tops the scene up to this many hostiles of the named actor (1–8). Leave blank for one.",
+  encounterAlso: "Also on the field — extra foes beside the named actor (stored as beat.encounter.also = [{ actorName, count }]). When the beat's scene comes up, bbttcc-encounters tops the scene up to each count of hostiles of that name (1–8), the same way as the main actor. Clear a name (or ✕) to remove the row.",
   encounterParty: "Drop the Stewards — also place the coalition's Stewards on the beat's scene (story scenes don't get the travel party drop).",
 
   // Audio (injected panel, Core tab)
@@ -654,6 +655,36 @@ Hooks.once("init", () => {
 });
 
 // Story declaration (Layer 2b): parse the editor fields into beat.story or drop it when everything is blank.
+// beat.encounter from the Encounter section (2026-11-13). Starts from the STORED encounter and
+// overwrites only the fields the form actually rendered (`undefined` = not on the form → keep), so
+// fields the editor doesn't edit (and future ones) survive a Save. The old Save rebuilt the object
+// from five fields and silently dropped `also` (ft_camp_fight's raiders, the Elite beside Tor-Wrath).
+//   f = { key, tier, actorName, count, party, also: [{ actorName, count }] | undefined }
+function _encounterFromFields(stored, f = {}) {
+  const enc = (stored && typeof stored === "object" && !Array.isArray(stored)) ? foundry.utils.deepClone(stored) : { key: "", tier: null, actorName: "" };
+  if (f.key !== undefined) enc.key = String(f.key ?? "").trim() || null;
+  if (f.tier !== undefined) enc.tier = (f.tier === "" || f.tier == null) ? null : Math.max(0, Math.floor(_safeNum(f.tier, 0)));
+  if (f.actorName !== undefined) enc.actorName = String(f.actorName ?? "").trim() || null;
+  if (f.count !== undefined) {
+    const n = Math.floor(_safeNum(f.count, 0));
+    // keep an explicit stored 1 (macros write count:1); blank / <1 clears it (runtime default = one)
+    if (n > 1 || (n === 1 && enc.count != null)) enc.count = Math.min(8, n); else delete enc.count;
+  }
+  if (f.party !== undefined) { if (f.party) enc.party = true; else delete enc.party; }
+  if (Array.isArray(f.also)) {
+    const prev = Array.isArray(enc.also) ? enc.also : [];
+    const also = [];
+    f.also.forEach((row, i) => {
+      const nm = String(row?.actorName ?? "").trim(); if (!nm) return; // blank name = remove the row
+      const n = Math.max(1, Math.min(8, Math.floor(_safeNum(row?.count, 1)) || 1));
+      const base = (prev[i] && typeof prev[i] === "object") ? prev[i] : {};
+      also.push({ ...base, actorName: nm, count: n }); // unknown per-row keys ride along
+    });
+    if (also.length) enc.also = also; else delete enc.also;
+  }
+  return enc;
+}
+
 function _storyFromFields({ quest, chapter, role, ending, alsoStarts, alsoEnds }) {
   const parseList = (txt, withEnding) => String(txt || "").split(",").map(x => x.trim()).filter(Boolean).map(tok => {
     let ending = null; if (withEnding && tok.includes("=")) { const [l, r] = tok.split("="); tok = l.trim(); ending = r.trim() || null; }
@@ -782,6 +813,12 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
     const beatTypes = ["scene_transition", "dialog", "skill_scene", "encounter", "travel", "outcome_trigger", "custom", "cinematic"];
     const timeScales = ["moment", "scene", "leg", "turn", "arc", "campaign"];
+    // Save round-trip guard (2026-11-13): a <select> whose stored value is not among its options
+    // renders with the FIRST option selected, and Save then writes that option back — 185 "narration"
+    // + 12 "exploration" beats would have become scene_transition on any Save. Keep the stored value.
+    for (const [list, v] of [[beatTypes, this.beat.type], [timeScales, this.beat.timeScale]]) {
+      const sv = String(v || "").trim(); if (sv && !list.includes(sv)) list.push(sv);
+    }
 
     // Turn number dropdown (best-effort): offer 1..maxTurn found in the campaign so far.
     // If no campaign data is available, fall back to 1..20.
@@ -964,6 +1001,12 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     } catch (e) {
       questOptions = [];
     }
+    // Save round-trip guard: a stored quest link (beat.questId or a Quest Effects row) that the registry
+    // doesn't list (yet) stays selectable — otherwise its <select> renders "(None)" and Save erases it.
+    for (const v of [this.beat.questId, ...(Array.isArray(this.beat.worldEffects?.questEffects) ? this.beat.worldEffects.questEffects.map(r => r?.questId) : [])]) {
+      const sq = String(v || "").trim();
+      if (sq && !questOptions.some(q => q.id === sq)) questOptions.push({ id: sq, name: `${sq} (not in the quest list)`, status: "unknown" });
+    }
 
     // Story declaration view (Layer 2b, 2026-09-21): every story quest the engine knows (shipped + this
     // campaign's data), their chapters, the derived default from the Quest link, and the current values.
@@ -983,6 +1026,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         out.alsoStarts = fmt(d.alsoStarts); out.alsoEnds = fmt(d.alsoEnds);
         out.chapters = out.chapters.map(c => ({ ...c, show: c.quest === (out.quest || out.derived?.quest || "") }));
       } catch (_e) {}
+      // Save round-trip guard: a stored story quest / chapter the QUEST_MAP doesn't list stays selected.
+      try {
+        if (out.quest && !out.quests.some(q => q.key === out.quest)) out.quests.push({ key: out.quest, name: `${out.quest} (not in the story map)`, act: 0 });
+        if (out.chapter && !out.chapters.some(c => c.key === out.chapter)) out.chapters.push({ quest: out.quest || out.derived?.quest || "", key: out.chapter, name: out.chapter, show: true });
+      } catch (_e2) {}
       return out;
     })();
 
@@ -3044,6 +3092,30 @@ _ensureWorldModifiersUI(html) {
       }
     });
 
+    // Encounter "also" foes (2026-11-13) — extra hostiles beside the named actor ([{ actorName, count }]).
+    html.find("[data-action='add-encounter-also']").on("click", ev => {
+      ev.preventDefault();
+      // the sync drops blank-name rows, so re-add any still-blank rows the GM already opened (Add twice = two rows)
+      let blanks = 0;
+      try { html.find(".bbttcc-enc-also-row [name='encounter-also-name']").each((_i, el) => { if (!String(el.value || "").trim()) blanks++; }); } catch (_e) {}
+      this._syncFormToBeat();
+      this.beat.encounter ??= { key: "", tier: null, actorName: "" };
+      this.beat.encounter.also = Array.isArray(this.beat.encounter.also) ? this.beat.encounter.also : [];
+      for (let k = 0; k <= blanks; k++) this.beat.encounter.also.push({ actorName: "", count: 1 });
+      this.render(false);
+    });
+    html.find("[data-action='remove-encounter-also']").on("click", ev => {
+      ev.preventDefault();
+      // Remove the ROW from the form first, then sync: the sync drops blank rows, so splicing the synced array by
+      // the rendered index could hit the wrong foe (rows [A, "", B] → ✕ on B would splice index 2 of [A, B]).
+      const row = ev.currentTarget?.closest?.(".bbttcc-enc-also-row");
+      if (!row) return;
+      row.remove();
+      this._syncFormToBeat();
+      if (Array.isArray(this.beat.encounter?.also) && !this.beat.encounter.also.length) delete this.beat.encounter.also;
+      this.render(false);
+    });
+
     // Actors
     html.find("[data-action='add-actor']").on("click", async (ev) => {
       ev.preventDefault();
@@ -3335,7 +3407,8 @@ _syncCoreFromForm() {
     const tpRaw = _val("input[name='timePoints']");
     if (tpRaw != null) {
       const tp = Number(tpRaw);
-      this.beat.timePoints = (tpRaw === "" || tpRaw == null) ? null : (isFinite(tp) ? Math.max(0, Math.floor(tp)) : null);
+      // fractional TP are real data (0.25 / 0.5 — the input steps by 0.5); flooring zeroed them
+      this.beat.timePoints = (tpRaw === "" || tpRaw == null) ? null : (isFinite(tp) ? Math.max(0, Math.round(tp * 100) / 100) : null);
     }
 
     // Turn assignment (injected)
@@ -3403,17 +3476,19 @@ _syncCoreFromForm() {
     // Encounter fields (rendered only when type=encounter; skip when absent)
     const encKey = _val("input[name='encounter-key']");
     if (encKey != null) {
-      this.beat.encounter ??= { key: "", tier: null, actorName: "" };
-      this.beat.encounter.key = String(encKey || "").trim() || null;
-      const encTier = _val("input[name='encounter-tier']");
-      this.beat.encounter.tier = (encTier === "" || encTier == null) ? null : Math.max(0, Math.floor(_safeNum(encTier, 0)));
-      const encActor = _val("input[name='encounter-actor-name']");
-      if (encActor != null) this.beat.encounter.actorName = String(encActor || "").trim() || null;
-      const encCount = _val("input[name='encounter-count']");
-      if (encCount != null) { const n = Math.floor(_safeNum(encCount, 0)); if (n > 1) this.beat.encounter.count = Math.min(8, n); else delete this.beat.encounter.count; }
-      if ($el.find("input[name='encounter-party']").length) {
-        if (_checked("input[name='encounter-party']")) this.beat.encounter.party = true; else delete this.beat.encounter.party;
-      }
+      const _u = (v) => (v == null ? undefined : v);
+      const hasAlso = $el.find("[name='encounter-also-present']").length > 0;
+      this.beat.encounter = _encounterFromFields(this.beat.encounter, {
+        key: encKey,
+        tier: _u(_val("input[name='encounter-tier']")),
+        actorName: _u(_val("input[name='encounter-actor-name']")),
+        count: _u(_val("input[name='encounter-count']")),
+        party: $el.find("input[name='encounter-party']").length ? _checked("input[name='encounter-party']") : undefined,
+        also: hasAlso ? $el.find(".bbttcc-enc-also-row").toArray().map(r => ({
+          actorName: r.querySelector("[name='encounter-also-name']")?.value ?? "",
+          count: r.querySelector("[name='encounter-also-count']")?.value ?? ""
+        })) : undefined
+      });
     }
 
     // Journal switches (entryId itself is maintained live by the picker)
@@ -3915,7 +3990,7 @@ _syncCoreFromForm() {
     const tpRaw = fd.get("timePoints");
     if (tpRaw === "" || tpRaw == null) this.beat.timePoints = null;
     else {
-      const tp = Math.floor(_safeNum(tpRaw, 0));
+      const tp = Math.round(_safeNum(tpRaw, 0) * 100) / 100; // keep 0.25 / 0.5 (was Math.floor → 0)
       this.beat.timePoints = Number.isFinite(tp) ? Math.max(0, tp) : null;
     }
 
@@ -3945,19 +4020,19 @@ _syncCoreFromForm() {
     } catch (_eQ) {}
 
     // Encounter (only applies when type=encounter)
-    if (this.beat.type === "encounter") {
-      const encKey = String(fd.get("encounter-key") || "").trim();
-      const encTierRaw = fd.get("encounter-tier");
-      const encTier = (encTierRaw === "" || encTierRaw == null) ? null : Math.max(0, Math.floor(_safeNum(encTierRaw, 0)));
-      const encActorName = String(fd.get("encounter-actor-name") || "").trim();
-      const encCount = Math.floor(_safeNum(fd.get("encounter-count"), 0));
-      this.beat.encounter = {
-        key: encKey || null,
-        tier: encTier,
-        actorName: encActorName || null,
-        ...(encCount > 1 ? { count: Math.min(8, encCount) } : {}),
-        ...(fd.get("encounter-party") ? { party: true } : {})
-      };
+    // Only when the Encounter section was actually rendered (it renders for the STORED type; a type
+    // switched in the dropdown without a re-render has no fields → keep the stored encounter whole).
+    if (this.beat.type === "encounter" && fd.has("encounter-key")) {
+      const _f = (name) => (fd.has(name) ? fd.get(name) : undefined);
+      const alsoNames = fd.getAll("encounter-also-name"), alsoCounts = fd.getAll("encounter-also-count");
+      this.beat.encounter = _encounterFromFields(this.beat.encounter, {
+        key: _f("encounter-key"),
+        tier: _f("encounter-tier"),
+        actorName: _f("encounter-actor-name"),
+        count: _f("encounter-count"),
+        party: !!fd.get("encounter-party"),           // checkbox: absent from FormData = unchecked
+        also: fd.has("encounter-also-present") ? alsoNames.map((nm, i) => ({ actorName: nm, count: alsoCounts[i] })) : undefined
+      });
     } else {
       // Preserve encounter payload if author temporarily switches type.
       this.beat.encounter ??= { key: "", tier: null, actorName: "" };

@@ -68,6 +68,9 @@ export function validateNpcAuto(na, where = "") {
       if (!CONDITIONS.includes(d.condition.key)) err(`${w}condition "${d.condition.key}"`);
       if (d.condition.duration && !DURATIONS.includes(d.condition.duration)) err(`${w}duration "${d.condition.duration}"`);
       if (d.condition.save && (!ATTRS.includes(d.condition.save.attr) || !(Number(d.condition.save.dc) > 0))) err(`${w}condition.save ${JSON.stringify(d.condition.save)}`);
+      // 2026-11-13 (loose ends): endsWith:"<key>" — the condition also ends when the subject loses <key>
+      if (d.condition.endsWith !== undefined && (!CONDITIONS.includes(d.condition.endsWith) || d.condition.endsWith === d.condition.key)) err(`${w}condition.endsWith "${d.condition.endsWith}" must be another condition key`);
+      for (const k of Object.keys(d.condition)) if (!["key", "duration", "save", "endsWith"].includes(k)) err(`${w}unknown condition.${k}`);
     }
     if (d.save && (!ATTRS.includes(d.save.attr) || !(Number(d.save.dc) > 0))) err(`${w}save ${JSON.stringify(d.save)}`);
     for (const k of ["damage", "dot"]) if (d[k]) {

@@ -401,8 +401,8 @@ import { playSpend, pop } from "./surge-fx.js";
       fiction: "Inevitable. The kind of strike fables remember.", fx: { tgt: "self", oneShot: "crowningBlow", auto: "Your next attack hits; its damage is a critical with maximised dice.", note: "Next attack auto-hits as a critical with maximized dice (GM applies)." } },
     { cost: 4, key: "rallying-cry", bucket: "heal", label: "Rallying Cry — heal allies within Prof×5 ft for 1d6 × Prof",
       fiction: "Your voice carries the life back into them.", fx: { tgt: "alliesProfSq", heal: "1d6*@prof" } },
-    { cost: 2, key: "power-surge", minProf: 3, bucket: "off", label: "Power Surge — next hit adds your Prof again to hit and to damage",
-      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", auto: "Your next attack adds your Proficiency Bonus again to the roll and to its damage.", note: "Next attack: + Proficiency Bonus to hit and + Proficiency Bonus damage (GM applies)." } },
+    { cost: 2, key: "power-surge", minProf: 3, bucket: "off", label: "Power Surge — next attack adds your Prof again to hit and to its damage (spent hit or miss)",   // RFI parity 11-13: Tier Surge is spent on the Strike
+      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", auto: "Your next attack adds your Proficiency Bonus again to the roll and to its damage — spent on that attack, hit or miss.", note: "Next attack: + Proficiency Bonus to hit and + Proficiency Bonus to that attack's damage; spent hit or miss (GM applies)." } },
     { cost: 3, key: "cinderwake", minProf: 6, bucket: "off", label: "Cinderwake — next damage roll: maximize all dice",
       fiction: "The dice run hot enough to leave scars.", fx: { tgt: "self", oneShot: "cinderwake", auto: "Your next damage roll is maximised.", note: "Next damage roll is maximized (GM applies)." } },
     { cost: 8, key: "final-argument", minProf: 6, bucket: "off", label: "Final Argument — next attack auto-hits as a critical: +Prof d6, every die maximised, ignores resistance",

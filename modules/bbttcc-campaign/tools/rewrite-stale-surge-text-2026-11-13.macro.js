@@ -46,6 +46,10 @@
     ["remembered-heal",  "an ally heals 1d8 + tier and gains DR.", "an ally heals 2d6 × tier and gains DR."],
     ["deepsalvage-heal", "restore an ally hard — 2d8 + tier integrity", "restore an ally hard — 3d6 × tier integrity"],
     ["shoulder-heal",    "heal an ally Tier d6;", "heal an ally 1d6 × Tier;"],
+    // Flank & Strike (sc-flank, loose ends 11-13): the code primes snap-strike (adds a die, keep best 2) + doomstrike
+    // (+Tier d6, sixes explode, consumed on a hit) — module.js _FT_SURGE_MENU sc-flank / the courier base spend
+    ["flank-strike",     "reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.",
+                         "reposition, then your next Strike adds a die (keep the best 2) <em>and</em> gains +Tier d6 (sixes explode; kept through a miss)."],
     // prices (menu cost now — module.js _FT_SURGE_MENU)
     ...[
       ["Bulwark Stance", 6, 3], ["Anchor", 5, 2], ["Mass Aegis", 8, 6], ["Sanctum", 9, 6],
