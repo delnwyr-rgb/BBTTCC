@@ -75,7 +75,18 @@
     if (Array.isArray(cb) && cb.some(g => g?.worn === true && g?.attribute === "intrigue" && Number(g?.bonus) < 0)) {
       u["flags.fourththing.passives.checkBonus"] = cb.filter(g => !(g?.worn === true && g?.attribute === "intrigue" && Number(g?.bonus) < 0));
     }
-    return { c, u, before: { guardBonus: s.guardBonus ?? 0, resolveBonus: s.resolveBonus ?? 0, evasionBonus: s.evasionBonus ?? 0, armorSlot: s.armorSlot ?? "", armorLine: s.armorLine ?? "", checkBonus: cb ?? null } };
+    // Item "⚙️ Defense Grant" AEs carry flags.fourththing.grant.<guard|resolve|evasion> rows that REPLACE the native
+    // numbers (_ftArmorStatRaw) — strip those rows (resists stay); an effect left with no rows is deleted. (added after
+    // the first apply on 2026-11-12: the native fields were right but the grant rows still overrode them.)
+    const GRANT_RE = /^flags\.fourththing\.grant\.(guard|resolve|evasion)$/;
+    const fx = [];
+    for (const e of (it.effects ?? [])) {
+      const ch = Array.from(e._source?.system?.changes ?? e._source?.changes ?? []);
+      if (!ch.some(c => GRANT_RE.test(String(c?.key ?? "")))) continue;
+      const keep = ch.filter(c => !GRANT_RE.test(String(c?.key ?? "")));
+      fx.push({ id: e.id, keep, before: ch });
+    }
+    return { c, u, fx, before: { guardBonus: s.guardBonus ?? 0, resolveBonus: s.resolveBonus ?? 0, evasionBonus: s.evasionBonus ?? 0, armorSlot: s.armorSlot ?? "", armorLine: s.armorLine ?? "", checkBonus: cb ?? null } };
   }
   function planWeapon(it) {
     if (!isTwoHandedFamily(it)) return null;
@@ -92,18 +103,24 @@
   async function handle(it, where) {
     const pa = planArmor(it), pw = planWeapon(it);
     const p = pa ?? pw; if (!p) return;
-    if (pa) report.rows.push({ where, name: it.name, slot: pa.c.slot, line: pa.c.line || "—", G: pa.c.guard, R: pa.c.resolve, was: `G${pa.before.guardBonus} R${pa.before.resolveBonus}`, change: Object.keys(pa.u).length ? "update" : "already" });
+    const fx = pa?.fx ?? [];
+    if (pa) report.rows.push({ where, name: it.name, slot: pa.c.slot, line: pa.c.line || "—", G: pa.c.guard, R: pa.c.resolve, was: `G${pa.before.guardBonus} R${pa.before.resolveBonus}`, change: (Object.keys(pa.u).length || fx.length) ? "update" : "already", grantRowsStripped: fx.length });
     if (pw) report.weapons.push({ where, name: it.name });
-    if (!Object.keys(p.u).length) return;
-    backup.push({ uuid: it.uuid, where, name: it.name, before: p.before });
-    if (!DRY_RUN) await it.update(p.u);
+    if (!Object.keys(p.u).length && !fx.length) return;
+    backup.push({ uuid: it.uuid, where, name: it.name, before: { ...p.before, effects: fx.map(f => ({ id: f.id, changes: f.before })) } });
+    if (DRY_RUN) return;
+    if (Object.keys(p.u).length) await it.update(p.u);
+    const upd = fx.filter(f => f.keep.length).map(f => ({ _id: f.id, "system.changes": f.keep }));
+    const del = fx.filter(f => !f.keep.length).map(f => f.id);
+    if (upd.length) await it.updateEmbeddedDocuments("ActiveEffect", upd);
+    if (del.length) await it.deleteEmbeddedDocuments("ActiveEffect", del);
   }
 
   try {
     // 1) Item compendiums
     for (const pack of game.packs.filter(p => p.documentName === "Item")) {
       const docs = await pack.getDocuments();
-      if (!docs.some(d => planArmor(d) || planWeapon(d))) continue;
+      if (!docs.some(d => planArmor(d) || planWeapon(d))) continue;   // planArmor is non-null for every armor doc
       const wasLocked = pack.locked;
       if (!DRY_RUN && wasLocked) await pack.configure({ locked: false });
       for (const d of docs) { try { await handle(d, `pack:${pack.collection}`); } catch (e) { report.errors.push(`${pack.collection} ${d.name}: ${e.message}`); } }
@@ -131,7 +148,7 @@
 
   if (!DRY_RUN && backup.length) {
     try {
-      await JournalEntry.create({ name: "Armor re-seed backup 2026-11-12", pages: [{ name: "before", type: "text",
+      await JournalEntry.create({ name: `Armor re-seed backup 2026-11-12${game.journal.getName("Armor re-seed backup 2026-11-12") ? " (pass 2)" : ""}`, pages: [{ name: "before", type: "text",
         text: { content: `<pre>${foundry.utils.escapeHTML ? foundry.utils.escapeHTML(JSON.stringify(backup, null, 1)) : JSON.stringify(backup, null, 1).replace(/</g, "&lt;")}</pre>` } }] });
     } catch (e) { report.errors.push(`backup journal: ${e.message}`); }
   }
