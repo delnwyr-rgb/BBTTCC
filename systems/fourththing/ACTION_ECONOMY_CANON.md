@@ -160,7 +160,7 @@ Elites sit between Standard NPC and Boss.
 
 ## 6. Bosses
 
-Bosses scale through manifestation budget and legendary actions, **not** action-count multiplication.
+Bosses scale through manifestation budget and the threat chassis (pools, Strikes), **not** action-count multiplication. **Legendary actions are RETIRED (Dave 2026-11-12: "There are no legendary actions")** — §6.3 is kept only as history; no engine ever shipped it.
 
 ### 6.1 Baseline
 
@@ -188,7 +188,7 @@ Replaces today's unlimited-cast loophole. Each `castManifestation` call by a bos
 
 **Stale state across sessions:** If a session ends with a boss mid-cast (e.g. 1/3 remaining), the slot persists. Next round-advance refills. Edge case acknowledged; not patched in Phase B core.
 
-### 6.3 Legendary Actions (T3+)
+### 6.3 Legendary Actions (T3+) — ⛔ RETIRED 2026-11-12 (never built; the chassis `legendary` row is removed)
 
 | Tier | Legendary Actions per round |
 | ---- | --------------------------- |
