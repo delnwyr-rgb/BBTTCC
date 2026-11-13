@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The matter is closed. There is no appeal.</em></p><p>a foe cannot take reactions and rolls its saves at disadvantage (the matter is closed)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Archivist</p>",
+      "value": "<p><em>The matter is closed. There is no appeal.</em></p><p>a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10 (the matter is closed)</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Archivist</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "ar-resjudicata",
       "surgeBucket": "off",
-      "surgeCost": 5,
+      "surgeCost": 3,
       "surgeTier": 4,
       "surgeClass": "Doctrine ▸ Archivist"
     },

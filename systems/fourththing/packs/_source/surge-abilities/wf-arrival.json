@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You were never going to die here. I won't allow it.</em></p><p>whisk a hurt ally clear: heal + DR equal to Tier + a freed reaction</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Heal · Tier 4+ · Route ▸ Wayfarer</p>",
+      "value": "<p><em>You were never going to die here. I won't allow it.</em></p><p>heal a hurt ally 3d6 × Tier + DR equal to Tier + a freed bonus action</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Heal · Tier 4+ · Route ▸ Wayfarer</p>",
       "chat": ""
     }
   },

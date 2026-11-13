@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>There will be no negotiation.</em></p><p>next Strike auto-hits, max damage, counts +1 Tier</p><p style=\"opacity:0.7\"><strong>10◆ Surge</strong> · Offense · Tier 4+ · General</p>",
+      "value": "<p><em>There will be no negotiation.</em></p><p>your next Strike auto-hits as a critical with +Tier d6: every die max, then the damage doubles; ignores resistances</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Offense · Tier 4+ · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "final-argument",
       "surgeBucket": "off",
-      "surgeCost": 10,
+      "surgeCost": 8,
       "surgeTier": 4,
       "surgeClass": "General"
     },

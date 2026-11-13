@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>The dice all remember at once.</em></p><p>every d10 in next roll explodes once free</p><p style=\"opacity:0.7\"><strong>6◆ Surge</strong> · Offense · Tier 2+ · General</p>",
+      "value": "<p><em>The dice all remember at once.</em></p><p>+2 exploding d10 on your next Strike, cast or save</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "wrath-cascade",
       "surgeBucket": "off",
-      "surgeCost": 6,
+      "surgeCost": 2,
       "surgeTier": 2,
       "surgeClass": "General"
     },

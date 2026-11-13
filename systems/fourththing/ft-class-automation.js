@@ -146,7 +146,17 @@ export function ftHeatBandsFor(actor) {
 // Band for the actor; pass `surge` to read a value other than the current bank
 // (e.g. the bank BEFORE a spend was paid).
 export function ftBurnBandFor(actor, surge = null) {
-  return getBurnBand(surge ?? ftGetBurn(actor), ftHeatBandsFor(actor));
+  const bands = ftHeatBandsFor(actor);
+  // Aura Unbound (surge repricing 2026-11-12, Dave): no longer refills the bank — instead you COUNT as Overheated
+  // (the top band) for the round you unbind. Stamp = flags.fourththing.aurablade.unbound {combatId, round, at}.
+  try {
+    const st = actor?.flags?.fourththing?.aurablade?.unbound;
+    const live = st && (st.combatId
+      ? (game.combat?.id === st.combatId && Number(game.combat?.round ?? 0) === Number(st.round ?? -1))
+      : (!game.combat?.started && Number.isFinite(Number(st.at)) && (Date.now() - Number(st.at)) <= 6000));
+    if (live && bands?.length) return bands[bands.length - 1];
+  } catch (_e) { /* fall through */ }
+  return getBurnBand(surge ?? ftGetBurn(actor), bands);
 }
 export const ftHeatBandFor = ftBurnBandFor;
 

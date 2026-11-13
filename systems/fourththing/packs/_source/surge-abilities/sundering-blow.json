@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>Whatever they call armor, it stops mattering for one breath.</em></p><p>next Strike ignores resistances</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · General</p>",
+      "value": "<p><em>Whatever they call armor, it stops mattering for one breath.</em></p><p>your next Strike that hits ignores resistances (kept through a miss)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · General</p>",
       "chat": ""
     }
   },

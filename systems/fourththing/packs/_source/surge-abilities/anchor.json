@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You both refuse the verbs they're trying to apply.</em></p><p>you + one ally immune to forced move / CC till next round</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 3+ · Bulwark</p>",
+      "value": "<p><em>You both refuse the verbs they're trying to apply.</em></p><p>you + one ally immune to forced move / CC till next round</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 3+ · Bulwark</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "anchor",
       "surgeBucket": "def",
-      "surgeCost": 5,
+      "surgeCost": 2,
       "surgeTier": 3,
       "surgeClass": "Bulwark"
     },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>allies within 30 ft +1 to checks till your next turn</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Harmony Marshal</p>",
+      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>you and allies within 6 squares each bank a reroll</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Harmony Marshal</p>",
       "chat": ""
     }
   },

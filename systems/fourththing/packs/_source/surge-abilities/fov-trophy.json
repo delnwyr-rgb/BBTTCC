@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You forge a weapon from the kill, and it remembers how to bite.</em></p><p>your next Strike +tier d6 + an ally gains DR</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Forge ▸ Victory</p>",
+      "value": "<p><em>You forge a weapon from the kill, and it remembers how to bite.</em></p><p>your next Strike +Tier d6 (sixes explode, kept through a miss) + an ally gains DR</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Forge ▸ Victory</p>",
       "chat": ""
     }
   },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You belong here now. Argue with the mountain.</em></p><p>you + adjacent allies gain DR equal to Tier and cannot be forcibly moved</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Bulwark ▸ Mountain</p>",
+      "value": "<p><em>You belong here now. Argue with the mountain.</em></p><p>you + adjacent allies gain DR equal to Tier; you cannot be forcibly moved</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Bulwark ▸ Mountain</p>",
       "chat": ""
     }
   },

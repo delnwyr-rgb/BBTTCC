@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>Remember what you were before the wound. Be that now.</em></p><p>restore self/ally from defeated to half integrity (1 / raid)</p><p style=\"opacity:0.7\"><strong>10◆ Surge</strong> · Heal · General</p>",
+      "value": "<p><em>Remember what you were before the wound. Be that now.</em></p><p>restore a defeated self/ally to half Integrity and half Stress (1/raid)</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Heal · Tier 3+ · General</p>",
       "chat": ""
     }
   },
@@ -25,8 +25,8 @@
     "fourththing": {
       "surgeKey": "phoenix",
       "surgeBucket": "heal",
-      "surgeCost": 10,
-      "surgeTier": 1,
+      "surgeCost": 8,
+      "surgeTier": 3,
       "surgeClass": "General"
     },
     "autoanimations": {

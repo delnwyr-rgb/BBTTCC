@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Hard to hit a thing that won't hold still.</em></p><p>DR equal to Tier till your next turn; reposition out of danger</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 2+ · Shadow Courier</p>",
+      "value": "<p><em>Hard to hit a thing that won't hold still.</em></p><p>DR equal to Tier till your next turn; reposition out of danger</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Shadow Courier</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "sc-ghost",
       "surgeBucket": "def",
-      "surgeCost": 3,
+      "surgeCost": 2,
       "surgeTier": 2,
       "surgeClass": "Shadow Courier"
     },

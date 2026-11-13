@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Something gives way. You aim where.</em></p><p>your next Strike erupts (+Tier d6 exploding) and knocks the target back</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Bulwark ▸ Cataclyst</p>",
+      "value": "<p><em>Something gives way. You aim where.</em></p><p>your next Strike +Tier d6 (sixes explode, kept through a miss) and knocks the target back (GM resolves the push)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Bulwark ▸ Cataclyst</p>",
       "chat": ""
     }
   },

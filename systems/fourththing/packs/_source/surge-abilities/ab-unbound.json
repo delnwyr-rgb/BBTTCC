@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You stop holding it in. Everyone nearby feels the warmth.</em></p><p>enter Overheated (Burn 4); your Aura actions cost no Burn this round; allies within 2 squares gain DR equal to Tier</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 4+ · Aurablade</p>",
+      "value": "<p><em>You stop holding it in. Everyone nearby feels the warmth.</em></p><p>you count as Overheated this round and the overheat can't touch you; allies within 2 squares gain DR equal to Tier (1/fight)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 4+ · Aurablade</p>",
       "chat": ""
     }
   },

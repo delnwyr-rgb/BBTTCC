@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>Something between you and the world refuses the harm.</em></p><p>resistance to one damage type this round</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 2+ · General</p>",
+      "value": "<p><em>Something between you and the world refuses the harm.</em></p><p>resistance to one damage type this round</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 2+ · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "steel-veil",
       "surgeBucket": "def",
-      "surgeCost": 5,
+      "surgeCost": 3,
       "surgeTier": 2,
       "surgeClass": "General"
     },

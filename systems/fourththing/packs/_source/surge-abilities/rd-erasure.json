@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Struck from the sentence. The room forgets it was ever a threat.</em></p><p>a foe is Staggered, cannot take reactions, and rolls saves at disadvantage</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Redactor</p>",
+      "value": "<p><em>Struck from the sentence. The room forgets it was ever a threat.</em></p><p>a foe is Staggered, cannot take reactions, and rolls saves keeping the lowest 2 of 3d10</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Redactor</p>",
       "chat": ""
     }
   },

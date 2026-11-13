@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Two of you, both wrong, both safe.</em></p><p>you + an ally blur behind borrowed identities: both gain DR</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Trance ▸ Thousand Faces</p>",
+      "value": "<p><em>Two of you, both wrong, both safe.</em></p><p>you + an ally blur behind borrowed identities: both gain DR</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 3+ · Trance ▸ Thousand Faces</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "tf-shared",
       "surgeBucket": "def",
-      "surgeCost": 3,
+      "surgeCost": 2,
       "surgeTier": 3,
       "surgeClass": "Trance ▸ Thousand Faces"
     },

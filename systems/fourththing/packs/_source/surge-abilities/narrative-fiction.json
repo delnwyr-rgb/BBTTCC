@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>A small miracle. A door that wasn't there. A body that didn't quite fall.</em></p><p>one beat (GM-gated, 1/scene)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Narrative · General</p>",
+      "value": "<p><em>A small miracle. A door that wasn't there. A body that didn't quite fall.</em></p><p>one beat (GM-gated; the GM enforces 1/scene)</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Narrative · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "narrative-fiction",
       "surgeBucket": "narr",
-      "surgeCost": 5,
+      "surgeCost": 4,
       "surgeTier": 1,
       "surgeClass": "General"
     },

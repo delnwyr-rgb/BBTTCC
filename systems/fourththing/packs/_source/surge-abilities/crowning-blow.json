@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>Inevitable. The kind of strike fables remember.</em></p><p>next Strike is a max-die critical hit</p><p style=\"opacity:0.7\"><strong>7◆ Surge</strong> · Offense · Tier 3+ · General</p>",
+      "value": "<p><em>Inevitable. The kind of strike fables remember.</em></p><p>your next Strike auto-hits as a critical: every damage die shows max, then the damage doubles</p><p style=\"opacity:0.7\"><strong>7◆ Surge</strong> · Offense · Tier 3+ · General</p>",
       "chat": ""
     }
   },

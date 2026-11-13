@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The terms are not negotiable. Neither are you.</em></p><p>a foe is Staggered and rolls its saves at disadvantage till your next turn</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Pactkeeper</p>",
+      "value": "<p><em>The terms are not negotiable. Neither are you.</em></p><p>a foe is Staggered and rolls its saves keeping the lowest 2 of 3d10 till your next turn</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Pactkeeper</p>",
       "chat": ""
     }
   },

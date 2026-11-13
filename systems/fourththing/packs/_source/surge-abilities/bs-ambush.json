@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You came through a door that wasn't for them.</em></p><p>your next Strike +Tier d6; the target's next attack is at disadvantage</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Route ▸ Black Stair</p>",
+      "value": "<p><em>You came through a door that wasn't for them.</em></p><p>your next Strike +Tier d6 (sixes explode, kept through a miss); the target's next attack keeps the lowest 2 of 3d10</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Route ▸ Black Stair</p>",
       "chat": ""
     }
   },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You do not stop. They learn this the hard way.</em></p><p>your next Strike +Tier d6 and the target is knocked Prone</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Bulwark ▸ Avalanche</p>",
+      "value": "<p><em>You do not stop. They learn this the hard way.</em></p><p>your next Strike +Tier d6 (sixes explode, kept through a miss) and the target is knocked Prone</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Bulwark ▸ Avalanche</p>",
       "chat": ""
     }
   },

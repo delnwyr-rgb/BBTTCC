@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The light remembers what it was given to hold.</em></p><p>your weapon blazes with bound light: next Strike +tier d6</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 4+ · Forge ▸ Bound Light</p>",
+      "value": "<p><em>The light remembers what it was given to hold.</em></p><p>your weapon blazes with bound light: next Strike +Tier d6 (sixes explode, kept through a miss)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 4+ · Forge ▸ Bound Light</p>",
       "chat": ""
     }
   },

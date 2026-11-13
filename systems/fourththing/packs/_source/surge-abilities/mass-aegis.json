@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>+Tier to all defenses for allies within Tier squares this round</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Defense · Tier 3+ · Bulwark</p>",
+      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>+Tier to all defenses for allies within Tier squares this round</p><p style=\"opacity:0.7\"><strong>6◆ Surge</strong> · Defense · Tier 3+ · Bulwark</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "mass-aegis",
       "surgeBucket": "def",
-      "surgeCost": 8,
+      "surgeCost": 6,
       "surgeTier": 3,
       "surgeClass": "Bulwark"
     },

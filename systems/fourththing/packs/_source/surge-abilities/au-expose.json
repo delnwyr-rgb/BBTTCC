@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>I've seen the real ledger. You're overdrawn.</em></p><p>your next Strike or manifestation deals +Tier d6 (the hidden cost comes due)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Doctrine ▸ Auditor</p>",
+      "value": "<p><em>I've seen the real ledger. You're overdrawn.</em></p><p>your next Strike that hits deals +Tier d6, sixes explode (the hidden cost comes due)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Doctrine ▸ Auditor</p>",
       "chat": ""
     }
   },

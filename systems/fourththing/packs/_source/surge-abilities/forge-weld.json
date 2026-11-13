@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You lay hands on the breakage and will it whole.</em></p><p>repair an ally (1d8+tier, scales with forge heat)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Heal · Soul Smith</p>",
+      "value": "<p><em>You lay hands on the breakage and will it whole.</em></p><p>repair an ally 1d6 × Tier (×1.5 Stoked, ×2 Overheated; Overheated costs you 1d6 Stress)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Heal · Soul Smith</p>",
       "chat": ""
     }
   },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Laid bare. There is nowhere left to hide a single intention.</em></p><p>a foe cannot take reactions and rolls its saves at disadvantage</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Refraction ▸ Truth</p>",
+      "value": "<p><em>Laid bare. There is nowhere left to hide a single intention.</em></p><p>a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 4+ · Refraction ▸ Truth</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "tr-exposure",
       "surgeBucket": "off",
-      "surgeCost": 5,
+      "surgeCost": 3,
       "surgeTier": 4,
       "surgeClass": "Refraction ▸ Truth"
     },

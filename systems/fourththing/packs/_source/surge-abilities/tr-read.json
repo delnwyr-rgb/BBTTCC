@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>I see what you actually are.</em></p><p>a foe rolls its saves at disadvantage (you read it true)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Refraction ▸ Truth</p>",
+      "value": "<p><em>I see what you actually are.</em></p><p>a foe rolls its saves keeping the lowest 2 of 3d10 (you read it true)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Refraction ▸ Truth</p>",
       "chat": ""
     }
   },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Every structure has a flaw. You only have to look at it correctly.</em></p><p>a foe's next attack and its saves are at disadvantage (read the seam)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Wyrdlens Adept</p>",
+      "value": "<p><em>Every structure has a flaw. You only have to look at it correctly.</em></p><p>a foe's next attack and its saves keep the lowest 2 of 3d10 (read the seam)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Wyrdlens Adept</p>",
       "chat": ""
     }
   },

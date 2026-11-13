@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The lie stops working the moment it is named.</em></p><p>a foe is Staggered and its next attack is at disadvantage</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Refraction ▸ Truth</p>",
+      "value": "<p><em>The lie stops working the moment it is named.</em></p><p>a foe is Staggered and its next attack keeps the lowest 2 of 3d10</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Refraction ▸ Truth</p>",
       "chat": ""
     }
   },

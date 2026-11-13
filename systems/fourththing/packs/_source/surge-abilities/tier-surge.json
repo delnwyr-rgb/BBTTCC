@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>You reach above your weight class for one moment.</em></p><p>next Strike OR Cast counts as one Tier higher</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Offense · Tier 3+ · General</p>",
+      "value": "<p><em>You reach above your weight class for one moment.</em></p><p>next Strike: +Tier to hit and +Tier damage; next Cast: +Tier to the roll</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · General</p>",
       "chat": ""
     }
   },
@@ -25,8 +25,8 @@
     "fourththing": {
       "surgeKey": "tier-surge",
       "surgeBucket": "off",
-      "surgeCost": 8,
-      "surgeTier": 3,
+      "surgeCost": 2,
+      "surgeTier": 2,
       "surgeClass": "General"
     },
     "autoanimations": {

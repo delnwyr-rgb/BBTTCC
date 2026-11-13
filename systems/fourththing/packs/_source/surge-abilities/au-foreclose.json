@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Everything you have. It was never really yours.</em></p><p>your next Strike is a max-die crit and ignores resistances (the debt is called in full)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Auditor</p>",
+      "value": "<p><em>Everything you have. It was never really yours.</em></p><p>max damage dice on your next Strike and it ignores resistances (kept through a miss)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Auditor</p>",
       "chat": ""
     }
   },

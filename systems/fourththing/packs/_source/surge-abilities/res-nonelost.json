@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Not this one. Not today.</em></p><p>refuse a death: restore a fallen ally to half + ward (1/fight)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Heal · Tier 4+ · Mandate ▸ Resolve</p>",
+      "value": "<p><em>Not this one. Not today.</em></p><p>refuse a death: restore a fallen ally to half + ward (1/fight)</p><p style=\"opacity:0.7\"><strong>6◆ Surge</strong> · Heal · Tier 4+ · Mandate ▸ Resolve</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "res-nonelost",
       "surgeBucket": "heal",
-      "surgeCost": 5,
+      "surgeCost": 6,
       "surgeTier": 4,
       "surgeClass": "Mandate ▸ Resolve"
     },

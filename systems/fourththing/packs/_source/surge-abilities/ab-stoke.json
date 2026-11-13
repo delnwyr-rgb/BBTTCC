@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You feed the aura and it feeds the edge.</em></p><p>your next Strike +tier d6; you take +1 Burn</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Aurablade</p>",
+      "value": "<p><em>You feed the aura and it feeds the edge.</em></p><p>your next Strike +Tier d6 (sixes explode, kept through a miss)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Aurablade</p>",
       "chat": ""
     }
   },

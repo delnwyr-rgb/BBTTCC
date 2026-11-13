@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>You name what is happening. It listens.</em></p><p>auto-succeed one save</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Defense · General</p>",
+      "value": "<p><em>You name what is happening. It listens.</em></p><p>auto-succeed one save</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "iron-word",
       "surgeBucket": "def",
-      "surgeCost": 4,
+      "surgeCost": 3,
       "surgeTier": 1,
       "surgeClass": "General"
     },

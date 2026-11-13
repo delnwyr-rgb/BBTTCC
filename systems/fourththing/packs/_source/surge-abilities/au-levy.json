@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>Payment is due. Now.</em></p><p>a foe is Staggered and its next attack is at disadvantage (the penalty lands)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Auditor</p>",
+      "value": "<p><em>Payment is due. Now.</em></p><p>a foe is Staggered and its next attack keeps the lowest 2 of 3d10 (the penalty lands)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Auditor</p>",
       "chat": ""
     }
   },

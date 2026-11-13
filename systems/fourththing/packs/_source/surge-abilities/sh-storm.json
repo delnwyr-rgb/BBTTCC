@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The eye is the quietest place in the storm.</em></p><p>your Aura and Burn are locked till your next turn; foes within 2 squares are Calmed for 1 round</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Defense · Tier 4+ · Aura ▸ Stillheart</p>",
+      "value": "<p><em>The eye is the quietest place in the storm.</em></p><p>your Aura is locked and the overheat can't touch you till your next turn; foes within 2 squares are Calmed for 1 round</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 4+ · Aura ▸ Stillheart</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "sh-storm",
       "surgeBucket": "def",
-      "surgeCost": 4,
+      "surgeCost": 5,
       "surgeTier": 4,
       "surgeClass": "Aura ▸ Stillheart"
     },

@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>You arrive from the side they forgot they had.</em></p><p>reposition, then your next Strike has advantage and +Tier d6</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 3+ · Shadow Courier</p>",
+      "value": "<p><em>You arrive from the side they forgot they had.</em></p><p>reposition, then your next Strike adds a die (keep best 2) and gains +Tier d6 (sixes explode, kept through a miss)</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 3+ · Shadow Courier</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "sc-flank",
       "surgeBucket": "off",
-      "surgeCost": 5,
+      "surgeCost": 3,
       "surgeTier": 3,
       "surgeClass": "Shadow Courier"
     },

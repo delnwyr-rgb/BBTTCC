@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The draft was wrong. This is the draft now.</em></p><p>allies within 30 ft each bank a reroll-lowest (the whole passage, corrected)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Narrative · Tier 4+ · Doctrine ▸ Annotator</p>",
+      "value": "<p><em>The draft was wrong. This is the draft now.</em></p><p>allies within 6 squares each bank a reroll-lowest (the whole passage, corrected)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Narrative · Tier 4+ · Doctrine ▸ Annotator</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "an-revision",
       "surgeBucket": "narr",
-      "surgeCost": 5,
+      "surgeCost": 2,
       "surgeTier": 4,
       "surgeClass": "Doctrine ▸ Annotator"
     },

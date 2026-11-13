@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>The current runs hotter. Anything could come through.</em></p><p>next Cast explodes on 9–10</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Offense · General</p>",
+      "value": "<p><em>The current runs hotter. Anything could come through.</em></p><p>next Cast explodes on 9–10</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "surging-cast",
       "surgeBucket": "off",
-      "surgeCost": 4,
+      "surgeCost": 1,
       "surgeTier": 1,
       "surgeClass": "General"
     },

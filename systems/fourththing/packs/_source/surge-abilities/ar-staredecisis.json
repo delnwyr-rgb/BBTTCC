@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>It is settled. The ruling holds, and so do you.</em></p><p>a foe's next attack and its saves are at disadvantage (bound by precedent)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Archivist</p>",
+      "value": "<p><em>It is settled. The ruling holds, and so do you.</em></p><p>a foe's next attack and its saves keep the lowest 2 of 3d10 (bound by precedent)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Archivist</p>",
       "chat": ""
     }
   },

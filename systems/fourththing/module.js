@@ -5785,15 +5785,19 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
     wrathCascade:   false,
     cinderwake:     false,
     bonusDie:       false,
-    consumed:       []   // flag keys to unset after the roll resolves
+    maxDice:        false,   // surge repricing 2026-11-12 (Dave): class "max damage dice" primers (old Crowning effect, no auto-hit/×2)
+    consumed:       [],  // flag keys to unset after the roll resolves
+    consumedOnHit:  []   // surge repricing 2026-11-12 (Dave): damage riders — unset only when the Strike hits (kept through a miss)
   };
   const has = (k) => !!f[k];
   if (context === "strike") {
     if (has("snap-strike"))     { out.snapStrike    = true; out.consumed.push("snap-strike"); }
-    if (has("sundering-blow"))  { out.sunderingBlow = true; out.consumed.push("sundering-blow"); }
-    if (has("doomstrike"))      { out.doomstrike    = true; out.consumed.push("doomstrike"); }
-    if (has("crowning-blow"))   { out.crowningBlow  = true; out.consumed.push("crowning-blow"); }
-    if (has("final-argument"))  { out.finalArgument = true; out.consumed.push("final-argument"); }
+    // surge repricing 2026-11-12 (Dave) — damage riders wait for a hit (consumedOnHit), so a miss keeps them primed.
+    if (has("sundering-blow"))  { out.sunderingBlow = true; out.consumedOnHit.push("sundering-blow"); }
+    if (has("doomstrike"))      { out.doomstrike    = true; out.consumedOnHit.push("doomstrike"); }
+    if (has("crowning-blow"))   { out.crowningBlow  = true; out.consumedOnHit.push("crowning-blow"); }
+    if (has("final-argument"))  { out.finalArgument = true; out.consumedOnHit.push("final-argument"); }
+    if (has("max-dice"))        { out.maxDice       = true; out.consumedOnHit.push("max-dice"); }
     if (has("tier-surge"))      { out.tierSurge     = true; out.consumed.push("tier-surge"); }
     if (has("echo-strike"))     { out.echoStrike    = true; out.consumed.push("echo-strike"); }
   } else if (context === "cast") {
@@ -5908,10 +5912,12 @@ async function _ftSurgeMarkerAE(actor, entry) {
 const _FT_SURGE_LABELS = {
   "snap-strike":    "Snap Strike (advantage)",
   "sundering-blow": "Sundering Blow (ignores resists)",
-  "doomstrike":     "Doomstrike (+T d6 exploding)",
-  "crowning-blow":  "Crowning Blow (max-die)",
-  "final-argument": "Final Argument (auto-hit · max · +1 Tier)",
-  "tier-surge":     "Tier Surge (+1 Tier)",
+  // surge repricing 2026-11-12 (Dave) — banners say what the code does
+  "doomstrike":     "Doomstrike (+T d6, sixes explode)",
+  "crowning-blow":  "Crowning Blow (critical ×2)",
+  "final-argument": "Final Argument (auto-hit · +T d6 · max · ×2 · ignores resists)",
+  "tier-surge":     "Tier Surge (+T hit & damage)",
+  "max-dice":       "Max Dice",
   "echo-strike":    "Echo Strike (free, −2)",
   "surging-cast":   "Surging Cast (explodes 9–10)",
   "iron-word":      "Iron Word (auto-pass)",
@@ -5929,7 +5935,7 @@ function _ftSurgeBoostBanner(shots) {
 }
 
 // Surge spend menu spec — 2026-05-22 expansion. Each cost band gets at least
-// one offensive + one defensive option; heals at 2/4/7/10. Tier-gated entries
+// one offensive + one defensive option. (Prices re-set 2026-11-12 — surge repricing (Dave); heals d6 × Tier by price.) Tier-gated entries
 // stay visible but disabled at low tier (tooltip explains why). `bucket`
 // drives column placement: off | def | heal | narr. `wired:true` = handler
 // applies mechanical effects; `wired:false` = sets a one-shot flag at
@@ -5971,12 +5977,12 @@ const _FT_SURGE_MENU = [
     label: "Reaction Miss — turn one incoming attack into a miss",
     fiction: "You slide sideways through the moment.",
     wired: false },
-  { cost: 2, key: "sundering-blow", tier: 1, bucket: "off",
-    label: "Sundering Blow — next Strike ignores resistances",
+  { cost: 2, key: "sundering-blow", tier: 1, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Sundering Blow — your next Strike that hits ignores resistances (kept through a miss)",
     fiction: "Whatever they call armor, it stops mattering for one breath.",
     wired: false },
-  { cost: 2, key: "stitch", tier: 1, bucket: "heal",
-    label: "Stitch — heal self (Tier+1)d6 + Tier",   // combat balance 2026-11-12 (was 2d6 + Tier)
+  { cost: 2, key: "stitch", tier: 1, bucket: "heal", // surge repricing 2026-11-12 (Dave)
+    label: "Stitch — heal self 2d6 × Tier (Integrity and Stress)",   // combat balance 2026-11-12 (was 2d6 + Tier)
     fiction: "Soma re-knits along the seams you remember.",
     wired: true },
   // Cost 3
@@ -5992,106 +5998,106 @@ const _FT_SURGE_MENU = [
     label: "Echo Strike — free Strike at −2",
     fiction: "A second blow that was already there.",
     wired: false },
-  { cost: 3, key: "aegis", tier: 1, bucket: "def",
+  { cost: 1, key: "aegis", tier: 1, bucket: "def", // surge repricing 2026-11-12 (Dave)
     label: "Aegis — ally gains DR equal to Tier this round",
     fiction: "Your stance covers theirs.",
     wired: false },
   // Cost 4
-  { cost: 4, key: "surging-cast", tier: 1, bucket: "off",
+  { cost: 1, key: "surging-cast", tier: 1, bucket: "off", // surge repricing 2026-11-12 (Dave)
     label: "Surging Cast — next Cast explodes on 9–10",
     fiction: "The current runs hotter. Anything could come through.",
     wired: false },
-  { cost: 4, key: "iron-word", tier: 1, bucket: "def",
+  { cost: 3, key: "iron-word", tier: 1, bucket: "def", // surge repricing 2026-11-12 (Dave)
     label: "Iron Word — auto-succeed one save",
     fiction: "You name what is happening. It listens.",
     wired: false },
-  { cost: 4, key: "field-patch", tier: 1, bucket: "heal",
-    label: "Field Patch — heal ally (Tier+1)d6 + Tier, their lower track (in reach)",   // combat balance 2026-11-12
+  { cost: 3, key: "field-patch", tier: 1, bucket: "heal", // surge repricing 2026-11-12 (Dave)
+    label: "Field Patch — heal a targeted ally 2d6 × Tier on their lower track",   // combat balance 2026-11-12
     fiction: "Hands move faster than the wound can close.",
     wired: true },
   // Cost 5
-  { cost: 5, key: "narrative-fiction", tier: 1, bucket: "narr",
-    label: "Reshape Fiction — one beat (GM-gated, 1/scene)",
+  { cost: 4, key: "narrative-fiction", tier: 1, bucket: "narr", // surge repricing 2026-11-12 (Dave)
+    label: "Reshape Fiction — one beat (GM-gated; the GM enforces 1/scene)",
     fiction: "A small miracle. A door that wasn't there. A body that didn't quite fall.",
     wired: false },
-  { cost: 5, key: "doomstrike", tier: 1, bucket: "off",
-    label: "Doomstrike — next Strike +Tier d6 exploding damage",
+  { cost: 2, key: "doomstrike", tier: 1, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Doomstrike — your next Strike that hits deals +Tier d6, sixes explode (kept through a miss)",
     fiction: "You bring more than you swung.",
     wired: false },
-  { cost: 5, key: "steel-veil", tier: 2, bucket: "def",
+  { cost: 3, key: "steel-veil", tier: 2, bucket: "def", // surge repricing 2026-11-12 (Dave)
     label: "Steel Veil — resistance to one damage type this round",
     fiction: "Something between you and the world refuses the harm.",
     wired: false },
   // Cost 6
-  { cost: 6, key: "wrath-cascade", tier: 2, bucket: "off",
-    label: "Wrath Cascade — every d10 in next roll explodes once free",
+  { cost: 2, key: "wrath-cascade", tier: 2, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Wrath Cascade — +2 exploding d10 on your next Strike, cast or save",
     fiction: "The dice all remember at once.",
     wired: false },
-  { cost: 6, key: "bulwark-stance", tier: 2, bucket: "def", classFilter: ["bulwark"],
+  { cost: 3, key: "bulwark-stance", tier: 2, bucket: "def", classFilter: ["bulwark"], // surge repricing 2026-11-12 (Dave)
     label: "Bulwark Stance — adjacent allies share your defenses till next turn",
     fiction: "You become the wall they fight from behind.",
     wired: true },
   // Cost 7
-  { cost: 7, key: "crowning-blow", tier: 3, bucket: "off",
-    label: "Crowning Blow — next Strike is a max-die critical hit",
+  { cost: 7, key: "crowning-blow", tier: 3, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Crowning Blow — your next Strike auto-hits as a critical: every damage die shows max, then the damage doubles",
     fiction: "Inevitable. The kind of strike fables remember.",
     wired: false },
-  { cost: 5, key: "anchor", tier: 3, bucket: "def", classFilter: ["bulwark"],
+  { cost: 2, key: "anchor", tier: 3, bucket: "def", classFilter: ["bulwark"], // surge repricing 2026-11-12 (Dave)
     label: "Anchor — you + one ally immune to forced move / CC till next round",
     fiction: "You both refuse the verbs they're trying to apply.",
     wired: true },
-  { cost: 7, key: "rallying-cry", tier: 1, bucket: "heal",
-    label: "Rallying Cry — heal all allies within Tier squares for 1d6 + Tier",
+  { cost: 4, key: "rallying-cry", tier: 1, bucket: "heal", // surge repricing 2026-11-12 (Dave)
+    label: "Rallying Cry — heal you and allies within Tier squares 1d6 × Tier",
     fiction: "Your voice carries the Soma back into them.",
     wired: true },
   // Cost 8
-  { cost: 8, key: "tier-surge", tier: 3, bucket: "off",
-    label: "Tier Surge — next Strike OR Cast counts as one Tier higher",
+  { cost: 2, key: "tier-surge", tier: 2, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Tier Surge — next Strike: +Tier to hit and +Tier damage; next Cast: +Tier to the roll",
     fiction: "You reach above your weight class for one moment.",
     wired: false },
-  { cost: 8, key: "mass-aegis", tier: 3, bucket: "def", classFilter: ["bulwark"],
+  { cost: 6, key: "mass-aegis", tier: 3, bucket: "def", classFilter: ["bulwark"], // surge repricing 2026-11-12 (Dave)
     label: "Mass Aegis — +Tier to all defenses for allies within Tier squares this round",
     fiction: "Every nearby stance straightens at once.",
     wired: true },
   // Cost 9
-  { cost: 9, key: "cinderwake", tier: 4, bucket: "off",
-    label: "Cinderwake — every d10 in next roll explodes on 8+",
+  { cost: 3, key: "cinderwake", tier: 4, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Cinderwake — the base dice of your next roll explode on 8+",
     fiction: "The dice run hot enough to leave scars.",
     wired: false },
-  { cost: 9, key: "sanctum", tier: 4, bucket: "def", classFilter: ["bulwark"],
+  { cost: 6, key: "sanctum", tier: 4, bucket: "def", classFilter: ["bulwark"], // surge repricing 2026-11-12 (Dave)
     label: "Sanctum — immune to one damage type for one round",
     fiction: "A category of harm forgets your name.",
     wired: true },
   // Cost 10 — cap-spending capstones
-  { cost: 10, key: "final-argument", tier: 4, bucket: "off",
-    label: "Final Argument — next Strike auto-hits, max damage, counts +1 Tier",
+  { cost: 8, key: "final-argument", tier: 4, bucket: "off", // surge repricing 2026-11-12 (Dave)
+    label: "Final Argument — your next Strike auto-hits as a critical with +Tier d6: every die max, then the damage doubles; ignores resistances",
     fiction: "There will be no negotiation.",
     wired: false },
   { cost: 10, key: "mythic-stand", tier: 4, bucket: "def", classFilter: ["bulwark"],
     label: "Mythic Stand — invulnerable until start of your next turn",
     fiction: "The world allows it. You decide for one breath.",
     wired: true },
-  { cost: 10, key: "phoenix", tier: 1, bucket: "heal",
-    label: "Phoenix — restore self/ally from defeated to half integrity (1 / raid)",
+  { cost: 8, key: "phoenix", tier: 3, bucket: "heal", // surge repricing 2026-11-12 (Dave)
+    label: "Phoenix — restore a defeated self/ally to half Integrity and half Stress (1/raid)",
     fiction: "Remember what you were before the wound. Be that now.",
     wired: true },
 
   // ─── Soul-Smith class-exclusive entries (heat-native, Phase 2) ─────────────
   // Shown only to Soul-Smiths (classFilter). All four are wired in _ftSoulSmithSurge
   // (2026-10-24: the old "three are flag-and-card" note was stale).
-  { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Forge-Weld — repair an ally (1d8+tier, scales with forge heat)",
+  { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"], // surge repricing 2026-11-12 (Dave)
+    label: "Forge-Weld — repair an ally 1d6 × Tier (×1.5 Stoked, ×2 Overheated; Overheated costs you 1d6 Stress)",
     fiction: "You lay hands on the breakage and will it whole.",
     wired: true },
   { cost: 2, key: "atonement", tier: 2, bucket: "heal", classFilter: ["soul-smith"],
     label: "Crucible Cleanse — cleanse a condition + temper an ally into armor (DR)",
     fiction: "Whatever was done can be unmade — and made into a shield.",
     wired: true },
-  { cost: 3, key: "share-furnace", tier: 3, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Share the Furnace — heal allies within 6 squares + share poison/qliphothic resist",
+  { cost: 5, key: "share-furnace", tier: 3, bucket: "heal", classFilter: ["soul-smith"], // surge repricing 2026-11-12 (Dave)
+    label: "Share the Furnace — heal you and allies within 6 squares 1d6 × Tier each (heat-band ×) + poison/qliphothic resist",
     fiction: "Stand near the forge. Let it burn the rot out of you.",
     wired: true },
-  { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
+  { cost: 6, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"], // surge repricing 2026-11-12 (Dave)
     label: "Rebirth Ward — ward an ally vs dropping (Overheated: reforge a fallen ally)",
     fiction: "Not yet. I forged you something to hold the line.",
     wired: true },
@@ -6103,30 +6109,30 @@ const _FT_SURGE_MENU = [
     label: "Rallying Words — ally banks a reroll on their next roll",
     fiction: "A word at the right moment. They find the line again.",
     wired: true },
-  { cost: 2, key: "ease-attrition", tier: 1, bucket: "heal", classFilter: ["harmony-marshal"],
-    label: "Ease Attrition — heal an ally + clear one condition",
+  { cost: 2, key: "ease-attrition", tier: 1, bucket: "heal", classFilter: ["harmony-marshal"], // surge repricing 2026-11-12 (Dave)
+    label: "Ease Attrition — heal an ally 2d6 × Tier + clear one condition",
     fiction: "You take the weight off them for a breath.",
     wired: true },
-  { cost: 2, key: "rally-to-me", tier: 2, bucket: "narr", classFilter: ["harmony-marshal"],
-    label: "Rally to Me — an ally acts or reacts out of turn",
+  { cost: 2, key: "rally-to-me", tier: 2, bucket: "narr", classFilter: ["harmony-marshal"], // surge repricing 2026-11-12 (Dave)
+    label: "Rally to Me — an ally banks a reroll and gains a freed bonus action",
     fiction: "They move because you asked. That's all it takes.",
     wired: true },
-  { cost: 3, key: "unity-flourish", tier: 3, bucket: "def", classFilter: ["harmony-marshal"],
-    label: "Unity Flourish — allies within 6 squares +1 to checks till your next turn",
+  { cost: 3, key: "unity-flourish", tier: 3, bucket: "def", classFilter: ["harmony-marshal"], // surge repricing 2026-11-12 (Dave)
+    label: "Unity Flourish — you and allies within 6 squares each bank a reroll",
     fiction: "Every nearby stance straightens at once.",
     wired: true },
-  { cost: 5, key: "conductors-crescendo", tier: 4, bucket: "heal", classFilter: ["harmony-marshal"],
-    label: "Conductor's Crescendo — allies reroll all 1s + clear a condition (1/scene)",
+  { cost: 5, key: "conductors-crescendo", tier: 4, bucket: "heal", classFilter: ["harmony-marshal"], // surge repricing 2026-11-12 (Dave)
+    label: "Conductor's Crescendo — allies within 6 squares each bank a reroll + clear a condition (1/scene)",
     fiction: "The whole line moves as one body.",
     wired: true },
 
   // ─── Soul-Smith FORGE (subclass) entries — gated by `forge`, all cost a Spark ──
   // Forge of Victory (Sparks from fallen foes → offense):
-  { cost: 3, key: "fov-trophy",  tier: 2, bucket: "off", forge: "victory",
-    label: "Forged Trophy (Spark) — your next Strike +tier d6 + an ally gains DR",
+  { cost: 3, key: "fov-trophy",  tier: 2, bucket: "off", forge: "victory", // surge repricing 2026-11-12 (Dave)
+    label: "Forged Trophy (Spark) — your next Strike +Tier d6 (sixes explode, kept through a miss) + an ally gains DR",
     fiction: "You forge a weapon from the kill, and it remembers how to bite.", wired: true },
-  { cost: 1, key: "fov-compound", tier: 3, bucket: "off", forge: "victory",
-    label: "Compounded Blow (Spark) — your next Strike lands as a max-die crit",
+  { cost: 1, key: "fov-compound", tier: 3, bucket: "off", forge: "victory", // surge repricing 2026-11-12 (Dave)
+    label: "Compounded Blow (Spark) — max damage dice on your next Strike (kept through a miss)",
     fiction: "The fallen foe strikes alongside you.", wired: true },
   { cost: 4, key: "fov-sunder",  tier: 4, bucket: "off", forge: "victory",
     label: "Sundering Stroke (Spark) — next Strike ignores resists + Staggers the target",
@@ -6135,11 +6141,11 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "rec-reclaim",  tier: 2, bucket: "def", forge: "reclaimer",
     label: "Reclaim (Spark) — salvage a condition off an ally + grant them DR",
     fiction: "Nothing is beyond salvage.", wired: true },
-  { cost: 3, key: "rec-remember", tier: 3, bucket: "heal", forge: "reclaimer",
-    label: "The Remembered Thing (Spark) — salvage a relic for an ally (heal + DR)",
+  { cost: 3, key: "rec-remember", tier: 3, bucket: "heal", forge: "reclaimer", // surge repricing 2026-11-12 (Dave)
+    label: "The Remembered Thing (Spark) — heal an ally 2d6 × Tier + DR",
     fiction: "It returns as it last existed, usable if it was usable.", wired: true },
-  { cost: 4, key: "rec-deepsalvage", tier: 4, bucket: "heal", forge: "reclaimer",
-    label: "Deep Salvage (Spark) — restore an ally (big heal + clear all conditions)",
+  { cost: 4, key: "rec-deepsalvage", tier: 4, bucket: "heal", forge: "reclaimer", // surge repricing 2026-11-12 (Dave)
+    label: "Deep Salvage (Spark) — heal an ally 3d6 × Tier + clear all conditions",
     fiction: "From ancient ruin, something disproportionate to the effort.", wired: true },
   // Forge of Bound Light (Sparks from containment → protection/support):
   { cost: 2, key: "bl-vessel", tier: 2, bucket: "def", forge: "bound-light",
@@ -6148,17 +6154,17 @@ const _FT_SURGE_MENU = [
   { cost: 3, key: "bl-sealed", tier: 3, bucket: "def", forge: "bound-light",
     label: "The Sealed Work (Spark) — ward an ally: DR + hold the next lethal hit at 1",
     fiction: "Sealed against corruption, radiation, and breaking.", wired: true },
-  { cost: 2, key: "bl-blessed", tier: 4, bucket: "off", forge: "bound-light",
-    label: "Blessed Weapon (Spark) — your weapon blazes with bound light: next Strike +tier d6",
+  { cost: 2, key: "bl-blessed", tier: 4, bucket: "off", forge: "bound-light", // surge repricing 2026-11-12 (Dave)
+    label: "Blessed Weapon (Spark) — your weapon blazes with bound light: next Strike +Tier d6 (sixes explode, kept through a miss)",
     fiction: "The light remembers what it was given to hold.", wired: true },
 
   // ─── Harmony Marshal MANDATE (subclass) entries — gated by `mandate` ──────────
   // Mandate of Accord — coordination/teamwork:
-  { cost: 1, key: "acc-breath", tier: 1, bucket: "narr", mandate: "accord",
-    label: "Shared Breath — name an Accord Partner: you + they bank a reroll, they free a reaction",
+  { cost: 1, key: "acc-breath", tier: 1, bucket: "narr", mandate: "accord", // surge repricing 2026-11-12 (Dave)
+    label: "Shared Breath — name an Accord Partner: you + they bank a reroll, they gain a freed bonus action",
     fiction: "Act as one.", wired: true },
-  { cost: 3, key: "acc-sync", tier: 2, bucket: "off", mandate: "accord",
-    label: "Synchronized Advance — allies within 6 squares bank a reroll on their next attack",
+  { cost: 3, key: "acc-sync", tier: 2, bucket: "off", mandate: "accord", // surge repricing 2026-11-12 (Dave)
+    label: "Synchronized Advance — allies within 6 squares bank a reroll on their next roll",
     fiction: "Strike together; the second blow lands on the opening the first made.", wired: true },
   { cost: 5, key: "acc-group", tier: 4, bucket: "narr", mandate: "accord",
     label: "Group Turn — allies within 6 squares each gain a freed bonus action",
@@ -6180,7 +6186,7 @@ const _FT_SURGE_MENU = [
   { cost: 3, key: "res-secondwind", tier: 2, bucket: "heal", mandate: "resolve",
     label: "Second Wind — ward an ally: the next hit that would drop them holds at 1",
     fiction: "They refuse to fall because you were watching.", wired: true },
-  { cost: 5, key: "res-nonelost", tier: 4, bucket: "heal", mandate: "resolve",
+  { cost: 6, key: "res-nonelost", tier: 4, bucket: "heal", mandate: "resolve", // surge repricing 2026-11-12 (Dave)
     label: "None Lost — refuse a death: restore a fallen ally to half + ward (1/fight)",
     fiction: "Not this one. Not today.", wired: true },
 
@@ -6206,7 +6212,7 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "qs-peace", tier: 2, bucket: "def", trance: "quiet-sun",
     label: "Gentle Sleep — the next lethal blow against an ally drops them to 1, not dead",
     fiction: "Sleep, not death. There's a difference, and you keep it.", wired: true },
-  { cost: 3, key: "qs-pause", tier: 3, bucket: "narr", trance: "quiet-sun",
+  { cost: 6, key: "qs-pause", tier: 3, bucket: "narr", trance: "quiet-sun", // surge repricing 2026-11-12 (Dave)
     label: "Radiant Pause — nearby enemies are Calmed (a contemplative beat)",
     fiction: "For one round, everyone remembers they'd rather not.", wired: true },
   // Trance of the Sapphire Gate — reposition / movement:
@@ -6226,7 +6232,7 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "tf-mirror", tier: 2, bucket: "off", trance: "thousand-faces",
     label: "Reflected Tell — a foe rolls its next attack keeping the lowest 2 of 3d10 + you bank a reroll",
     fiction: "You wear their tell back at them.", wired: true },
-  { cost: 3, key: "tf-shared", tier: 3, bucket: "def", trance: "thousand-faces",
+  { cost: 2, key: "tf-shared", tier: 3, bucket: "def", trance: "thousand-faces", // surge repricing 2026-11-12 (Dave)
     label: "Shared Face — you + an ally blur behind borrowed identities: both gain DR",
     fiction: "Two of you, both wrong, both safe.", wired: true },
 
@@ -6262,28 +6268,28 @@ const _FT_SURGE_MENU = [
 
   // ─── Bulwark CATACLYST (subclass) entries — gated by `bulwarkPath` ─────────────
   // Cataclyst — controlled eruption; trade stability for force.
-  { cost: 1, key: "cl-erupt", tier: 1, bucket: "off", bulwarkPath: "cataclyst",
-    label: "Erupt — your next Strike erupts (+Tier d6 exploding) and knocks the target back",
+  { cost: 1, key: "cl-erupt", tier: 1, bucket: "off", bulwarkPath: "cataclyst", // surge repricing 2026-11-12 (Dave)
+    label: "Erupt — your next Strike +Tier d6 (sixes explode, kept through a miss) and knocks the target back (GM resolves the push)",
     fiction: "Something gives way. You aim where.", wired: true },
   { cost: 3, key: "cl-shatter", tier: 2, bucket: "off", bulwarkPath: "cataclyst",
     label: "Shatter — your next Strike ignores resistances and Staggers the target",
     fiction: "Whatever held it together, you found the seam.", wired: true },
-  { cost: 5, key: "cl-cataclysm", tier: 4, bucket: "off", bulwarkPath: "cataclyst",
-    label: "Cataclysm — your next Strike lands as a max-die crit; foes in reach are knocked Prone",
+  { cost: 5, key: "cl-cataclysm", tier: 4, bucket: "off", bulwarkPath: "cataclyst", // surge repricing 2026-11-12 (Dave)
+    label: "Cataclysm — max damage dice on your next Strike; foes in reach are knocked Prone (kept through a miss)",
     fiction: "The ground decides it has had enough of standing still.", wired: true },
   // Avalanche — momentum; geography deciding to move.
-  { cost: 1, key: "av-roll", tier: 1, bucket: "off", bulwarkPath: "avalanche",
-    label: "Roll Forward — your next Strike +Tier d6 and the target is knocked Prone",
+  { cost: 1, key: "av-roll", tier: 1, bucket: "off", bulwarkPath: "avalanche", // surge repricing 2026-11-12 (Dave)
+    label: "Roll Forward — your next Strike +Tier d6 (sixes explode, kept through a miss) and the target is knocked Prone",
     fiction: "You do not stop. They learn this the hard way.", wired: true },
-  { cost: 3, key: "av-crash", tier: 2, bucket: "off", bulwarkPath: "avalanche",
-    label: "Crash — your next Strike lands as a max-die crit and Staggers the target",
+  { cost: 3, key: "av-crash", tier: 2, bucket: "off", bulwarkPath: "avalanche", // surge repricing 2026-11-12 (Dave)
+    label: "Crash — max damage dice on your next Strike and the target is Staggered (kept through a miss)",
     fiction: "All that mass, arriving at once.", wired: true },
   { cost: 5, key: "av-unstoppable", tier: 4, bucket: "off", bulwarkPath: "avalanche",
     label: "Unstoppable — immune to forced-move/CC this round; your next Strike ignores resists + knocks Prone",
     fiction: "Nothing in the world is currently able to stop you.", wired: true },
   // Mountain — durability/refusal; immovable, load-bearing, patient.
-  { cost: 1, key: "mt-root", tier: 1, bucket: "def", bulwarkPath: "mountain",
-    label: "Root — you + adjacent allies gain DR equal to Tier and cannot be forcibly moved",
+  { cost: 1, key: "mt-root", tier: 1, bucket: "def", bulwarkPath: "mountain", // surge repricing 2026-11-12 (Dave)
+    label: "Root — you + adjacent allies gain DR equal to Tier; you cannot be forcibly moved",
     fiction: "You belong here now. Argue with the mountain.", wired: true },
   { cost: 2, key: "mt-deny", tier: 2, bucket: "def", bulwarkPath: "mountain",
     label: "Refuse — you or an ally becomes immune to forced-move/CC + gains DR this round",
@@ -6295,50 +6301,50 @@ const _FT_SURGE_MENU = [
   // ─── Shadow Courier (Pool) class-exclusive entries — "keep moving" ────────────
   // Generation = movement (see _ftCourierMoveGen; folds the old Pace pool into
   // Surge). Base kit = mobility + tempo; the 3 routes add their tactical flavor.
-  { cost: 1, key: "sc-step", tier: 1, bucket: "narr", classFilter: ["shadow_courier"],
-    label: "Courier's Step — +half-speed move (no provoke) and a freed reaction",
+  { cost: 1, key: "sc-step", tier: 1, bucket: "narr", classFilter: ["shadow_courier"], // surge repricing 2026-11-12 (Dave)
+    label: "Courier's Step — +half-speed move (no provoke) and a freed bonus action",
     fiction: "You're already moving. The fight rearranges around it.", wired: true },
-  { cost: 3, key: "sc-ghost", tier: 2, bucket: "def", classFilter: ["shadow_courier"],
+  { cost: 2, key: "sc-ghost", tier: 2, bucket: "def", classFilter: ["shadow_courier"], // surge repricing 2026-11-12 (Dave)
     label: "Ghoststep — DR equal to Tier till your next turn; reposition out of danger",
     fiction: "Hard to hit a thing that won't hold still.", wired: true },
-  { cost: 5, key: "sc-flank", tier: 3, bucket: "off", classFilter: ["shadow_courier"],
-    label: "Flank & Strike — reposition, then your next Strike rerolls its lowest die and gains +Tier d6",
+  { cost: 3, key: "sc-flank", tier: 3, bucket: "off", classFilter: ["shadow_courier"], // surge repricing 2026-11-12 (Dave)
+    label: "Flank & Strike — reposition, then your next Strike adds a die (keep best 2) and gains +Tier d6 (sixes explode, kept through a miss)",
     fiction: "You arrive from the side they forgot they had.", wired: true },
-  { cost: 8, key: "sc-nodoor", tier: 4, bucket: "def", classFilter: ["shadow_courier"],
-    label: "No Such Door — allies within Tier squares each gain a freed reaction + a reroll",
+  { cost: 8, key: "sc-nodoor", tier: 4, bucket: "def", classFilter: ["shadow_courier"], // surge repricing 2026-11-12 (Dave)
+    label: "No Such Door — allies within Tier squares each gain a freed bonus action + a reroll",
     fiction: "The whole team finds the road at once.", wired: true },
 
   // ─── Shadow Courier WAYFARER (route) — movement is mercy / extraction ─────────
-  { cost: 1, key: "wf-clearroad", tier: 1, bucket: "def", courierRoute: "wayfarer",
-    label: "Clear Road — an ally gains a freed reaction and a reroll (open their road out)",
+  { cost: 1, key: "wf-clearroad", tier: 1, bucket: "def", courierRoute: "wayfarer", // surge repricing 2026-11-12 (Dave)
+    label: "Clear Road — an ally gains a freed bonus action and a reroll",
     fiction: "Go. I'll hold the way.", wired: true },
   { cost: 2, key: "wf-safepassage", tier: 2, bucket: "def", courierRoute: "wayfarer",
     label: "Safe Passage — an ally gains DR equal to Tier and a reroll (escorted through)",
     fiction: "Nothing touches what I'm carrying.", wired: true },
-  { cost: 5, key: "wf-arrival", tier: 4, bucket: "heal", courierRoute: "wayfarer",
-    label: "Impossible Arrival — whisk a hurt ally clear: heal + DR equal to Tier + a freed reaction",
+  { cost: 5, key: "wf-arrival", tier: 4, bucket: "heal", courierRoute: "wayfarer", // surge repricing 2026-11-12 (Dave)
+    label: "Impossible Arrival — heal a hurt ally 3d6 × Tier + DR equal to Tier + a freed bonus action",
     fiction: "You were never going to die here. I won't allow it.", wired: true },
 
   // ─── Shadow Courier BLACK STAIR (route) — weaponized thresholds / denial ──────
-  { cost: 1, key: "bs-ambush", tier: 1, bucket: "off", courierRoute: "black-stair",
-    label: "Ambush — your next Strike +Tier d6; the target's next attack keeps the lowest 2 of 3d10",
+  { cost: 1, key: "bs-ambush", tier: 1, bucket: "off", courierRoute: "black-stair", // surge repricing 2026-11-12 (Dave)
+    label: "Ambush — your next Strike +Tier d6 (sixes explode, kept through a miss); the target's next attack keeps the lowest 2 of 3d10",
     fiction: "You came through a door that wasn't for them.", wired: true },
   { cost: 2, key: "bs-cutoff", tier: 2, bucket: "off", courierRoute: "black-stair",
     label: "Cut Off — a foe is Staggered and cannot take reactions until your next turn",
     fiction: "The crossing closes behind you. They don't get to answer.", wired: true },
-  { cost: 5, key: "bs-stairtrap", tier: 4, bucket: "off", courierRoute: "black-stair",
-    label: "Stair-Trap — next Strike is a max-die crit + knocks Prone; if it drops them, regain a freed action",
+  { cost: 5, key: "bs-stairtrap", tier: 4, bucket: "off", courierRoute: "black-stair", // surge repricing 2026-11-12 (Dave)
+    label: "Stair-Trap — max damage dice on your next Strike + knocks Prone; you gain a freed bonus action (kept through a miss)",
     fiction: "The stair that does not end. Mind the last step.", wired: true },
 
   // ─── Shadow Courier LAST MILE (route) — carry the burden / anti-death ─────────
-  { cost: 1, key: "lm-shoulder", tier: 1, bucket: "heal", courierRoute: "last-mile",
-    label: "Shoulder the Weight — heal an ally Tier d6; you take half as Stress; they bank a reroll",
+  { cost: 1, key: "lm-shoulder", tier: 1, bucket: "heal", courierRoute: "last-mile", // surge repricing 2026-11-12 (Dave)
+    label: "Shoulder the Weight — heal an ally 1d6 × Tier; you take half as Stress; they bank a reroll",
     fiction: "Give it to me. I carry things.", wired: true },
   { cost: 2, key: "lm-quiet", tier: 2, bucket: "def", courierRoute: "last-mile",
     label: "Quiet Road — an ally gains DR equal to Tier + the next hit that would drop them holds at 1",
     fiction: "Sleep. I've got the road from here.", wired: true },
-  { cost: 5, key: "lm-delivered", tier: 4, bucket: "heal", courierRoute: "last-mile",
-    label: "Delivered — restore a fallen/hurt ally to half integrity and clear a condition",
+  { cost: 6, key: "lm-delivered", tier: 4, bucket: "heal", courierRoute: "last-mile", // surge repricing 2026-11-12 (Dave)
+    label: "Delivered — restore a fallen ally to half Integrity and clear a condition (1/fight)",
     fiction: "The unbearable thing arrives. Intact.", wired: true },
 
   // ─── Pactkeeper (Pool) class-exclusive entries — "obligation compounds" ───────
@@ -6353,7 +6359,7 @@ const _FT_SURGE_MENU = [
   { cost: 5, key: "pk-shelter", tier: 3, bucket: "def", classFilter: ["pactkeeper"],
     label: "Shelter the Bound — you + an ally gain DR equal to Tier; the next hit that would drop them holds at 1",
     fiction: "The pact protects its parties. That is the whole point of a pact.", wired: true },
-  { cost: 8, key: "pk-sovereign", tier: 4, bucket: "off", classFilter: ["pactkeeper"],
+  { cost: 5, key: "pk-sovereign", tier: 4, bucket: "off", classFilter: ["pactkeeper"], // surge repricing 2026-11-12 (Dave)
     label: "Sovereign Writ — a foe cannot take reactions and rolls its next attack and saves keeping the lowest 2 of 3d10",
     fiction: "You do not argue with the law. You are the clerk who files it.", wired: true },
 
@@ -6364,30 +6370,30 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "ar-staredecisis", tier: 2, bucket: "off", pactDoctrine: "archivist",
     label: "Stare Decisis — a foe's next attack and its saves keep the lowest 2 of 3d10 (bound by precedent)",
     fiction: "It is settled. The ruling holds, and so do you.", wired: true },
-  { cost: 5, key: "ar-resjudicata", tier: 4, bucket: "off", pactDoctrine: "archivist",
+  { cost: 3, key: "ar-resjudicata", tier: 4, bucket: "off", pactDoctrine: "archivist", // surge repricing 2026-11-12 (Dave)
     label: "Res Judicata — a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10 (the matter is closed)",
     fiction: "The matter is closed. There is no appeal.", wired: true },
 
   // ─── Pactkeeper AUDITOR (doctrine) — expose debt / punish ─────────────────────
-  { cost: 1, key: "au-expose", tier: 1, bucket: "off", pactDoctrine: "auditor",
-    label: "Expose the Debt — your next Strike or manifestation deals +Tier d6 (the hidden cost comes due)",
+  { cost: 1, key: "au-expose", tier: 1, bucket: "off", pactDoctrine: "auditor", // surge repricing 2026-11-12 (Dave)
+    label: "Expose the Debt — your next Strike that hits deals +Tier d6, sixes explode (the hidden cost comes due)",
     fiction: "I've seen the real ledger. You're overdrawn.", wired: true },
   { cost: 2, key: "au-levy", tier: 2, bucket: "off", pactDoctrine: "auditor",
     label: "Levy — a foe is Staggered and its next attack keeps the lowest 2 of 3d10 (the penalty lands)",
     fiction: "Payment is due. Now.", wired: true },
-  { cost: 5, key: "au-foreclose", tier: 4, bucket: "off", pactDoctrine: "auditor",
-    label: "Foreclose — your next Strike is a max-die crit and ignores resistances (the debt is called in full)",
+  { cost: 5, key: "au-foreclose", tier: 4, bucket: "off", pactDoctrine: "auditor", // surge repricing 2026-11-12 (Dave)
+    label: "Foreclose — max damage dice on your next Strike and it ignores resistances (kept through a miss)",
     fiction: "Everything you have. It was never really yours.", wired: true },
 
   // ─── Pactkeeper STEWARD OF LIVING COMMUNITIES (doctrine) — protect the bound ──
   { cost: 1, key: "st-shelter", tier: 1, bucket: "def", pactDoctrine: "steward",
     label: "Shield the Vulnerable — an ally gains DR equal to Tier and a reroll",
     fiction: "Stand behind the agreement. It was written to hold you.", wired: true },
-  { cost: 2, key: "st-bound", tier: 2, bucket: "heal", pactDoctrine: "steward",
-    label: "Keep the Agreement — heal an ally; the next hit that would drop them holds at 1",
+  { cost: 2, key: "st-bound", tier: 2, bucket: "heal", pactDoctrine: "steward", // surge repricing 2026-11-12 (Dave)
+    label: "Keep the Agreement — heal an ally 2d6 × Tier; the next hit that would drop them holds at 1",
     fiction: "No one falls while the terms still stand.", wired: true },
-  { cost: 5, key: "st-sanctuary", tier: 4, bucket: "def", pactDoctrine: "steward",
-    label: "Sanctuary — allies within 6 squares gain DR equal to Tier and a freed reaction",
+  { cost: 5, key: "st-sanctuary", tier: 4, bucket: "def", pactDoctrine: "steward", // surge repricing 2026-11-12 (Dave)
+    label: "Sanctuary — allies within 6 squares gain DR equal to Tier and a freed bonus action",
     fiction: "This ground is under contract. Nothing crosses it uninvited.", wired: true },
 
   // ─── Wyrdlens Adept (Pool) class-exclusive entries — perception as force ──────
@@ -6424,8 +6430,8 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "mc-redirect", tier: 2, bucket: "def", wlRefraction: "mercy",
     label: "Redirected Harm — an ally gains DR + the next hit that would drop them holds at 1",
     fiction: "Send it into the wall. Walls don't mind.", wired: true },
-  { cost: 5, key: "mc-openhand", tier: 4, bucket: "heal", wlRefraction: "mercy",
-    label: "The Open Hand — heal an ally and clear a condition (offer the clean exit)",
+  { cost: 5, key: "mc-openhand", tier: 4, bucket: "heal", wlRefraction: "mercy", // surge repricing 2026-11-12 (Dave)
+    label: "The Open Hand — heal an ally 3d6 × Tier and clear a condition",
     fiction: "There is always another way out. You just have to show it to them.", wired: true },
 
   // ─── Wyrdlens REFRACTION OF TRUTH (subclass) — exposure / lockdown ────────────
@@ -6435,20 +6441,20 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "tr-unconceal", tier: 2, bucket: "off", wlRefraction: "truth",
     label: "The Unconcealed Word — a foe is Staggered and its next attack keeps the lowest 2 of 3d10",
     fiction: "The lie stops working the moment it is named.", wired: true },
-  { cost: 5, key: "tr-exposure", tier: 4, bucket: "off", wlRefraction: "truth",
+  { cost: 3, key: "tr-exposure", tier: 4, bucket: "off", wlRefraction: "truth", // surge repricing 2026-11-12 (Dave)
     label: "The Exposure — a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10",
     fiction: "Laid bare. There is nowhere left to hide a single intention.", wired: true },
 
   // ─── Cosmic Linguist (Pool) class-exclusive entries — reality as editable text ─
   // Generation = +1 Surge/turn ("the editor always has the next word"; folds the old
   // Resonance auto-gain). The 5 Resonance cast-channels live here as Surge spends.
-  { cost: 1, key: "cl-emphasis", tier: 1, bucket: "off", classFilter: ["cosmic_linguist"],
-    label: "Emphasis — your next Strike or manifestation hits for +Tier d6 (the word, underlined)",
+  { cost: 1, key: "cl-emphasis", tier: 1, bucket: "off", classFilter: ["cosmic_linguist"], // surge repricing 2026-11-12 (Dave)
+    label: "Emphasis — your next Strike that hits deals +Tier d6, sixes explode (the word, underlined)",
     fiction: "Some words simply matter more. You decide which.", wired: true },
   { cost: 2, key: "cl-stabilize", tier: 2, bucket: "def", classFilter: ["cosmic_linguist"],
     label: "Stabilize — you gain DR equal to Tier; your next cast explodes on 9–10 (the sentence holds)",
     fiction: "The sentence is load-bearing now. Try to move it.", wired: true },
-  { cost: 3, key: "cl-impose", tier: 2, bucket: "off", classFilter: ["cosmic_linguist"],
+  { cost: 2, key: "cl-impose", tier: 2, bucket: "off", classFilter: ["cosmic_linguist"], // surge repricing 2026-11-12 (Dave)
     label: "Impose a Reading — a foe's next attack and its saves keep the lowest 2 of 3d10",
     fiction: "There is only one correct interpretation. Yours.", wired: true },
   { cost: 5, key: "cl-rewrite", tier: 4, bucket: "off", classFilter: ["cosmic_linguist"],
@@ -6462,7 +6468,7 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "an-margin", tier: 2, bucket: "off", clDoctrine: "annotator",
     label: "Side Note — a foe is Staggered and rolls its saves keeping the lowest 2 of 3d10",
     fiction: "A note in the margin that the text cannot ignore.", wired: true },
-  { cost: 5, key: "an-revision", tier: 4, bucket: "narr", clDoctrine: "annotator",
+  { cost: 2, key: "an-revision", tier: 4, bucket: "narr", clDoctrine: "annotator", // surge repricing 2026-11-12 (Dave)
     label: "Revision — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected)",
     fiction: "The draft was wrong. This is the draft now.", wired: true },
 
@@ -6491,25 +6497,25 @@ const _FT_SURGE_MENU = [
   // ─── Aurablade class-exclusive entries (ruling AB1, 2026-10-25; heat 2026-10-29) ──
   // Burn is folded into Surge: Aura actions / an aura switch / a landed hit raise
   // Surge, and paying for these cools you. All wired in _ftAurabladeSurge.
-  { cost: 1, key: "ab-stoke", tier: 1, bucket: "off", classFilter: ["aurablade"],
-    label: "Stoke the Blade — your next Strike +tier d6",
+  { cost: 1, key: "ab-stoke", tier: 1, bucket: "off", classFilter: ["aurablade"], // surge repricing 2026-11-12 (Dave)
+    label: "Stoke the Blade — your next Strike +Tier d6 (sixes explode, kept through a miss)",
     fiction: "You feed the aura and it feeds the edge.", wired: true },
   { cost: 2, key: "ab-shift", tier: 2, bucket: "def", classFilter: ["aurablade"],
     label: "Aura Shift — change your Aura (no Surge gained) + DR equal to Tier this round",
     fiction: "The colour of you changes between one breath and the next.", wired: true },
-  { cost: 3, key: "ab-vent", tier: 3, bucket: "off", classFilter: ["aurablade"],
-    label: "Vent Through the Blade — your next Strike +tier d6 and ignores resistances",
+  { cost: 3, key: "ab-vent", tier: 3, bucket: "off", classFilter: ["aurablade"], // surge repricing 2026-11-12 (Dave)
+    label: "Vent Through the Blade — your next Strike +Tier d6 (sixes explode, kept through a miss) and ignores resistances",
     fiction: "All that heat has to go somewhere. It goes through them.", wired: true },
-  { cost: 5, key: "ab-unbound", tier: 4, bucket: "def", classFilter: ["aurablade"],
-    label: "Aura Unbound — after paying, your Surge fills to its cap (Overheated) and the overheat can't touch you this round; allies within 2 squares gain DR equal to Tier",
+  { cost: 5, key: "ab-unbound", tier: 4, bucket: "def", classFilter: ["aurablade"], // surge repricing 2026-11-12 (Dave)
+    label: "Aura Unbound — you count as Overheated this round and the overheat can't touch you; allies within 2 squares gain DR equal to Tier (1/fight)",
     fiction: "You stop holding it in. Everyone nearby feels the warmth.", wired: true },
 
   // ─── Aurablade BLOOD HYMN (doctrine) — wound = prayer; gated by `auraDoctrine` ──
-  { cost: 1, key: "bh-tithe", tier: 2, bucket: "off", auraDoctrine: "blood-hymn",
-    label: "Crimson Tithe — pay Integrity equal to Tier; your next Strike lands as a max-die crit",
+  { cost: 1, key: "bh-tithe", tier: 2, bucket: "off", auraDoctrine: "blood-hymn", // surge repricing 2026-11-12 (Dave)
+    label: "Crimson Tithe — pay Integrity equal to Tier; max damage dice on your next Strike (kept through a miss)",
     fiction: "The hymn wants blood first. Yours will do.", wired: true },
-  { cost: 2, key: "bh-hymn", tier: 3, bucket: "heal", auraDoctrine: "blood-hymn",
-    label: "Hymn of the Open Wound — heal an ally 1d8+tier (×2 if you were Overheated)",
+  { cost: 2, key: "bh-hymn", tier: 3, bucket: "heal", auraDoctrine: "blood-hymn", // surge repricing 2026-11-12 (Dave)
+    label: "Hymn of the Open Wound — heal an ally 2d6 × Tier (×2 if you were Overheated)",
     fiction: "You sing the wound shut and keep the ache yourself.", wired: true },
   { cost: 4, key: "bh-terror", tier: 4, bucket: "off", auraDoctrine: "blood-hymn",
     label: "Scarlet Terror — a foe is Shaken and rolls its next attack keeping the lowest 2 of 3d10",
@@ -6522,7 +6528,7 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "sh-still", tier: 3, bucket: "def", auraDoctrine: "stillheart",
     label: "Still Point — auto-pass your next save; a targeted ally within 2 squares gains DR equal to Tier",
     fiction: "Nothing moves you. Nothing moves them while you stand there.", wired: true },
-  { cost: 4, key: "sh-storm", tier: 4, bucket: "def", auraDoctrine: "stillheart",
+  { cost: 5, key: "sh-storm", tier: 4, bucket: "def", auraDoctrine: "stillheart", // surge repricing 2026-11-12 (Dave)
     label: "Storm's Heart — your Aura is locked and the overheat can't touch you till your next turn; foes within 2 squares are Calmed for 1 round",
     fiction: "The eye is the quietest place in the storm.", wired: true },
 
@@ -6778,6 +6784,22 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       ui.notifications?.warn(`${actor.name}: Phoenix already used this raid.`);
       return;
     }
+    // surge repricing 2026-11-12 (Dave): Phoenix only answers a DEFEAT — refuse (no charge) unless the target (or self)
+    // is Dying, Incapacitated or at 0 Integrity.
+    const _phT = Array.from(game.user?.targets ?? [])[0]?.actor ?? actor;
+    const _phSys = _phT?.system?.system ?? _phT?.system ?? {};
+    const _phInt = Number(_phSys?.derived?.integrity?.value ?? _phSys?.integrity?.value ?? 1);
+    if (!(_ftIsDying(_phT) || _ftIsIncapacitated(_phT) || _phInt <= 0)) {
+      ui.notifications?.warn(`Phoenix only restores the defeated — ${_phT?.name ?? "the target"} is still standing. No Surge spent.`);
+      return;
+    }
+  }
+
+  // surge repricing 2026-11-12 (Dave): Aura Unbound is 1/fight (the refill stays). The flag is stamped by the handler.
+  if (effectKey === "ab-unbound" && game.combat?.id
+      && actor.flags?.fourththing?.aurablade?.unbound?.combatId === game.combat.id) {
+    ui.notifications?.warn(`${actor.name}: Aura Unbound already used this fight. No Surge spent.`);
+    return;
   }
 
   // Narrative Miss is reactive (negates the next incoming attack via a 1-round
@@ -7030,7 +7052,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   const AUTO_CONSUMED_KEYS = new Set([
     "snap-strike", "sundering-blow", "doomstrike", "crowning-blow", "final-argument",
     "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake", "echo-strike",
-    "narrative-bonus-die"
+    "narrative-bonus-die", "max-dice"   // surge repricing 2026-11-12 (Dave): max-dice = class max-damage-dice primers
   ]);
   const GM_DEFERRED_KEYS = new Set([
     "narrative-refund", "narrative-fiction"
@@ -7224,7 +7246,8 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   if (effectKey === "stitch") {
     // Stitch mends BOTH pools — the rolled total lands on Integrity AND Stress.
     // Combat balance 2026-11-12: (Tier+1)d6 + Tier (was a flat 2d6 + Tier, which fell behind T2+ damage).
-    const total = await postHealCard(`${(Number(tier) || 1) + 1}d6 + ${tier}`, "Stitch", actor.uuid, { extraTracks: ["stress"] });
+    // surge repricing 2026-11-12 (Dave): heal ruling — 2d6 × Tier.
+    const total = await postHealCard(`2d6 * ${Number(tier) || 1}`, "Stitch", actor.uuid, { extraTracks: ["stress"] });
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Stitch — rolled <b>${total}</b> healing (roll posted below); click <b>Apply Healing</b> to mend Integrity <i>and</i> Stress.</p>`;
   }
 
@@ -7233,13 +7256,14 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
     if (!tok?.actor) {
       return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.</p>`;
     }
+    // surge repricing 2026-11-12 (Dave): heal is now 2d6 × Tier (heal ruling).
     // Combat balance 2026-11-12: (Tier+1)d6 + Tier, and the heal goes to the target's LOWER-percentage track —
     // Dying → Integrity first; Incapacitated (Stress 0) → Stress, which lifts it exactly as an Integrity heal lifts
     // Dying (the Stress → 0 updateActor detector clears it once Stress is back above 0). Ties go to Integrity.
     const _pSys = tok.actor.system?.system ?? tok.actor.system;
     const _pPct = (k) => { const t = _pSys?.derived?.[k]; const m = Number(t?.max) || 0; return m > 0 ? (Number(t?.value) || 0) / m : 1; };
     const _pTrack = (!_ftIsDying(tok.actor) && (_ftIsIncapacitated(tok.actor) || _pPct("stress") < _pPct("integrity"))) ? "stress" : "integrity";
-    const total = await postHealCard(`${(Number(tier) || 1) + 1}d6 + ${tier}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid, { track: _pTrack });
+    const total = await postHealCard(`2d6 * ${Number(tier) || 1}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid, { track: _pTrack });
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> ${ftCap(_pTrack)} for <b>${ftEscapeHtml(tok.actor.name)}</b>; click <b>Apply Healing</b>.</p>`;
   }
 
@@ -7262,7 +7286,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No allies within ${tier} squares.</p>`;
     }
     // AOE: one roll (shown via DSN), applied to each in-range ally via the canonical path.
-    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+    const roll = new Roll(`1d6 * ${Number(tier) || 1}`); await roll.evaluate(); // surge repricing 2026-11-12 (Dave): 1d6 × Tier (was 1d6 + Tier)
     const amt  = Math.max(0, Number(roll.total) || 0);
     const names = [];
     for (const t of allies) {
@@ -7274,7 +7298,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
       rolls: [roll],
       content: `<div class="fourththing-roll">
         <div class="ft-roll-header"><span class="ft-roll-name">✚ Rallying Cry — Healing</span></div>
-        <div class="ft-dmg-row"><span class="ft-dmg-label">Healing</span><span class="ft-dmg-formula">1d6 + ${tier} = <b>${amt}</b></span></div>
+        <div class="ft-dmg-row"><span class="ft-dmg-label">Healing</span><span class="ft-dmg-formula">1d6 × ${Number(tier) || 1} = <b>${amt}</b></span></div>
         <p style="margin:0.2rem 0;font-size:0.76rem">Applied to allies within ${tier} sq: <b>${names.join(", ") || "—"}</b>.</p>
       </div>`
     });
@@ -7291,8 +7315,13 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
     const cur     = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
     const _h      = await _ftHealTarget(target, Math.max(0, half - cur));   // owner-or-GM-relay
     const next    = _h.next;
+    // surge repricing 2026-11-12 (Dave): Phoenix restores half Stress too.
+    const sMax    = Number(sys?.derived?.stress?.max ?? sys?.stress?.max ?? 0);
+    const sCur    = Number(sys?.derived?.stress?.value ?? sys?.stress?.value ?? 0);
+    const sHalf   = Math.max(1, Math.floor(sMax / 2));
+    const _hs     = sMax > 0 ? await _ftHealTarget(target, Math.max(0, sHalf - sCur), "stress") : null;
     return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">
-      ⟁ <b>${target.name}</b> restored to half integrity: ${cur} → ${next}/${max}.${_h.tag}
+      ⟁ <b>${target.name}</b> restored to half Integrity: ${cur} → ${next}/${max}${_hs ? ` · half Stress: ${sCur} → ${_hs.next}/${sMax}` : ""}.${_h.tag}
       <span style="opacity:0.7;font-weight:400;font-style:italic"> (1/raid — flag set, GM clears on raid end)</span>
     </p>`;
   }
@@ -7374,6 +7403,13 @@ function _ftSurgeAnchorAE(actor, flag) {
   return (actor?.effects ?? []).find(e => !e.disabled && !e.isSuppressed && e.flags?.fourththing?.surge?.[flag] === true) ?? null;
 }
 
+// surge repricing 2026-11-12 (Dave): Surge-spend conditions are TIMED — Staggered / Shaken from a spend last 1 round
+// (via _ftTempCondition) instead of sticking until someone clears them. Prone stays untimed (they stand up).
+async function _ftSurgeSetCond(a, c, want = true) {
+  if (want && (c === "staggered" || c === "shaken")) return _ftTempCondition(a, c, 1);
+  return _ftSetCondition(a, c, want);
+}
+
 async function _ftTempCondition(target, key, rounds = 1) {
   if (!target) return false;
   const s = target.system?.system ?? target.system ?? {};
@@ -7420,11 +7456,12 @@ async function _ftAurabladeSurge(actor, effectKey, tier) {
     const combat = game.combat;
     // Stamp the shield BEFORE filling, so the fill can't bite.
     try { await actor.setFlag("fourththing", "aurablade.unbound", { round: Number(combat?.round ?? 0), combatId: combat?.id ?? null, at: Date.now() }); } catch (e) {}
-    const nb = await ftAddBurn(actor, ftBurnMax(actor));
+    // surge repricing 2026-11-12 (Dave): no refill — the stamp above makes you COUNT as Overheated this round (ftBurnBandFor).
+    const nb = ftGetBurn(actor);
     const allies = _ftAbTokensWithin(actor, 10) ?? [];
     const names = [];
     for (const t of allies) { if (await _ftCreateAllyAE(t.actor, _ftAbDrAE(actor, `Aura Unbound (DR ${tier})`, tier))) names.push(t.actor.name); }
-    return _ftAbP("#ff5ac8", `☀ Aura Unbound — Surge ${nb}/${ftBurnMax(actor)} (Overheated); the overheat can't touch you this round${names.length ? `; DR ${tier} to <b>${names.join(", ")}</b>` : ""}.`);
+    return _ftAbP("#ff5ac8", `☀ Aura Unbound — you count as Overheated this round (Surge stays ${nb}/${ftBurnMax(actor)}); the overheat can't touch you${names.length ? `; DR ${tier} to <b>${names.join(", ")}</b>` : ""}.`);
   }
   return "";
 }
@@ -7433,7 +7470,7 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the target";
   const band   = _ftSpendBand(actor);
-  const setCond = (a, k) => _ftSetCondition(a, k, true);   // 10-29: immune → false
+  const setCond = (a, k) => _ftSurgeSetCond(a, k, true);   // 10-29: immune → false; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
   const keepLowest = async (a) => { try { await _ftSetFlagSeatSafe(a, "aurablade.disAttackOnce", true); } catch (e) {} };
   switch (effectKey) {
     // ── Blood Hymn ──
@@ -7442,15 +7479,15 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
       const cur = Number(s?.derived?.integrity?.value ?? 0);
       const nxt = Math.max(1, cur - tier);
       try { await actor.update({ "system.derived.integrity.value": nxt }); } catch (e) {}
-      await _ftAbOneShot(actor, "crowning-blow", tier);
-      return _ftAbP("#dc5050", `🩸 Crimson Tithe — you pay ${cur - nxt} Integrity (${cur} → ${nxt}); your next Strike lands as a max-die critical.`);
+      await _ftAbOneShot(actor, "max-dice", tier); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
+      return _ftAbP("#dc5050", `🩸 Crimson Tithe — you pay ${cur - nxt} Integrity (${cur} → ${nxt}); your next Strike that hits rolls max damage dice.`); // surge repricing 2026-11-12 (Dave)
     }
     case "bh-hymn": {
       if (!target) return _ftAbWarn("Hymn of the Open Wound");
-      const r = new Roll(`1d8 + ${tier}`); await r.evaluate(); _ftSurgeRoll(r);
+      const r = new Roll(`2d6 * ${Math.max(1, tier)}`); await r.evaluate(); _ftSurgeRoll(r); // surge repricing 2026-11-12 (Dave): heal by price — 2d6 × Tier (was 1d8 + Tier)
       const mult = band.key === "overheated" ? 2 : 1;
       const h = await _ftHealTarget(target, Math.max(0, Math.round((Number(r.total) || 0) * mult)));
-      return _ftAbP("#78c88c", `🎶 Hymn of the Open Wound — <b>${tname}</b> +${h.healed} Integrity (1d8+${tier}${mult > 1 ? " ×2 Overheated" : ""}) → ${h.next}.${h.tag}`);
+      return _ftAbP("#78c88c", `🎶 Hymn of the Open Wound — <b>${tname}</b> +${h.healed} Integrity (2d6×${Math.max(1, tier)}${mult > 1 ? " ×2 Overheated" : ""}) → ${h.next}.${h.tag}`);
     }
     case "bh-terror": {
       if (!target) return _ftAbWarn("Scarlet Terror");
@@ -7586,14 +7623,14 @@ async function _ftTranceSurge(actor, effectKey, tier) {
       if (!target) return needTarget("Gate-Touched");
       await _ftCreateAllyAE(target, drAE(`Gate-Touched (DR ${tier})`));
       try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate-Touched — carried <b>${tname}</b> through to safety: DR ${tier} and a freed reaction.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate-Touched — carried <b>${tname}</b> through to safety: DR ${tier} and a freed bonus action.</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
     case "sg-step": {
       if (!target) return needTarget("Sapphire Step");
       await bankReroll(actor, "sapphire-gate"); await bankReroll(target, "sapphire-gate");
       try { await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true); } catch (e) {}
       try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Sapphire Step — you and <b>${tname}</b> step through a threshold: each banks a reroll and a freed reaction (reposition).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Sapphire Step — you and <b>${tname}</b> step through a threshold: each banks a reroll and a freed bonus action (reposition).</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
     case "sg-held": {
       const allies = alliesInAura(30);
@@ -7712,7 +7749,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       if (!target) return needTarget;
       await bankReroll(actor, "accord"); await bankReroll(target, "accord");
       try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">🤝 Shared Breath — you and <b>${tname}</b> each bank a reroll-lowest; ${tname} may take a reaction now (Accord Partner).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">🤝 Shared Breath — you and <b>${tname}</b> each bank a reroll-lowest; ${tname} gains a freed bonus action (Accord Partner).</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
     case "acc-sync": {
       const allies = alliesInAura(30);
@@ -7850,12 +7887,12 @@ async function _ftForgeSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Forged Trophy — your next Strike blazes (+${tier}d6) and <b>${tname}</b> gains DR ${tier}.${tail}</p>`;
     }
     case "fov-compound": {
-      await oneShot("crowning-blow");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Compounded Blow — your next Strike lands as a max-die critical.${tail}</p>`;
+      await oneShot("max-dice"); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Compounded Blow — your next Strike that hits rolls max damage dice.${tail}</p>`; // surge repricing 2026-11-12 (Dave)
     }
     case "fov-sunder": {
       await oneShot("sundering-blow");
-      if (target) await _ftSetCondition(target, "staggered");   // 10-29: set, not toggle
+      if (target) await _ftSurgeSetCond(target, "staggered");   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): timed 1 round
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Sundering Stroke — your next Strike ignores resistances; <b>${tname}</b> is Staggered.${tail}</p>`;
     }
     // ── Forge of the Spark Reclaimer ──
@@ -7870,12 +7907,12 @@ async function _ftForgeSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">♻ Reclaim — ${cleared ? `salvaged <b>${cleared}</b> off ` : "shored up "}<b>${tname}</b> (DR ${tier}).${tail}</p>`;
     }
     case "rec-remember": {
-      const h = target ? await healAlly(target, `1d8 + ${tier}`) : 0;
+      const h = target ? await healAlly(target, `2d6 * ${Math.max(1, tier)}`) : 0; // surge repricing 2026-11-12 (Dave): heal by price — 2d6 × Tier (was 1d8 + Tier)
       if (target) await _ftCreateAllyAE(target, drAE(`Remembered Thing (DR ${tier})`));
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">♻ The Remembered Thing — salvaged a relic for <b>${tname}</b>: +${h} integrity and DR ${tier}.${tail}</p>`;
     }
     case "rec-deepsalvage": {
-      const h = target ? await healAlly(target, `2d8 + ${tier}`) : 0;
+      const h = target ? await healAlly(target, `3d6 * ${Math.max(1, tier)}`) : 0; // surge repricing 2026-11-12 (Dave): heal by price — 3d6 × Tier (was 2d8 + Tier)
       let n = 0;
       if (target) {
         const ts = target.system?.system ?? target.system ?? {};
@@ -7914,7 +7951,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     const sys = target.system?.system ?? target.system ?? {};
     const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
     const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
-    const roll = new Roll(`1d8 + ${tier}`);
+    const roll = new Roll(`1d6 * ${Math.max(1, tier)}`); // surge repricing 2026-11-12 (Dave): heal by price — 1d6 × Tier (was 1d8 + Tier), heat band × kept
     await roll.evaluate(); _ftSurgeRoll(roll);
     const amount = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
     const _h     = await _ftHealTarget(target, amount);   // owner-or-GM-relay
@@ -7930,7 +7967,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
       ⚒ Forge-Welded <b>${target.name}</b> for <b>${banked}</b> integrity
-      (1d8+${tier} ×${mult} <span style="opacity:0.7">[${heatTag}]</span>). ${cur} → ${next}/${max}.${_h.tag}${backlash}
+      (1d6×${Math.max(1, tier)} ×${mult} <span style="opacity:0.7">[${heatTag}]</span>). ${cur} → ${next}/${max}.${_h.tag}${backlash}
     </p>`;
   }
 
@@ -7973,7 +8010,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       const asys = a.system?.system ?? a.system ?? {};
       const max = Number(asys?.derived?.integrity?.max ?? asys?.integrity?.max ?? 16);
       const cur = Number(asys?.derived?.integrity?.value ?? asys?.integrity?.value ?? 0);
-      const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate(); _ftSurgeRoll(roll);
+      const roll = new Roll(`1d6 * ${Math.max(1, tier)}`); await roll.evaluate(); _ftSurgeRoll(roll); // surge repricing 2026-11-12 (Dave): heal by price — 1d6 × Tier each (was 1d6 + Tier)
       const amt  = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
       const next = (await _ftHealTarget(a, amt)).next;   // owner-or-GM-relay
       for (const rt of ["poison", "qliphothic"]) {   // RFI type — "necrotic" never matched a hit
@@ -8483,7 +8520,7 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
   const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const anchorAE = (name) => ({ name, img: "icons/svg/anchor.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true } } } });
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
   const selfAE = async (ae) => { try { await actor.createEmbeddedDocuments("ActiveEffect", [ae]); return true; } catch (e) { return false; } };
   const dist = (a, b) => {
     const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2;
@@ -8507,11 +8544,11 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">💥 Shatter — your next Strike ignores resistances; <b>${tname}</b> is Staggered.</p>`;
     }
     case "cl-cataclysm": {
-      await oneShot("crowning-blow");
+      await oneShot("max-dice"); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
       const foes = nearbyFoes(tier);
       const downed = [];
       for (const t of foes) if (await setCond(t.actor, "prone")) downed.push(t.actor.name);
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌋 Cataclysm — your next Strike lands as a max-die crit${downed.length ? `; knocked Prone: <b>${downed.join(", ")}</b>` : "; no foes in reach to fell"}.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌋 Cataclysm — your next Strike that hits rolls max damage dice${downed.length ? `; knocked Prone: <b>${downed.join(", ")}</b>` : "; no foes in reach to fell"}.</p>`;
     }
     // ── Avalanche — momentum ──
     case "av-roll": {
@@ -8520,9 +8557,9 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🏔 Roll Forward — your next Strike +${tier}d6; <b>${tname}</b> is knocked Prone.</p>`;
     }
     case "av-crash": {
-      await oneShot("crowning-blow");
+      await oneShot("max-dice"); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
       if (target) await setCond(target, "staggered");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">💢 Crash — your next Strike lands as a max-die crit; <b>${tname}</b> is Staggered.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">💢 Crash — your next Strike that hits rolls max damage dice; <b>${tname}</b> is Staggered.</p>`;
     }
     case "av-unstoppable": {
       await selfAE(anchorAE("Bulwark: Unstoppable (CC/forced-move immune)"));
@@ -8593,7 +8630,7 @@ function _ftCourierRoute(actor) {
 }
 
 // Shadow Courier base Surge spends — mobility + tempo. Reuse existing chokepoints
-// (movementBudgetFt, bonusActionAvailable freed reaction, aegis-DR AE, snap-strike +
+// (movementBudgetFt, bonusActionAvailable freed bonus action, aegis-DR AE, snap-strike +
 // doomstrike one-shots, aidBanked reroll) — no new consumers.
 async function _ftCourierSurge(actor, effectKey, tier) {
   const grid    = canvas.grid?.size ?? 100;
@@ -8616,7 +8653,7 @@ async function _ftCourierSurge(actor, effectKey, tier) {
     const half = await selfMove(); await freeReaction(actor);
     // Ruling SC4 (2026-10-25): "no provoke" — set the disengaged flag the reaction-strike suppressor reads.
     try { await actor.setFlag("fourththing", "combat", { ...(actor.flags?.fourththing?.combat ?? {}), disengaged: true }); } catch (e) {}
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🏃 Courier's Step — +${half} ft movement (no provoke) and a freed reaction.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🏃 Courier's Step — +${half} ft movement (no provoke) and a freed bonus action.</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
   }
   if (effectKey === "sc-ghost") {
     try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Ghoststep (DR ${tier})`)]); } catch (e) {}
@@ -8632,7 +8669,7 @@ async function _ftCourierSurge(actor, effectKey, tier) {
     const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= tier * grid + grid / 2) : [];
     const names = [];
     for (const t of allies) { await freeReaction(t.actor); await bankReroll(t.actor); names.push(t.actor.name); }
-    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0b8e8;font-weight:600">🚪 No Such Door — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies in reach gain"} a freed reaction and a reroll.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0b8e8;font-weight:600">🚪 No Such Door — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies in reach gain"} a freed bonus action and a reroll.</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
   }
   return "";
 }
@@ -8650,7 +8687,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
   const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier-route" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
   const disAdv  = async (foe) => { try { await _ftSetFlagSeatSafe(foe, "aurablade.disAttackOnce", true); } catch (e) {} };
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     const h = await _ftHealTarget(a, Math.max(0, Number(r.total) || 0));   // owner-or-GM-relay
@@ -8662,7 +8699,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     // ── Wayfarer — movement is mercy / extraction ──
     case "wf-clearroad": {
       if (target) { await freeReaction(target); await bankReroll(target); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🛤 Clear Road — <b>${tname}</b> gains a freed reaction and a reroll (the road opens).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🛤 Clear Road — <b>${tname}</b> gains a freed bonus action and a reroll (the road opens).</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
     case "wf-safepassage": {
       if (target) { await _ftCreateAllyAE(target, drAE(`Safe Passage (DR ${tier})`)); await bankReroll(target); }
@@ -8670,8 +8707,8 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     }
     case "wf-arrival": {
       let h = 0;
-      if (target) { const r = await healAlly(target, `1d8 + ${tier}`); h = r.banked; await _ftCreateAllyAE(target, drAE(`Impossible Arrival (DR ${tier})`)); await freeReaction(target); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">✦ Impossible Arrival — whisked <b>${tname}</b> clear: +${h} integrity, DR ${tier}, and a freed reaction.</p>`;
+      if (target) { const r = await healAlly(target, `3d6 * ${Math.max(1, tier)}`); h = r.banked; await _ftCreateAllyAE(target, drAE(`Impossible Arrival (DR ${tier})`)); await freeReaction(target); } // surge repricing 2026-11-12 (Dave): heal by price — 3d6 × Tier (was 1d8 + Tier)
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">✦ Impossible Arrival — whisked <b>${tname}</b> clear: +${h} integrity, DR ${tier}, and a freed bonus action.</p>`;
     }
     // ── Black Stair — weaponized thresholds / denial ──
     case "bs-ambush": {
@@ -8687,15 +8724,15 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🚧 Cut Off — <b>${tname}</b> is Staggered and cannot take reactions until your next turn.</p>`;
     }
     case "bs-stairtrap": {
-      await oneShot("crowning-blow");
+      await oneShot("max-dice"); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
       if (target) await setCond(target, "prone");
       try { await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true); } catch (e) {}
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌀 Stair-Trap — your next Strike lands as a max-die crit${target ? `; <b>${tname}</b> is knocked Prone` : ""}; if it drops them, you regain a freed action.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌀 Stair-Trap — your next Strike that hits rolls max damage dice${target ? `; <b>${tname}</b> is knocked Prone` : ""}; you gain a freed bonus action.</p>`;
     }
     // ── Last Mile — carry the burden / anti-death ──
     case "lm-shoulder": {
       if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Shoulder the Weight needs a target ally. Surge spent — GM may refund.</p>`;
-      const r = await healAlly(target, `${Math.max(1, tier)}d6`);
+      const r = await healAlly(target, `1d6 * ${Math.max(1, tier)}`); // surge repricing 2026-11-12 (Dave): heal by price — 1d6 × Tier (was Tier d6)
       await bankReroll(target);
       const sCur = Number((actor.system?.system ?? actor.system)?.derived?.stress?.value ?? 10);
       const cost = Math.ceil(r.banked / 2);
@@ -8708,6 +8745,12 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     }
     case "lm-delivered": {
       if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Delivered needs a target ally. Surge spent — GM may refund.</p>`;
+      // surge repricing 2026-11-12 (Dave): 1/fight (in a fight), same guard as None Lost.
+      const _dlvCombat = String(game.combat?.id ?? "none");
+      if (game.combat?.id && actor.flags?.fourththing?.courier?.deliveredCombat === _dlvCombat) {
+        return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Delivered already used this fight.</p>`;
+      }
+      try { await actor.setFlag("fourththing", "courier.deliveredCombat", _dlvCombat); } catch (e) {}
       const tsys = target.system?.system ?? target.system ?? {};
       const max  = Number(tsys?.derived?.integrity?.max ?? tsys?.integrity?.max ?? 16);
       const half = Math.max(1, Math.floor(max / 2));
@@ -8716,7 +8759,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
       const next = _h.next;
       let cl = ""; const k = NEG.find(x => tsys?.conditions?.[x] === true);
       if (k && await setCond(target, k, false)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}.${_h.tag}</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}. <span style="opacity:0.7;font-weight:400">(1/fight)</span>${_h.tag}</p>`;
     }
   }
   return "";
@@ -8768,7 +8811,7 @@ async function _ftPactkeeperSurge(actor, effectKey, tier) {
   const target  = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname   = target?.name ?? "the target";
   const drAE    = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
 
   if (effectKey === "pk-clause") {
     if (target) await _ftPactDisAttack(target);
@@ -8802,7 +8845,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
   const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "pactkeeper" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     return (await _ftHealTarget(a, Math.max(0, Number(r.total) || 0))).healed;   // owner-or-GM-relay
@@ -8835,8 +8878,8 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🧾 Levy — <b>${tname}</b> is Staggered and its next attack is keeping the lowest 2 of 3d10 (payment is due).</p>`;
     }
     case "au-foreclose": {
-      await oneShot("crowning-blow"); await oneShot("sundering-blow");
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🧾 Foreclose — your next Strike lands as a max-die crit and ignores resistances. The debt is called in full.</p>`;
+      await oneShot("max-dice"); await oneShot("sundering-blow"); // surge repricing 2026-11-12 (Dave): max-dice (not Crowning)
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🧾 Foreclose — your next Strike that hits rolls max damage dice and ignores resistances. The debt is called in full.</p>`;
     }
     // ── Steward of Living Communities — protect the bound ──
     case "st-shelter": {
@@ -8845,14 +8888,14 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
     }
     case "st-bound": {
       let h = 0;
-      if (target) { h = await healAlly(target, `1d8 + ${tier}`); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
+      if (target) { h = await healAlly(target, `2d6 * ${Math.max(1, tier)}`); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} } // surge repricing 2026-11-12 (Dave): heal by price — 2d6 × Tier (was 1d8 + Tier)
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🤝 Keep the Agreement — healed <b>${tname}</b> +${h}; the next hit that would drop them holds at 1.</p>`;
     }
     case "st-sanctuary": {
       const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
       const names = [];
       for (const t of allies) { if (await _ftCreateAllyAE(t.actor, drAE(`Sanctuary (DR ${tier})`))) { await freeReaction(t.actor); names.push(t.actor.name); } }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">⛪ Sanctuary — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies within 6 squares gain"} DR ${tier} and a freed reaction.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">⛪ Sanctuary — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies within 6 squares gain"} DR ${tier} and a freed bonus action.</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
   }
   return "";
@@ -8941,7 +8984,7 @@ async function _ftWyrdlensSurge(actor, effectKey, tier) {
   }
   if (effectKey === "wl-refract") {
     if (target) { await _ftCreateAllyAE(target, drAE(`Refracted (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {} }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🪞 Refract — <b>${tname}</b> gains DR ${tier} and a freed reaction (harm bends aside).</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🪞 Refract — <b>${tname}</b> gains DR ${tier} and a freed bonus action (harm bends aside).</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
   }
   if (effectKey === "wl-revelation") {
     const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
@@ -8961,7 +9004,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
   const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens-refraction" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
 
   switch (effectKey) {
     // ── Refraction of Foresight — anticipation / temporal ──
@@ -8972,7 +9015,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
     }
     case "fs-slow": {
       if (target) { await freeReaction(target); await _ftCreateAllyAE(target, drAE(`Slowed Instant (DR ${tier})`)); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⏳ The Slowed Instant — <b>${tname}</b> gains a freed reaction and DR ${tier} (time gives them room).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⏳ The Slowed Instant — <b>${tname}</b> gains a freed bonus action and DR ${tier} (time gives them room).</p>`; // surge repricing 2026-11-12 (Dave): freed bonus action
     }
     case "fs-stop": {
       if (target) { await _ftPactDisAttack(target); await setCond(target, "staggered"); }
@@ -8990,13 +9033,14 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
     case "mc-openhand": {
       let h = 0;
       if (target) {
-        h = (await _ftHealTarget(target, Math.max(1, tier) * 2 + 2)).healed;   // owner-or-GM-relay
+        const _ohR = new Roll(`3d6 * ${Math.max(1, tier)}`); await _ohR.evaluate(); _ftSurgeRoll(_ohR); // surge repricing 2026-11-12 (Dave): heal by price — 3d6 × Tier (was flat 2T + 2)
+        h = (await _ftHealTarget(target, Math.max(0, Number(_ohR.total) || 0))).healed;   // owner-or-GM-relay
         const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
         const ts = target.system?.system ?? target.system ?? {};
         const k = NEG.find(x => ts?.conditions?.[x] === true);
         if (k) await setCond(target, k, false);
       }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">🕊 The Open Hand — healed <b>${tname}</b> and offered a clean exit (cleared a condition).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">🕊 The Open Hand — healed <b>${tname}</b> +${h} and offered a clean exit (cleared a condition).</p>`;
     }
     // ── Refraction of Truth — exposure / lockdown ──
     case "tr-read": {
@@ -9076,7 +9120,7 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
   const grid   = canvas.grid?.size ?? 100;
   const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cl-doctrine" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
-  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
+  const setCond = (a, c, want = true) => _ftSurgeSetCond(a, c, want);   // 10-29: set, not toggle; surge repricing 2026-11-12 (Dave): Staggered/Shaken timed
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
   const aura = () => myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
@@ -9162,7 +9206,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     const sys = target.system?.system ?? target.system ?? {};
     const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
     const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
-    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate(); _ftSurgeRoll(roll);
+    const roll = new Roll(`2d6 * ${Math.max(1, tier)}`); await roll.evaluate(); _ftSurgeRoll(roll); // surge repricing 2026-11-12 (Dave): heal by price — 2d6 × Tier (was 1d6 + Tier)
     const amount = Math.max(0, Number(roll.total) || 0);
     const _h     = await _ftHealTarget(target, amount);   // owner-or-GM-relay
     const next   = _h.next;
@@ -9170,10 +9214,10 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     const k = NEG.find(x => sys?.conditions?.[x] === true);
     let cl = "";
     if (k) { try { await game.fourththing?.toggleCondition?.(target, k); cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`; } catch (e) {} }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Eased <b>${target.name}</b>: +${healed} integrity (1d6+${tier}=${amount}), ${cur} → ${next}/${max}${cl}.${_h.tag}</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Eased <b>${target.name}</b>: +${healed} integrity (2d6×${Math.max(1, tier)}=${amount}), ${cur} → ${next}/${max}${cl}.${_h.tag}</p>`;
   }
 
-  // ── Rally to Me — embolden one ally: bank a reroll + free a reaction ──
+  // ── Rally to Me — embolden one ally: bank a reroll + free a bonus action ──
   if (effectKey === "rally-to-me") {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rally to Me needs a target ally. Surge spent — GM may refund.</p>`;
     await bankReroll(target, "rally-to-me");
@@ -9381,10 +9425,10 @@ async function _ftCreateAllyAE(ally, aeData) {
 // ft-applyDamage GM relay by UUID. Returns the PREDICTED numbers for the card:
 // { ok, relayed, cur, next, max, healed, tag } — `tag` is a short card suffix
 // ("relayed to GM" / "no GM online") so a relayed heal never reads as applied.
-async function _ftHealTarget(target, amount) {
+async function _ftHealTarget(target, amount, track = "integrity") { // surge repricing 2026-11-12 (Dave): optional track (Phoenix mends Stress too)
   const s   = target?.system?.system ?? target?.system ?? {};
-  const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
-  const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
+  const max = Number(s?.derived?.[track]?.max ?? s?.[track]?.max ?? 16);
+  const cur = Number(s?.derived?.[track]?.value ?? s?.[track]?.value ?? 0);
   const out = { ok: false, relayed: false, cur, next: cur, max, healed: 0, tag: "" };
   if (!target) return out;
   const raw = Math.max(0, Math.floor(Number(amount) || 0));
@@ -9394,7 +9438,7 @@ async function _ftHealTarget(target, amount) {
   const dim = (t) => ` <span style="opacity:0.7;font-weight:400;font-style:italic">(${t})</span>`;
   if (target.isOwner) {
     try {
-      await game.fourththing.rolls._applyDamageToActor(target, raw, { op: "heal", track: "integrity" });
+      await game.fourththing.rolls._applyDamageToActor(target, raw, { op: "heal", track });
       out.ok = true; out.next = next; out.healed = next - cur;
       if (qli) out.tag = dim("½ qliphothic");
     } catch (e) { console.warn("[fourththing] heal apply failed", e); out.tag = dim("heal failed — see console"); }
@@ -9403,7 +9447,7 @@ async function _ftHealTarget(target, amount) {
   if (game.users?.some?.(u => u.isGM && u.active)) {
     _ftRelayEmit({
       t: "ft-applyDamage", actorId: target.id, targetUuid: target.uuid,
-      baseDmg: raw, op: "heal", track: "integrity", damageType: "", damageFlavor: ""
+      baseDmg: raw, op: "heal", track, damageType: "", damageFlavor: ""
     });
     out.ok = true; out.relayed = true; out.next = next; out.healed = next - cur;
     out.tag = dim(qli ? "½ qliphothic · relayed to GM" : "relayed to GM");
@@ -19150,7 +19194,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // scalar bonus; snap-strike adds a die to the pool.
     const _surge = _ftReadSurgeOneShots(actor, { context: "strike" });
     const tierVal = _ftCasterTier(actor);
-    const tierBonus = (_surge.tierSurge || _surge.finalArgument) ? tierVal : 0;
+    const tierBonus = _surge.tierSurge ? tierVal : 0; // surge repricing 2026-11-12 (Dave): Final Argument no longer adds +Tier to hit (it auto-hits)
     // Echo Strike: this free Strike takes a −2 accuracy penalty.
     const echoPenalty = _surge.echoStrike ? 2 : 0;
 
@@ -19337,7 +19381,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       catch (_e) { /* non-owner — clears on round commit */ }
     }
     // Final Argument / Predator Patience: auto-hit. Surge spends overpower the gate.
-    const success = (_surge.finalArgument || _predatorHit) ? true : (total >= defenseValue);
+    const success = (_surge.finalArgument || _surge.crowningBlow || _predatorHit) ? true : (total >= defenseValue); // surge repricing 2026-11-12 (Dave): Crowning Blow auto-hits
+    // surge repricing 2026-11-12 (Dave): what this Strike spends — damage riders only when it hits.
+    const _surgeFired = { ..._surge, consumed: [..._surge.consumed, ...(success ? _surge.consumedOnHit : [])] };
 
     // Bulwark T3 Polarity Mastery, Avalanche voice (wired 2026-06-07 —
     // Frame/Ruin folded into Surge): a SUCCESSFUL melee strike whose base
@@ -19400,10 +19446,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // NPC automation: "the damage die rerolls the lowest/highest" → the first NdX gains a die and keeps N best/worst
     try { if (_npcAtkMods?.damage) finalDamageFormula = game.fourththing.npcAuto.transformDamage(finalDamageFormula, _npcAtkMods); } catch (_e) {}
 
-    // Doomstrike: tack on `+Td6x10` exploding bonus damage.
+    // Doomstrike: tack on `+Td6x` exploding bonus damage (sixes explode).
     if (_surge.doomstrike && finalDamageFormula) {
-      finalDamageFormula = `${finalDamageFormula} + ${tierVal}d6x10`;
+      finalDamageFormula = `${finalDamageFormula} + ${tierVal}d6x`; // surge repricing 2026-11-12 (Dave): was d6x10 (a d6 can never roll 10) — sixes now explode
     }
+    // surge repricing 2026-11-12 (Dave) — Tier Surge: +Tier damage; Final Argument: +Tier d6 (maxed + doubled below).
+    if (_surge.tierSurge && finalDamageFormula) finalDamageFormula += ` + ${tierVal}`;
+    if (_surge.finalArgument && finalDamageFormula) finalDamageFormula += ` + ${tierVal}d6`;
 
     // Menhirkin Heat Memory — banked-heat rider: +Nd10x10 fire on a connecting
     // hit (N = heat spent). Consumed only on a hit (persists through a miss, per
@@ -19430,7 +19479,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         // Crowning Blow / Final Argument: set every rolled die to its max face.
         // We compute the "as if every die rolled max" total + reconstruct the
         // displayed dice tooltip so the chat card matches the apply total.
-        if (_surge.crowningBlow || _surge.finalArgument) {
+        // surge repricing 2026-11-12 (Dave) — Crowning Blow / Final Argument max every die then DOUBLE (a true critical);
+        // class "max damage dice" primers (max-dice) only max the dice.
+        if (_surge.crowningBlow || _surge.finalArgument || _surge.maxDice) {
+          const _critX2 = !!(_surge.crowningBlow || _surge.finalArgument);
           let maxedTotal = 0;
           const maxedDiceDisplay = [];
           for (const term of (dmgRoll.terms ?? [])) {
@@ -19447,8 +19499,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               maxedTotal += term.total;
             }
           }
-          damageRolledTotal = Math.max(0, maxedTotal);
-          damageDiceTooltip = maxedDiceDisplay.length ? `[max: ${maxedDiceDisplay.join(" · ")}]` : "";
+          damageRolledTotal = Math.max(0, maxedTotal) * (_critX2 ? 2 : 1);
+          damageDiceTooltip = maxedDiceDisplay.length ? `[max: ${maxedDiceDisplay.join(" · ")}${_critX2 ? " · ×2" : ""}]` : "";
         } else {
           damageRolledTotal = Number(dmgRoll.total) || 0;
           const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
@@ -19494,7 +19546,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       damageType, damageFlavor, damageTrack,
       targetUuid:    target?.uuid ?? "",
       itemUuid,
-      ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists   // 2026-10-26: npcAuto.ignoreResists (Yesodium-Bolt)
+      ignoreResists: !!_surge.sunderingBlow || !!_surge.finalArgument || !!_npcAtkMods?.ignoreResists   // surge repricing 2026-11-12 (Dave): + Final Argument. 2026-10-26: npcAuto.ignoreResists (Yesodium-Bolt)
     } : null;
     const _legendaryBtn = _legendaryCanSave
       ? `<button class="ft-legendary-invoke" data-message-id="" style="margin-top:0.35rem;background:#3a1f3a;color:#eb9beb;border:1px solid #eb5757;padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer">✨ Invoke Legendary (1/scene) — ${Number(defenseValue) <= 20 ? "auto-succeed" : "+10"}</button>`
@@ -19512,7 +19564,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, damageTrack, rolledParts: success ? rolledParts : [],
         costNote, signature, thirdThing,
-        itemUuid, ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists, nonlethal: _nonlethalHit,
+        itemUuid, ignoreResists: !!_surge.sunderingBlow || !!_surge.finalArgument || !!_npcAtkMods?.ignoreResists, nonlethal: _nonlethalHit, // surge repricing 2026-11-12 (Dave)
         radPenalty: _radPen
       }) + restraintNote + (_staggerPen
         ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#f2994a;margin:0.2rem 0 0">◈ Staggered: −${_staggerPen} to the attack</p>`
@@ -19557,11 +19609,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           }</p>`
         : "") + (_rankPoolNote
         ? `<p style="font-size:0.78rem;color:#ffd54a;font-weight:600;margin:0.2rem 0 0">${ftEscapeHtml(_rankPoolNote)}</p>`
-        : "") + _ftSurgeBoostBanner(_surge) + _legendaryBtn
+        : "") + _ftSurgeBoostBanner(_surgeFired) + _legendaryBtn
     });
 
     // Consume Surge one-shots — flags clear so the next Strike rolls clean.
-    await _ftConsumeSurgeOneShots(actor, _surge, { context: "strike" });
+    // surge repricing 2026-11-12 (Dave): damage riders (consumedOnHit) clear only on a hit; a miss keeps them primed.
+    await _ftConsumeSurgeOneShots(actor, _surgeFired, { context: "strike" });
 
     // Reality Tear — attacks are always on; defenseValue is the DC. Tier gate
     // means a Tier-IV bashing a Tier-I mook is when the ground actually breaks.

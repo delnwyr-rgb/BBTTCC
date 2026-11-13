@@ -11,7 +11,7 @@
       "general"
     ],
     "description": {
-      "value": "<p><em>You bring more than you swung.</em></p><p>next Strike +Tier d6 exploding damage</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · General</p>",
+      "value": "<p><em>You bring more than you swung.</em></p><p>your next Strike that hits deals +Tier d6, sixes explode (kept through a miss)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · General</p>",
       "chat": ""
     }
   },
@@ -25,7 +25,7 @@
     "fourththing": {
       "surgeKey": "doomstrike",
       "surgeBucket": "off",
-      "surgeCost": 5,
+      "surgeCost": 2,
       "surgeTier": 1,
       "surgeClass": "General"
     },

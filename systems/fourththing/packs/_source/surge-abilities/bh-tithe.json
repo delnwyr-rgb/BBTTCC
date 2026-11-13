@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The hymn wants blood first. Yours will do.</em></p><p>pay Integrity equal to Tier; your next Strike lands as a max-die crit</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Tier 2+ · Aura ▸ Blood Hymn</p>",
+      "value": "<p><em>The hymn wants blood first. Yours will do.</em></p><p>pay Integrity equal to Tier; max damage dice on your next Strike (kept through a miss)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Tier 2+ · Aura ▸ Blood Hymn</p>",
       "chat": ""
     }
   },

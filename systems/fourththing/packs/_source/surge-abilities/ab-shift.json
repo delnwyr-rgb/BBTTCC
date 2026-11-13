@@ -11,7 +11,7 @@
       "class"
     ],
     "description": {
-      "value": "<p><em>The colour of you changes between one breath and the next.</em></p><p>change your Aura at no Burn cost + DR equal to Tier this round</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Aurablade</p>",
+      "value": "<p><em>The colour of you changes between one breath and the next.</em></p><p>change your Aura (no Surge gained) + DR equal to Tier this round</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Aurablade</p>",
       "chat": ""
     }
   },
