@@ -263,10 +263,20 @@
   function rollGroups5e(actor) {
     const out = [], sys = actor?.system ?? {};
     const abil = CONFIG.DND5E?.abilities ?? {};
+    // 11-12 (Dave): ability checks — dnd5e 6 totals them at abilities.<k>.check.value (mod + check bonuses + prof term).
+    const checks = Object.keys(abil).filter(k => sys.abilities?.[k]).map(k => {
+      const a = sys.abilities[k];
+      const mod = a.check?.value ?? a.mod ?? 0;
+      const prof = a.check?.prof?.multiplier ?? 0;
+      const name = abil[k]?.abbreviation ?? k;
+      return { kind: "roll5e", roll: "check", key: `check:${k}`, abil: k, label: `${String(name).toUpperCase()} ${sgn(mod)}${PROF_MARK(prof) ? ` ${PROF_MARK(prof)}` : ""}`,
+        tip: `${abil[k]?.label ?? k} check (${sgn(mod)})`, icon: "hand-fist", aim: "none", cost: null };
+    });
+    if (checks.length) out.push({ id: "checks", label: "Checks", entries: checks });
     const saves = Object.keys(abil).filter(k => sys.abilities?.[k]).map(k => {
       const a = sys.abilities[k];
       const mod = a.save?.value ?? a.save ?? a.mod ?? 0;
-      const prof = a.saveProf?.multiplier ?? a.proficient ?? 0;
+      const prof = a.save?.prof?.multiplier ?? a.saveProf?.multiplier ?? a.proficient ?? 0;
       const name = abil[k]?.abbreviation ?? k;
       return { kind: "roll5e", roll: "save", key: `save:${k}`, abil: k, label: `${String(name).toUpperCase()} ${sgn(mod)}${PROF_MARK(prof) ? ` ${PROF_MARK(prof)}` : ""}`,
         tip: `${abil[k]?.label ?? k} saving throw (${sgn(mod)})${prof ? " — proficient" : ""}`, icon: "shield-halved", aim: "none", cost: null };
@@ -500,6 +510,7 @@
       try {
         const event = window.event;
         if (entry.roll === "save") return await actor.rollSavingThrow?.({ ability: entry.abil, event });
+        if (entry.roll === "check") return await actor.rollAbilityCheck?.({ ability: entry.abil, event });
         return await actor.rollSkill?.({ skill: entry.skill, event });
       } catch (e) { warn(`roll failed: ${entry.label}`, e); return; }
     }
@@ -716,7 +727,7 @@
       const isFolded = folded.has(g.id);
       const labelBtn = `<button type="button" class="cd-group-label cd-fold" data-dock="fold" data-g="${esc(g.id)}" data-tooltip="${isFolded ? "Show" : "Hide"} ${esc(g.label)}"><i class="fas fa-caret-${isFolded ? "right" : "down"}"></i> ${esc(g.label)}${isFolded ? ` <span class="cd-fold-n">${shown.length}</span>` : ""}</button>`;
       if (isFolded) { out.push(`<div class="cd-group is-folded">${labelBtn}</div>`); continue; }
-      out.push(`<div class="cd-group ${g.id === "saves" || g.id === "skills" ? "is-rolls" : ""}">${labelBtn}` + shown.map(e => {
+      out.push(`<div class="cd-group ${["checks", "saves", "skills"].includes(g.id) ? "is-rolls" : ""}">${labelBtn}` + shown.map(e => {
         const spent = e.cost && slotSpent(s.actor, e.cost);
         let hk = "";
         if (!spent && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
