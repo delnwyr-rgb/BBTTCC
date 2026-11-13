@@ -1785,6 +1785,37 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexDarkness apply failed", eHD);
     }
 
+    // 2g-gate) LEYGATE (Dave 2026-11-12: the stabilizer Garren installs should give a working Leygate — "it totally makes sense for
+    // the Leygate to lead to the Fixit Farm"). worldEffects.leygate = { hexName, linkHexName, enabled?:true, strength?:0.5,
+    // minFactionTier?:"T1", twoWay?:true } (or a LIST). Writes flags.bbttcc-territory.leylines.gate on the hex (and on the linked
+    // hex, pointing back, when twoWay) — the same record the Travel Console's gate legs read (api.territory.leylines).
+    try {
+      const lgList = Array.isArray(we.leygate) ? we.leygate : (we.leygate && typeof we.leygate === "object" ? [we.leygate] : []);
+      if (lgList.length && game.user?.isGM) {
+        const MODT = "bbttcc-territory";
+        const norm = (x) => String(x || "").replace(/[\s ]+/g, " ").trim().replace(/^[^\p{L}\p{N}]+/u, "").trim().toLowerCase();
+        const byName = (n) => { const want = norm(n); for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) { const tf = d.flags && d.flags[MODT]; if (tf && (tf.isHex === true || tf.kind === "territory-hex") && norm(tf.name || d.text) === want) return d; } return null; };
+        const write = async (doc, link, lg) => {
+          const cur = clone(((doc.flags && doc.flags[MODT]) || {}).leylines?.gate || {});
+          const next = { ...cur, enabled: lg.enabled !== false, linkHexUuid: link.uuid, strength: Number(lg.strength ?? cur.strength ?? 0.5) || 0.5,
+            minFactionTier: String(lg.minFactionTier || cur.minFactionTier || "T1"), locked: false };
+          if (JSON.stringify(next) === JSON.stringify(cur)) return false;
+          await doc.update({ [`flags.${MODT}.leylines.gate`]: next }, { parent: doc.parent });
+          return true;
+        };
+        for (const lg of lgList) {
+          if (!lg || typeof lg !== "object") continue;
+          const a = byName(lg.hexName), b = byName(lg.linkHexName);
+          if (!a || !b) { console.warn(TAG, "leygate: hex not found", lg); continue; }
+          let did = await write(a, b, lg);
+          if (lg.twoWay !== false) did = (await write(b, a, lg)) || did;
+          if (did) { changed = true; notes.push(`leygate:${lg.hexName}${lg.twoWay !== false ? "↔" : "→"}${lg.linkHexName}`); }
+        }
+      }
+    } catch (eLG) {
+      console.warn(TAG, "leygate apply failed", eLG);
+    }
+
     // 2g') STAGE CUES (2026-10-15): worldEffects.stageCue = { key, sceneId?, direction? } (or a LIST).
     // Plays a recorded before/after scene state (bbttcc-campaign/scripts/stage-cues.js) — darkness,
     // lights, walls, tiles — animated, on every seat (document updates). Scene resolves sceneId →
