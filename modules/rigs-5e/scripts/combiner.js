@@ -168,7 +168,9 @@
       for (const [i, id] of j.crew.entries()) {
         const a = game.actors.get(id); if (!a) continue;
         const role = i === 0 ? (part?.role ?? "crew") : "crew";
-        try { await R().board(a, titan, { role }); }
+        // 11-13: the part's pilot mans that part's titan station (flags.rigs-5e.station.part === part key)
+        const station = i === 0 ? (titan.items.find(it => it.flags?.[SCOPE]?.station?.part === j.key)?.id ?? null) : null;
+        try { await R().board(a, titan, { role, station }); }
         catch (e) { try { await R().board(a, titan, { role: "crew" }); } catch (e2) { console.warn(TAG, "seat failed", a.name, e2); } }
       }
     }

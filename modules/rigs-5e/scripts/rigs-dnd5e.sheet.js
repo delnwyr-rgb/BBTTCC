@@ -169,7 +169,9 @@
         ok: { label: "Seat", callback: (_ev, b) => b.form.elements.role?.value ?? "crew" }, rejectClose: false,
       }).catch(() => null);
       if (!role) return;
-      await R().board(who, a, { role });
+      const st = await I().pickStation?.(a, role);
+      if (st === null) return;
+      await R().board(who, a, { role, station: st?.station ?? null });
       if (I().rigOf?.(who)?.id === a.id || R().boardedRigOf?.(who)?.rigId === a.id) await dropNative(uuid);
       rerender();
     });

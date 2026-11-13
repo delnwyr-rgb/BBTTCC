@@ -474,7 +474,7 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
     if (!game.user.isGM) {
       const gx = game.bbttcc?.api?.gmExec;
       if (typeof gx?.call !== "function" || !game.users.some(u => u.isGM && u.active)) throw new Error("No GM is online to confirm boarding.");
-      const r = await gx.call("rigs.board", { stewardId: steward.id, rigId: rig.id, role, initiatorUserId: game.user.id });
+      const r = await gx.call("rigs.board", { stewardId: steward.id, rigId: rig.id, role, station: opts.station ?? null, initiatorUserId: game.user.id });
       if (r?.error) throw new Error(r.error);
       return true;
     }
@@ -484,7 +484,15 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
       if (inRole >= Number(cap.max)) throw new Error(`${rig.name}: all ${role} stations are taken (${inRole}/${cap.max} — ${d.frame.name})`);
     }
     const slots = foundry.utils.deepClone(d.crew?.slots ?? []);
-    slots.push({ role, actorId: steward.id, label: steward.name });
+    // 11-13 (Dave: "players select a specific station, which then sets that power as their fire weapon ability"):
+    // a seat may name ONE station item on the rig — one person per station.
+    let station = opts?.station ? String(opts.station) : null;
+    if (station) {
+      const st = rig.items.get(station);
+      if (!st) station = null;
+      else if (slots.some(s => s.station === station)) throw new Error(`${rig.name}: ${st.name} is already manned.`);
+    }
+    slots.push({ role, actorId: steward.id, label: steward.name, ...(station ? { station } : {}) });
     await setSlots(rig, slots);
     const tok = token?.document ?? token ?? tokenOf(steward)?.document ?? null;
     await steward.setFlag(SCOPE, "boardedRig", { rigId: rig.id, role, tokenId: tok?.id ?? null, sceneId: tok?.parent?.id ?? null });
@@ -504,7 +512,7 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
       try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); }
       catch (e) { console.warn(TAG, "board: token sync failed on", scene.name, e); }
     }
-    await chatNote(rig, `🛻 ${foundry.utils.escapeHTML(steward.name)} boards ${foundry.utils.escapeHTML(rig.name)}`, [`Role: <b>${role}</b>. They spend their own action economy on rig actions.`]);
+    await chatNote(rig, `🛻 ${foundry.utils.escapeHTML(steward.name)} boards ${foundry.utils.escapeHTML(rig.name)}`, [`Role: <b>${role}</b>${station ? ` · station <b>${foundry.utils.escapeHTML(rig.items.get(station)?.name ?? "")}</b>` : ""}. They spend their own action economy on rig actions.`]);
     _broadcastSelect({ stewardId: steward.id, rigId: rig.id, mode: "board", initiatorUserId: opts.initiatorUserId ?? game.user.id });
     return true;
   }
@@ -680,7 +688,7 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
           const { user, steward } = authorise(payload, meta);
           const rig = game.actors?.get?.(String(payload.rigId ?? ""));
           if (!rig || !data(rig)) throw new Error("unknown rig");
-          await board(steward, rig, { role: String(payload.role ?? "crew"), initiatorUserId: user.id });
+          await board(steward, rig, { role: String(payload.role ?? "crew"), station: payload.station ? String(payload.station) : null, initiatorUserId: user.id });
           return { ok: true };
         } catch (e) { return { error: e.message }; } });
       gx.register("rigs.disembark", async (payload = {}, meta = {}) => {
@@ -701,6 +709,33 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
     const gap = (a, b, sa, sb) => Math.max(0, Math.abs(a - b) - (sa + sb) / 2);
     const dx = gap(t1.center.x, t2.center.x, t1.w ?? 0, t2.w ?? 0), dy = gap(t1.center.y, t2.center.y, t1.h ?? 0, t2.h ?? 0);
     return Math.hypot(dx, dy) / (grid.size / grid.distance);
+  }
+  // ── Stations (11-13) ──────────────────────────────────────────────────────
+  // An item on the rig is a STATION when it carries flags.rigs-5e.station = { role } (the seed / station tools tag them).
+  // Boarding a rig that has stations asks for one after the role; a seated character's Fire Weapon / dock row use it.
+  const stationRole = (i) => i?.flags?.[SCOPE]?.station?.role ?? null;
+  const stationsOf = (rig) => (rig?.items ?? []).filter(i => stationRole(i));
+  function seatOf(rig, steward) { return (data(rig)?.crew?.slots ?? []).find(s => s.actorId === (steward?.id ?? steward)) ?? null; }
+  function stationOf(rig, steward) { const id = seatOf(rig, steward)?.station; return id ? rig.items.get(id) ?? null : null; }
+  async function pickStation(rig, role) {
+    const all = stationsOf(rig);
+    if (!all.length) return { station: null };
+    const mine = all.filter(i => stationRole(i) === role);
+    const list = mine.length ? mine : all;
+    const taken = new Map((data(rig)?.crew?.slots ?? []).filter(s => s.station).map(s => [s.station, game.actors.get(s.actorId)?.name ?? s.label]));
+    const free = list.filter(i => !taken.has(i.id));
+    if (!free.length) throw new Error(`${rig.name}: every ${role} station is manned.`);
+    const esc = foundry.utils.escapeHTML;
+    const pick = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `${rig.name} — choose your station` },
+      content: `<p style="margin:.2rem 0 .4rem;font-size:.85rem">You crew one station; its power is yours to use.</p>` + list.map((i, n) => {
+        const who = taken.get(i.id);
+        return `<label style="display:flex;gap:.4rem;align-items:center;padding:.15rem;${who ? "opacity:.45" : ""}"><input type="radio" name="station" value="${i.id}" ${who ? "disabled" : ""} ${!who && i === free[0] ? "checked" : ""}/><img src="${esc(i.img)}" width="22" height="22" style="border:none"/><span>${esc(i.name)}${who ? ` — <em>${esc(who)}</em>` : ""}</span></label>`;
+      }).join(""),
+      ok: { label: "Take the station", callback: (_ev, b) => b.form.elements.station?.value ?? null }, rejectClose: false,
+    }).catch(() => null);
+    if (!pick) return null;
+    return { station: pick };
   }
   async function pickRole() {
     return foundry.applications.api.DialogV2.prompt({
@@ -738,7 +773,11 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
             const rigs = all.filter(x => x.ft <= step).map(x => x.t);
             if (rigs.length) addBtn("🛻", `Board ${rigs[0].actor.name}`, async () => {
               const role = await pickRole();
-              if (role) await board(actor, baseActor(rigs[0].actor), role, { token });
+              if (!role) return;
+              const target = baseActor(rigs[0].actor);
+              const st = await pickStation(target, role);
+              if (st === null) return;
+              await board(actor, target, { role, token, station: st.station });
             });
             else if (all.length && all[0].ft <= step * 4) addBtn("🛻", `${all[0].t.actor.name} is ${Math.round(all[0].ft)} ft away — move next to it to board`, () => ui.notifications?.info?.(`Move next to ${all[0].t.actor.name} to board it.`));
           }
@@ -969,6 +1008,7 @@ import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifes
 
     Object.assign(Rg.impl, {
       setRollAs, crewRoller,   // crew rolls (2026-10-31)
+      pickStation, stationOf, stationsOf, seatOf,   // stations (11-13)
       board, disembark, park, deploy, destroy, restore, outputFor, outputPreview, describeOutput, applyTurnOutput, setState, applyFrame, applyTemplate,
       CHANNELS,
       // helpers the sheet / actions files lean on

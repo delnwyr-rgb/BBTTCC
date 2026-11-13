@@ -163,7 +163,23 @@
     const token = actor.getActiveTokens?.(true)?.find?.(t => t.scene?.id === canvas?.scene?.id) ?? actor.getActiveTokens?.()?.[0] ?? null;
     return { actor, token: token?.document ? token : (token?.object ?? null), combatant: null, ooc: true };
   }
-  function subject() { return combatSubject() ?? oocSubject(); }
+  // 11-13 (Dave: "the robots need attacks of their own for the stewards to use while piloting"): a character seated
+  // in a rig (game.bbttcc.rigs — rigs-5e or Bad Eden) acts FROM the vehicle: its token for range + the movement
+  // circle, its moves in a 🤖 row on the dock.
+  function rigOf(actor) {
+    try {
+      const b = game.bbttcc?.rigs?.boardedRigOf?.(actor);
+      return b?.rigId ? game.actors.get(b.rigId) ?? null : null;
+    } catch (_e) { return null; }
+  }
+  function withRig(s) {
+    if (!s?.actor) return s;
+    const rig = rigOf(s.actor);
+    if (!rig) return s;
+    const tok = canvas?.tokens?.placeables?.find?.(t => t.actor?.id === rig.id && !t.document?.hidden) ?? null;
+    return { ...s, rig, token: tok ?? s.token };
+  }
+  function subject() { return withRig(combatSubject() ?? oocSubject()); }
   function combatSubject() {
     const c = combatHere(); if (!c) return null;
     if (game.user.isGM) {
@@ -256,7 +272,7 @@
       else if (act?.type === "heal") aim = "ally";
       else if (["attack", "damage", "save"].includes(act?.type)) aim = "foe";
       rangeFt = Number(act?.range?.value) || Number(it.system?.range?.value) || (act?.range?.units === "touch" ? 5 : 0);
-      if (!rangeFt && act?.type === "attack") rangeFt = Number(it.system?.range?.reach) || 5;
+      if (!rangeFt && act?.type === "attack") rangeFt = Number(act?.range?.reach) || Number(it.system?.range?.reach) || 5;
     } catch (_e) {}
     return { kind: "use5e", item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "bolt", cost, aim, rangeFt, group: kind };
   }
@@ -335,6 +351,20 @@
     const H = hud(); if (!H || !actor) return [];
     const groups = [];
     if (IS_5E()) {
+      const rig = rigOf(actor);
+      if (rig) {
+        const isFrame = (i) => !!(i.flags?.fourththing?.rigFrame || i.flags?.bbttcc?.rigFrame);
+        // 11-13: a rig with STATIONS (flags.rigs-5e.station) shows this character's own station + the shared moves
+        // (untagged ones, e.g. FINAL CONVERGENCE); a single-seat vehicle shows its whole kit.
+        const impl = game.bbttcc?.rigs?.impl;
+        const hasStations = !!impl?.stationsOf?.(rig)?.length;
+        const mine = hasStations ? impl?.stationOf?.(rig, actor) : null;
+        const moves = rig.items.filter(i => !isFrame(i) && (i.system?.activities?.size ?? 0) > 0)
+          .filter(i => !hasStations || i === mine || !i.flags?.["rigs-5e"]?.station)
+          .sort((a, b) => (b === mine) - (a === mine))
+          .map(i => ({ ...entry5e(i), rigItem: true, key: `rig:${i.id}` }));
+        if (moves.length) groups.push({ id: "rig", label: `🤖 ${rig.name}`, entries: moves });
+      }
       const s = H.collectSections5e?.(actor) ?? {};
       if (s.strikes?.length) groups.push({ id: "strike", label: "Strike", entries: s.strikes.map(i => entry5e(i)) });
       // 11-12: one row per spell level — an 18th-level caster's list is long.
@@ -572,7 +602,18 @@
         case "strike": return await H?.fire?.strike?.(actor, entry.item);
         case "mani":   return await H?.fire?.mani?.(actor, entry.item);
         case "ability":return await H?.fire?.ability?.(actor, entry.item);
-        case "use5e":  return await H?.fire?.use5e?.(actor, entry.item);
+        case "use5e":
+          if (entry.rigItem) {
+            // The vehicle rolls with THIS character's numbers (rigs-5e crew-roll hook) — name them as the roller until
+            // their attack lands (the chat card's Attack button rolls later), then let it go.
+            const impl = game.bbttcc?.rigs?.impl;
+            impl?.setRollAs?.(actor);
+            const done = () => { try { impl?.setRollAs?.(null); } catch (_e) {} };
+            Hooks.once("dnd5e.rollAttackV2", () => setTimeout(done, 50));
+            setTimeout(done, 90000);
+            return await entry.item.use({}, { event: window.event });
+          }
+          return await H?.fire?.use5e?.(actor, entry.item);
         case "move":   return await game.fourththing?.combatActions?.perform?.(actor, entry.key);
       }
     } catch (e) { warn(`fire failed: ${entry.label}`, e); ui.notifications?.error?.(`${entry.label}: something went wrong — see console.`); }
@@ -596,7 +637,7 @@
       const a = sysOf(s?.actor).actions ?? {};
       return { budget: Number(a.movementBudgetFt) || 0, used: Number(a.movementUsedFt) || 0 };
     }
-    const mv = s?.actor?.system?.attributes?.movement ?? {};
+    const mv = (s?.rig ?? s?.actor)?.system?.attributes?.movement ?? {};
     const budget = Number(mv.max) || Math.max(0, ...["walk", "fly", "swim", "climb", "burrow"].map(k => Number(mv[k]) || 0));
     let used = 0;
     try {

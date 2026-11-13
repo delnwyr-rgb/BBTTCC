@@ -278,7 +278,9 @@
   }
 
   async function fireWeapon(rig, st) {
-    const ws = weaponsOf(rig);
+    // 11-13: a character seated at a STATION fires that station's weapon — no "which weapon?" pick.
+    const mine = I().stationOf?.(rig, st);
+    const ws = mine && actCount(mine) ? [mine] : weaponsOf(rig);
     if (!ws.length) return cue(rig, st, "Fire Weapon", ["No mounted weapons on this rig."]);
     const id = ws.length === 1 ? ws[0].id : await pickOne("Fire which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
     const w = ws.find(x => x.id === id);
