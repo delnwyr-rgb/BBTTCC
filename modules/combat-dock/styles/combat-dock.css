@@ -162,3 +162,14 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
   background: linear-gradient(135deg, transparent 0 50%, var(--cd-line) 50% 60%, transparent 60% 70%, var(--cd-line) 70% 80%, transparent 80%); border-bottom-right-radius: 7px; }
 .cd-resize:hover { background: linear-gradient(135deg, transparent 0 50%, var(--cd-gold) 50% 60%, transparent 60% 70%, var(--cd-gold) 70% 80%, transparent 80%); }
 .cd-group { flex-wrap: wrap; }
+
+/* 11-12 (Dave's screenshot): a narrowed dock spilled End Turn / ☰ / collapse past its right edge — the header
+   row never wrapped. A placed dock wraps its header inside the frame; End Turn + the icons stay together on the right. */
+#bbttcc-combat-dock.is-placed { overflow: hidden; }
+#bbttcc-combat-dock.is-placed .cd-row { flex-wrap: wrap; row-gap: 4px; min-width: 0; }
+#bbttcc-combat-dock.is-placed .cd-ribbon { max-width: 100%; }
+#bbttcc-combat-dock.is-placed .cd-slots { flex-wrap: wrap; row-gap: 3px; }
+#bbttcc-combat-dock.is-placed .cd-row > .cd-spacer { flex: 1 1 0; min-width: 0; }
+#bbttcc-combat-dock.is-placed .cd-row > .cd-end { margin-left: auto; }
+#bbttcc-combat-dock.is-placed .cd-row > .cd-target { max-width: 100%; }
+#bbttcc-combat-dock.is-placed .cd-row > .cd-target:has(.cd-tgt-none) { flex-basis: 100%; order: 10; }
