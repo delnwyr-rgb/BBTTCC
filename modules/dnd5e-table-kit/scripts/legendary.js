@@ -15,6 +15,8 @@
 // Entry point for the whole kit (the manifest lists only this file).
 import { activateRiders } from "./riders.js";
 import { activateAutomation } from "./automation.js";
+import { activateOverTime } from "./overtime.js";
+import { activateLight } from "./light.js";
 
 const ID = "dnd5e-table-kit";
 const KINDS = {
@@ -170,6 +172,8 @@ export function activate() {
   if ( game.system.id !== "dnd5e" ) return;
   try { activateRiders(); } catch(err) { console.error(`${ID} | could not start riders`, err); }
   try { activateAutomation(); } catch(err) { console.error(`${ID} | could not start automation`, err); }
+  try { activateOverTime(); } catch(err) { console.error(`${ID} | could not start over-time effects`, err); }
+  try { activateLight(); } catch(err) { console.error(`${ID} | could not start effect lights`, err); }
   try { patchCharacterData(); } catch(err) { console.error(`${ID} | could not patch CharacterData`, err); }
   Hooks.on("dnd5e.preRestCompleted", onPreRestCompleted);
   Hooks.on("renderCharacterActorSheet", onRenderCharacterSheet);

@@ -148,6 +148,12 @@ const STINGS = {
       tone(ac, out, { type: "triangle", f0: f, t0: t + i * 0.07, attack: 0.005, decay: 0.5, peak: 0.12 }));
     noise(ac, out, { t0: t + 0.05, decay: 0.5, peak: 0.08, type: "highpass", freq: 4000 });
   },
+  // A Surge spend: the charge leaving — a falling zap over a thump (Dave 11-12).
+  "surge-spend"(ac, out, t) {
+    tone(ac, out, { f0: 90, f1: 50, t0: t, attack: 0.005, decay: 0.25, peak: 0.35 });
+    tone(ac, out, { type: "sawtooth", f0: 1760, f1: 440, t0: t, attack: 0.004, decay: 0.22, peak: 0.06 });
+    noise(ac, out, { t0: t, decay: 0.18, peak: 0.07, type: "highpass", freq: 3000 });
+  },
   // Rubber stamp + till bell: paper thud, then a bright two-note ching.
   "stamp"(ac, out, t) {
     noise(ac, out, { t0: t, decay: 0.12, peak: 0.5, freq: 500 });

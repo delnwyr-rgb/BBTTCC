@@ -51,6 +51,12 @@ export function installMomentBridge(api) {
     surgeBurst.set(id, b);
   });
 
+  // ── Surge spent (Dave 11-12): the power's name pops over the spender with a zap.
+  Hooks.on("fourththing.surgeSpent", (p = {}) => {
+    if (!p.actorId) return;
+    fire("surge_spent", { actor: p.actorName, actorUuid: p.actorUuid, tokenId: p.tokenId, label: p.label || "Surge", cost: p.cost });
+  });
+
   // ── Receipts — only the gaining faction's seats (and GMs) see it ─────────
   Hooks.on("bbttcc:receipt:gained", (p = {}) => {
     if (!p.factionId) return;

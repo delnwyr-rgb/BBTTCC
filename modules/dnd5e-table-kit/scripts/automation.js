@@ -115,7 +115,10 @@ async function gmCard(title, lines, flags={}) {
 /* -------------------------------------------- */
 
 async function onRollAttack(rolls, { subject: activity }={}) {
-  if ( !setting("autoDamage") || !activity?.damage?.parts?.length ) return;
+  // 11-12: a weapon whose attack only "includes base damage" (no extra parts — the dnd5e default) rolls too.
+  const base = activity?.item?.system?.damage?.base;
+  const hasBase = !!(activity?.damage?.includeBase && (base?.formula || base?.number || base?.custom?.enabled));
+  if ( !setting("autoDamage") || !(activity?.damage?.parts?.length || hasBase) ) return;
   const roll = rolls?.[0];
   const usage = game.messages.get(roll?.options?.originatingMessage);
   if ( !roll || !usage ) return;
@@ -204,6 +207,7 @@ async function applyDamageCard(message) {
   const ignoreResist = !!message.flags?.[ID]?.ignoreResist;
   const lines = [];
   const undo = [];
+  const dodge = [];
   const awaiting = [];
 
   for ( const descriptor of descriptors ) {
@@ -227,6 +231,16 @@ async function applyDamageCard(message) {
     // damage tray instead of applying full damage a late success could never halve.
     if ( waitSaves && !outcome && (onSave !== "full") ) { awaiting.push(name); continue; }
     if ( onSave && (outcome === "success") ) multiplier = { full: 1, half: 0.5, none: 0 }[onSave] ?? 1;
+    // 11-12 (no midi): Evasion — flags.dnd5e-table-kit.evasion = "dex" (or a list). On a half-damage save of that
+    // ability: success → nothing, failure → half. Not while Incapacitated.
+    let evaded = false;
+    const evasion = String(actor.flags?.[ID]?.evasion ?? "").toLowerCase();
+    const saveAbilities = [...(activity?.save?.ability ?? [])];
+    if ( evasion && (activity?.type === "save") && (onSave === "half") && outcome
+      && saveAbilities.some(a => evasion.split(/[,\s]+/).includes(a)) && !actor.statuses?.has?.("incapacitated") ) {
+      multiplier = (outcome === "success") ? 0 : 0.5;
+      evaded = true;
+    }
 
     const hp = actor.system.attributes?.hp;
     if ( !hp ) continue;
@@ -237,8 +251,15 @@ async function applyDamageCard(message) {
     const after = actor.system.attributes.hp;
     const delta = (before.value + before.temp) - (after.value + (after.temp ?? 0));
     undo.push({ uuid: actor.uuid, value: before.value, temp: before.temp });
+    // 11-12 (no midi): Uncanny Dodge — flags.dnd5e-table-kit.uncannyDodge on a target an ATTACK hit. The GM card gets a
+    // button: restore the HP and re-apply at half (the player's reaction, so it stays a choice).
+    if ( attackRoll && (delta > 0) && actor.flags?.[ID]?.uncannyDodge && !actor.statuses?.has?.("incapacitated") ) {
+      dodge.push({ uuid: actor.uuid, name, value: before.value, temp: before.temp, multiplier, ignoreResist,
+        damages: damages.map(d => ({ value: d.value, type: d.type, properties: [...d.properties] })) });
+    }
     const what = delta >= 0 ? `takes <strong>${delta}</strong>` : `heals <strong>${-delta}</strong>`;
-    const why = [multiplier !== 1 ? (multiplier ? "half, saved" : "saved, no damage") : null,
+    const why = [evaded ? (multiplier ? "Evasion: half on a failed save" : "Evasion: no damage") : null,
+      !evaded && multiplier !== 1 ? (multiplier ? "half, saved" : "saved, no damage") : null,
       ignoreResist ? "resistance ignored" : null].filter(Boolean).join("; ");
     lines.push(`<strong>${name}</strong> ${what}${why ? ` <em>(${why})</em>` : ""} → ${after.value}/${after.max} HP`);
   }
@@ -250,8 +271,30 @@ async function applyDamageCard(message) {
   if ( lines.length ) {
     const source = message.flavor || activity?.item?.name || "Damage";
     // 10-29: `by` stamps the GM who wrote the Undo list; onRenderMessage/undoDamage require it.
-    await gmCard(`⚔ ${source}`, lines, undo.length ? { undo, by: game.user.id } : {});
+    await gmCard(`⚔ ${source}`, lines, undo.length ? { undo, ...(dodge.length ? { dodge } : {}), by: game.user.id } : {});
   }
+}
+
+/** 11-12: Uncanny Dodge — put the target back to its pre-hit HP and apply the same damage at half. */
+async function uncannyDodge(message, i) {
+  if ( !game.user.isGM || !trustedUndo(message) ) return;
+  const list = Object.values(message.flags?.[ID]?.dodge ?? {});
+  const entry = list[i];
+  if ( !entry || entry.used || message.flags?.[ID]?.undone ) return;
+  const actor = await fromUuid(entry.uuid);
+  if ( !actor?.system?.attributes?.hp ) return;
+  await actor.update({ "system.attributes.hp.value": entry.value, "system.attributes.hp.temp": Math.max(0, Number(entry.temp) || 0) || null });
+  const damages = entry.damages.map(d => ({ ...d, properties: new Set(d.properties ?? []) }));
+  const options = { isDelta: true, multiplier: (Number(entry.multiplier) || 1) * 0.5 };
+  if ( entry.ignoreResist ) options.ignore = { resistance: true };
+  const before = entry.value + (Number(entry.temp) || 0);
+  await actor.applyDamage(damages, options);
+  const hp = actor.system.attributes.hp;
+  // Write the whole list back: a dotted "dodge.0.used" path turns the stored array into an object.
+  const next = foundry.utils.deepClone(list); next[i] = { ...next[i], used: true };
+  await message.update({ [`flags.${ID}.dodge`]: next });
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="tk-card"><p class="tk-title">🌀 Uncanny Dodge</p><p><strong>${foundry.utils.escapeHTML(entry.name)}</strong> halves the hit: takes <strong>${before - (hp.value + (hp.temp ?? 0))}</strong> → ${hp.value}/${hp.max} HP.</p></div>` });
 }
 
 /** 10-29: only a card a GM wrote through gmCard may carry an Undo list (players can post any flags). */
@@ -486,6 +529,14 @@ function onRenderMessage(message, html) {
   button.innerHTML = message.flags[ID].undone ? "Undone" : `<i class="fa-solid fa-rotate-left"></i> Undo`;
   button.addEventListener("click", async () => { button.disabled = true; await undoDamage(message); });
   card.append(button);
+  Object.values(message.flags[ID].dodge ?? {}).forEach((d, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tk-undo tk-dodge";
+    b.disabled = !!(d.used || message.flags[ID].undone);
+    b.innerHTML = d.used ? `🌀 ${foundry.utils.escapeHTML(d.name)} dodged` : `🌀 Uncanny Dodge — ${foundry.utils.escapeHTML(d.name)} halves it`;
+    b.addEventListener("click", async () => { b.disabled = true; await uncannyDodge(message, i); });
+    card.append(b);
+  });
 }
 
 export function activateAutomation() {

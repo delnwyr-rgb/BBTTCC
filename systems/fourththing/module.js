@@ -5690,6 +5690,18 @@ function _ftEmitSurgeBanked(actor, amount, value, cap, { fromHarvest = false } =
   } catch (_e) {}
 }
 
+// Dave 11-12: the spend gets its moment too (zap + the power's name over the token) —
+// ported back from the D&D Surge Powers module. Local to the spending client.
+function _ftEmitSurgeSpent(actor, cost, label) {
+  try {
+    Hooks.callAll("fourththing.surgeSpent", {
+      actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name,
+      tokenId: actor.token?.id ?? actor.getActiveTokens?.(true, false)?.[0]?.id ?? null,
+      cost, label: String(label ?? "").slice(0, 60)
+    });
+  } catch (_e) {}
+}
+
 // Aurablade flavor Surge gen (playtest fix 2026-05-27). RETIRED 2026-10-29: Burn
 // is folded into Surge, so the Aura action / aura switch raise Surge directly (one
 // number). Nothing in the system calls this any more; kept on game.fourththing so
@@ -6886,6 +6898,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   _ftPreSpendSurge = Number(curSurge) || 0;
   // Pay the cost.
   await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
+  _ftEmitSurgeSpent(actor, cost, String(entry?.label ?? effectKey).split(" — ")[0]);
   let _bwNote = _discounted ? `<p style="margin:0.25rem 0;font-size:0.72rem;opacity:0.75">◆ Cost reduced ${_baseCost} → ${cost}${actor.flags?.fourththing?.bulwark?.exchangeNext ? " (The Exchange)" : ""}${actor.flags?.fourththing?.courier?.masteryNext ? " (Package Mastery)" : ""}.</p>` : "";
   if (actor.flags?.fourththing?.bulwark?.exchangeNext) { try { await actor.unsetFlag("fourththing", "bulwark.exchangeNext"); } catch (e) {} }
   if (actor.flags?.fourththing?.courier?.masteryNext) { try { await actor.unsetFlag("fourththing", "courier.masteryNext"); } catch (e) {} }

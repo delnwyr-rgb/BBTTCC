@@ -114,6 +114,7 @@ function onPreRollD20(config) {
  *   flags.dnd5e-table-kit.disadvantage.attack         scope — the bearer's attacks have disadvantage
  *   flags.dnd5e-table-kit.grants.advantage.attack     truthy, on the TARGET — attacks against it have advantage
  *   flags.dnd5e-table-kit.grants.disadvantage.attack  truthy, on the TARGET — attacks against it have disadvantage
+ *                                                     (or a creature-type list: only attackers of those types)
  * Scope: "all" | "weapon" | "melee" | "ranged" | an ability key ("str", "dex"…) for attacks using it.
  * Advantage and disadvantage together cancel, exactly as dnd5e resolves them.
  *
@@ -148,6 +149,18 @@ function attackMatches(scope, activity) {
   return false;
 }
 
+/** 11-12: a grants.* flag is truthy ("all"/1/true) or a list of creature types the ATTACKER must be
+ *  (Protection from Evil and Good: "aberration,celestial,elemental,fey,fiend,undead"). */
+function grantsMatch(value, attacker) {
+  if ( !value ) return false;
+  const v = String(value).trim().toLowerCase();
+  if ( ["1", "true", "all"].includes(v) || (value === true) ) return true;
+  const types = v.split(/[,\s]+/).filter(Boolean);
+  const d = attacker?.system?.details ?? {};
+  const t = String(d.type?.value ?? d.race?.system?.type?.value ?? d.race?.type?.value ?? "").toLowerCase();
+  return !!t && types.includes(t);
+}
+
 function attackTargets(activity) {
   const fromUser = [...(game.user?.targets ?? [])].map(t => t.actor).filter(Boolean);
   return fromUser;
@@ -159,8 +172,8 @@ function applyEffectAttackModes(config, actor) {
   if ( attackMatches(mine.advantage?.attack, activity) ) config.advantage = true;
   if ( attackMatches(mine.disadvantage?.attack, activity) ) config.disadvantage = true;
   const targets = attackTargets(activity);
-  if ( targets.some(t => t.flags?.[ID]?.grants?.advantage?.attack) ) config.advantage = true;
-  if ( targets.some(t => t.flags?.[ID]?.grants?.disadvantage?.attack) ) config.disadvantage = true;
+  if ( targets.some(t => grantsMatch(t.flags?.[ID]?.grants?.advantage?.attack, actor)) ) config.advantage = true;
+  if ( targets.some(t => grantsMatch(t.flags?.[ID]?.grants?.disadvantage?.attack, actor)) ) config.disadvantage = true;
   // midi-qol / flags.dnd5e aliases (C53)
   if ( midiFlag(actor, "advantage.attack", activity) ) config.advantage = true;
   if ( midiFlag(actor, "disadvantage.attack", activity) ) config.disadvantage = true;

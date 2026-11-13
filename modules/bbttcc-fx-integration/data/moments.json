@@ -22,6 +22,16 @@
     "shake": "subtle",
     "holdMs": 2200
   },
+  "surge_spent": {
+    "size": "whisper",
+    "tone": "surge",
+    "icon": "⚡",
+    "audience": "all",
+    "title": "{label}",
+    "sound": "synth:surge-spend",
+    "soundGain": 0.6,
+    "holdMs": 1500
+  },
   "receipt_gained": {
     "size": "beat",
     "tone": "receipt",

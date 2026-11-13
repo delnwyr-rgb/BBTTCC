@@ -23,6 +23,8 @@
  *          Without the kit they stay flag-and-narrate.
  * ─────────────────────────────────────────────────────────────────────────────
  */
+import { playSpend, pop } from "./surge-fx.js";
+
 (() => {
   const MOD = "surge-powers";
   const TAG = "[surge-powers/menu]";
@@ -557,6 +559,7 @@
     }
 
     let chosenType = null, healedTotal = 0;
+    const failedSaves = new Set();   // for the VFX: a failed forced save gets the hex, a pass the glyph
     const dc = dcOf(actor);
     for (const t of targets) {
       if (!t) continue;
@@ -575,6 +578,7 @@
         const args = { ability: fx.save.ability ?? "wis", dc, ae, label: shortName };
         if (t.isOwner) {
           const failed = await saveOrEffect(t, args);
+          if (failed) failedSaves.add(t.id);
           lines.push(`${t.name} ${failed ? `fails the ${args.ability.toUpperCase()} save (DC ${dc}): ${fx.save.ae?.name ?? shortName}.` : `saves (DC ${dc}).`}`);
         } else {
           await writeActor(t, "saveAE", args);
@@ -695,8 +699,10 @@
     if (kit && fx.auto) lines.push(`<em>Armed: ${fx.auto}</em>`);
     else if (fx.note) lines.push(`<em>${fx.note}</em>`);
     if (kit && fx.auto && fx.note && fx.alsoNote) lines.push(`<em>${fx.note}</em>`);
+    playSpend(actor, entry, targets, { failedSaves });
     if (entry._nested) return lines;
 
+    pop(actor, "spend", shortName);
     await cue(actor, `${entry.label} (${entry.cost} Surge)`, [entry.fiction ? `<em>${entry.fiction}</em>` : "", ...lines].filter(Boolean));
     return true;
   }
