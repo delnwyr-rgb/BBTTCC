@@ -61,6 +61,7 @@
  *           once per faction (rigsMigrated stamp), legacy array kept as audit.
  * ───────────────────────────────────────────────────────────────────────────── */
 import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "./economy.constants.js";
+import "./combiner.js";   // 11-12: combining rigs (Legansus Tal) — no manifest change
 
 (() => {
   const TAG = "[rigs-5e/rigs-dnd5e]";

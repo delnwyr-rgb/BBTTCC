@@ -632,11 +632,13 @@
       <span style="font-size:.72rem;font-weight:700;color:#e8c84a;white-space:nowrap">🛻 ${esc(rig.name)}</span>
       ${crewPicker}
       ${bandButtonsHtml(rig, role)}
+      ${(() => { try { return game.rigs5e?.combiner?.barHTML?.(rig) ?? ""; } catch (_e) { return ""; } })()}
       <button type="button" data-rig-bar-leave title="Disembark ${esc(steward?.name ?? slot.label)}"
         style="width:auto;padding:.15rem .45rem;font-size:.72rem;border:1px solid #c0303066;border-radius:4px;
         background:rgba(48,16,16,.9);color:#f0c0c0;cursor:pointer">🪂</button>`;
     document.body.appendChild(bar);
     wireBandButtons(bar, rig, steward, role);
+    try { game.rigs5e?.combiner?.wireBar?.(bar, rig); } catch (_e) {}   // ⚡ FORM / ✂ SEPARATE (combiner.js)
     bar.querySelector("[data-rig-bar-crew]")?.addEventListener("change", (ev) => {
       _barCrewChoice.set(rig.id, Number(ev.target.value) || 0);
       renderRigBar();
