@@ -72,7 +72,7 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 @keyframes cd-heat-pulse { 50% { box-shadow: 0 0 10px var(--heat); } }
 
 /* Abilities */
-.cd-abilities { display: flex; gap: 4px 12px; flex-wrap: wrap; max-height: 58px; overflow-y: auto; padding: 3px 8px 5px; border-top: 1px solid rgba(214, 178, 106, 0.15); }
+.cd-abilities { display: flex; gap: 4px 12px; flex-wrap: wrap; align-content: flex-start; max-height: 132px; overflow-y: auto; padding: 3px 8px 5px; border-top: 1px solid rgba(214, 178, 106, 0.15); scrollbar-width: thin; scrollbar-color: var(--cd-line) transparent; }
 .cd-group { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .cd-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cd-dim); margin-right: 2px; }
 .cd-ab { position: relative; display: flex; align-items: center; gap: 4px; padding: 2px 7px; height: 24px; border-radius: 5px; background: var(--cd-panel); border: 1px solid rgba(214, 178, 106, 0.3); max-width: 190px; }
@@ -147,3 +147,18 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
   .cd-ribbon { max-width: 100%; }
   .cd-ab { max-width: 140px; }
 }
+
+/* Move / resize (2026-11-12): a placed dock is positioned by left/top and may carry its own size;
+   the abilities area then fills the height and scrolls. */
+#bbttcc-combat-dock.is-placed { transform: none; }
+#bbttcc-combat-dock.is-sized { display: flex; flex-direction: column; }
+#bbttcc-combat-dock.is-sized .cd-row { flex: none; }
+#bbttcc-combat-dock.is-sized .cd-abilities { flex: 1 1 auto; min-height: 0; max-height: none; }
+#bbttcc-combat-dock.is-dragging { opacity: 0.92; user-select: none; }
+.cd-grip { flex: none; cursor: grab; color: var(--cd-dim); padding: 2px 3px; touch-action: none; }
+.cd-grip:hover { color: var(--cd-gold); }
+#bbttcc-combat-dock.is-dragging .cd-grip { cursor: grabbing; }
+.cd-resize { position: absolute; right: 1px; bottom: 1px; width: 14px; height: 14px; cursor: nwse-resize; touch-action: none;
+  background: linear-gradient(135deg, transparent 0 50%, var(--cd-line) 50% 60%, transparent 60% 70%, var(--cd-line) 70% 80%, transparent 80%); border-bottom-right-radius: 7px; }
+.cd-resize:hover { background: linear-gradient(135deg, transparent 0 50%, var(--cd-gold) 50% 60%, transparent 60% 70%, var(--cd-gold) 70% 80%, transparent 80%); }
+.cd-group { flex-wrap: wrap; }

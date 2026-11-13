@@ -76,8 +76,10 @@
     const sys = it.system ?? {};
     if (!has5eActs(it)) return false;
     if (!(Number(sys.level) > 0)) return true;                              // cantrips / at-will powers
+    // 11-12 (Dave: Darth Babs showed no force powers): only regular "spell"-method / "prepared"-mode spells need
+    // preparing. SW5E powers (method "powerCasting"), pact, at-will, innate, ritual… are always ready when known.
     const method = String(sys.method ?? sys.preparation?.mode ?? "");
-    if (["pact", "atwill", "innate", "always", "powers"].includes(method)) return true;
+    if (method && !["spell", "prepared"].includes(method)) return true;
     const prep = sys.prepared ?? sys.preparation?.prepared;
     return prep === true || Number(prep) >= 1;                               // 1 prepared, 2 always
   }
@@ -94,7 +96,7 @@
       return ctl ?? game.actors?.find?.(a => isPC(a) && a.testUserPermission?.(game.user, "OWNER")) ?? null;
     },
     collectSections5e(actor) {
-      const strikes = [], spells = [], abilities = [], ancestry = [];
+      const strikes = [], spells = [], abilities = [], ancestry = [], items = [];
       for (const it of (actor?.items?.contents ?? [])) {
         if (it.type === "weapon") { if (has5eActs(it) && (it.system?.equipped !== false)) strikes.push(it); continue; }
         if (it.type === "spell" || it.type === "power") { if (readySpell(it)) spells.push(it); continue; }
@@ -102,11 +104,12 @@
         const act = String(firstAct(it)?.activation?.type ?? "");
         if (!ACT_TYPES.has(act)) continue;                                   // passives / minute-long rituals stay on the sheet
         if (it.type === "consumable" && !["potion", "scroll", "wand", "rod", "poison"].includes(String(it.system?.type?.value ?? ""))) continue;
+        if (it.type === "consumable") { items.push(it); continue; }
         (it.system?.type?.value === "race" ? ancestry : abilities).push(it);
       }
       const byName = (a, b) => a.name.localeCompare(b.name);
       spells.sort((a, b) => (Number(a.system?.level) || 0) - (Number(b.system?.level) || 0) || byName(a, b));
-      return { strikes: strikes.sort(byName), spells, abilities: abilities.sort(byName), ancestry: ancestry.sort(byName) };
+      return { strikes: strikes.sort(byName), spells, abilities: abilities.sort(byName), ancestry: ancestry.sort(byName), items: items.sort(byName) };
     },
     fire: {
       async use5e(actor, item) {
@@ -244,9 +247,14 @@
     if (IS_5E()) {
       const s = H.collectSections5e?.(actor) ?? {};
       if (s.strikes?.length) groups.push({ id: "strike", label: "Strike", entries: s.strikes.map(i => entry5e(i)) });
-      if (s.spells?.length) groups.push({ id: "mani", label: "Spells", entries: s.spells.map(i => entry5e(i)) });
+      // 11-12: one row per spell level — an 18th-level caster's list is long.
+      const byLvl = new Map();
+      for (const i of (s.spells ?? [])) { const l = Number(i.system?.level) || 0; if (!byLvl.has(l)) byLvl.set(l, []); byLvl.get(l).push(i); }
+      for (const [l, list] of [...byLvl].sort((a, b) => a[0] - b[0]))
+        groups.push({ id: `mani${l}`, label: l ? `Level ${l}` : "Cantrips", entries: list.map(i => entry5e(i)) });
       const ab = [...(s.abilities ?? []), ...(s.ancestry ?? [])];
       if (ab.length) groups.push({ id: "ability", label: "Abilities", entries: ab.map(i => entry5e(i)) });
+      if (s.items?.length) groups.push({ id: "items", label: "Items", entries: s.items.map(i => entry5e(i)) });   // 11-12: potions & scrolls last
       return groups;
     }
     const s = H.collectSections?.(actor) ?? {};
@@ -703,6 +711,7 @@
     dock.classList.toggle("is-collapsed", _collapsed);
     const canEnd = myTurn || game.user.isGM;
     if (_collapsed) {
+      dock.classList.remove("is-placed", "is-sized"); dock.style.width = dock.style.height = dock.style.left = dock.style.top = "";
       dock.innerHTML = `<button type="button" class="cd-pill" data-dock="expand"><i class="fas fa-crosshairs"></i> Combat · R${c.round}${myTurn ? " · YOUR TURN" : ""}</button>`;
       drawMoveRing(s);
       return;
@@ -719,6 +728,7 @@
     // Two thin rows: [ribbon · who · slots · target · queued · End Turn] then the abilities.
     dock.innerHTML = `
       <div class="cd-row">
+        <span class="cd-grip" data-dock-grip data-tooltip="Drag to move the dock · double-click to put it back at the bottom"><i class="fas fa-grip-vertical"></i></span>
         ${ribbonHTML(c, s)}
         <span class="cd-who"><img src="${esc(s.token?.document?.texture?.src || s.actor.img)}" alt=""> ${esc(s.actor.name)}</span>
         ${hint}
@@ -731,7 +741,9 @@
         <button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>
         <button type="button" class="cd-icon" data-dock="collapse" data-tooltip="Shrink the dock"><i class="fas fa-chevron-down"></i></button>
       </div>
-      <div class="cd-abilities">${abilitiesHTML(s, myTurn)}</div>`;
+      <div class="cd-abilities">${abilitiesHTML(s, myTurn)}</div>
+      <span class="cd-resize" data-dock-resize data-tooltip="Drag to resize"></span>`;
+    applyLayout(dock);
     drawMoveRing(s);
     placeDock();
   }
@@ -742,6 +754,11 @@
   function placeDock() {
     requestAnimationFrame(() => {
       const dock = document.getElementById(DOCK_ID); if (!dock) return;
+      if (dock.classList.contains("is-placed")) {
+        const top = dock.getBoundingClientRect().top;
+        document.documentElement.style.setProperty("--cd-dock-h", `${Math.max(0, Math.round(window.innerHeight - top - 8))}px`);
+        return;
+      }
       const hb = document.getElementById("hotbar");
       const r = (!document.body.classList.contains("bbttcc-dock-hidebars") && hb?.offsetParent) ? hb.getBoundingClientRect() : null;
       const bottom = (r && r.height) ? Math.max(8, Math.round(window.innerHeight - r.top + 6)) : 8;
@@ -751,7 +768,62 @@
     });
   }
 
+  // ── Move / resize (2026-11-12, Dave: "make the interface draggable, resizable, and scrollable") ──
+  // Saved per user in localStorage: { left, top, width, height } in px. No layout = the default bottom bar.
+  const LAYOUT_KEY = () => `combat-dock-layout:${game.user?.id ?? "anon"}`;
+  function loadLayout() { try { return JSON.parse(window.localStorage?.getItem(LAYOUT_KEY()) || "null"); } catch (_e) { return null; } }
+  function saveLayout(L) { try { if (L) localStorage.setItem(LAYOUT_KEY(), JSON.stringify(L)); else localStorage.removeItem(LAYOUT_KEY()); } catch (_e) {} }
+  function clampLayout(L) {
+    const W = window.innerWidth, H = window.innerHeight;
+    const width = Math.max(420, Math.min(Number(L.width) || 900, W - 16));
+    const height = L.height ? Math.max(90, Math.min(Number(L.height), H - 16)) : null;
+    const left = Math.max(8, Math.min(Number(L.left) || 8, W - width - 8));
+    const top = Math.max(8, Math.min(Number(L.top) || 8, H - (height ?? 90) - 8));
+    return { left, top, width, height };
+  }
+  function applyLayout(dock) {
+    const L = loadLayout();
+    if (!L) { dock.classList.remove("is-placed", "is-sized"); dock.style.left = dock.style.top = dock.style.width = dock.style.height = ""; return; }
+    const c = clampLayout(L);
+    dock.classList.add("is-placed"); dock.classList.toggle("is-sized", !!c.height);
+    Object.assign(dock.style, { left: `${c.left}px`, top: `${c.top}px`, width: `${c.width}px`, height: c.height ? `${c.height}px` : "", bottom: "auto" });
+  }
+  function startDrag(ev, dock, mode) {
+    ev.preventDefault(); ev.stopPropagation();
+    const r = dock.getBoundingClientRect();
+    const start = { x: ev.clientX, y: ev.clientY, left: r.left, top: r.top, width: r.width, height: r.height };
+    const cur = loadLayout();
+    const base = { left: r.left, top: r.top, width: r.width, height: mode === "resize" ? r.height : (cur?.height ?? null) };
+    dock.classList.add("is-placed", "is-dragging");
+    const move = (e) => {
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
+      const L = mode === "move" ? { ...base, left: start.left + dx, top: start.top + dy } : { ...base, width: start.width + dx, height: start.height + dy };
+      const c = clampLayout(L);
+      Object.assign(dock.style, { left: `${c.left}px`, top: `${c.top}px`, width: `${c.width}px`, bottom: "auto", ...(c.height ? { height: `${c.height}px` } : {}) });
+      dock.classList.toggle("is-sized", !!c.height);
+      dock._cdLayout = c;
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up);
+      dock.classList.remove("is-dragging");
+      if (dock._cdLayout) saveLayout(dock._cdLayout);
+      dock._cdLayout = null;
+      placeDock();
+    };
+    window.addEventListener("pointermove", move); window.addEventListener("pointerup", up);
+  }
+  window.addEventListener("resize", foundry.utils.debounce(() => { const d = document.getElementById(DOCK_ID); if (d) { applyLayout(d); placeDock(); } }, 150));
+
   function wireDock(dock) {
+    dock.addEventListener("pointerdown", (ev) => {
+      if (ev.button !== 0) return;
+      if (ev.target.closest("[data-dock-grip]")) return startDrag(ev, dock, "move");
+      if (ev.target.closest("[data-dock-resize]")) return startDrag(ev, dock, "resize");
+    });
+    dock.addEventListener("dblclick", (ev) => {
+      if (!ev.target.closest("[data-dock-grip]")) return;
+      saveLayout(null); applyLayout(dock); placeDock();
+    });
     dock.addEventListener("click", async (ev) => {
       const pan = ev.target.closest("[data-pan]");
       if (pan) {
