@@ -18,11 +18,6 @@
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem .8rem;margin-bottom:.6rem">
-      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Faction
-        {{#if bbttccRig.faction.options}}
-        <select data-rig-field="factionOwnerId" style="flex:1">{{#each bbttccRig.faction.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-        {{else}}<b>{{#if bbttccRig.faction.name}}{{bbttccRig.faction.name}}{{else}}—{{/if}}</b>{{/if}}
-      </label>
       <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Archetype
         {{#if bbttccRig.editable}}<input type="text" data-rig-field="archetype" value="{{bbttccRig.archetype}}" style="flex:1"/>{{else}}<b>{{bbttccRig.archetype}}</b>{{/if}}
       </label>
@@ -52,23 +47,10 @@
     <p style="font-size:.72rem;opacity:.55;margin:.1rem 0 .4rem">⚙ No frame equipped — drop a <em>rig-frame</em> item (or a <em>rig-template</em>) on this sheet to define hull, slots, crew capacity, and role actions.</p>
     {{/if}}
 
-    <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Output / strategic turn <span style="font-size:.72rem;opacity:.65">{{ bbttccRig.mult }}</span></h4>
-    {{!-- data-rig-output keeps the onboarding tour anchor (bbttcc-onboarding tour-defs "output" step) --}}
-    {{#if bbttccRig.output.produces}}
-    <div data-rig-output style="display:grid;grid-template-columns:auto 1fr;gap:.15rem .6rem;font-size:.78rem;margin-bottom:.4rem">
-      <span style="opacity:.7">🅿️ Parked</span><b>{{ bbttccRig.output.parkedText }}</b>
-      <span style="opacity:.7">🛻 Deployed</span><b>{{ bbttccRig.output.deployedText }}</b>
-      <span style="opacity:.7">Lost while deployed</span><span>{{ bbttccRig.output.lostText }}</span>
-    </div>
-    {{else}}
-    <p data-rig-output style="font-size:.78rem;margin:.1rem 0 .4rem">This rig produces <b>nothing</b> on its own{{#if bbttccRig.showTravel}} — a moving rig earns Logistics by size once it is parked{{/if}}.</p>
-    {{/if}}
-    <p style="font-size:.7rem;opacity:.55;margin:.1rem 0 .6rem">Same math as Roll for Initiation: rigs that move earn Logistics marks by size, equipped <em>output-module</em> gear adds its yield (bank channels pay marks, everything else lands in the Domain stockpile). Parked earns in full; deployed earns half (modules that can't run mobile earn nothing); destroyed earns nothing.</p>
-
     <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Crew</h4>
     {{#if bbttccRig.hasCrew}}
     <table style="font-size:.8rem;width:100%">
-      <tr><th style="text-align:left">Role</th><th style="text-align:left">Steward</th><th></th></tr>
+      <tr><th style="text-align:left">Role</th><th style="text-align:left">Who</th><th></th></tr>
       {{#each bbttccRig.crew}}
       <tr><td style="text-transform:capitalize">{{ role }}</td><td>{{ name }}</td>
         <td style="text-align:right;white-space:nowrap">
@@ -77,9 +59,21 @@
       {{/each}}
     </table>
     {{else}}
-    <p style="font-size:.78rem;opacity:.6">No crew boarded. Board from a steward token's HUD (🛻 button) while adjacent to this rig's token.</p>
+    <p style="font-size:.78rem;opacity:.6">No crew seated. Right-click a character's token next to this rig → 🛻 <b>Board</b> and pick a station — or seat someone from the list below.</p>
     {{/if}}
-    <p style="font-size:.7rem;opacity:.55;margin:.4rem 0 0">Boarded stewards spend their <b>own</b> action economy on rig actions — a 4-crew rig does up to 4 things a round. Pilot disembarking auto-parks a mobile rig.</p>
+    {{#if bbttccRig.hasNative}}
+    <h4 style="margin:.6rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Aboard — dnd5e crew list <span style="font-size:.72rem;opacity:.65">(not seated at a station)</span></h4>
+    <table style="font-size:.8rem;width:100%">
+      {{#each bbttccRig.native}}
+      <tr><td>{{ name }}{{#if multi}} <span style="opacity:.6">×{{ count }}</span>{{/if}} <span style="opacity:.55;font-size:.7rem">{{ list }}</span></td>
+        <td style="text-align:right;white-space:nowrap">
+          {{#if @root.bbttccRig.editable}}{{#if actor}}<button type="button" data-rig-native-seat="{{ uuid }}" style="width:auto;padding:.05rem .45rem;font-size:.7rem">Seat ▸</button>{{/if}}
+          <button type="button" data-rig-native-remove="{{ uuid }}" style="width:auto;padding:.05rem .45rem;font-size:.7rem">✕ Remove</button>{{/if}}</td></tr>
+      {{/each}}
+    </table>
+    {{#if bbttccRig.editable}}<button type="button" data-rig-native-clear style="width:auto;padding:.1rem .6rem;font-size:.72rem;margin-top:.25rem">Clear the whole list</button>{{/if}}
+    {{/if}}
+    <p style="font-size:.7rem;opacity:.55;margin:.4rem 0 0">Seated crew spend their <b>own</b> action economy on rig actions — a 4-crew rig does up to 4 things a round. Pilot disembarking auto-parks a mobile rig.</p>
     {{/unless}}
   </div>
 </section>

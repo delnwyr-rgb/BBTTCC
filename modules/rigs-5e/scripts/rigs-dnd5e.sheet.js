@@ -75,6 +75,17 @@
     const mecha = ig.bracket === "mecha";
     const tiers = mecha ? ["0", "1", "2", "3", "4", "5"] : ["1", "2", "3", "4"];
     const crew = (rig.crew?.slots ?? []).map((s, i) => ({ i, role: s.role, name: game.actors?.get?.(s.actorId)?.name ?? s.label ?? "(empty)" }));
+    // rigs-5e (11-12, Dave: "no way to disembark the people already boarded"): dnd5e's own vehicle crew / passenger
+    // lists (system.crew.value / system.passengers.value — actor UUIDs, duplicates allowed) aren't rig seats.
+    const native = [];
+    for (const list of ["crew", "passengers"]) {
+      const counts = new Map();
+      for (const u of (a.system?.[list]?.value ?? [])) counts.set(u, (counts.get(u) ?? 0) + 1);
+      for (const [uuid, count] of counts) {
+        let doc = null; try { doc = fromUuidSync(uuid); } catch (_e) { doc = null; }
+        native.push({ uuid, count, multi: count > 1, list, name: doc?.name ?? `(missing ${uuid})`, actor: doc?.documentName === "Actor" });
+      }
+    }
     const frame = (() => {
       const f = rig.frame;
       if (!f) return null;
@@ -83,7 +94,7 @@
       return { name: f.name, usage: ["weapon", "system", "output"].map(s => `${s} ${count(s === "weapon" ? "rig-weapon" : s === "system" ? "rig-system" : "output-module")}/${slots[s] ?? "∞"}`).join(" · ") };
     })();
     return {
-      isRig: true, editable,
+      isRig: true, editable, native, hasNative: native.length > 0,
       state: id.state, stateIcon: { parked: "🅿️", deployed: "🛻", destroyed: "💥" }[id.state] ?? "",
       canDeploy: editable && id.state === "parked" && id.mobility !== "stationary",
       canPark: editable && id.state === "deployed",
@@ -130,6 +141,36 @@
       const clamped = bracket === "mecha" ? Math.max(0, Math.min(5, tier)) : Math.max(1, Math.min(4, tier));
       if (clamped !== tier || field === "tier") patch["integrity.tier"] = clamped;
       await R().update(a, patch);   // the accessor re-seats AC + DT from bracket/tier (C20)
+      rerender();
+    });
+    // dnd5e crew / passenger list → seat at a station (a real board) or drop from the list.
+    const dropNative = async (uuid) => {
+      const upd = {};
+      for (const list of ["crew", "passengers"]) {
+        const cur = a.system?.[list]?.value ?? [];
+        if (uuid === null) { if (cur.length) upd[`system.${list}.value`] = []; continue; }
+        const next = cur.filter(u => u !== uuid);
+        if (next.length !== cur.length) upd[`system.${list}.value`] = next;
+      }
+      if (Object.keys(upd).length) await a.update(upd);
+    };
+    on("[data-rig-native-remove]", "click", async (e) => { await dropNative(e.currentTarget.dataset.rigNativeRemove); rerender(); });
+    on("[data-rig-native-clear]", "click", async () => {
+      const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Clear the crew list" }, content: `<p>Remove everyone from ${foundry.utils.escapeHTML(a.name)}'s dnd5e crew and passenger lists? Seated crew are not affected.</p>`, rejectClose: false }).catch(() => false);
+      if (ok) { await dropNative(null); rerender(); }
+    });
+    on("[data-rig-native-seat]", "click", async (e) => {
+      const uuid = e.currentTarget.dataset.rigNativeSeat;
+      const who = await fromUuid(uuid);
+      if (!who) return ui.notifications.warn("That actor no longer exists.");
+      const role = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `Seat ${who.name} — choose a station` },
+        content: ["pilot", "gunner", "engineer", "crew"].map((r, i) => `<label style="display:flex;gap:.4rem;padding:.2rem"><input type="radio" name="role" value="${r}" ${i === 3 ? "checked" : ""}/><span style="text-transform:capitalize">${r}</span></label>`).join(""),
+        ok: { label: "Seat", callback: (_ev, b) => b.form.elements.role?.value ?? "crew" }, rejectClose: false,
+      }).catch(() => null);
+      if (!role) return;
+      await R().board(who, a, { role });
+      if (I().rigOf?.(who)?.id === a.id || R().boardedRigOf?.(who)?.rigId === a.id) await dropNative(uuid);
       rerender();
     });
     on("[data-rig-act]", "click", async (e) => {

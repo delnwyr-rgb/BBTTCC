@@ -693,7 +693,11 @@ import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "/modules/bbttcc-core/
   function distFt(t1, t2) {
     const grid = canvas?.scene?.grid;
     if (!t1 || !t2 || !grid?.size || !grid?.distance) return Infinity;
-    return Math.hypot(t1.center.x - t2.center.x, t1.center.y - t2.center.y) / (grid.size / grid.distance);
+    // 11-12 (Dave: "I'm not sure how to board"): EDGE to edge, not centre to centre — a 150-ft titan's centre is
+    // 15+ ft from a PC standing against its hull, so the 🛻 Board button never appeared beside big rigs.
+    const gap = (a, b, sa, sb) => Math.max(0, Math.abs(a - b) - (sa + sb) / 2);
+    const dx = gap(t1.center.x, t2.center.x, t1.w ?? 0, t2.w ?? 0), dy = gap(t1.center.y, t2.center.y, t1.h ?? 0, t2.h ?? 0);
+    return Math.hypot(dx, dy) / (grid.size / grid.distance);
   }
   async function pickRole() {
     return foundry.applications.api.DialogV2.prompt({
