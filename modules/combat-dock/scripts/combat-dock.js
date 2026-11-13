@@ -151,8 +151,12 @@
     return c;
   }
   // 11-12: out of combat (setting combatDockAlways) the dock drives the player's character / the GM's selected token.
+  // 11-12: the RFI player HUD's Abilities button opens the dock out of combat (remembered per user).
+  let _manualOpen = false;
+  const OPEN_KEY = () => `combat-dock-open:${game.user?.id ?? "anon"}`;
+  function setManualOpen(v) { _manualOpen = !!v; try { localStorage.setItem(OPEN_KEY(), _manualOpen ? "1" : "0"); } catch (_e) {} }
   function oocSubject() {
-    if (!setting("combatDockAlways", false)) return null;
+    if (!setting("combatDockAlways", false) && !_manualOpen) return null;
     const actor = hud()?.getSteward?.();
     if (!actor) return null;
     if (game.user.isGM && !canvas?.tokens?.controlled?.length && !actor.hasPlayerOwner && actor !== game.user.character) return null;
@@ -292,6 +296,41 @@
     return out;
   }
 
+  // ── RFI: what the Abilities tray had (2026-11-12) ──────────────────────
+  // Retinue (crew feats + Invoke Crew / Association), Faculties, Defenses, Aptitudes, Active States — built from
+  // the player HUD's own helpers (game.bbttcc.playerHud.rfi), fired through its roll paths.
+  function rfiTrayGroups(actor, sections) {
+    const R = hud()?.rfi; if (!R || !actor) return [];
+    const out = [];
+    const echo = sections?.echo ?? [];
+    let contracts = []; try { contracts = R.contracts?.(actor) ?? []; } catch (_e) {}
+    if (echo.length || contracts.length) {
+      const tip = contracts.map(c => `${c.label}: ${c.name} (${c.clock})`).join("<br>");
+      out.push({ id: "retinue", label: "Retinue", entries: [
+        { kind: "spot", which: "crew", key: "spot:crew", label: "Invoke Crew", emoji: "⭐", aim: "none", cost: null, noTarget: true, tipHTML: `<b>Invoke Crew</b><br>Spotlight a member from an active crew — one beat per scene${tip ? `<br>${tip}` : ""}` },
+        { kind: "spot", which: "occult", key: "spot:occult", label: "Invoke Association", emoji: "⭐", aim: "none", cost: null, noTarget: true, tipHTML: `<b>Invoke Association</b><br>Spotlight a member from an active association — one beat per scene` },
+        ...echo.map(featureEntry).map(e => ({ ...e, icon: "ghost" }))] });
+    }
+    const fac = R.faculties?.(actor) ?? [];
+    if (fac.length) out.push({ id: "faculties", label: "Faculties", entries: fac.map(f => ({ kind: "rfiRoll", sub: "faculty", fkey: f.key, key: `fac:${f.key}`,
+      label: `${f.label} ${f.value >= 0 ? "+" : ""}${f.value}`, tip: `Roll ${f.label}`, icon: "dice-d20", aim: "none", cost: null, noTarget: true })) });
+    const def = R.defenses?.(actor) ?? [];
+    if (def.length) out.push({ id: "defenses", label: "Defenses", entries: def.map(d => ({ kind: "rfiRoll", sub: "defense", fkey: d.key, key: `def:${d.key}`,
+      label: `${d.label} ${d.value}`, tip: `Roll ${d.label} (DC ${d.value})`, icon: "shield-halved", aim: "none", cost: null, noTarget: true })) });
+    const apt = R.aptitudes?.(actor) ?? [];
+    if (apt.length) out.push({ id: "aptitudes", label: "Aptitudes", entries: apt.map(a => ({ kind: "rfiRoll", sub: "aptitude", fkey: a.key, attribute: a.attribute, key: `apt:${a.key}`,
+      label: `${a.label} · ${R.rankInfo?.[Math.max(0, Math.min(5, a.rank))]?.label ?? a.rank}`, tipHTML: R.rankTip?.(a.label, a.rank) ?? esc(a.label), icon: "dice-d20", aim: "none", cost: null, noTarget: true })) });
+    let states = []; try { states = R.liveStates?.(actor) ?? []; } catch (_e) {}
+    if (states.length) out.push({ id: "states", label: "States", entries: states.map(e => ({ kind: "state", effectId: e.id, key: `fx:${e.id}`,
+      label: `${e.name ?? "Effect"}${(() => { const d = (() => { try { return String(R.effectDurationLabel?.(e) ?? ""); } catch (_e) { return ""; } })();
+        const v = e.duration?.value ?? e._source?.duration?.value, u = String(e.duration?.units ?? e._source?.duration?.units ?? "");
+        const own = Number(v) > 0 ? `${v}${u.startsWith("round") ? "r" : u.startsWith("turn") ? "t" : u.startsWith("minute") ? "m" : u.startsWith("second") ? "s" : ""}` : "";
+        const lbl = own || (/^(none|∞|)$/i.test(d.trim()) ? "" : d);
+        return lbl ? ` · ${lbl}` : ""; })()}`, img: e.img ?? e.icon, tip: "Open this effect", aim: "none", cost: null, noTarget: true,
+      polarity: R.effectPolarity?.(e) ?? "neutral", off: !!e.disabled })) });
+    return out;
+  }
+
   function buildGroups(actor) {
     const H = hud(); if (!H || !actor) return [];
     const groups = [];
@@ -320,6 +359,7 @@
     }));
     if (moves.length) groups.push({ id: "move", label: "Moves", entries: moves });
     if (ab.length) groups.push({ id: "ability", label: "Abilities", entries: ab.map(featureEntry) });   // the long list goes last
+    groups.push(...rfiTrayGroups(actor, s));   // 11-12 (Dave): the dock replaces the RFI Abilities tray
     return groups;
   }
 
@@ -505,6 +545,17 @@
   // ── Fire ───────────────────────────────────────────────────────────────
   async function fire(entry, s, tokens) {
     const H = hud(); const actor = s.actor;
+    // 11-12: RFI tray rows (faculties, defenses, aptitudes, spotlights, states) leave the targets alone too.
+    if (entry.kind === "rfiRoll") {
+      try {
+        if (entry.sub === "faculty") return await H?.fire?.faculty?.(actor, entry.fkey);
+        if (entry.sub === "defense") return await H?.fire?.defense?.(actor, entry.fkey);
+        if (entry.sub === "aptitude") return await H?.fire?.aptitude?.(actor, entry.fkey, entry.attribute);
+      } catch (e) { warn(`roll failed: ${entry.label}`, e); }
+      return;
+    }
+    if (entry.kind === "spot") return H?.fire?.spotlight?.(actor, entry.which);
+    if (entry.kind === "state") { const eff = actor.effects?.get?.(entry.effectId); return eff?.sheet?.render?.(true, { focus: true }); }
     // 11-12: saves / skill checks roll for the actor and leave the user's targets alone.
     if (entry.kind === "roll5e") {
       try {
@@ -721,24 +772,24 @@
     const folded = foldedGroups();
     for (const g of groups) {
       // Off your turn: what the engine lets you take then — Bonus (any time, ruling U4) and Reaction. Saves / checks always.
-      const shown = g.entries.filter(e => !offTurn || e.kind === "roll5e" || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed" || e.cost === "free");
+      const shown = g.entries.filter(e => !offTurn || e.kind === "roll5e" || e.noTarget || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed" || e.cost === "free");
       if (!shown.length) continue;
       // 11-12 (Dave): every section folds — click its label. Remembered per user.
       const isFolded = folded.has(g.id);
       const labelBtn = `<button type="button" class="cd-group-label cd-fold" data-dock="fold" data-g="${esc(g.id)}" data-tooltip="${isFolded ? "Show" : "Hide"} ${esc(g.label)}"><i class="fas fa-caret-${isFolded ? "right" : "down"}"></i> ${esc(g.label)}${isFolded ? ` <span class="cd-fold-n">${shown.length}</span>` : ""}</button>`;
       if (isFolded) { out.push(`<div class="cd-group is-folded">${labelBtn}</div>`); continue; }
-      out.push(`<div class="cd-group ${["checks", "saves", "skills"].includes(g.id) ? "is-rolls" : ""}">${labelBtn}` + shown.map(e => {
+      out.push(`<div class="cd-group ${["checks", "saves", "skills", "faculties", "defenses", "aptitudes"].includes(g.id) ? "is-rolls" : ""}">${labelBtn}` + shown.map(e => {
         const spent = e.cost && slotSpent(s.actor, e.cost);
         let hk = "";
         if (!spent && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
         const _mixTip = e.kind === "mani" ? "Your stance picks: Shamanic uses the Action · Chaotic the Bonus action · Hermetic both" : "Cost depends on which ability you pick";
         const costTag = { action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]
           ? `<span class="cd-cost cd-cost-${e.cost}" ${e.cost === "mixed" ? `data-tooltip="${_mixTip}"` : ""}>${{ action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]}</span>` : "";
-        const tip = e.item ? (hud()?.synopsisFor?.(e.item) ?? esc(e.label)) : `<b>${esc(e.label)}</b><br>${esc(e.tip ?? "")}`;
-        const aimTag = e.kind === "roll5e" ? "" : ({ area: "◎", self: "", none: "" }[e.aim] ?? "🎯");
-        return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""}" ${spent ? "disabled" : ""}
+        const tip = e.tipHTML ?? (e.item ? (hud()?.synopsisFor?.(e.item) ?? esc(e.label)) : `<b>${esc(e.label)}</b><br>${esc(e.tip ?? "")}`);
+        const aimTag = (e.kind === "roll5e" || e.noTarget) ? "" : ({ area: "◎", self: "", none: "" }[e.aim] ?? "🎯");
+        return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""} ${e.kind === "state" ? `is-state is-${e.polarity}${e.off ? " is-off" : ""}` : ""}" ${spent ? "disabled" : ""}
           data-dock="fire" data-g="${esc(g.id)}" data-k="${esc(e.item?.id ?? e.key)}" data-tooltip="${esc(tip)}">
-          ${hk ? `<span class="cd-hk">${hk}</span>` : ""}${e.emoji ? `<span class="cd-emoji">${e.emoji}</span>` : `<i class="fas fa-${esc(e.icon)}"></i>`}
+          ${hk ? `<span class="cd-hk">${hk}</span>` : ""}${e.img ? `<img class="cd-ab-img" src="${esc(e.img)}" alt="">` : e.emoji ? `<span class="cd-emoji">${e.emoji}</span>` : `<i class="fas fa-${esc(e.icon)}"></i>`}
           <span class="cd-ab-name">${esc(e.label)}</span>${aimTag ? `<span class="cd-aim">${aimTag}</span>` : ""}${costTag}</button>`;
       }).join("") + `</div>`);
     }
@@ -807,6 +858,7 @@
         <span class="cd-who"><img src="${esc(s.token?.document?.texture?.src || s.actor.img)}" alt=""> ${esc(s.actor.name)}</span>
         ${hint}
         ${slotsHTML(s)}
+        ${!IS_5E() ? `<span class="cd-res">${(() => { try { return hud()?.rfi?.resStripHTML?.(s.actor) ?? ""; } catch (_e) { return ""; } })()}</span>` : ""}
         <span class="cd-spacer"></span>
         <span class="cd-target">${targetLineHTML(s)}</span>
         <span class="cd-queued">${offerChips()}${queuedHTML}</span>
@@ -814,9 +866,12 @@
         ${canEnd ? `<button type="button" class="cd-end" data-dock="end"><i class="fas fa-forward"></i> End Turn</button>` : ""}
         ${!inCombat ? "" : `<button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>`}
         <button type="button" class="cd-icon" data-dock="collapse" data-tooltip="Shrink the dock"><i class="fas fa-chevron-down"></i></button>
+        ${!inCombat && _manualOpen && !setting("combatDockAlways", false) ? `<button type="button" class="cd-icon" data-dock="close" data-tooltip="Close the dock (the Abilities button opens it again)"><i class="fas fa-xmark"></i></button>` : ""}
       </div>
       <div class="cd-abilities">${abilitiesHTML(s, myTurn || !inCombat)}</div>
       <span class="cd-resize" data-dock-resize data-tooltip="Drag to resize"></span>`;
+    // The dock's own heat meter already shows Surge — drop the tray strip's duplicate Surge chip.
+    dock.querySelectorAll(".cd-res .bbttcc-res-chip").forEach(c => { if (/^\s*(<[^>]*>\s*)*Surge\b/i.test(c.innerHTML) || /^\s*Surge\b/i.test(c.textContent)) c.remove(); });
     applyLayout(dock);
     drawMoveRing(s);
     placeDock();
@@ -905,7 +960,10 @@
         if (tok) { canvas.animatePan({ x: tok.center.x, y: tok.center.y, duration: 250 }); if (game.user.isGM) tok.control({ releaseOthers: true }); }
         return;
       }
+      const res = ev.target.closest(".cd-res [data-fire]");
+      if (res) { const s0 = subject(); if (s0 && res.dataset.fire === "pool") hud()?.fire?.pool?.(s0.actor, res.dataset.key); return; }
       const b = ev.target.closest("[data-dock]"); if (!b) return;
+      if (b.dataset.dock === "close") { setManualOpen(false); return render(); }
       const s = subject(); if (!s) return;
       switch (b.dataset.dock) {
         case "fire": { const e = findEntry(s, b.dataset.g, b.dataset.k); if (e) activate(e, s); return; }
@@ -1047,6 +1105,21 @@
   // ── Hooks ──────────────────────────────────────────────────────────────
   Hooks.once("ready", () => {
     try { _collapsed = window.localStorage?.getItem(COLL_KEY()) === "1"; } catch (_e) {}
+    try { _manualOpen = window.localStorage?.getItem(OPEN_KEY()) === "1"; } catch (_e) {}
+    // 11-12: open / close / toggle from other UI (the RFI player HUD's Abilities button).
+    const api = {
+      open() { setManualOpen(true); if (_collapsed) { _collapsed = false; try { localStorage.setItem(COLL_KEY(), "0"); } catch (_e) {} } render(); },
+      close() { setManualOpen(false); render(); },
+      toggle() {
+        const shown = !!document.getElementById(DOCK_ID);
+        if (combatHere() && shown) { _collapsed = !_collapsed; try { localStorage.setItem(COLL_KEY(), _collapsed ? "1" : "0"); } catch (_e) {} return render(); }
+        if (shown && !_collapsed) return api.close();
+        return api.open();
+      },
+      get isOpen() { return !!document.getElementById(DOCK_ID); }
+    };
+    game.combatDock = api;
+    if (game.bbttcc) game.bbttcc.combatDock = api;
     renderSoon();
     // 10-30: on a refresh mid-combat the Player HUD (and its Steward) can publish after this
     // ready pass, so the dock found no subject and stayed gone until the next combat event.

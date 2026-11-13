@@ -186,3 +186,12 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 .cd-group.is-rolls .cd-ab i { color: var(--cd-blue); }
 /* Out of combat: a calmer frame. */
 #bbttcc-combat-dock.is-ooc { border-color: rgba(106, 176, 214, 0.45); }
+
+/* 11-12: RFI — the dock replaces the Abilities tray: state chips, resource chips, effect icons. */
+.cd-ab-img { width: 16px; height: 16px; border-radius: 3px; object-fit: cover; border: none; flex: none; }
+.cd-ab.is-state.is-buff { border-color: rgba(90, 200, 120, 0.55); }
+.cd-ab.is-state.is-debuff { border-color: rgba(224, 90, 74, 0.6); }
+.cd-ab.is-state.is-off { opacity: 0.5; }
+.cd-res:empty { display: none; }
+.cd-res .bbttcc-resstrip { display: flex; gap: 4px; padding: 0; margin: 0; border: 0; background: none; flex-wrap: wrap; }
+.cd-res .bbttcc-res-chip { height: 24px; padding: 1px 7px; font-size: 11px; line-height: 1.2; }

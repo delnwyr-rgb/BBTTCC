@@ -1077,7 +1077,7 @@
         <button type="button" class="bbttcc-btn" data-action="steward">
           <i class="fas fa-user-shield"></i><span>Steward</span>
         </button>
-        <button type="button" class="bbttcc-btn" data-action="abilities">
+        <button type="button" class="bbttcc-btn" data-action="abilities" data-tooltip="${IS_5E() ? "Abilities" : "Abilities — opens the dock (drag, resize, fold sections) · Shift-click: the classic tray"}">
           <i class="fas fa-bolt"></i><span>Abilities</span>
         </button>
         <button type="button" class="bbttcc-btn" data-action="travel">
@@ -1099,7 +1099,9 @@
         case "landing":   return game.bbttcc?.onboarding?.landing?.open?.();   // the front door (bbttcc-onboarding landing.js)
         case "faction":   return openFaction();
         case "steward":   return openStewardOrRig();
-        case "abilities": return toggleTray(root);
+        // 11-12 (Dave): on RFI the Abilities button launches the Combat Dock (collapsible, movable, remembered);
+        // Shift-click still opens the classic tray.
+        case "abilities": if (!IS_5E() && !ev.shiftKey && typeof game.combatDock?.toggle === "function") return game.combatDock.toggle(); return toggleTray(root);
         case "travel":    return openTravelConsole();
         case "reliable":  return game.bbttcc?.api?.campaign?.reliable?.board?.();
       }
@@ -1181,7 +1183,16 @@
     game.bbttcc.playerHud = {
       getSteward, getBoardedRig, collectSections, collectSections5e, synopsisFor, abilityIcon,
       isManifestationItem, refreshGroups, surgeHeatFor: (a) => readPool(a, "surge"),
-      fire: { ability: fireAbility, strike: fireStrike, mani: fireManifestation, pool: firePool, use5e: useItem5e }
+      fire: { ability: fireAbility, strike: fireStrike, mani: fireManifestation, pool: firePool, use5e: useItem5e,
+        // 11-12: the Combat Dock replaces the RFI Abilities tray — same roll paths as the tray buttons.
+        faculty: fireFaculty, defense: fireDefense, aptitude: fireAptitude,
+        spotlight: (steward, which) => { const fn = game.fourththing?.echoAssets?.spotlight?.quickInvoke; return typeof fn === "function" ? fn(steward, which) : ui.notifications?.warn?.("Spotlight not ready."); } },
+      rfi: {
+        faculties: (st) => FACULTIES.map(([key, label]) => ({ key, label, value: Number(foundry.utils.getProperty(st, `system.attributes.${key}.value`) ?? 0) })),
+        defenses: (st) => DEFENSES.map(([key, label]) => ({ key, label, value: Number(foundry.utils.getProperty(st, `system.derived.${key}.value`) ?? 10) })),
+        aptitudes: aptitudeRows, rankTip: rankCumulativeTip, rankInfo: RANK_INFO,
+        contracts: contractRows, liveStates, effectDurationLabel, effectPolarity, resStripHTML
+      }
     };
   });
   // Turn Ledger chip stays live: world settings replicate to every client, so
