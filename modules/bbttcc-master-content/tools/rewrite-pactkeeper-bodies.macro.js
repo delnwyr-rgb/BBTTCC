@@ -24,7 +24,7 @@ const BASE_BODY = `
   <li><strong>Invoke Clause</strong> (1) — name a clause on a foe: its next attack is at disadvantage.</li>
   <li><strong>Binding Writ</strong> (3) — a foe is Staggered and rolls its saves at disadvantage until your next turn.</li>
   <li><strong>Shelter the Bound</strong> (5) — you and an ally gain DR equal to Tier; the next hit that would drop them holds at 1.</li>
-  <li><strong>Sovereign Writ</strong> (8) — a foe cannot take reactions and rolls its next attack <em>and</em> saves at disadvantage.</li>
+  <li><strong>Sovereign Writ</strong> (5) — a foe cannot take reactions and rolls its next attack <em>and</em> saves at disadvantage.</li>
 </ul>
 <p>The pact layer endures: <strong>The Bargain</strong> binds a subject (sustain on it at no extra Clarity upkeep), <strong>Renegotiate</strong> converts a misfire into accepted debt, <strong>Sealed Pact</strong> is your stance (+concurrency, no voluntary drop on the bound), and <strong>Ledger Day</strong> transfers a sustained manifestation to a willing ally.</p>
 `.trim();
@@ -37,7 +37,7 @@ const ARCHIVIST_BODY = `
 <ul>
   <li><strong>Cite Precedent</strong> (1) — you and an ally each bank a reroll (the record supports you).</li>
   <li><strong>Stare Decisis</strong> (2) — a foe's next attack and its saves are at disadvantage (bound by precedent).</li>
-  <li><strong>Res Judicata</strong> (5) — a foe cannot take reactions and rolls its saves at disadvantage. The matter is closed; there is no appeal.</li>
+  <li><strong>Res Judicata</strong> (3) — a foe cannot take reactions and rolls its saves at disadvantage. The matter is closed; there is no appeal.</li>
 </ul>
 `.trim();
 
@@ -49,7 +49,7 @@ const AUDITOR_BODY = `
 <ul>
   <li><strong>Expose the Debt</strong> (1) — your next Strike or manifestation deals +Tier d6 (the hidden cost comes due).</li>
   <li><strong>Levy</strong> (2) — a foe is Staggered and its next attack is at disadvantage (payment is due, now).</li>
-  <li><strong>Foreclose</strong> (5) — your next Strike lands as a max-die crit and ignores resistances. Everything you have; it was never really yours.</li>
+  <li><strong>Foreclose</strong> (5) — your next Strike that hits rolls max damage dice and ignores resistances. Everything you have; it was never really yours.</li>
 </ul>
 `.trim();
 
@@ -61,7 +61,7 @@ const STEWARD_BODY = `
 <ul>
   <li><strong>Shield the Vulnerable</strong> (1) — an ally gains DR equal to Tier and a reroll.</li>
   <li><strong>Keep the Agreement</strong> (2) — heal an ally; the next hit that would drop them holds at 1.</li>
-  <li><strong>Sanctuary</strong> (5) — allies within 30 ft gain DR equal to Tier and a freed reaction.</li>
+  <li><strong>Sanctuary</strong> (5) — allies within 30 ft gain DR equal to Tier and a freed bonus action.</li>
 </ul>
 `.trim();
 

@@ -1,6 +1,6 @@
 # The Bad Eden conversion rubric (RFI → D&D 5E)
 
-**v1.11.0 · 2026-10-31** (D&D port review fix round: C40–C50, C64, C72, P7). This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
+**v1.12.0 · 2026-11-13** (Surge repricing mirror: heals × proficiency bonus; earlier: v1.11.0 D&D port review fix round C40–C50, C64, C72, P7). This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
 
 ✅ = ruled by Dave · ⏳ = drafted, ruling owed.
 
@@ -132,6 +132,23 @@ Rigs → the vehicle lane: `attributes.ac = { flat: rigAcFor(bracket, tier), cal
 ## Creatures (drafted for the monster lane)
 
 **Source = `packs/_source/npcs`** (the lineage-flagged actors, items embedded), like every other lane — `conversion/sources/npcs-monsters.jsonl` is a fallback only, refreshed with `bin/ft-dump-pack npcs`, and `--parity creatures` prints its drift from canon ✅ C40 2026-10-31. **Numbers (✅ C45 ruled 2026-10-31):** hp = Integrity, AC = Guard, verbatim; the **CR label is derived** from what lands on the sheet (DMG p.274 — defensive CR from the hp band shifted 1 per 2 AC off the band, offensive CR from damage/round shifted 1 per 2 attack-bonus points, averaged, snapped to a legal CR; `CR_ROWS` in convert-5e.mjs) so the number the GM sees matches the stat block; the old Tier 1–4 → CR 1–4 / 5–8 / 9–13 / 14+ table is now only the band a needs-row compares against (Tier IV bosses land CR 8–9 with their 135 Integrity). The threat chassis still sets strikes, legendary actions and the per-tier damage bonus. Power saves use the intent's own ability (Mind → Intelligence, Presence → Charisma; no fold to Wisdom) ✅ C48; condition words in defense lists → `traits.ci` ✅ C47; the RFI stat idiom in item prose ("Strike. reach 1 square., one target. Damage: 2d10 kinetic + violence", "Hit: … + violence; half on success", "Fail: <dice> type + Condition", "Cost. 2 Clarity, +2 Noise", "Damage goes to Stress") is stripped before the rubric runs — the activity carries the dice, the rider sentence and Dave's flavour line stay ✅ C43; `npcAuto` condition objects render as words with their duration ✅ C41. Evasion / Resolve → Dex / Wis save proficiency; attributes 1–5 → scores 10 + 2×value ✅; skills through the rank table; attacks → weapon items through the gear table; lineage → creature type; bounties and hire stay in marks. **`npcAuto` rules (the monster rider slice, ✅ ruled + shipped 2026-10-07):** *use* + condition/save/damage → a save (or utility) activity on the feature with the condition as an applied effect (Staggered = status `be5e-staggered`: speed ×½, −2 to attacks; Shaken → frightened; Calmed/Compelled → charmed; a weapon's *kinetic* = its own damage type); *hit* + damage/condition/no-reactions/ongoing damage → riders on the weapon's attack activity; *saveFail* → effects on the weapon's save activity (a second "— condition" save activity when the weapon only attacks); *attack* + reroll → chat flavour; *turnStart · selfTurnStart · bloodied · zero · struck · attacked · damaged · allyDamaged* → text + `flags.bad-eden-5e.reminders` whispered to the GM at the moment by `scripts/reminders.js`; *radiation · morale · ward · tempIntegrity · heal · prompt* → chat flavour on the activity. Budgets are checked against `threat-chassis.js` and the table-kit encounter sim.
+
+## Surge (shared engine, mirrored by hand) ✅ Dave 2026-11-13
+
+Surge has no converter lane: the D&D twin is `surge-powers` (the universal menu in `scripts/surge-powers.js`, Path powers in `data/paths.json`) and the `dnd5e-table-kit` riders. When the RFI menu (`_FT_SURGE_MENU`) is repriced, mirror it there against this table. Dave: *"when I say proficiency bonus I mean in the BadEden5E system. In RFI it's Tier level."*
+
+| RFI | D&D | |
+| --- | --- | --- |
+| any Tier-scaled Surge number | the proficiency bonus (PB) | ✅ |
+| Tier gate I · II · III · IV | minProf none (PB 2) · 3 · 4 · 6; cost cap 4 · 6 · 8 · 10 | ✅ |
+| Stitch · Field Patch 2d6 × Tier | 2d6 × PB (`2d6*@prof`) | ✅ |
+| Rallying Cry · area heals 1d6 × Tier | 1d6 × PB each | ✅ |
+| class heal by price 1 · 2–3 · 4+ | 1d6 · 2d6 · 3d6 × PB, priced by the **5E** cost; a doctrine that heals more keeps its + PB | ✅ |
+| Doomstrike +Tier d6, sixes explode | +PB d6x | ✅ |
+| Tier Surge +Tier to hit and damage | Power Surge: +PB to hit and +PB damage | ✅ |
+| Crowning Blow critical ×2 | auto-hit, dnd5e critical, dice maximised | ✅ |
+| Final Argument | auto-hit critical, +PB d6, dice maximised, ignores resistance | ✅ |
+| damage riders wait for a hit | native: the damage roll consumes them, and it only follows a hit | ✅ |
 
 ## Vocabulary the lint refuses
 

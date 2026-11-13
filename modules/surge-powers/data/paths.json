@@ -672,11 +672,11 @@
      "key": "ease-attrition",
      "cost": 2,
      "minProf": 3,
-     "label": "Ease Attrition — heal an ally 2d6 + Prof and end one condition",
+     "label": "Ease Attrition — heal an ally 2d6 × Prof and end one condition",
      "fiction": "Process it. Then keep going.",
      "fx": {
       "tgt": "ally",
-      "heal": "2d6+@prof",
+      "heal": "2d6*@prof",
       "endCondition": 1
      }
     },
@@ -944,11 +944,11 @@
      "key": "shoulder-the-weight",
      "cost": 3,
      "minProf": 4,
-     "label": "Shoulder the Weight — heal an ally 2d6 + Prof; you take half; they have advantage next",
+     "label": "Shoulder the Weight — heal an ally 2d6 × Prof; you take half; they have advantage next",
      "fiction": "Give it to me.",
      "fx": {
       "tgt": "ally",
-      "heal": "2d6+@prof",
+      "heal": "2d6*@prof",
       "selfDamage": "halfHeal",
       "arm": "bonusDie"
      },
@@ -1679,16 +1679,16 @@
      "key": "forge-weld",
      "cost": 1,
      "minProf": 2,
-     "label": "Forge-Weld — an ally within 5 ft heals 1d8 + Prof",
+     "label": "Forge-Weld — an ally within 5 ft heals 1d6 × Prof",
      "fiction": "Lay hands on the breakage.",
      "fx": {
       "tgt": "allyOrSelf",
-      "heal": "1d8+@prof"
+      "heal": "1d6*@prof"
      },
      "byDoctrine": {
       "boundlight": {
        "fx": {
-        "heal": "1d8+@prof+@prof"
+        "heal": "1d6*@prof+@prof"
        }
       },
       "reclaimer": {
@@ -1726,11 +1726,11 @@
      "key": "furnace-of-renewal",
      "cost": 4,
      "minProf": 4,
-     "label": "Furnace of Renewal — you and allies within 30 ft heal 1d8 + Prof and resist poison for 1 minute",
+     "label": "Furnace of Renewal — you and allies within 30 ft heal 1d6 × Prof and resist poison for 1 minute",
      "fiction": "Stand near the fire. It is rude not to.",
      "fx": {
       "tgt": "allies30",
-      "heal": "1d8+@prof",
+      "heal": "1d6*@prof",
       "ae": {
        "name": "Furnace of Renewal",
        "rounds": 10,
@@ -1746,7 +1746,7 @@
      "byDoctrine": {
       "boundlight": {
        "fx": {
-        "heal": "1d8+@prof+@prof"
+        "heal": "1d6*@prof+@prof"
        }
       }
      }
@@ -1806,11 +1806,11 @@
      "key": "deep-salvage",
      "cost": 3,
      "minProf": 4,
-     "label": "Deep Salvage — an ally heals 2d8 + Prof and every condition on them ends",
+     "label": "Deep Salvage — an ally heals 2d6 × Prof and every condition on them ends",
      "fiction": "Some ruins are worth the dig.",
      "fx": {
       "tgt": "allyOrSelf",
-      "heal": "2d8+@prof",
+      "heal": "2d6*@prof",
       "endCondition": "all"
      },
      "doctrine": "reclaimer"

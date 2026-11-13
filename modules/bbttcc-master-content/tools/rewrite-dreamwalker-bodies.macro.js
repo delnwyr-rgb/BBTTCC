@@ -36,7 +36,7 @@ const QUIETSUN_BODY = `
 <ul>
   <li><strong>Still Attention</strong> (1) — you and allies within 30 ft bank a reroll-lowest.</li>
   <li><strong>Somnolent Peace</strong> (2) — the next lethal blow against an ally drops them to 1 Integrity (unconscious), not dead.</li>
-  <li><strong>Radiant Pause</strong> (3) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>
+  <li><strong>Radiant Pause</strong> (6) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>
 </ul>
 <p><em>Out-of-combat:</em> The Revelation (ask the GM one true thing), The Unhurried Word, and the Sun-That-Does-Not-Set capstone (no lie holds in your presence) remain the oracle's quiet powers.</p>
 `.trim();
@@ -47,8 +47,8 @@ const SAPPHIRE_BODY = `
 <p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real — carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>
 <h3>Trance (spent via Surge)</h3>
 <ul>
-  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed reaction.</li>
-  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>
+  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed bonus action.</li>
+  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed bonus action.</li>
   <li><strong>Gate Held Open</strong> (3) — allies within 30 ft bank a reroll and gain DR (the threshold steadies them).</li>
 </ul>
 <p><em>Out-of-combat:</em> threshold-sight, the true teleport-by-linkage, the Gate Held Open evacuation, and the Gatewright capstone (make a door where none was) remain the explorer's powers.</p>
@@ -62,7 +62,7 @@ const THOUSAND_BODY = `
 <ul>
   <li><strong>Borrowed Face</strong> (1) — they can't tell which face is real: you gain DR + bank a reroll.</li>
   <li><strong>Mirror Read</strong> (2) — you wear a foe's tell back at them: it rolls its next attack at disadvantage, and you bank a reroll.</li>
-  <li><strong>Shared Face</strong> (3) — you and an ally blur behind borrowed identities: both gain DR.</li>
+  <li><strong>Shared Face</strong> (2) — you and an ally blur behind borrowed identities: both gain DR.</li>
 </ul>
 <p><em>Out-of-combat:</em> the Borrowed / Gathered / Composite Faces (full disguise + memory access), Persona Cache, and the Thousand-and-One capstone remain the infiltrator's powers.</p>
 `.trim();

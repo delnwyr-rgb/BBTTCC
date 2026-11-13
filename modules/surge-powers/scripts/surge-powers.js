@@ -145,7 +145,8 @@ import { playSpend, pop } from "./surge-fx.js";
     // The sender must play a character (the caster); a GM seat always may.
     if (!sender.isGM && !game.actors.some(a => a.type === "character" && a.testUserPermission(sender, "OWNER"))) return null;
     if (ALLY_OPS.has(op) && isHostile(actor)) return null;
-    if (op === "heal") return { amount: Math.max(0, Math.min(40, Math.round(Number(args.amount) || 0))) };
+    // 2026-11-13: heals are Nd6 × Prof now (3d6 × 6 = 108 max) — the old 40 clamp would cut a relayed heal.
+    if (op === "heal") return { amount: Math.max(0, Math.min(120, Math.round(Number(args.amount) || 0))) };
     if (op === "tempHP") return { n: Math.max(0, Math.min(30, Math.round(Number(args.n) || 0))) };
     if (op === "phoenix") return {};
     if (op === "oneShot") return { keys: [].concat(args.keys ?? []).filter(k => ARMABLE.has(k)) };
@@ -369,8 +370,8 @@ import { playSpend, pop } from "./surge-fx.js";
       fiction: "You slide sideways through the moment.", fx: { tgt: "self", oneShot: "reactionMiss", auto: "The next attack that hits you this round misses instead.", note: "One incoming attack this round becomes a miss (declare before damage; GM applies)." } },
     { cost: 2, key: "sundering-blow", bucket: "off", label: "Sundering Blow — next attack ignores resistances",
       fiction: "Whatever they call armor, it stops mattering for one breath.", fx: { tgt: "self", oneShot: "ignoreResists", auto: "Your next damage roll ignores the target's resistances.", note: "Next hit ignores damage resistances (GM applies)." } },
-    { cost: 2, key: "stitch", bucket: "heal", label: "Stitch — heal self 2d6 + Prof",
-      fiction: "Flesh re-knits along the seams you remember.", fx: { tgt: "self", heal: "2d6+@prof" } },
+    { cost: 2, key: "stitch", bucket: "heal", label: "Stitch — heal self 2d6 × Prof",   // surge repricing mirror 2026-11-13 (Dave: heals = Nd6 × PB; Tier → PB)
+      fiction: "Flesh re-knits along the seams you remember.", fx: { tgt: "self", heal: "2d6*@prof" } },
     // ── cost 3 ──
     { cost: 3, key: "reposition-init", bucket: "narr", label: "Reposition — new spot in initiative",
       fiction: "Step out of the moment. Re-enter where you choose.", fx: { tgt: "self", init: true } },
@@ -378,35 +379,35 @@ import { playSpend, pop } from "./surge-fx.js";
       fiction: "The effort didn't cost you. Something else paid.", fx: { tgt: "self", note: "Refund one expended class-feature use (GM restores the use)." } },
     { cost: 3, key: "echo-strike", bucket: "off", label: "Echo Strike — extra attack at −2",
       fiction: "A second blow that was already there.", fx: { tgt: "self", oneShot: "echoStrike", note: "Make one extra attack this turn at −2 (GM adjudicates)." } },
-    { cost: 3, key: "aegis", bucket: "def", label: "Aegis — ally gains DR equal to Prof this round",
+    { cost: 1, key: "aegis", bucket: "def", label: "Aegis — ally gains DR equal to Prof this round",
       fiction: "Your stance covers theirs.", fx: { tgt: "ally", dr: "prof" } },
     // ── cost 4 ──
-    { cost: 4, key: "surging-cast", bucket: "off", label: "Surging Cast — maximize one damage die of your next spell/feature",
+    { cost: 1, key: "surging-cast", bucket: "off", label: "Surging Cast — maximize one damage die of your next spell/feature",
       fiction: "The current runs hotter. Anything could come through.", fx: { tgt: "self", oneShot: "surgingCast", auto: "Your next spell/feature damage roll maximises one die.", note: "Next spell/feature damage: maximize one die (GM applies)." } },
-    { cost: 4, key: "iron-word", bucket: "def", label: "Iron Word — auto-succeed one save",
+    { cost: 3, key: "iron-word", bucket: "def", label: "Iron Word — auto-succeed one save",
       fiction: "You name what is happening. It listens.", fx: { tgt: "self", oneShot: "autoSaveOnce", auto: "Your next saving throw succeeds automatically.", note: "Automatically succeed one saving throw this round (declare before rolling)." } },
-    { cost: 4, key: "field-patch", bucket: "heal", label: "Field Patch — heal ally 2d6 + Prof (in reach)",
-      fiction: "Hands move faster than the wound can close.", fx: { tgt: "ally", heal: "2d6+@prof" } },
+    { cost: 3, key: "field-patch", bucket: "heal", label: "Field Patch — heal ally 2d6 × Prof (in reach)",
+      fiction: "Hands move faster than the wound can close.", fx: { tgt: "ally", heal: "2d6*@prof" } },
     // ── cost 5+ ──
-    { cost: 5, key: "reshape-fiction", bucket: "narr", label: "Reshape Fiction — one beat (GM-gated, 1/scene)",
+    { cost: 4, key: "reshape-fiction", bucket: "narr", label: "Reshape Fiction — one beat (GM-gated, 1/scene)",
       fiction: "A small miracle. A door that wasn't there. A body that didn't quite fall.", fx: { tgt: "self", note: "One narrative beat reshaped (GM-gated, once per scene)." } },
-    { cost: 5, key: "doomstrike", bucket: "off", label: "Doomstrike — next attack +Prof d6 damage",
-      fiction: "You bring more than you swung.", fx: { tgt: "self", oneShot: "doomstrike", auto: "Your next damage roll adds Prof d6.", note: "Next hit deals +Prof d6 extra damage (GM applies)." } },
-    { cost: 5, key: "steel-veil", minProf: 3, bucket: "def", label: "Steel Veil — resistance to one damage type this round",
+    { cost: 2, key: "doomstrike", bucket: "off", label: "Doomstrike — next hit +Prof d6 damage (sixes explode)",
+      fiction: "You bring more than you swung.", fx: { tgt: "self", oneShot: "doomstrike", auto: "Your next damage roll adds Prof d6; sixes explode.", note: "Next hit deals +Prof d6 extra damage, sixes explode (GM applies)." } },
+    { cost: 3, key: "steel-veil", minProf: 3, bucket: "def", label: "Steel Veil — resistance to one damage type this round",
       fiction: "Something between you and the world refuses the harm.", fx: { tgt: "self", resistChoice: true } },
-    { cost: 6, key: "wrath-cascade", minProf: 3, bucket: "off", label: "Wrath Cascade — reroll all 1s and 2s on your next damage roll",
+    { cost: 2, key: "wrath-cascade", minProf: 3, bucket: "off", label: "Wrath Cascade — reroll all 1s and 2s on your next damage roll",
       fiction: "The dice all remember at once.", fx: { tgt: "self", oneShot: "wrathCascade", auto: "Your next damage roll rerolls 1s and 2s.", note: "Next damage roll: reroll all 1s and 2s, keep the new results (GM applies)." } },
-    { cost: 7, key: "crowning-blow", minProf: 4, bucket: "off", label: "Crowning Blow — next hit is a max-die critical",
-      fiction: "Inevitable. The kind of strike fables remember.", fx: { tgt: "self", oneShot: "crowningBlow", auto: "Your next damage roll is a critical with maximised dice.", note: "Next hit is a critical with maximized dice (GM applies)." } },
-    { cost: 7, key: "rallying-cry", bucket: "heal", label: "Rallying Cry — heal allies within Prof×5 ft for 1d6 + Prof",
-      fiction: "Your voice carries the life back into them.", fx: { tgt: "alliesProfSq", heal: "1d6+@prof" } },
-    { cost: 8, key: "power-surge", minProf: 4, bucket: "off", label: "Power Surge — next attack or feature adds your Prof again",
-      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", auto: "Your next attack roll adds your Proficiency Bonus again.", note: "Next attack/feature: add your Proficiency Bonus to the roll a second time (GM applies)." } },
-    { cost: 9, key: "cinderwake", minProf: 6, bucket: "off", label: "Cinderwake — next damage roll: maximize all dice",
+    { cost: 7, key: "crowning-blow", minProf: 4, bucket: "off", label: "Crowning Blow — next attack hits as a critical, dice maximised",
+      fiction: "Inevitable. The kind of strike fables remember.", fx: { tgt: "self", oneShot: "crowningBlow", auto: "Your next attack hits; its damage is a critical with maximised dice.", note: "Next attack auto-hits as a critical with maximized dice (GM applies)." } },
+    { cost: 4, key: "rallying-cry", bucket: "heal", label: "Rallying Cry — heal allies within Prof×5 ft for 1d6 × Prof",
+      fiction: "Your voice carries the life back into them.", fx: { tgt: "alliesProfSq", heal: "1d6*@prof" } },
+    { cost: 2, key: "power-surge", minProf: 3, bucket: "off", label: "Power Surge — next hit adds your Prof again to hit and to damage",
+      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", auto: "Your next attack adds your Proficiency Bonus again to the roll and to its damage.", note: "Next attack: + Proficiency Bonus to hit and + Proficiency Bonus damage (GM applies)." } },
+    { cost: 3, key: "cinderwake", minProf: 6, bucket: "off", label: "Cinderwake — next damage roll: maximize all dice",
       fiction: "The dice run hot enough to leave scars.", fx: { tgt: "self", oneShot: "cinderwake", auto: "Your next damage roll is maximised.", note: "Next damage roll is maximized (GM applies)." } },
-    { cost: 10, key: "final-argument", minProf: 6, bucket: "off", label: "Final Argument — next attack auto-hits, max damage, +Prof to damage",
-      fiction: "There will be no negotiation.", fx: { tgt: "self", oneShot: "finalArgument", auto: "Your next attack auto-hits; its damage is maximised + Prof.", note: "Next attack auto-hits with maximized damage, plus your Proficiency Bonus (GM applies)." } },
-    { cost: 10, key: "phoenix", bucket: "heal", label: "Phoenix — restore self/ally from 0 HP to half (1/encounter)",
+    { cost: 8, key: "final-argument", minProf: 6, bucket: "off", label: "Final Argument — next attack auto-hits as a critical: +Prof d6, every die maximised, ignores resistance",
+      fiction: "There will be no negotiation.", fx: { tgt: "self", oneShot: "finalArgument", auto: "Your next attack auto-hits as a critical; +Prof d6, every die maximised, resistance ignored.", note: "Next attack auto-hits as a critical: + Prof d6, all dice maximized, ignores resistances (GM applies)." } },
+    { cost: 8, key: "phoenix", minProf: 4, bucket: "heal", label: "Phoenix — restore self/ally from 0 HP to half (1/encounter)",
       oncePer: "encounter",   // 10-29: the label's 1/encounter is enforced (keyed to the combat id)
       fiction: "Remember what you were before the wound. Be that now.", fx: { tgt: "allyOrSelf", phoenix: true } },
   ];

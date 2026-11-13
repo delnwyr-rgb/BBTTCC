@@ -22,7 +22,7 @@ const BASE_BODY = `
 <p>The Soul-Smith runs a forge that does not much care whether you call it a person or a furnace; it answers to heat and intention either way. Mechanically you ride <strong>Burn</strong> — a 0→8 heat track that climbs when you or a nearby ally takes a hit (the forge stokes itself on other people's bad days) and banks <strong>Surge</strong> right alongside it. You spend that Surge on four forge-works, and the hotter you run, the harder they land — right up until the furnace bites back.</p>
 <h3>The Four Works (spent via Surge)</h3>
 <ul>
-  <li><strong>Forge-Weld.</strong> Lay hands on the breakage and repair an ally — 1d8 + tier integrity. <em>Stoked</em> (Burn 2–3) ×1.5; <em>Overheated</em> (Burn 4+) ×2, and Overheated also costs you 1d6 Stress, because an open forge has opinions about being grabbed.</li>
+  <li><strong>Forge-Weld.</strong> Lay hands on the breakage and repair an ally — 1d6 × tier integrity. <em>Stoked</em> (Burn 2–3) ×1.5; <em>Overheated</em> (Burn 4+) ×2, and Overheated also costs you 1d6 Stress, because an open forge has opinions about being grabbed.</li>
   <li><strong>Atonement Crucible.</strong> Cleanse a condition off an ally (two while Stoked or hotter) and temper the wound into armor — they gain DR equal to your tier. The bad thing that happened to them is now load-bearing.</li>
   <li><strong>Furnace of Renewal.</strong> Light the aura: allies within 30 ft heal (Burn-scaled) and share your poison/necrotic resistance for three rounds. Stand near the fire. It is rude not to.</li>
   <li><strong>Relic of Rebirth.</strong> Forge a ward on an ally — the next hit that would drop them is held at 1. While Overheated, instead reforge a fallen ally back to half integrity (once per fight). The forge does not accept "dead" as a final answer. It considers it a draft.</li>
@@ -38,7 +38,7 @@ const VICTORY_BODY = `
 <ul>
   <li><strong>The Victor's Spark.</strong> When a foe falls in your presence, bank a Victor's Spark (free). Trophies. Flammable ones.</li>
   <li><strong>Forged Trophy.</strong> Spark + Surge: your next Strike blazes (+tier d6) and an ally gains DR equal to your tier — a weapon and a shield, both made of someone's worst day.</li>
-  <li><strong>Compounded Blow.</strong> Spark: your next Strike lands as a max-die critical. The dead, it turns out, hold grudges you can aim.</li>
+  <li><strong>Compounded Blow.</strong> Spark: your next Strike that hits rolls max damage dice. The dead, it turns out, hold grudges you can aim.</li>
   <li><strong>Sundering Stroke.</strong> Spark + Surge: your next Strike ignores resistances and leaves the target Staggered. Armor is a suggestion you decline.</li>
   <li><strong>The Final Form (Capstone).</strong> A Capstone Weapon that swallows every Spark you ever collect, gaining a permanent minor benefit per Spark. Over a campaign it becomes a legendary thing with too many names. Bound to you; a lesser hand gets a fraction.</li>
 </ul>
@@ -53,8 +53,8 @@ const RECLAIMER_BODY = `
 <ul>
   <li><strong>Where The Heat Was.</strong> When something is destroyed within reach of you, bank a Salvage Spark. The wreckage owes you. You collect.</li>
   <li><strong>Reclaim.</strong> Spark + Surge: salvage a condition off an ally and shore them up with DR equal to your tier. You take the broken thing off them and make it useful.</li>
-  <li><strong>The Remembered Thing.</strong> Spark + Surge: pull a salvaged relic out of the residue — an ally heals 1d8 + tier and gains DR. It returns as it last existed, usable if it was usable.</li>
-  <li><strong>Deep Salvage.</strong> Spark + Surge: restore an ally hard — 2d8 + tier integrity and clear <em>every</em> condition on them. Some ruins are worth the dig.</li>
+  <li><strong>The Remembered Thing.</strong> Spark + Surge: pull a salvaged relic out of the residue — an ally heals 2d6 × tier and gains DR. It returns as it last existed, usable if it was usable.</li>
+  <li><strong>Deep Salvage.</strong> Spark + Surge: restore an ally hard — 3d6 × tier integrity and clear <em>every</em> condition on them. Some ruins are worth the dig.</li>
   <li><strong>The Last Forge of the Broken Things (Capstone).</strong> Once per session, walk the perimeter of a destroyed site and, over a day's work, restore it to a Salvaged State (~25% capacity) — a garrison, a leyline node, a faction's ruined headquarters. The campaign-scale miracle stays campaign-scale.</li>
 </ul>
 <p><em>Out-of-combat:</em> <strong>Clean Extraction</strong> (negate a Darkness tick after a salvage or demolition you ran) remains the strategic flourish.</p>

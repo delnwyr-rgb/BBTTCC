@@ -4219,7 +4219,7 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
 // Form's hit save ("hitSave") stops the states on a pass and halves the strike's damage when resolution.onSave is half.
 // chain / chainDr (2026-11-08, teeth P28): a single-target card may carry the manifestation's chain — it arcs on a failed
 // save (the primary landed), stamped on the strike card so Apply Damage never arcs a second time.
-async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null, damageParts = [], poolShift = undefined, strikeMessageId = null, hitSave = false, chain = null, chainDr = null } = {}) {
+async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null, damageParts = [], poolShift = undefined, strikeMessageId = null, hitSave = false, chain = null, chainDr = null, npcAutoChained = false } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
   const dc = ftSaveDCFor(actor, r, mf?.tier, channel);
@@ -4244,6 +4244,8 @@ async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, inte
     hitSave: hitSave === true,
     chain: (chain && chain.enabled === true) ? foundry.utils.deepClone(ftNormalizeChainConfig(chain)) : null,
     chainDr: chainDr ? { type: chainDr.type ?? "", track: chainDr.track ?? "", flavor: chainDr.flavor ?? "" } : null,
+    // 2026-11-13: posted by an npcAuto saveFail rule — its failure must not re-fire that rule (npc-automation onSaveFail)
+    npcAutoChained: npcAutoChained === true,
     expiresAt: Date.now() + 86400000
   };
   const opLabel = dr?.op === "heal" ? "heal" : (dr?.op === "damage" ? "damage" : "effect");
@@ -4336,7 +4338,7 @@ async function _ftHandleSavePromptClick(btn, message) {
       }
     }
     // NPC automation: the caster's "saveFail" rules (no reactions, +Radiation, extra damage, push prompt…)
-    if (!sav?.saved) { try { await game.fourththing.npcAuto?.onSaveFail?.(caster, item, target); } catch (e) { console.warn("[fourththing] npc automation saveFail", e); } }
+    if (!sav?.saved) { try { await game.fourththing.npcAuto?.onSaveFail?.(caster, item, target, { chained: ctx.npcAutoChained === true }); } catch (e) { console.warn("[fourththing] npc automation saveFail", e); } }
     // Chain (2026-11-08, teeth P28): the primary landed (multiplier > 0, not saved) → arc to the secondaries, once.
     if (ctx.chain?.enabled && mult > 0 && !sav?.saved) {
       const _sm = ctx.strikeMessageId ? game.messages?.get(ctx.strikeMessageId) : null;
@@ -18847,14 +18849,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       try { await target.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); }
       catch (_e) { /* non-owner — clears on round commit */ }
     }
-    const saved = (r.saveSurge.ironWord || r.abAutoHit || adaptiveApplies) ? true : !!rawPass;
+    // NPC automation (2026-11-13): a "wouldFailSave" passSave rule (Fractured Will and kin) — N per combat, flips a failure.
+    let npcRescue = null;
+    if (!rawPass && !(r.saveSurge.ironWord || r.abAutoHit || adaptiveApplies)) {
+      try { npcRescue = (await game.fourththing.npcAuto?.rescueSave?.(target, { attr, caster })) ?? null; } catch (e) { console.warn("[fourththing] npcAuto rescueSave", e); }
+    }
+    const saved = (r.saveSurge.ironWord || r.abAutoHit || adaptiveApplies || !!npcRescue) ? true : !!rawPass;
     try { await fireTriggers(target, saved ? "on-save-success" : "on-save-fail", { tags: [attr, channel].filter(Boolean), scope: "self", target: caster, total: r.total, dc }); } catch (_e) {}
     // Hard Lessons (technique): a failed defense check arms reroll-lowest until the end of your next turn.
     if (!saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_hard_lessons")) {
       try { await target.setFlag("fourththing", "hardLessons", { round: Number(game.combat?.round ?? 0), at: Date.now() }); } catch (_e) {}
     }
     // Pressure Tested (technique): succeed on a defense check → bank a reroll-lowest. Once per Scene Break.
-    let note = "";
+    let note = npcRescue?.note ?? "";
     if (saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_pressure_tested")
         && !target.flags?.fourththing?.perUse?.bbttcc_feat_pressure_tested) {
       try {
@@ -18864,7 +18871,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           "flags.fourththing.aidBanked": _pb,
           "flags.fourththing.perUse.bbttcc_feat_pressure_tested": { cad: "scene", sceneId: canvas?.scene?.id ?? "none", round: Number(game.combat?.round ?? 0), day: new Date().toDateString(), at: Date.now() }
         });
-        note = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Pressure Tested — a reroll is banked for ${ftEscapeHtml(target.name)}'s next roll (or the GM lets them ignore the effect).</p>`;
+        note += `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Pressure Tested — a reroll is banked for ${ftEscapeHtml(target.name)}'s next roll (or the GM lets them ignore the effect).</p>`;
       } catch (_e) {}
     }
     if (r.abAutoHit) {

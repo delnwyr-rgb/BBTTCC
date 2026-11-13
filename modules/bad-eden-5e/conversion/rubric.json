@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -628,6 +628,24 @@
     "defense lists": "condition words in resistances/immunities (fear, charm, …) → traits.ci (frightened, charmed, …), never a damage type (C47 2026-10-31)",
     "prose": "the RFI stat idiom (Strike./Working. labels, 'reach 1 square., one target.', 'Damage: 2d10 kinetic + violence', 'Hit: … + violence; half on success', 'Fail: <dice> type + Condition', 'Cost. 2 Clarity, +2 Noise', 'Damage goes to Stress') is stripped before the rubric runs — the activity carries the dice; the rider sentence and Dave's flavour line stay (C43 2026-10-31)"
   },
+  "surge": {
+    "_why": "Surge repricing 2026-11-12 (RFI _FT_SURGE_MENU) mirrored 2026-11-13. Surge stays a shared engine (no converter lane): the D&D twin is the surge-powers menu + data/paths.json and the dnd5e-table-kit riders, edited by hand against this table.",
+    "tier": "every Tier-scaled Surge effect → the proficiency bonus (Dave 2026-11-13: \"when I say proficiency bonus I mean in the BadEden5E system. In RFI it's Tier level.\")",
+    "gate": "an RFI Tier gate → minProf: Tier I → none (PB 2) · Tier II → 3 · Tier III → 4 · Tier IV → 6; cost cap by gate 4 / 6 / 8 / 10",
+    "heals": {
+      "universal": "Stitch / Field Patch → 2d6 × PB · Rallying Cry → 1d6 × PB (each ally)",
+      "path": "by the 5E price: 1 → 1d6 × PB · 2–3 → 2d6 × PB · 4+ → 3d6 × PB; an area heal → 1d6 × PB each; a doctrine that 'heals more' keeps its + PB on top",
+      "formula": "dnd5e roll string 'Nd6*@prof' (the multiplier applies to the dice total)"
+    },
+    "damage": {
+      "+Tier d6 (Doomstrike)": "+PB d6, sixes explode (PBd6x)",
+      "+Tier to hit and damage (Tier Surge)": "Power Surge: +PB to the attack roll and +PB damage",
+      "critical ×2 (Crowning Blow)": "auto-hit, dnd5e critical with every die maximised",
+      "Final Argument": "auto-hit critical, +PB d6, every die maximised, ignores resistance",
+      "riders wait for a hit": "native in dnd5e: damage one-shots are consumed by the damage roll, which only follows a hit"
+    },
+    "ruling": true
+  },
   "vocabulary": {
     "_about": "text substitutions the converter applies before a human sees the draft, and the terms the lint refuses to ship",
     "replace": [
@@ -1161,7 +1179,8 @@
     "2026-10-07c": "PROPOSED (built, awaiting Dave): the nine Path-discipline techniques and the Clarity techniques → Active Effects / riders per engine.discipline.* and engine['Clarity techniques']; needs-human for techniques fell 31 → 6.",
     "2026-10-07d": "Dave APPROVED all five discipline/Clarity mappings (Paths doc, 'Rulings owed'). Martial subclass names ruled: Leyline Runner, Circuit Sarge (Fighter); Rhapsodist, Wheelstick (Rogue); Warrior of the Wire keeps its name with the nickname Wireior; the Furies and the Riptide stand.",
     "2026-10-30": "Archetype prose pass: skill names after 'proficiency in' map through the skill table (Faith→Religion, Lore→History, Occult→Arcana, Diplomacy→Persuasion, Empathy→Insight); bare Violence/Intrigue stay as Domain mark pools when the sentence is about marks. 'the X aptitude' → the skill/tool through the skill table (Tinkering → tinker's tools, Occult → Arcana).",
-    "2026-10-31": "Dave: Piloting is a Bad Eden 5E skill (Dex, key pil); Firearms is a weapon category (firearmR / proficiency fir), not a skill — martial classes + Warden/Vigilant proficient. The Chariot and The Fool swap Perception for Piloting."
+    "2026-10-31": "Dave: Piloting is a Bad Eden 5E skill (Dex, key pil); Firearms is a weapon category (firearmR / proficiency fir), not a skill — martial classes + Warden/Vigilant proficient. The Chariot and The Fool swap Perception for Piloting.",
+    "2026-11-13": "Dave: Surge heals = 2d6 × proficiency bonus in Bad Eden 5E (Rallying Cry / area 1d6 × PB; class heals by price 1 → 1d6, 2–3 → 2d6, 4+ → 3d6 × PB); every Tier-scaled Surge effect uses PB. The 2026-11-12 menu prices mirror onto the surge-powers universal menu at the same keys (Tier Surge → Power Surge)."
   },
   "manifestations": {
     "damage-only harm": {

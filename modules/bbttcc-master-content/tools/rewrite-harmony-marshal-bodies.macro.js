@@ -22,7 +22,7 @@ const BASE_BODY = `
 <ul>
   <li><strong>Rallying Words</strong> (1) — an ally banks a <strong>reroll-lowest</strong> on their next roll.</li>
   <li><strong>Ease Attrition</strong> (2) — heal an ally and clear one condition.</li>
-  <li><strong>Rally to Me</strong> (2) — an ally banks a reroll <em>and</em> frees a reaction.</li>
+  <li><strong>Rally to Me</strong> (2) — an ally banks a reroll <em>and</em> gains a freed bonus action.</li>
   <li><strong>Unity Flourish</strong> (3) — every ally within 30 ft banks a reroll.</li>
   <li><strong>Conductor's Crescendo</strong> (5) — the whole line banks a reroll and each clears a condition.</li>
 </ul>
@@ -35,7 +35,7 @@ const ACCORD_BODY = `
 <p>Accord makes a squad move like a single animal with too many legs and no argument about which way to run. Your Surge spends turn coordination into mechanics — partners feeding each other rerolls, focus-fire that compounds, a whole line acting on one breath.</p>
 <h3>Doctrine (spent via Surge)</h3>
 <ul>
-  <li><strong>Shared Breath</strong> (1) — name an Accord Partner: you and they each bank a reroll-lowest, and they may take a reaction right now.</li>
+  <li><strong>Shared Breath</strong> (1) — name an Accord Partner: you and they each bank a reroll-lowest, and they gain a freed bonus action.</li>
   <li><strong>Synchronized Advance</strong> (3) — allies within 30 ft bank a reroll on their next attack. Pile onto one target; the second blow lands in the hole the first made.</li>
   <li><strong>Group Turn</strong> (5) — allies within 30 ft each gain a freed bonus action, resolving together.</li>
 </ul>
@@ -63,7 +63,7 @@ const RESOLVE_BODY = `
 <ul>
   <li><strong>Hold the Line</strong> (1) — clear Shaken off an ally and hand them a reroll. No one breaks.</li>
   <li><strong>Second Wind</strong> (3) — ward an ally: the next hit that would drop them holds them at 1 Integrity.</li>
-  <li><strong>None Lost</strong> (5) — refuse a death: restore a fallen ally to half Integrity and ward them. Once per fight. Not this one. Not today.</li>
+  <li><strong>None Lost</strong> (6) — refuse a death: restore a fallen ally to half Integrity and ward them. Once per fight. Not this one. Not today.</li>
 </ul>
 <p><em>Out-of-combat:</em> Ground Not Yielded, the Long Watch (a restorative rest in hostile territory), and the None-Lost session capstone remain the strategic flourishes.</p>
 `.trim();

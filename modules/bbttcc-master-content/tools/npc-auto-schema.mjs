@@ -5,11 +5,12 @@
 export const CONDITIONS = ["staggered", "scarred", "calmed", "blinded", "prone", "shaken", "burning", "restrained", "charmed", "compelled", "imposed"];
 export const ATTRS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 export const DAMAGE_TYPES = ["kinetic", "electrical", "thermal", "chemical", "poison", "sephirotic", "psychic", "qliphothic", "radiation"];
-const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "allyDamaged", "use", "saveFail", "struck", "damaged", "attacked", "enemyDamaged"];   // enemyDamaged 2026-10-26
+const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "allyDamaged", "use", "saveFail", "struck", "damaged", "attacked", "enemyDamaged", "wouldFailSave"];   // enemyDamaged 2026-10-26; wouldFailSave 2026-11-13
 const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied", "ownerNotBloodied", "ownerAirborne", "targetNotAirborne", "ownerMovedSquares",
-  "critical", "maxDie", "chance", "ownerHidden"];   // 2026-10-26 (BS7)
+  "critical", "maxDie", "chance", "ownerHidden",   // 2026-10-26 (BS7)
+  "melee"];   // 2026-11-13: the Strike's weapon is Melee / Unarmed (npc-automation.js isMeleeItem)
 const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt", "bankReroll", "bankBonus", "removeCondition", "impose",
-  "push", "pull", "shift", "slow", "teleport", "swap", "clarity", "noBonusAction", "immune", "evasive", "disposition", "vanish", "hide", "spawn", "template", "clearBank", "random", "redirect", "disSaves"];   // disSaves: engine runs it (npc-automation.js:270) — added 2026-11-12 creature audit   // 2026-10-26 (BS7; redirect = CO18 ward-and-take-the-hit)
+  "push", "pull", "shift", "slow", "teleport", "swap", "clarity", "noBonusAction", "immune", "evasive", "disposition", "vanish", "hide", "spawn", "template", "clearBank", "random", "redirect", "disSaves", "passSave"];   // passSave 2026-11-13 (on:"wouldFailSave")   // disSaves: engine runs it (npc-automation.js:270) — added 2026-11-12 creature audit   // 2026-10-26 (BS7; redirect = CO18 ward-and-take-the-hit)
 export const REAL_DO = DO.filter(k => k !== "prompt");
 /** a rule the engine executes (anything beyond a chat prompt), or one the author marked GM-fiat on purpose */
 export const ruleIsReal = r => !!r && Object.keys(r.do ?? {}).some(k => REAL_DO.includes(k) && r.do[k] !== undefined && r.do[k] !== false && r.do[k] !== null && r.do[k] !== "");
@@ -73,7 +74,17 @@ export function validateNpcAuto(na, where = "") {
       if (!FORMULA.test(String(d[k].formula).replace(/\s+/g, ""))) err(`${w}${k}.formula "${d[k].formula}"`);
       if (d[k].type && !DAMAGE_TYPES.includes(d[k].type)) err(`${w}${k}.type "${d[k].type}"`);
     }
-    if (d.dot?.ends && !["action", "rounds", "turn"].includes(d.dot.ends)) err(`${w}dot.ends "${d.dot.ends}"`);
+    if (d.dot?.ends && !["action", "rounds", "turn", "condition"].includes(d.dot.ends)) err(`${w}dot.ends "${d.dot.ends}"`);
+    // 2026-11-13: ends:"condition" names its condition (dot.condition, else the rule's own do.condition.key)
+    if (d.dot) for (const k of Object.keys(d.dot)) if (!["formula", "type", "ends", "rounds", "condition"].includes(k)) err(`${w}unknown dot.${k}`);
+    if (d.dot?.ends === "condition") { const ck = d.dot.condition ?? d.condition?.key; if (!CONDITIONS.includes(ck)) err(`${w}dot.ends "condition" needs dot.condition (a condition key) — got ${JSON.stringify(ck)}`); }
+    else if (d.dot?.condition !== undefined) err(`${w}dot.condition only with ends:"condition"`);
+    if (r.if?.melee !== undefined && typeof r.if.melee !== "boolean") err(`${w}if.melee must be true / false`);
+    if (r.if?.melee !== undefined && !["struck", "attacked", "hit", "attack"].includes(r.on)) err(`${w}if.melee reads the Strike's weapon — only on struck / attacked / hit / attack`);
+    if (d.passSave !== undefined && (d.passSave !== true || r.on !== "wouldFailSave")) err(`${w}passSave:true needs on:"wouldFailSave"`);
+    if (r.on === "wouldFailSave" && !d.passSave) err(`${w}on:"wouldFailSave" needs do.passSave:true`);
+    if (r.on === "wouldFailSave" && Object.keys(d).some(k => !["passSave", "prompt"].includes(k))) err(`${w}on:"wouldFailSave" runs passSave (+prompt) only`);
+    if (r.on === "wouldFailSave" && (r.who || r.radius || r.to)) err(`${w}on:"wouldFailSave" is the owner's own save — no who/radius/to`);
     for (const k of ["tempIntegrity", "heal"]) if (d[k] !== undefined && !(typeof d[k] === "number" || FORMULA.test(String(d[k]).replace(/\s+/g, "")))) err(`${w}${k} "${d[k]}"`);
     if (d.morale && (!ATTRS.includes(d.morale.attr || "soul") || !(Number(d.morale.dc) > 0))) err(`${w}morale ${JSON.stringify(d.morale)}`);
     if (d.morale && r.on !== "bloodied") err(`${w}morale needs on:"bloodied"`);

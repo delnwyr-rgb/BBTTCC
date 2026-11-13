@@ -189,14 +189,16 @@ function onPreRollAttack(config) {
   const actor = actorOf(config.subject);
   if ( !actor ) return;
   applyEffectAttackModes(config, actor);
-  const got = pick(config, actor, ["advAttack", "powerSurge"]);
+  const got = pick(config, actor, ["advAttack"]);
   if ( got.has("advAttack") ) config.advantage = true;
-  if ( got.has("powerSurge") ) {
+  // surge repricing mirror 2026-11-13 (Dave: heals = Nd6 × PB; Tier → PB)
+  // Power Surge (the RFI Tier Surge twin) stays armed for its damage half, like Final Argument.
+  if ( armed(actor, "powerSurge") ) {
     config.rolls ??= [{}];
     config.rolls[0].parts = [...(config.rolls[0].parts ?? []), String(profOf(actor))];
   }
-  // Final Argument stays armed for its damage half; flag this attack as a sure hit.
-  if ( armed(actor, "finalArgument") ) {
+  // Final Argument and Crowning Blow stay armed for their damage half; flag this attack as a sure hit.
+  if ( armed(actor, "finalArgument") || armed(actor, "crowningBlow") ) {
     config.rolls ??= [{}];
     foundry.utils.setProperty(config.rolls[0], `options.${ID}AutoHit`, true);
   }
@@ -214,7 +216,7 @@ function onPreRollSave(config, dialog, message) {
 /* -------------------------------------------- */
 
 const DAMAGE_KEYS = ["doomstrike", "surgingCast", "wrathCascade", "cinderwake", "crowningBlow", "finalArgument",
-  "ignoreResists", "absorbStrike", "pressHarder"];
+  "ignoreResists", "absorbStrike", "pressHarder", "powerSurge"];
 
 function onPreRollDamage(config, dialog, message) {
   const activity = config.subject;
@@ -230,16 +232,18 @@ function onPreRollDamage(config, dialog, message) {
   const plan = config[ID] = {};
   const prof = profOf(actor);
   if ( got.has("crowningBlow") || got.has("finalArgument") || got.has("cinderwake") ) plan.maximize = true;
-  if ( got.has("crowningBlow") ) {
+  if ( got.has("crowningBlow") || got.has("finalArgument") ) {
     config.isCritical = true;
     for ( const r of config.rolls ?? [] ) foundry.utils.setProperty(r, "options.isCritical", true);
   }
-  if ( got.has("doomstrike") ) plan.extra = `${prof}d6`;
-  if ( got.has("finalArgument") ) plan.flat = prof;
+  if ( got.has("doomstrike") ) plan.extra = `${prof}d6x`;   // sixes explode
+  // Final Argument: + Prof d6, maximised and doubled with the critical (it lands after dnd5e's crit doubling).
+  if ( got.has("finalArgument") ) plan.flat = prof * 6 * 2;
+  if ( got.has("powerSurge") ) plan.flat = (plan.flat ?? 0) + prof;
   if ( got.has("pressHarder") ) plan.flat = (plan.flat ?? 0) + prof;
   if ( got.has("surgingCast") ) plan.maxOne = true;
   if ( got.has("wrathCascade") ) plan.reroll = true;
-  if ( got.has("ignoreResists") ) foundry.utils.setProperty(message, `data.flags.${ID}.ignoreResist`, true);
+  if ( got.has("ignoreResists") || got.has("finalArgument") ) foundry.utils.setProperty(message, `data.flags.${ID}.ignoreResist`, true);
   // Absorbing Guard (Path of the Bulwark): 1d6 of the absorbed type rides the next melee hit.
   if ( got.has("absorbStrike") ) plan.absorbType = actor.flags?.[SURGE]?.absorbType || null;
   plan.labels = [...got];
@@ -253,6 +257,14 @@ function onPostDamageConfig(rolls, config) {
   const plan = config[ID];
   const roll = rolls?.[0];
   if ( !plan || !roll ) return;
+  // review 2026-11-13: Doomstrike's dice join the roll BEFORE maximize, so Crowning Blow / Final Argument
+  // max them too (RFI: "incl. Doomstrike dice"), and a critical doubles them like any rider dice
+  // (dnd5e has already doubled the base dice by this hook).
+  if ( plan.extra ) {
+    const crit = !!(roll.isCritical || roll.options?.isCritical || config.isCritical);
+    const extra = crit ? plan.extra.replace(/^(\d+)d/, (_, n) => `${Number(n) * 2}d`) : plan.extra;
+    appendTerms(roll, extra);
+  }
   const dice = rolls.flatMap(r => r.terms.filter(t => t instanceof Die));
   if ( plan.reroll ) dice.forEach(d => d.modifiers.push("r<=2"));
   if ( plan.maximize ) {
@@ -268,7 +280,6 @@ function onPostDamageConfig(rolls, config) {
     if ( die.number > 1 ) { die.number -= 1; appendTerms(owner, String(die.faces)); }
     else owner.terms.splice(owner.terms.indexOf(die), 1, new NumericTerm({ number: die.faces }));
   }
-  if ( plan.extra ) appendTerms(roll, plan.extra);
   if ( plan.absorbType ) rolls.push(new CONFIG.Dice.DamageRoll("1d6", roll.data, { type: plan.absorbType }));
   if ( plan.flat ) appendTerms(roll, String(plan.flat));
   rolls.forEach(r => r.resetFormula());

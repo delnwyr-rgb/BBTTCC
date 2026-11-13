@@ -23,7 +23,7 @@ const BASE_BODY = `
 <ul>
   <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>
   <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>
-  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>
+  <li><strong>Impose a Reading</strong> (2) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>
   <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>
 </ul>
 <p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its saves against you at disadvantage.</p>
@@ -37,7 +37,7 @@ const ANNOTATOR_BODY = `
 <ul>
   <li><strong>Footnote</strong> (1) — an ally banks a reroll-lowest (a small note, a large consequence).</li>
   <li><strong>Marginalia</strong> (2) — a foe is Staggered and rolls its saves at disadvantage.</li>
-  <li><strong>Revision</strong> (5) — allies within 30 ft each bank a reroll-lowest (the whole passage, corrected).</li>
+  <li><strong>Revision</strong> (2) — allies within 30 ft each bank a reroll-lowest (the whole passage, corrected).</li>
 </ul>
 `.trim();
 

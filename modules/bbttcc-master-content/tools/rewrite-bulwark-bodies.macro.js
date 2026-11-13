@@ -22,10 +22,10 @@ const BASE_BODY = `
 <h3>The Fortress (spent via Surge — Bulwark only)</h3>
 <ul>
   <li><strong>Brace Wall</strong> (1) — you and adjacent allies gain DR equal to Tier this round.</li>
-  <li><strong>Bulwark Stance</strong> (6) — adjacent allies share your defenses until your next turn.</li>
-  <li><strong>Anchor</strong> (5) — you and one ally become immune to forced movement and crowd-control until next round.</li>
-  <li><strong>Mass Aegis</strong> (8) — allies within Tier squares gain +Tier to every defense this round.</li>
-  <li><strong>Sanctum</strong> (9) — immune to one damage type for a round.</li>
+  <li><strong>Bulwark Stance</strong> (3) — adjacent allies share your defenses until your next turn.</li>
+  <li><strong>Anchor</strong> (2) — you and one ally become immune to forced movement and crowd-control until next round.</li>
+  <li><strong>Mass Aegis</strong> (6) — allies within Tier squares gain +Tier to every defense this round.</li>
+  <li><strong>Sanctum</strong> (6) — immune to one damage type for a round.</li>
   <li><strong>Mythic Stand</strong> (10) — invulnerable until the start of your next turn.</li>
 </ul>
 <p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer — Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost — and both refill on a Soma Break.</p>
@@ -39,7 +39,7 @@ const CATACLYST_BODY = `
 <ul>
   <li><strong>Erupt</strong> (1) — your next Strike blazes (+Tier d6 exploding) and hurls the target back.</li>
   <li><strong>Shatter</strong> (3) — your next Strike ignores resistances; the target is Staggered.</li>
-  <li><strong>Cataclysm</strong> (5) — your next Strike lands as a max-die crit, and foes in reach are knocked Prone.</li>
+  <li><strong>Cataclysm</strong> (5) — your next Strike that hits rolls max damage dice, and foes in reach are knocked Prone.</li>
 </ul>
 `.trim();
 
@@ -50,7 +50,7 @@ const AVALANCHE_BODY = `
 <h3>Path (spent via Surge)</h3>
 <ul>
   <li><strong>Roll Forward</strong> (1) — your next Strike +Tier d6, and the target is knocked Prone.</li>
-  <li><strong>Crash</strong> (3) — your next Strike lands as a max-die crit; the target is Staggered.</li>
+  <li><strong>Crash</strong> (3) — your next Strike that hits rolls max damage dice; the target is Staggered.</li>
   <li><strong>Unstoppable</strong> (5) — immune to forced-movement/CC this round; your next Strike ignores resistances and knocks the target Prone.</li>
 </ul>
 `.trim();

@@ -27,12 +27,20 @@
  *             "damaged"    the owner took damage (any source; if.damageType) — self effects only (heal, tempIntegrity, prompt)
  *             "attacked"   someone Strikes the owner (do.reroll: "attack-highest" = the attacker rerolls their highest die)
  *             "enemyDamaged" an enemy within `radius` squares just took damage (do.damage: the "every wound articulate" auras)
- *   if        { firstRound, targetNotActed, allyAdjacentToTarget, targetTag:[…], targetCondition:[…], weapon:"<item name>",
+ *             "wouldFailSave" the OWNER is about to fail a save (any save card / manifestation save / contest) — do.passSave:true
+ *                          turns that failure into a success (Fractured Will and kin). Needs `limit` (default 1 per combat);
+ *                          only fires inside a combat. 2026-11-13.
+ *   if        { melee:true (the Strike's weapon is Melee / Unarmed — struck / attacked / hit; false = only ranged / thrown /
+ *               non-weapon sources; 2026-11-13), firstRound, targetNotActed, allyAdjacentToTarget, targetTag:[…], targetCondition:[…], weapon:"<item name>",
  *               damageType:[…], ownerNotAttacked, ownerBloodied, ownerNotBloodied, targetBloodied, ownerAirborne, targetNotAirborne,
  *               ownerMovedSquares:N (moved ≥ N squares this turn),
  *               critical:true (the hit's best base die showed a 10) | maxDie:N, chance:0.1 (a 1-in-10 roll), ownerHidden:true }
  *   do        { reroll, condition:{key, duration, save:{attr, dc}}, save:{attr, dc, onSave}, damage:{formula, type, track?},
- *               dot:{formula, type, ends:"action"|"rounds", rounds}, radiation:N, noReactions:true, tempIntegrity:N|"formula",
+ *               dot:{formula, type, ends:"action"|"rounds"|"condition", rounds, condition}, radiation:N,
+ *                 (ends:"condition" — 2026-11-13: the DoT ticks only while the subject still has `dot.condition` (default:
+ *                  this rule's do.condition.key); the first turn start without it drops the DoT, no damage. Re-applying
+ *                  the same source + condition does not stack.)
+ *               passSave:true (on:"wouldFailSave" only — the failed save becomes a success), noReactions:true, tempIntegrity:N|"formula",
  *               heal:N|"formula", morale:{attr, dc, outcome, condition?}, ward:0.5, prompt:"…",
  *               bankReroll:true|{context?,skill?,attribute?,note?}, bankBonus:{bonus,context?,skill?,attribute?,note?},
  *               removeCondition:[keys], impose:true,   (2026-10-07: the last four run on ▶ Use / hit / struck / saveFail targets)
@@ -93,23 +101,34 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     try { return Math.round(canvas.grid.measurePath([ta.center, tb.center]).distance / SQ()); }
     catch (_e) { return Math.round(Math.hypot(ta.center.x - tb.center.x, ta.center.y - tb.center.y) / canvas.grid.size); }
   };
+  // 2026-11-13: melee = the Strike's item is a weapon whose Form Type (system.category) is melee / unarmed — the same
+  // table module.js uses for flanking / Prone / reaction weapons (ftWeaponCategoryTraits). No item = not melee.
+  const isMeleeItem = (it) => {
+    if (!it || it.type !== "weapon") return false;
+    const tr = game.fourththing?.weaponCategoryTraits?.(it.system?.category);
+    return tr ? !!tr.isMelee : ["melee", "unarmed"].includes(String(it.system?.category ?? "").toLowerCase().trim());
+  };
+  const hasCondition = (a, k) => !!k && !!((a?.system?.system ?? a?.system ?? {}).conditions?.[k]);
   const disp = (actor) => tokenOf(actor)?.document?.disposition ?? (actor?.type === "character" ? 1 : -1);
   const hostile = (a, b) => disp(a) !== disp(b);
 
   // ── limits (per round / combat / scene), stored on the active combat so they reset with it ─────────
   function limitKey(item, rule) { return `${item.uuid}#${(item.flags[MOD].npcAuto.rules ?? []).indexOf(rule)}`; }
+  // 2026-11-13: a wouldFailSave rule without a limit is 1 per combat — an unlimited auto-pass is never what the prose means
+  const limitOf = (rule) => rule.limit ?? (rule.on === "wouldFailSave" ? { per: "combat", uses: 1 } : null);
   function limitOk(item, rule) {
-    if (!rule.limit) return true;
+    const lim = limitOf(rule); if (!lim) return true;
     const c = game.combat, used = c?.getFlag?.(MOD, "npcAutoUses") ?? {};
     const k = limitKey(item, rule), rec = used[k];
-    const stamp = rule.limit.per === "round" ? `${c?.id}:${c?.round}` : rule.limit.per === "combat" ? `${c?.id}` : `${canvas?.scene?.id}`;
-    return !rec || rec.stamp !== stamp || rec.n < (rule.limit.uses ?? 1);
+    const stamp = lim.per === "round" ? `${c?.id}:${c?.round}` : lim.per === "combat" ? `${c?.id}` : `${canvas?.scene?.id}`;
+    return !rec || rec.stamp !== stamp || rec.n < (lim.uses ?? 1);
   }
   async function limitSpend(item, rule) {
-    if (!rule.limit || !game.combat || !game.user.isGM) return;
+    const lim = limitOf(rule);
+    if (!lim || !game.combat || !game.user.isGM) return;
     const c = game.combat, used = foundry.utils.deepClone(c.getFlag(MOD, "npcAutoUses") ?? {});
     const k = limitKey(item, rule);
-    const stamp = rule.limit.per === "round" ? `${c.id}:${c.round}` : rule.limit.per === "combat" ? `${c.id}` : `${canvas?.scene?.id}`;
+    const stamp = lim.per === "round" ? `${c.id}:${c.round}` : lim.per === "combat" ? `${c.id}` : `${canvas?.scene?.id}`;
     used[k] = used[k]?.stamp === stamp ? { stamp, n: used[k].n + 1 } : { stamp, n: 1 };
     await c.setFlag(MOD, "npcAutoUses", used);
   }
@@ -138,6 +157,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       if (!cond.targetCondition.some(k => sys.conditions?.[k])) return false;
     }
     if (cond.weapon && item && item.name !== cond.weapon) return false;
+    if (cond.melee !== undefined && cond.melee !== null && !!cond.melee !== isMeleeItem(item)) return false;   // 2026-11-13
     if (cond.damageType?.length && !cond.damageType.includes(String(extra.damageType || "").toLowerCase())) return false;
     if (cond.ownerNotAttacked && (c?.getFlag?.(MOD, "npcAutoAttacked") ?? {})[actor?.id]) return false;
     const bloodied = a => { const d = a?.system?.derived?.integrity; return d?.max > 0 && d.value <= d.max / 2; };
@@ -199,7 +219,8 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
           appliedStates: { states: [d.condition.key], duration: d.condition.duration || "1-round", saveEachRound: d.condition.duration === "until-saved", saveAttribute: d.condition.save.attr || "body" }
         };
         const dr = d.damage?.formula ? toDr(d.damage) : { op: "none" };
-        await postSavePrompt(actor, target, item, mf, dr, { castDc: Number(d.condition.save.dc) || 13 });
+        // npcAutoChained (2026-11-13): a card posted BY a saveFail rule never re-fires that rule when it fails (onSaveFail)
+        await postSavePrompt(actor, target, item, mf, dr, { castDc: Number(d.condition.save.dc) || 13, npcAutoChained: rule.on === "saveFail" });
         lines.push(`${tName}: ${esc(d.condition.save.attr)} DC ${d.condition.save.dc} or <b>${esc(d.condition.key)}</b> — save card posted`);
         return;   // damage (if any) rides the save card
       }
@@ -208,7 +229,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     }
     if (d.save && !d.condition && target) {   // save-for-damage aura (no condition)
       const mf = { resolution: { saveAttribute: d.save.attr || "soul", saveDcMode: "fixed", saveDcFixed: Number(d.save.dc) || 13, onSave: d.save.onSave || "negate" }, appliedStates: {} };
-      await postSavePrompt(actor, target, item, mf, d.damage?.formula ? toDr(d.damage) : { op: "none" }, { castDc: Number(d.save.dc) || 13 });
+      await postSavePrompt(actor, target, item, mf, d.damage?.formula ? toDr(d.damage) : { op: "none" }, { castDc: Number(d.save.dc) || 13, npcAutoChained: rule.on === "saveFail" });
       lines.push(`${tName}: ${esc(d.save.attr)} DC ${d.save.dc} — save card posted`);
       return;
     }
@@ -222,9 +243,15 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     }
     if (d.dot?.formula && target && game.user.isGM && game.combat) {
       const dots = foundry.utils.deepClone(game.combat.getFlag(MOD, "npcAutoDots") ?? []);
-      dots.push({ targetId: target.id, sourceName: item.name, formula: d.dot.formula, type: d.dot.type || "kinetic", ends: d.dot.ends || "action", rounds: d.dot.rounds ?? 1 });
-      await game.combat.setFlag(MOD, "npcAutoDots", dots);
-      lines.push(`${tName}: ${esc(d.dot.formula)} ${esc(d.dot.type || "")} at the start of its turn${d.dot.ends === "action" ? " (an action ends it)" : ""}`);
+      // ends:"condition" (2026-11-13): tied to a condition key — dot.condition, else this rule's own do.condition.key
+      const ends = d.dot.ends || "action";
+      const condKey = ends === "condition" ? String(d.dot.condition || d.condition?.key || "") : "";
+      const entry = { targetId: target.id, sourceName: item.name, formula: d.dot.formula, type: d.dot.type || "kinetic", ends: (ends === "condition" && !condKey) ? "action" : ends, rounds: d.dot.rounds ?? 1 };
+      if (condKey) entry.condition = condKey;
+      // a condition-bound DoT doesn't stack with itself (the condition doesn't): same target + source + condition = one entry
+      const dup = condKey && dots.some(x => x.targetId === entry.targetId && x.sourceName === entry.sourceName && x.ends === "condition" && x.condition === condKey);
+      if (!dup) { dots.push(entry); await game.combat.setFlag(MOD, "npcAutoDots", dots); }
+      lines.push(`${tName}: ${esc(d.dot.formula)} ${esc(d.dot.type || "")} at the start of its turn${entry.ends === "action" ? " (an action ends it)" : entry.ends === "condition" ? ` while ${esc(condKey)}` : ""}${dup ? " (already running)" : ""}`);
     }
     if (d.radiation && target) {
       try {
@@ -386,7 +413,10 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
         if (target && attacker) await api.onStruck(target, attacker, await get(msg.itemUuid));
       } else if (msg.kind === "saveFail") {
         const caster = await get(msg.casterUuid), target = await get(msg.targetUuid);
-        if (caster && target) await api.onSaveFail(caster, await get(msg.itemUuid), target);
+        if (caster && target) await api.onSaveFail(caster, await get(msg.itemUuid), target, { chained: !!msg.chained });
+      } else if (msg.kind === "spend") {   // 2026-11-13: a player seat spent a limited rule (wouldFailSave) — the GM records it
+        const it = await get(msg.itemUuid), rule = it?.flags?.[MOD]?.npcAuto?.rules?.[Number(msg.ruleIndex)];
+        if (it && rule) await limitSpend(it, rule);
       }
     } catch (e) { console.warn("[npc-automation] relay", msg.kind, e); }
   }
@@ -465,15 +495,34 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       }
     },
     /** a target failed this item's save card → secondary effects on that target */
-    async onSaveFail(caster, item, target) {
+    async onSaveFail(caster, item, target, { chained = false } = {}) {
       if (!on() || !caster || !target) return;
-      if (relayToGM("saveFail", { casterUuid: caster.uuid, targetUuid: target.uuid, itemUuid: item?.uuid ?? null })) return;
+      if (relayToGM("saveFail", { casterUuid: caster.uuid, targetUuid: target.uuid, itemUuid: item?.uuid ?? null, chained: !!chained })) return;
       const lines = [];
       for (const { item: src, rule } of rulesOf(caster, "saveFail")) {
+        // 2026-11-13: a card a saveFail rule posted (Engulf's Blinded, Gaze's Staggered) failing must not re-run the rule
+        // that posted it — that stacked a DoT and posted another card on every failure.
+        if (chained && item && (src.id === item.id || rule.if?.weapon === item.name)) continue;
         if (!predicateOk(rule.if, { actor: caster, target, item }) || !limitOk(src, rule)) continue;
         for (const t of subjectsOf(rule, caster, target)) await runDo(caster, src, rule, t, { lines }); await limitSpend(src, rule);
       }
       await card(caster, item, lines, "#d8a24a");
+    },
+    /** 2026-11-13: the OWNER is about to fail a save → a "wouldFailSave" passSave rule (Fractured Will and kin) flips it.
+     *  Called from module.js _ftTargetResistFinish (every save card / manifestation save / contest target roll). Combat
+     *  only; the rule's limit (default 1 per combat) is spent here — a player seat relays the spend to the GM.
+     *  Returns { source, note } when it fires, else null. */
+    async rescueSave(target, { attr = "", caster = null } = {}) {
+      if (!on() || !target || !game.combat) return null;
+      for (const { item, rule } of rulesOf(target, "wouldFailSave")) {
+        if (!rule.do?.passSave) continue;
+        if (!limitOk(item, rule) || !predicateOk(rule.if, { actor: target, target: caster, item })) continue;
+        // a player seat (a Form hit save rolled on the attacker's client) can't write the Combat — the GM records the spend
+        if (!relayToGM("spend", { itemUuid: item.uuid, ruleIndex: (item.flags[MOD].npcAuto.rules ?? []).indexOf(rule) })) await limitSpend(item, rule);
+        const note = `<p style="font-size:0.78rem;color:#c9a2ff;margin:0.2rem 0 0">⚙ ${esc(item.name)} — ${esc(target.name)} would have failed${attr ? ` the ${esc(attr)} save` : ""}; it holds instead.${rule.do.prompt ? ` <i>${esc(rule.do.prompt)}</i>` : ""}</p>`;
+        return { source: item.name, note };
+      }
+      return null;
     },
     /** ▶ Use on a feature/feat/power with "use" rules — an action against the user's targets (or the owner) */
     async onUse(actor, item) {
@@ -516,16 +565,20 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     const mine = dots.filter(d => d.targetId === cur.id);
     if (mine.length) {
       const lines = [];
+      // ends:"condition" (2026-11-13): the DoT lives only while its condition does — checked BEFORE the tick
+      const live = new Set(mine.filter(d => d.ends !== "condition" || hasCondition(cur, d.condition)));
       for (const d of mine) {
+        if (!live.has(d)) { lines.push(`${esc(cur.name)} is no longer ${esc(d.condition)} — ${esc(d.sourceName)} ends`); continue; }
         const roll = await new Roll(d.formula).evaluate();
         const track = game.fourththing.trackForDamage?.("", d.type) ?? (["psychic", "qliphothic"].includes(d.type) ? "stress" : "integrity");
         await game.fourththing.rolls._applyDamageToActor(cur, roll.total, { op: "damage", track, damageType: d.type });
-        lines.push(`${esc(cur.name)} takes ${roll.total} ${esc(d.type)} from ${esc(d.sourceName)}${d.ends === "action" ? " — spend an action to end it" : ""}`);
+        lines.push(`${esc(cur.name)} takes ${roll.total} ${esc(d.type)} from ${esc(d.sourceName)}${d.ends === "action" ? " — spend an action to end it" : d.ends === "condition" ? ` — until it is no longer ${esc(d.condition)}` : ""}`);
       }
       // "action" DoTs persist until the target spends an action (GM clears via the card prompt / next combat);
-      // timed DoTs tick `rounds` times
+      // timed DoTs tick `rounds` times; condition DoTs persist while the condition holds
       const keep = dots.filter(d => d.targetId !== cur.id)
         .concat(mine.filter(d => d.ends === "action"))
+        .concat(mine.filter(d => d.ends === "condition" && live.has(d)))
         .concat(mine.filter(d => d.ends === "rounds" && --d.rounds > 0));
       await combat.setFlag(MOD, "npcAutoDots", keep);
       await card(cur, { name: "Lingering harm" }, lines, "#c0574a");

@@ -21,7 +21,7 @@ const BASE_BODY = `
 <ul>
   <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>
   <li><strong>Expose</strong> (2) — a foe's next attack and its saves are at disadvantage (you read the seam).</li>
-  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>
+  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed bonus action (harm bends aside).</li>
   <li><strong>Revelation</strong> (5) — allies within 30 ft bank a reroll; a foe's next attack is at disadvantage.</li>
 </ul>
 <p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>
@@ -34,7 +34,7 @@ const FORESIGHT_BODY = `
 <h3>Refraction (spent via Surge)</h3>
 <ul>
   <li><strong>Anticipation</strong> (1) — you and an ally each bank a reroll (foreseen).</li>
-  <li><strong>The Slowed Instant</strong> (2) — an ally gains a freed reaction and DR equal to Tier.</li>
+  <li><strong>The Slowed Instant</strong> (2) — an ally gains a freed bonus action and DR equal to Tier.</li>
   <li><strong>The Stopped Strike</strong> (5) — a foe is Staggered and its next attack is at disadvantage.</li>
 </ul>
 `.trim();
@@ -59,7 +59,7 @@ const TRUTH_BODY = `
 <ul>
   <li><strong>The Reading Eye</strong> (1) — a foe rolls its saves at disadvantage (you read it true).</li>
   <li><strong>The Unconcealed Word</strong> (2) — a foe is Staggered and its next attack is at disadvantage.</li>
-  <li><strong>The Exposure</strong> (5) — a foe cannot take reactions and rolls its saves at disadvantage.</li>
+  <li><strong>The Exposure</strong> (3) — a foe cannot take reactions and rolls its saves at disadvantage.</li>
 </ul>
 `.trim();
 

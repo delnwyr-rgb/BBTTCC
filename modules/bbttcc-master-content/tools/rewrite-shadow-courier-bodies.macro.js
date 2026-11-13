@@ -20,10 +20,10 @@ const BASE_BODY = `
 <p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 60 ft, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>
 <h3>The Courier (spent via Surge)</h3>
 <ul>
-  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>
-  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>
-  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike has advantage <em>and</em> +Tier d6.</li>
-  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>
+  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed bonus action; flow through the fight.</li>
+  <li><strong>Ghoststep</strong> (2) — DR equal to Tier till your next turn, and reposition out of danger.</li>
+  <li><strong>Flank &amp; Strike</strong> (3) — reposition, then your next Strike has advantage <em>and</em> +Tier d6.</li>
+  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed bonus action and a reroll; open the road for the whole team.</li>
 </ul>
 <p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>
 `.trim();
@@ -34,9 +34,9 @@ const WAYFARER_BODY = `
 <p>The Wayfarer is the courier as lifeline. Your Surge spends are extraction made real: free an ally to run, escort them through untouched, and — when it's nearly too late — whisk them clear of the kill zone.</p>
 <h3>Route (spent via Surge)</h3>
 <ul>
-  <li><strong>Clear Road</strong> (1) — an ally gains a freed reaction and a reroll; their road opens.</li>
+  <li><strong>Clear Road</strong> (1) — an ally gains a freed bonus action and a reroll; their road opens.</li>
   <li><strong>Safe Passage</strong> (2) — an ally gains DR equal to Tier and a reroll; nothing touches what you're carrying.</li>
-  <li><strong>Impossible Arrival</strong> (5) — whisk a hurt ally clear: heal them, DR equal to Tier, and a freed reaction.</li>
+  <li><strong>Impossible Arrival</strong> (5) — whisk a hurt ally clear: heal them, DR equal to Tier, and a freed bonus action.</li>
 </ul>
 `.trim();
 
@@ -48,7 +48,7 @@ const BLACKSTAIR_BODY = `
 <ul>
   <li><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is at disadvantage.</li>
   <li><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</li>
-  <li><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</li>
+  <li><strong>Stair-Trap</strong> (5) — your next Strike that hits rolls max damage dice; the target is knocked Prone and you gain a freed bonus action.</li>
 </ul>
 `.trim();
 
@@ -58,9 +58,9 @@ const LASTMILE_BODY = `
 <p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>
 <h3>Route (spent via Surge)</h3>
 <ul>
-  <li><strong>Shoulder the Weight</strong> (1) — heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>
+  <li><strong>Shoulder the Weight</strong> (1) — heal an ally 1d6 × Tier; you take half as Stress; they bank a reroll.</li>
   <li><strong>Quiet Voyage</strong> (2) — an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>
-  <li><strong>Delivered</strong> (5) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>
+  <li><strong>Delivered</strong> (6) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>
 </ul>
 `.trim();
 
