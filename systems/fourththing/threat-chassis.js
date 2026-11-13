@@ -13,7 +13,7 @@
  *   • defense  flat Guard / Resolve (Evasion retired 2026-11-11 — a creature's would-be Evasion folds into Guard, higher wins)
  *   • pool     × Integrity and Stress max, by bracket
  *   • strikes  Strikes per round, by bracket (the GM spends them; foes aren't gated)
- *   • legendary legendary actions per round, by bracket (bosses at EVERY tier — ruled 2026-10-06)
+ *   (legendary actions RETIRED 2026-11-12 — Dave: "There are no legendary actions"; nothing ever read the row)
  * Targets (ruled 2026-10-06): 3 lights vs 1 Steward = fair · medium vs 1 Steward = fair, 3–4 rounds ·
  * heavy = take a partner · boss = full party, someone likely drops ("mob and pitchfork time").
  * SUPERSEDED 2026-11-12 (Dave: "fair" = CR — a CR N foe is an average fight for 4 level-N Stewards). Creature audit
@@ -43,10 +43,50 @@ export const THREAT_CHASSIS = {
   mobSize: 3,
   bracket: {
     // Encounter points (CR budget): light 1 · medium 2 · heavy 4 · boss 8; 8 points = average fight for 4 Stewards at the tier anchor.
-    light:  { pool: [0.6, 0.6, 0.4, 0.5 ], strikes: [1, 1, 1, 2], legendary: [0, 0, 0, 0] },
-    medium: { pool: [2,   1.5, 1.75, 1.25], strikes: [1, 1, 1, 2], legendary: [0, 0, 0, 0] },
-    heavy:  { pool: [3,   1.5, 1.5, 1.75], strikes: [2, 2, 2, 3], legendary: [0, 0, 0, 0] },
-    boss:   { pool: [3,   3.5, 3,   5   ], strikes: [2, 2, 2, 2], legendary: [1, 1, 1, 2] }
+    light:  { pool: [0.6, 0.6, 0.4, 0.5 ], strikes: [1, 1, 1, 2] },
+    medium: { pool: [2,   1.5, 1.75, 1.25], strikes: [1, 1, 1, 2] },
+    heavy:  { pool: [3,   1.5, 1.5, 1.75], strikes: [2, 2, 2, 3] },
+    boss:   { pool: [3,   3.5, 3,   5   ], strikes: [2, 2, 2, 2] }
+  }
+};
+
+/**
+ * ENCOUNTER BUDGET — the GM's signifier (creature audit, Dave 2026-11-12: "fair" = CR; a CR N foe is an average
+ * fight for 4 level-N Stewards). Points by bracket; each tier has an anchor level (its boss's CR). An average fight
+ * for 4 Stewards of level L = 8 points of L's tier, +1 per level above the anchor / −1 below, × Stewards ÷ 4.
+ * ½ the budget = trivial · ×1.5 = hard · ×2 = deadly. One tier down counts half (per tier); a tier UP is off the
+ * chart (never use). Lights past 8 count ×1.5. A monster may print its own value: flags.fourththing.rfi.actor.points
+ * (Tor-Wrath = 2). Measured with the creature-audit sim (balanced party, N=3000) — see threat-chassis v3 above.
+ */
+export const ENCOUNTER = {
+  points: { light: 1, medium: 2, heavy: 4, boss: 8 },
+  anchor: [3, 8, 13, 18],
+  base: 8,
+  pointsFor(actor, bracket) {
+    const o = Number(actor?.flags?.fourththing?.rfi?.actor?.points);
+    return (Number.isFinite(o) && o > 0) ? o : (this.points[bracket] ?? 2);
+  },
+  /** Budget for an average fight: party level (avg), party size. */
+  budget(level, size = 4) {
+    const L = Math.max(1, Math.min(20, Math.round(Number(level) || 1)));
+    const t = L <= 5 ? 0 : L <= 10 ? 1 : L <= 15 ? 2 : 3;
+    return { tier: t + 1, anchor: this.anchor[t], points: Math.max(1, (this.base + (L - this.anchor[t])) * (Math.max(1, size) / 4)) };
+  },
+  /** foes: [{ tier, bracket, points }]; party: { level, size }. → { spent, budget, ratio, band, overTier, notes } */
+  rate(foes, party) {
+    const B = this.budget(party?.level, party?.size);
+    let spent = 0, lights = 0, overTier = 0;
+    for (const f of foes ?? []) {
+      let p = Number(f.points) || this.points[f.bracket] || 2;
+      const d = (Number(f.tier) || 1) - B.tier;
+      if (d > 0) { overTier++; }
+      else if (d < 0) p = p / Math.pow(2, -d);
+      if (f.bracket === "light" && d === 0 && ++lights > 8) p *= 1.5;
+      spent += p;
+    }
+    const ratio = spent / B.points;
+    const band = overTier ? "deadly" : ratio < 0.625 ? "trivial" : ratio < 1.25 ? "average" : ratio < 1.75 ? "hard" : "deadly";
+    return { spent: Math.round(spent * 10) / 10, budget: Math.round(B.points * 10) / 10, ratio, band, overTier, tier: B.tier, anchor: B.anchor };
   }
 };
 
@@ -86,7 +126,8 @@ export function threatFor(actor, actorKind) {
   return {
     version: C.version, tier, bracket,
     attack: C.attack[t], damage: C.damage[t], defense: C.defense[t], rank: C.rank[t],
-    pool: B.pool[t], strikes: B.strikes[t], legendary: B.legendary[t]
+    pool: B.pool[t], strikes: B.strikes[t],
+    points: ENCOUNTER.pointsFor(actor, bracket), anchor: ENCOUNTER.anchor[t]
   };
 }
 

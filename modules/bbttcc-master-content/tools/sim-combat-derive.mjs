@@ -47,7 +47,7 @@ function threatFor(a, kind) {
   const raw = String(rfi.bracket || "medium").toLowerCase();
   const bracket = C.bracket[raw] ? raw : (ALIAS[raw] || "medium");
   const B = C.bracket[bracket], t = tier - 1;
-  return { tier, bracket, bracketRaw: rfi.bracket || null, attack: C.attack[t], damage: C.damage[t], defense: C.defense[t], rank: C.rank[t], pool: B.pool[t], strikes: B.strikes[t], legendary: B.legendary[t] };
+  return { tier, bracket, bracketRaw: rfi.bracket || null, attack: C.attack[t], damage: C.damage[t], defense: C.defense[t], rank: C.rank[t], pool: B.pool[t], strikes: B.strikes[t], legendary: B.legendary?.[t] ?? 0 };
 }
 const meanDice = f => { let m = 0; for (const x of String(f || "").replace(/\s+/g, "").matchAll(/(\d*)d(\d+)/g)) m += Number(x[1] || 1) * (Number(x[2]) + 1) / 2; const fl = String(f || "").replace(/\s+/g, "").replace(/(\d*)d(\d+)(x\d+|kh\d+|kl\d+)?/g, "").match(/[+-]\d+/g); return m + (fl ? fl.reduce((s, v) => s + Number(v), 0) : 0); };
 function aliasType(t, fl) { t = String(t || "kinetic").toLowerCase().split(":")[0]; if (t !== "energy") return t; fl = String(fl || "").toLowerCase(); return /cold|ice|frost|fire|hot|flame|heat|burn/.test(fl) ? "thermal" : /acid|base|alkal|caust/.test(fl) ? "chemical" : "electrical"; }

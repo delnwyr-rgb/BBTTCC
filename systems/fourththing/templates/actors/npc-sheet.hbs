@@ -31,6 +31,19 @@
       </div>
       {{/if}}
 
+      {{#if threatCard}}
+      <div class="ft-meta-pill ft-threat-card" data-tooltip="{{threatCard.tooltip}}">
+        <span class="ft-meta-label">Threat</span>
+        <span class="ft-meta-val">T{{threatCard.roman}} {{threatCard.bracket}} · {{threatCard.points}} pts · {{threatCard.perFight}}× = avg fight @ L{{threatCard.anchor}}</span>
+      </div>
+      {{#if threatCard.trackLabel}}
+      <div class="ft-meta-pill ft-threat-track ft-threat-track-{{threatCard.track}}" data-tooltip="{{threatCard.tooltip}}">
+        <span class="ft-meta-label">Targets</span>
+        <span class="ft-meta-val">{{threatCard.trackLabel}}</span>
+      </div>
+      {{/if}}
+      {{/if}}
+
       <div class="ft-npc-meta-grid">
         <div class="ft-meta">
           <label data-tooltip="Role label — e.g. Brute, Striker, Lurker, Boss. Free-text for GM organization.">Role</label>

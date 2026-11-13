@@ -202,7 +202,7 @@ import {
   registerActorKindApi,
   registerActorKindHooks,
 } from "./actor-kind.js";
-import { threatFor, registerThreatChassisSetting, registerThreatChassisHooks } from "./threat-chassis.js";
+import { threatFor, registerThreatChassisSetting, registerThreatChassisHooks, ENCOUNTER } from "./threat-chassis.js";
 import { ItemLadder, registerItemLadderHooks, workingCharges, spendWorkingCharge, refillWorkingCharges } from "./item-ladder.js";
 import { registerNpcAutomation } from "./npc-automation.js";
 import { ARMOR_LINES, armorLineRanks, accessoryCap, isTwoHandedWeapon, inferArmorSlot, inferArmorLine, gearAccessorySlot, computeLinesArmor, describeLineRanks, LINE_RANK_NAMES } from "./armor-lines.js";   // Dave's armor LINES model (2026-11-12), setting armorModel
@@ -1438,6 +1438,54 @@ function ftAttackDefenseFor(item) {
   if (dr.op === "damage" && Number(dr.number) > 0) return ftDefenseForDamage(dr.track, dr.type);
   if (ftPoolShiftIsHostile(sys.manifestation?.poolShift)) return "resolve";
   return flat?.type ? ftDefenseForDamage(flat.track, flat.type) : ftDefenseForDamage(dr.track, dr.type);
+}
+// Which defenses a monster attacks (creature audit, Dave 2026-11-12): read off its weapons + damaging powers through
+// ftAttackDefenseFor, so the tag always agrees with the roll. → "guard" | "resolve" | "both" | "" (nothing that harms).
+function ftThreatTrack(actor) {
+  const seen = new Set();
+  for (const it of actor?.items ?? []) {
+    if (it.type !== "weapon" && it.type !== "power") continue;
+    const sys = it.system ?? {};
+    const harms = (it.type === "weapon" && sys.damage?.formula) || (ftNormalizeDamageRoll(sys).op === "damage" && Number(ftNormalizeDamageRoll(sys).number) > 0) || ftPoolShiftIsHostile(sys.manifestation?.poolShift);
+    if (!harms) continue;
+    try { seen.add(ftAttackDefenseFor(it)); } catch (_e) { /* skip */ }
+  }
+  return seen.size === 2 ? "both" : (seen.values().next().value ?? "");
+}
+const FT_TRACK_LABEL = { guard: "attacks Guard", resolve: "attacks Resolve", both: "attacks Guard + Resolve", "": "no attacks" };
+// GM signifier card for a monster: tier, bracket, encounter points, how many make an average fight at the anchor,
+// and which defense it attacks. null for non-monsters.
+function ftThreatCard(actor) {
+  const th = actor?.system?.derived?.threat;
+  if (!th) return null;
+  const track = ftThreatTrack(actor);
+  const per = th.points > 0 ? Math.round((ENCOUNTER.base / th.points) * 10) / 10 : 0;
+  const roman = ["", "I", "II", "III", "IV"][th.tier] ?? th.tier;
+  const bracket = th.bracket.charAt(0).toUpperCase() + th.bracket.slice(1);
+  return {
+    tier: th.tier, roman, bracket, points: th.points, anchor: th.anchor, track, trackLabel: FT_TRACK_LABEL[track] ?? "",
+    perFight: per,
+    tooltip: `Tier ${roman} ${bracket} · ${th.points} encounter point${th.points === 1 ? "" : "s"}. ` +
+      `An average fight for 4 Stewards of level ${th.anchor} is 8 points (${per} of these) — +1 point per party level above ${th.anchor}, −1 below. ` +
+      `½ the budget = trivial, ×1.5 = hard, ×2 = deadly. One tier down counts half; never use a tier above the party. ` +
+      (track === "guard" ? "Attacks Guard only — Guard-heavy Stewards tank it; Resolve-heavy ones suffer." :
+       track === "resolve" ? "Attacks Resolve only — Resolve-heavy Stewards tank it; Guard-heavy ones suffer." :
+       track === "both" ? "Attacks both Guard and Resolve — balanced Stewards fare best." : "")
+  };
+}
+// Rate the current combat for the GM: hostile monsters vs the Stewards in it.
+function ftRateCombat(combat = game.combat) {
+  if (!combat) return null;
+  const foes = [], stewards = [];
+  for (const c of combat.combatants ?? []) {
+    const a = c.actor; if (!a || c.defeated) continue;
+    const th = a.system?.derived?.threat;
+    if (th) foes.push({ tier: th.tier, bracket: th.bracket, points: th.points, name: a.name });
+    else if (a.type === "character" && a.hasPlayerOwner) stewards.push(Number(a.system?.details?.level) || 1);
+  }
+  if (!foes.length || !stewards.length) return null;
+  const level = stewards.reduce((x, y) => x + y, 0) / stewards.length;
+  return { ...ENCOUNTER.rate(foes, { level, size: stewards.length }), level: Math.round(level * 10) / 10, size: stewards.length, foes: foes.length };
 }
 function ftWeaponTargetDefense(item) { return ftAttackDefenseFor(item); }
 
@@ -17354,6 +17402,26 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
 // run-once-per-world (see migrations/index.js).
 Hooks.once("ready", () => runMigrations());
 
+// GM encounter readout on the combat tracker (creature audit 2026-11-12): monster points vs the Stewards' budget.
+Hooks.on("renderCombatTracker", (app, html) => {
+  try {
+    if (!game.user?.isGM) return;
+    const root = html instanceof HTMLElement ? html : html?.[0];
+    if (!root) return;
+    root.querySelector(".ft-encounter-rating")?.remove();
+    const r = ftRateCombat(app?.viewed ?? game.combat);
+    if (!r) return;
+    const colour = { trivial: "#7fb37f", average: "#d8c27a", hard: "#e0904f", deadly: "#e05252" }[r.band] ?? "#ccc";
+    const div = document.createElement("div");
+    div.className = "ft-encounter-rating";
+    div.style.cssText = `margin:4px 6px;padding:3px 8px;border:1px solid ${colour};border-radius:4px;font-size:12px;color:${colour};text-align:center`;
+    div.textContent = `Encounter: ${r.band.toUpperCase()} — ${r.spent} / ${r.budget} pts` + (r.overTier ? ` · ⚠ ${r.overTier} foe(s) above the party's tier` : "");
+    div.dataset.tooltip = `${r.foes} monster(s) vs ${r.size} Steward(s), avg level ${r.level}. Average fight = ${r.budget} points (8 at the tier anchor L${r.anchor}, ±1 per level, × Stewards ÷ 4). ½ = trivial · ×1.5 = hard · ×2 = deadly. Monsters one tier down count half. GM only.`;
+    const anchor = root.querySelector(".combat-tracker") ?? root.querySelector("ol") ;
+    if (anchor?.parentElement) anchor.parentElement.insertBefore(div, anchor); else root.prepend(div);
+  } catch (e) { console.warn("[fourththing] encounter rating failed", e); }
+});
+
 // ─── Foundry init ──────────────────────────────────────────────────────────────
 
 Hooks.once("init", function () {
@@ -17475,6 +17543,13 @@ Hooks.once("init", function () {
     armorBreakdown: ftArmorBreakdown,
     armorModel: _ftArmorModel,
     isTwoHandedWeapon,
+    // CREATURE AUDIT (2026-11-12): encounter points. threatCard(actor) → { roman, bracket, points, anchor, track, perFight, tooltip }
+    // for a monster (null otherwise); threatTrack(actor) → "guard"|"resolve"|"both"|""; rateCombat(combat?) → { spent, budget,
+    // band: trivial|average|hard|deadly, overTier, level, size } for the GM; encounter = the ENCOUNTER table + rate(foes, party).
+    threatCard: ftThreatCard,
+    threatTrack: ftThreatTrack,
+    rateCombat: ftRateCombat,
+    encounter: ENCOUNTER,
     // Schema-migration framework — debug/repair surface for macros & console.
     //   game.fourththing.migrations.run()            → apply pending migrations
     //   game.fourththing.migrations.run({force:true})→ re-run all (idempotent)
@@ -22484,7 +22559,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       sys.derived.threat = _threat;
       if (_threat) {
         sys.derived.integrity.max = Math.max(1, Math.round(sys.derived.integrity.max * _threat.pool));
-        sys.derived.strikes = { value: _threat.strikes, striker: _threat.strikes > 1, tier: _threat.tier, legendary: _threat.legendary };
+        sys.derived.strikes = { value: _threat.strikes, striker: _threat.strikes > 1, tier: _threat.tier };
       }
       const _aeIntMax = Number(sys.derived.integrity.aeBonus) || 0;
       if (_aeIntMax) sys.derived.integrity.max = Math.max(1, sys.derived.integrity.max + _aeIntMax);
@@ -27398,6 +27473,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
       return {
         actor, system: sysData,
+        threatCard: ftThreatCard(actor),
         defenseTypes: defenseTypeList,
         defenseEditTypes: _ftDefenseEditRows(defensesBase),
         condImmunityList: condList,
