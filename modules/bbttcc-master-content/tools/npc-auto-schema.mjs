@@ -9,7 +9,7 @@ const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "
 const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied", "ownerNotBloodied", "ownerAirborne", "targetNotAirborne", "ownerMovedSquares",
   "critical", "maxDie", "chance", "ownerHidden"];   // 2026-10-26 (BS7)
 const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt", "bankReroll", "bankBonus", "removeCondition", "impose",
-  "push", "pull", "shift", "slow", "teleport", "swap", "clarity", "noBonusAction", "immune", "evasive", "disposition", "vanish", "hide", "spawn", "template", "clearBank", "random", "redirect"];   // 2026-10-26 (BS7; redirect = CO18 ward-and-take-the-hit)
+  "push", "pull", "shift", "slow", "teleport", "swap", "clarity", "noBonusAction", "immune", "evasive", "disposition", "vanish", "hide", "spawn", "template", "clearBank", "random", "redirect", "disSaves"];   // disSaves: engine runs it (npc-automation.js:270) — added 2026-11-12 creature audit   // 2026-10-26 (BS7; redirect = CO18 ward-and-take-the-hit)
 export const REAL_DO = DO.filter(k => k !== "prompt");
 /** a rule the engine executes (anything beyond a chat prompt), or one the author marked GM-fiat on purpose */
 export const ruleIsReal = r => !!r && Object.keys(r.do ?? {}).some(k => REAL_DO.includes(k) && r.do[k] !== undefined && r.do[k] !== false && r.do[k] !== null && r.do[k] !== "");
