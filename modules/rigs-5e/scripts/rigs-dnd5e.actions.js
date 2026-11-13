@@ -265,10 +265,13 @@
       rejectClose: false,
     }).catch(() => null);
   }
+  // 11-12: dnd5e 6 keeps activities in a Map-like collection — Object.keys() on it is always [], so feat-based weapons
+  // (WORLDBREAKER's stations) and rig-weapon gear were never counted. Count with .size.
+  const actCount = (i) => Number(i?.system?.activities?.size ?? Object.keys(i?.system?.activities ?? {}).length) || 0;
   function weaponsOf(rig) {
     return (rig.items ?? []).filter(i => i.type === "weapon"
-      || (Object.keys(i.system?.activities ?? {}).length && subtypeOf(i) === "rig-weapon")
-      || (i.type === "feat" && Object.keys(i.system?.activities ?? {}).length));
+      || (actCount(i) && subtypeOf(i) === "rig-weapon")
+      || (i.type === "feat" && actCount(i)));
   }
   function systemsOf(rig) {
     return (rig.items ?? []).filter(i => ["rig-system", "output-module"].includes(subtypeOf(i)) || i.type === "equipment");
@@ -467,7 +470,7 @@
     crew: [
       { id: "operate-module", type: "action", label: "Operate Module", desc: "Activate a rig system or output module.",
         handler: async (rig, st) => {
-          const its = systemsOf(rig).filter(i => Object.keys(i.system?.activities ?? {}).length);
+          const its = systemsOf(rig).filter(i => actCount(i));
           if (!its.length) return cue(rig, st, "Operate Module", ["No operable modules aboard."]);
           const id = await pickOne("Operate which module?", its.map(i => ({ id: i.id, label: i.name })));
           const it = its.find(x => x.id === id);

@@ -8,7 +8,7 @@
 // modules the crew operate. Idempotent. DRY_RUN = true only reports.
 const DRY_RUN = true;
 const NAME = "WORLDBREAKER";
-const AC = 34, WALK = 60;
+const AC = 34, WALK = 60, DT = 30;   // authored values the rig engine would re-seat by bracket
 
 const R = game.bbttcc?.rigs;
 if (!game.modules.get("rigs-5e")?.active || !R?.impl?.ensure) return ui.notifications.error("rigs-5e is not enabled in this world.");
@@ -42,8 +42,9 @@ if (!DRY_RUN && !haveFrame) {
   const fr = rig.items.find(i => i.flags?.fourththing?.rigFrame);
   if (fr && !R.data(rig)?.frame?.itemId) await R.impl.applyFrame?.(rig, fr);
 }
-report.push(`AC → ${AC} (flat), walk → ${WALK} ft`);
-if (!DRY_RUN) await rig.update({ "system.attributes.ac.calc": "flat", "system.attributes.ac.flat": AC, "system.attributes.movement.walk": WALK });
+report.push(`AC → ${AC} (flat), walk → ${WALK} ft, DT → ${DT}`);
+// dnd5e 6 stores speed at movement.speeds.<mode>; the frame's bracket re-seats hp.dt, so put the authored DT back too.
+if (!DRY_RUN) await rig.update({ "system.attributes.ac.calc": "flat", "system.attributes.ac.flat": AC, "system.attributes.movement.speeds.walk": String(WALK), "system.attributes.hp.dt": DT });
 const d = R.data(rig);
 report.push(`now: ${d ? `rig · ${d.integrity.bracket} T${d.integrity.tier} · hull ${d.integrity.value}/${d.integrity.max} · frame ${d.frame?.name ?? "—"}` : "not a rig (dry run)"}`);
 console.log("[kaeron-worldbreaker]", report);
