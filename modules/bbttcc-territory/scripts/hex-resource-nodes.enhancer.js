@@ -174,15 +174,14 @@
     const success = total >= dc;
 
     let yieldUnits = 0;
-    let nextCharges = charges;
+    // CHARGES ARE CHANCES (Dave 2026-11-12): every attempt spends a charge, pass or fail —
+    // otherwise a failed gather just rerolls and the roll means nothing.
+    const nextCharges = charges - 1;
+    await writeNodeUpdate(hexDoc, idx, arr, { charges: nextCharges });
     if (success) {
       const yRoll = new Roll(String(node.yieldFormula ?? "1"));
       await yRoll.evaluate();
       yieldUnits = Math.max(1, Number(yRoll.total) || 1);
-
-      // Decrement node charges (success only — gather is low-risk per RfiHarvest convention).
-      nextCharges = charges - 1;
-      await writeNodeUpdate(hexDoc, idx, arr, { charges: nextCharges });
 
       const materialItemData = await _materialItemData(RfiItems, { uuid: node.materialUuid, key: node.materialKey, name: node.materialName, tier: node.tier }, yieldUnits);
       var delivered = await _deliverMaterial(actor, materialItemData, yieldUnits);
@@ -198,7 +197,7 @@
                       ${aeContribs.length ? `<span style="color:#e8c84a;font-size:0.78rem">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</span><br>` : ""}
                       ${success
                         ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${node.materialName || node.materialKey}${delivered?.to === "stockpile" ? ` → <b>${delivered.faction.name}</b>'s stockpile` : ""}.<br>Node has ${nextCharges} attempt${nextCharges === 1 ? "" : "s"} remaining.`
-                        : `✗ <b>Failed</b> — no yield. The node's charges are unchanged.`}
+                        : `✗ <b>Failed</b> — no yield, and the attempt is spent.<br>Node has ${nextCharges} attempt${nextCharges === 1 ? "" : "s"} remaining.`}
                     </p>
                   </div></div>`
     });

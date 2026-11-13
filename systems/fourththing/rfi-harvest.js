@@ -315,14 +315,14 @@ export const RfiHarvest = {
         };
       }
       var delivered = await RfiHarvest._deliver(actor, materialItemData, yieldUnits, h.materialUuid || null);
+    }
 
-      // Decrement node charges — AFTER the yield has landed, and never fatal:
-      // the receipt below must still post if the write (or its GM relay) fails.
-      try { await _writeNodeCharges(sourceDoc, charges - 1); }
-      catch (eC) {
-        console.warn("Roll for Initiation | harvest charge decrement failed", eC);
-        ui.notifications?.warn("Gathered, but the node's charges could not be updated — is a GM connected?");
-      }
+    // CHARGES ARE CHANCES (Dave 2026-11-12): every attempt spends a charge, pass or fail.
+    // AFTER any yield has landed, and never fatal: the receipt below must still post if the write (or its GM relay) fails.
+    try { await _writeNodeCharges(sourceDoc, charges - 1); }
+    catch (eC) {
+      console.warn("Roll for Initiation | harvest charge decrement failed", eC);
+      ui.notifications?.warn("The node's charges could not be updated — is a GM connected?");
     }
 
     await ChatMessage.create({
@@ -335,7 +335,7 @@ export const RfiHarvest = {
                       ${aeContribs.length ? `<span style="color:#e8c84a;font-size:0.78rem">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</span><br>` : ""}
                       ${success
                         ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${h.materialName || h.materialKey}.<br>Node has ${charges - 1} attempt${charges - 1 === 1 ? "" : "s"} remaining.${delivered?.to === "stockpile" ? ` → <b>${delivered.faction.name}</b>'s stockpile` : ""}`
-                        : `✗ <b>Failed</b> — no yield. The node's charges are unchanged; the harvester walks away empty-handed.`}
+                        : `✗ <b>Failed</b> — no yield; the harvester walks away empty-handed and the attempt is spent.<br>Node has ${charges - 1} attempt${charges - 1 === 1 ? "" : "s"} remaining.`}
                     </p>
                   </div></div>`
     });
@@ -357,7 +357,7 @@ export const RfiHarvest = {
       }
       if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }
     }
-    return { ok: true, success, total, dc, yield: yieldUnits, drops: dropped, remaining: charges - (success ? 1 : 0) };
+    return { ok: true, success, total, dc, yield: yieldUnits, drops: dropped, remaining: charges - 1 };
   }
 };
 
