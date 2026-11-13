@@ -16,6 +16,11 @@
  *     about skill / insight checks. Duplicate auras deleted.
  *   - Dice-budget fixes; text-only mismatches fixed in the TEXT; anything needing a new engine verb = a narrative prompt.
  *
+ * 2026-11-13 (engine verbs if.melee / dot.ends:"condition" / on:"wouldFailSave"+do.passSave landed): the Fractured Will,
+ * Engulf, Golden Chains, Soulfire Form and Reflect The Blow cases now emit the NEW shapes (same as
+ * npc-verbs-followup-2026-11-13.macro.js) and upgrade the 11-12 prompt/reminder shapes, so a re-run never undoes that pass.
+ * Gloomgill's Fractured Will is left alone (Dave 11-13: Gloomgill is no longer a combat).
+ *
  * DRY RUN by default. globalThis.__creatureFixDry = false applies.
  *   globalThis.__creatureFixTokens = true  also applies to UNLINKED scene tokens whose delta overrides items (else they are
  *                                          only reported).
@@ -43,6 +48,22 @@
   const usePrompt = (prompt, extra = {}) => ({ v: 1, rules: [{ on: "use", who: "self", narrative: true, do: { prompt } }], ...extra });
   const auraDisSaves = r => { const d = { ...clone(r.do) }; delete d.impose; d.disSaves = true; return { ...clone(r), do: d }; };
   const auraPrompt = (r, prompt) => { const o = clone(r); o.do = { prompt }; o.narrative = true; return o; };
+  // 2026-11-13 engine-verb shapes (kept identical to npc-verbs-followup-2026-11-13.macro.js)
+  const FW_REMINDER_LABEL = "reminder (no engine verb yet)";
+  const isFwReminder = na => isObj(na) && Array.isArray(na.rules) && na.rules.length > 0 && na.rules.every(r => r?.on === "selfTurnStart" && r.narrative && r.label === FW_REMINDER_LABEL) && !na.recharge && !na.requires;
+  const fwUses = name => { const m = String(name ?? "").match(/\(\s*(\d+)\s*\/\s*(scene|combat|encounter|fight)\s*\)/i); return m ? Math.max(1, Number(m[1])) : 1; };
+  const fwWant = name => ({ v: 1, rules: [{ on: "wouldFailSave", limit: { per: "combat", uses: fwUses(name) }, label: "Fractured Will", do: { passSave: true } }] });
+  const SOULFIRE_RULE = () => ({ on: "struck", if: { melee: true }, label: "Soulfire Form", do: { damage: { formula: "2d6", type: "thermal" } } });
+  const REFLECT_RULE = () => ({ on: "struck", if: { melee: true }, limit: { per: "round", uses: 1 }, label: "Reflect The Blow", do: { save: { attr: "mind", dc: 15, onSave: "negate" }, damage: { formula: "2d8", type: "qliphothic" } } });
+  const CHAINS_DOT = (d) => ({ formula: d?.formula || "2d8", type: d?.type || "psychic", ends: "condition", condition: "restrained" });
+  // Engulf: the failed Restrained card (use rule) IS the engulfing → saveFail lands Blinded outright (no second card — runDo returns
+  // after posting a condition-save card, which is what ate the 11-12 DoT) and queues 2d6 chemical that lives while Restrained does.
+  const ENGULF_NA = () => ({ v: 1, rules: [
+    { on: "use", label: "Engulf — Violence DC 18 or engulfed", do: { condition: { key: "restrained", duration: "until-saved", save: { attr: "violence", dc: 18 } }, damage: { formula: "2d6", type: "chemical" } } },
+    { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded; 2d6 chemical each turn while Restrained", do: { condition: { key: "blinded", duration: "until-saved" }, dot: { formula: "2d6", type: "chemical", ends: "condition", condition: "restrained" } } }
+  ] });
+  // an old (pre-verb) struck rule: no melee predicate, and either the original executing rule or the 11-12 narrative stand-in
+  const oldStruck = (r, real) => r?.on === "struck" && r.if?.melee === undefined && (!!real(r) || !!r.narrative);
 
   function planFixes(actorData, itemsData) {
     const ops = [];
@@ -105,11 +126,10 @@
       setNA(it, { ...stripRuntime(na ?? {}), ...ULT(na) }, why);
     };
     const remindIfBare = (it, prompt, why) => { if (it && !NA(it)) setNA(it, remind(prompt), why); };
-    const fractured = (why = "T34-M10 Fractured Will has no engine reader → once-per-combat GM reminder (engine work owed)") => {
-      for (const it of IRall(/^Fractured Will/)) {
-        const n = (it.name.match(/\(([^)]*)\)/) || [])[1] || "per scene";
-        remindIfBare(it, `${it.name}: when ${a.name.split(",")[0]} fails a check or save, the GM may declare a success instead (${n}) — track the uses by hand.`, why);
-      }
+    // 2026-11-13: Fractured Will = on:"wouldFailSave" do.passSave, N per combat from the name ("N/scene" → N per combat).
+    // Bare items and the 11-12 reminder shape are upgraded; anything else (hand-edited) is left alone.
+    const fractured = (why = "T34-M10 Fractured Will → on:\"wouldFailSave\" passSave, N per combat from the name (engine verb 2026-11-13)") => {
+      for (const it of IRall(/^Fractured Will/)) { const na = NA(it); if (!na || isFwReminder(na)) setNA(it, fwWant(it.name), why); }
     };
     const hitSave = (it, attr, dc, why) => {   // M13 data route: a hit rule that posts the save card → the existing saveFail rule fires
       if (!it) return; const na = NA(it) ?? { v: 1, rules: [] };
@@ -289,10 +309,10 @@
         if (na?.rules?.length) {
           const rules = na.rules.map(r => {
             if (r.on === "use" && r.do?.condition?.key === "restrained" && r.do.condition.save?.attr !== "presence") return { ...clone(r), do: { ...clone(r.do), condition: { ...clone(r.do.condition), save: { ...clone(r.do.condition.save), attr: "presence" } } } };
-            if (r.on === "saveFail" && r.do?.dot?.ends === "rounds") { const d = clone(r.do); d.dot = { formula: d.dot.formula, type: d.dot.type, ends: "action" }; return { ...clone(r), do: d }; }
+            if (r.on === "saveFail" && r.do?.dot && r.do.dot.ends !== "condition") { const d = clone(r.do); d.dot = CHAINS_DOT(d.dot); return { ...clone(r), do: d }; }
             return r;
           });
-          setNA(gc, { ...stripRuntime(na), rules }, "T34-H4 chains DoT ticked 10 rounds whatever happened — now ends on the action that bursts them; the shake-off is Presence");
+          setNA(gc, { ...stripRuntime(na), rules }, "T34-H4 chains DoT ticked 10 rounds whatever happened — now lives while Restrained (dot.ends condition, 11-13); the shake-off is Presence");
         }
         fractured();
         remindIfBare(I("Hollow Radiance"), "Hollow Radiance: the Angel rolls twice-keep-better on checks to resist manifestations (apply by hand).", "T34-M10 no engine verb for 'advantage vs manifestations' → reminder");
@@ -354,24 +374,25 @@
       }
       case "Abomination of Excess": {
         const en = I("Engulf"), na = NA(en);
-        if (na?.rules?.some(r => r.on === "saveFail" && r.do?.condition?.duration === "scene")) setNA(en, { v: 1, rules: [
-          { on: "use", label: "Engulf — Violence DC 18 or engulfed", do: { condition: { key: "restrained", duration: "until-saved", save: { attr: "violence", dc: 18 } }, damage: { formula: "2d6", type: "chemical" } } },
-          { on: "saveFail", if: { weapon: "Engulf" }, label: "Engulfed — Blinded until it escapes; 2d6 chemical each turn until an action ends it", do: { condition: { key: "blinded", duration: "until-saved", save: { attr: "violence", dc: 18 } }, dot: { formula: "2d6", type: "chemical", ends: "action" } } }
-        ] }, "T34-M6 Engulf: Blinded lasted the scene, Restrained 1 round, no ongoing 2d6 — now until-saved (Violence 18) + an action-ended DoT");
+        // the original (Blinded for the scene) and the 11-12 shape (second Violence card + action DoT that never queued) → ENGULF_NA
+        if (na?.rules?.some(r => r.on === "saveFail" && (r.do?.condition?.duration === "scene" || r.do?.condition?.save || (r.do?.dot && r.do.dot.ends !== "condition")))) setNA(en, ENGULF_NA(),
+          "T34-M6 Engulf: Blinded lasted the scene, Restrained 1 round, no ongoing 2d6 — now Restrained until-saved (Violence 18), Blinded on the failure, 2d6 chemical while Restrained (11-13 verbs)");
         fractured();
         break;
       }
       case "Inferno of Cruelty": {
         const sf = I("Soulfire Form"), na = NA(sf);
-        if (na?.rules?.some(r => r.on === "struck" && r.do?.damage)) setNA(sf, { ...stripRuntime(na), rules: na.rules.map(r => (r.on === "struck" && r.do?.damage) ? { on: "struck", narrative: true, label: "Soulfire Form", do: { prompt: "Soulfire Form: a MELEE attacker takes 2d6 thermal (apply by hand — ranged attackers are spared)." } } : r) },
-          "T34-M7 retaliation burned RANGED attackers too (no melee predicate) → prompt; engine if.melee owed");
+        const isOld = r => oldStruck(r, x => x.do?.damage);
+        if (na?.rules?.some(isOld)) setNA(sf, { ...stripRuntime(na), rules: na.rules.map(r => isOld(r) ? SOULFIRE_RULE() : r) },
+          "T34-M7 retaliation burned RANGED attackers too → struck if.melee:true, 2d6 thermal (11-13 verb)");
         fractured();
         break;
       }
       case "Please-Stop-Hitting-Yourself (Qliphothic Loop)": {
         const rb = I("Reflect The Blow"), na = NA(rb);
-        if (na?.rules?.some(r => r.on === "struck" && r.do?.save)) setNA(rb, { ...stripRuntime(na), rules: na.rules.map(r => (r.on === "struck" && r.do?.save) ? { on: "struck", narrative: true, limit: { per: "round", uses: 1 }, label: "Reflect The Blow", do: { prompt: "Reflect The Blow (1/round): a MELEE attacker rolls Mind DC 15 or takes 2d8 qliphothic to Stress (roll by hand — ranged attackers are spared)." } } : r) },
-          "T34-M7 reflection hit ranged attackers, no 1/round → prompt; engine if.melee owed");
+        const isOld = r => oldStruck(r, x => x.do?.save);
+        if (na?.rules?.some(isOld)) setNA(rb, { ...stripRuntime(na), rules: na.rules.map(r => isOld(r) ? REFLECT_RULE() : r) },
+          "T34-M7 reflection hit ranged attackers, no 1/round → struck if.melee:true, 1/round, Mind DC 15 card for 2d8 qliphothic (11-13 verb)");
         break;
       }
       case "Desenitarius Maarg":
@@ -386,7 +407,7 @@
       case "Gloomgill":
         gateUltimate(I("Final Exam (1/scene)"), "T34-H2 ULTIMATE was ungated → recharge d6 5+ AND ownerBloodied");
         setFormula(I("Inlaid Lantern-Head Flail"), "1d8+1", "2d10+1", "O10 Flail under the T4 budget → 2d10+1");
-        fractured();
+        // Fractured Will left alone (Dave 11-13: Gloomgill is no longer a combat)
         break;
       case "Compliance Engine PRIME":
         gateUltimate(I("Total Compliance (1/scene)"), "T34-H2 ULTIMATE was ungated (CR >20 live) → recharge d6 5+ AND ownerBloodied");
