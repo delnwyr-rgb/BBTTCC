@@ -1,0 +1,43 @@
+{
+  "id": "combat-dock",
+  "title": "Combat Dock",
+  "description": "A bottom-docked combat console that appears when your combat starts: initiative ribbon, your abilities with ability-first targeting (click the power, then the token), range checks, reaction cards, and a movement circle showing how far you can still move this turn. Works on plain D&D 5e; Bad Eden worlds load it through bbttcc-territory.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "David English"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      },
+      {
+        "id": "fourththing",
+        "type": "system"
+      }
+    ],
+    "recommends": [
+      {
+        "id": "surge-powers",
+        "type": "module",
+        "reason": "the dock shows the Surge heat meter and opens the Surge menu"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/combat-dock.js"
+  ],
+  "styles": [
+    "styles/combat-dock.css"
+  ],
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/combat-dock.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/combat-dock.zip"
+}
