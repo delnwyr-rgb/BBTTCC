@@ -401,24 +401,21 @@ export const STORY_SCRIPTS = {
   circuit_riders: {
     giver: "nobody. The road. The Riders find you",
     description: "Static crawls across exposed metal before you see anyone. Then a man in a patched, lovingly maintained robot suit steps forward and tells you, in a CLASSIC monotone robot voice, not to be alarmed. The Circuit Riders verify first, befriend second, rescue third. Survive their verification, and one day a clean call might bring them hard, fast, and without theatrical delay.",
+    // REBUILT (Dave 2026-11-13): approach or ride on → be measured → the camp (talk to the Riders, earn or lose the room) →
+    // Captain Robot gathers them → a three-round Parley (Doctrine / Darkness / Witness) → alliance / neutral / flagged.
     steps: [
-      { id: "riders", label: "The Circuit Riders", line: "Static on the metal. Something enormous is pretending to be under control. Approach, or watch first.",
-        beats: ["enc_circuit_riders_parley_approach", "enc_circuit_riders_parley_observe"], done: { anyOf: ["enc_circuit_riders_parley_approach"] } },
-      { id: "parley", label: "Parley", line: "DO NOT BE ALARMED, CITIZENS. Pick how you meet a man in a robot suit.",
-        beats: ["enc_circuit_riders_parley_opening"], done: { anyOf: ["enc_circuit_riders_parley_respect", "enc_circuit_riders_parley_humor", "enc_circuit_riders_parley_skepticism"] } },
-      { id: "doctrine", label: "Verification: Doctrine", group: "verify", line: "Verification first. Do you understand your own methods, or are you mistaking momentum for wisdom?",
-        beats: ["enc_circuit_riders_pressure_doctrine"], done: { anyOf: ["enc_circuit_riders_doctrine_good", "enc_circuit_riders_doctrine_mixed", "enc_circuit_riders_doctrine_bad"] } },
-      { id: "darkness", label: "Verification: Darkness Mimicry", group: "verify", line: "They warn that Darkness has learned to imitate optimization. Take it seriously, or don't.",
-        beats: ["enc_circuit_riders_pressure_darkness"], done: { anyOf: ["enc_circuit_riders_darkness_good", "enc_circuit_riders_darkness_mixed", "enc_circuit_riders_darkness_bad"] } },
-      { id: "witness", label: "Verification: The Witness", group: "verify", line: "They want someone to see what they see and survive it. Will you look?",
-        beats: ["enc_circuit_riders_pressure_witness"], done: { anyOf: ["enc_circuit_riders_witness_good", "enc_circuit_riders_witness_mixed", "enc_circuit_riders_witness_bad"] } },
-      { id: "terms", label: "Terms of Contact", line: "Terms of contact. Alliance is earned, not picked.",
-        beats: ["enc_circuit_riders_parley_resolution"], done: { anyOf: ["enc_circuit_riders_parley_alliance", "enc_circuit_riders_parley_neutral", "enc_circuit_riders_parley_flagged"] } }
+      { id: "riders", label: "The Circuit Riders", line: "Static on the metal. Something enormous is pretending to be under control. Approach, or ride on.",
+        beats: ["enc_circuit_riders_parley_approach"], done: { anyOf: ["enc_circuit_riders_parley_opening"] } },
+      { id: "measured", label: "Measured", line: "FEAR NOT, CITIZENS. Let the Circuit Riders measure you.",
+        beats: ["enc_circuit_riders_parley_opening"], done: { anyOf: ["enc_circuit_riders_measured"] } },
+      { id: "camp", label: "The Camp", line: "Talk with Arviind, Simone, Dennis and Howard, and find Captain Robot. Every one of them is in the room you'll have to win.",
+        beats: ["enc_circuit_riders_camp"], done: { anyOf: ["enc_circuit_riders_captain_gather"] } },
+      { id: "parley", label: "Make Your Case", line: "The Riders gather. Doctrine, Darkness, Witness: three rounds to win their trust.",
+        beats: ["enc_circuit_riders_captain_gather"], done: { anyOf: ["enc_circuit_riders_parley_alliance", "enc_circuit_riders_parley_neutral", "enc_circuit_riders_parley_flagged"] } }
     ],
     doors: [
-      { id: "robot", label: "Captain Robot", line: "Captain Robot has a crew, and each of them has a question for you. Ask them theirs.", beats: ["enc_circuit_riders_captain_robot_intro"] },
-      { id: "crew", label: "Simone, Arvind, Howard, Dennis", line: "Simone checks whether you lag. Arvind hears patterns. Howard recovers things. Dennis is the regrettable hypothesis.", beats: ["enc_circuit_riders_simone_intro", "enc_circuit_riders_arvind_intro", "enc_circuit_riders_howard_intro", "enc_circuit_riders_dennis_intro"] },
-      { id: "see", label: "Show us what you see", line: "You do not get to witness their burden casually. Stay for the whole pattern.", beats: ["enc_circuit_riders_witness_request"] }
+      { id: "robot", label: "Captain Robot", line: "Captain Robot sits alone behind a tarp. He sounds different there.", beats: ["enc_circuit_riders_captain"] },
+      { id: "crew", label: "Arviind, Simone, Dennis, Howard", line: "Arviind argues with grass. Simone HOOPs at the woods. Dennis fixes a giant toe. Howard studies his hands.", beats: ["enc_circuit_riders_arviind", "enc_circuit_riders_simone", "enc_circuit_riders_dennis", "enc_circuit_riders_howard"] }
     ],
     after: ["circuit_riders_classification_review", "circuit_riders_review_stood", "circuit_riders_chase_run", "circuit_riders_chase_caught", "circuit_riders_chase_escaped"],
     chapters: {}

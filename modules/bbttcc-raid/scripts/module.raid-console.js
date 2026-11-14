@@ -3021,7 +3021,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.logWar      = !!s.logWar;
       this.vm.includeDefender = (s.includeDefender !== undefined) ? !!s.includeDefender : this.vm.includeDefender;
       // Ruling 22 — what the story asked for: the Parley goal/style preset, the stake line, the offering beat.
-      this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show"), audience: String(s.parley.audience || "observers") } : null;
+      this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show"), audience: String(s.parley.audience || "observers"), rounds: Array.isArray(s.parley.rounds) ? s.parley.rounds : null } : null;   // rounds: named rounds (2026-11-13)
       this.vm.stake     = String(s.stake || "");
       this.vm.offeredBy = String(s.offeredBy || "");
       this.vm.objectiveOnly = s.objectiveOnly === true;   // ruling 21: the story says the hex is not the prize
@@ -5760,6 +5760,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               goal: init.goal,
               performance: init.goal === "impress" ? init.style : null,
               audience: init.audience,
+              rounds: Array.isArray(this.vm.parley?.rounds) ? this.vm.parley.rounds : null,   // 2026-11-13: the story's named rounds
               domainStrength: null   // ruling 5 retired 2026-10-26: Influence opens from the marks committed above
             });
             this.__courtlyScenarioAtt = attacker.id;

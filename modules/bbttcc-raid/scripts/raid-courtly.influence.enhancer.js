@@ -202,13 +202,18 @@
   // Phase C — Court Bonus: sum of favors of courtiers aligned with `factionId`
   // (those whose courtFavor[factionId] >= 1), capped to ±5 per spec §4.2.
   // Reads the scene's courtiers (api.raid.tableau.courtiers — any scene since 2026-10-22); safe if canvas isn't loaded yet.
-  function computeCourtBonus(factionId) {
+  // DISFAVOR COUNTS (Dave 2026-11-13: "a way for people to already be disfavorable with people from the get go"): an observer
+  // who holds a grudge against the OTHER side (courtFavor[oppFactionId] <= -1) adds |favor| to this side — before, negative
+  // favor was simply ignored, so a soured observer cost nothing.
+  function computeCourtBonus(factionId, oppFactionId = null) {
     try {
       if (!factionId || !canvas?.tokens?.placeables) return 0;
       let total = 0;
       for (const tk of (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? [])) {
-        const fav = Number(tk?.actor?.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0);
+        const cf = tk?.actor?.flags?.[MOD_R]?.courtFavor || {};
+        const fav = Number(cf[factionId] ?? 0);
         if (fav >= 1) total += fav;
+        if (oppFactionId) { const opp = Number(cf[oppFactionId] ?? 0); if (opp <= -1) total += -opp; }
       }
       return clamp(total, -5, 5);
     } catch (e) {
@@ -362,6 +367,8 @@
       goal = "persuade",              // ALPHA CUT ruling 3: persuade | deceive | impress | unnoticed — one per Parley
       domainStrength = null,          // ALPHA CUT ruling 5: { atk:{dip,soft}, def:{dip,soft} } in OP — Influence from what the Domain owns, nothing debited
       audience = null,                // 2026-11-11 (Dave): who is being swayed — observers | judges | jury | crowd | court (raid.audienceWords)
+      rounds = null,                  // 2026-11-13 (Dave, the Circuit Riders): NAMED ROUNDS — [{ topic, prompt }]; the Parley runs exactly that many
+                                      // exchanges (roundCap) and each round's topic + prompt is posted to the table as it opens
       restore = null                  // 2026-11-11: a saved state (the courtlyActive mirror) — rebuild the SAME Parley after a GM reload: nothing charged again, no scars / door re-consumed
     } = {}) {
       const A = game.actors.get(String(attackerId||"").replace(/^Actor\./,""));
@@ -433,6 +440,15 @@
         initInfluenceD = Math.max(1, initInfluenceD + dCapDelta);
         await D.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
+      const _namedRounds = (Array.isArray(rounds) ? rounds : [])
+        .map(r => (r && typeof r === "object") ? { topic: String(r.topic || "").trim(), prompt: String(r.prompt || "").trim() } : { topic: String(r || "").trim(), prompt: "" })
+        .filter(r => r.topic || r.prompt).slice(0, 12);
+      const _postRound = async (i) => {   // round i (0-based) opens: the table hears its topic
+        const R = state.rounds?.[i]; if (!R) return;
+        const e = (t) => foundry.utils.escapeHTML(String(t || ""));
+        try { await ChatMessage.create({ speaker: { alias: state.label || "Parley" }, content: `<div class="bbttcc-parley-round" style="border-left:3px solid #c9a227;padding:.35em .6em;"><b>Round ${i + 1} of ${state.rounds.length}${R.topic ? ` — ${e(R.topic)}` : ""}</b>${R.prompt ? `<div style="margin-top:.25em">${e(R.prompt)}</div>` : ""}</div>` }); }
+        catch (eR) { console.warn(TAG, "round topic post failed", eR); }
+      };
       const state = {
         id: foundry.utils.randomID(),  // ruling 4: receipts drawn here are stamped with THIS Parley
         goal,                          // ruling 3
@@ -444,7 +460,8 @@
         sceneId: canvas?.scene?.id || null,   // review C66: the scene the Parley opened on — tableau.courtiers() falls back to it off-canvas
         label,
         round: 0,
-        roundCap: 6,                   // Phase E — spec §8 resolution 5
+        rounds: _namedRounds,          // 2026-11-13 — [{ topic, prompt }] or []
+        roundCap: _namedRounds.length || 6,   // Phase E — spec §8 resolution 5; a named-rounds Parley runs exactly its rounds
         outcome: "ongoing", // "ongoing" | "attackerWin" | "defenderWin" | "mutualRuin" | "stalemate"
         outcomeKind: null,             // Phase E — one of "cleanTriumph"|"tarnishedVictory"|"stalemate"|"publicHumiliation"|"mutualRuin"
         influenceA: initInfluenceA,
@@ -477,6 +494,7 @@
         audienceKey: (raidApi.audienceWords?.(audience)?.key) || "observers"
       };
       if (RESTORE) { try { Object.assign(state, structuredClone(RESTORE)); } catch (_eR) { Object.assign(state, JSON.parse(JSON.stringify(RESTORE))); } }
+      else if (state.rounds.length) _postRound(0);
       const AUD = () => (raidApi.audienceWords?.(state) || { one: "observer", many: "observers", One: "Observer", Many: "Observers" });
 
       // Phase E — Consume pending Scandal Scars on both factions. Each scar
@@ -670,8 +688,8 @@
 
         // Phase C — Court Bonus from courtier favor. Computed AT step entry
         // so the value the HUD displays is consistent with what the roll uses.
-        const courtBonusA = computeCourtBonus(state.attackerId);
-        const courtBonusD = computeCourtBonus(state.defenderId);
+        const courtBonusA = computeCourtBonus(state.attackerId, state.defenderId);
+        const courtBonusD = computeCourtBonus(state.defenderId, state.attackerId);
         state.courtBonusA = courtBonusA;
         state.courtBonusD = courtBonusD;
         atkBonus += courtBonusA;
@@ -943,7 +961,10 @@
         else if (state.round >= state.roundCap) {
           const aPct = state.maxA > 0 ? state.influenceA / state.maxA : 0;
           const dPct = state.maxD > 0 ? state.influenceD / state.maxD : 0;
-          if (aPct > 0.25 && dPct > 0.25) state.outcome = "stalemate";
+          // A named-rounds Parley (2026-11-13) is short by design — at its last round the side ahead by 15 points of
+          // Influence carries the table; closer than that is a stalemate.
+          if (state.rounds?.length) state.outcome = (aPct - dPct >= 0.15) ? "attackerWin" : (dPct - aPct >= 0.15) ? "defenderWin" : "stalemate";
+          else if (aPct > 0.25 && dPct > 0.25) state.outcome = "stalemate";
           else if (aPct < dPct) state.outcome = "defenderWin";
           else if (dPct < aPct) state.outcome = "attackerWin";
           else state.outcome = "stalemate";
@@ -1054,6 +1075,7 @@
           });
         }
 
+        if (state.outcome === "ongoing" && state.rounds?.length && state.round < state.rounds.length) await _postRound(state.round);
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
 
         return { ...state };

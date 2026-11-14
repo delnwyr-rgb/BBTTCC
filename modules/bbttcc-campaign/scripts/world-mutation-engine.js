@@ -2327,6 +2327,37 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eSG) { console.warn(TAG, "sparkGrants apply failed", eSG); }
 
+    // 2h-fav) COURT FAVOR (Dave 2026-11-13, the Circuit Riders: conversations before a Parley earn or cost the room).
+    // worldEffects.courtFavor = [{ npc | npcs: [names], delta?: ±n, set?: n, factionId?: id | "@coalition" (default) }] — writes
+    // flags.bbttcc-raid.courtFavor[factionId] on each named NPC's world actor (clamped −3..+3), the number a Parley's observers
+    // carry (raid-courtly computeCourtBonus: favor ≥ 1 backs that side; −1 or worse backs the OTHER side). Placed tokens of the
+    // actor inherit it. GM seat only.
+    if (Array.isArray(we.courtFavor) && we.courtFavor.length && game.user && game.user.isGM) {
+      try {
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null;
+        const roster = Array.from(new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean)));
+        for (const row of we.courtFavor) {
+          if (!row || typeof row !== "object") continue;
+          const names = [].concat(row.npcs || [], row.npc ? [row.npc] : []).map(n => String(n || "").trim()).filter(Boolean);
+          const fRaw = String(row.factionId || "@coalition").trim();
+          const fids = /^@(coalition|campaign|stewards)$/i.test(fRaw) ? roster : [fRaw.replace(/^Actor\./, "")];
+          for (const n of names) {
+            const actor = game.actors.getName(n) || game.actors.get(n);
+            if (!actor) { console.warn(TAG, `courtFavor: NPC "${n}" not found`); continue; }
+            const cur = foundry.utils.deepClone(actor.flags?.["bbttcc-raid"]?.courtFavor || {});
+            for (const fid of fids) {
+              const before = Number(cur[fid] ?? 0);
+              const next = Math.max(-3, Math.min(3, row.set !== undefined ? Number(row.set) || 0 : before + (Number(row.delta) || 0)));
+              cur[fid] = next;
+            }
+            await actor.update({ "flags.bbttcc-raid.courtFavor": cur });
+            changed = true; notes.push(`courtFavor:${actor.name}${row.set !== undefined ? "=" + row.set : (Number(row.delta) >= 0 ? "+" : "") + (Number(row.delta) || 0)}`);
+          }
+        }
+      } catch (eF) { console.warn(TAG, "courtFavor failed", eF); }
+    }
+
     // 2h) RECEIPTS (STORY FLOW D-4, 2026-09-17 — owner ruling: "courtly secrets" are RECEIPTS: something you were told
     // that you can produce later). worldEffects.receipts = [{ label, effectKey, truth?, acquisition?: "earned"|"stolen",
     // source?: { name?, npcActorId? }, factionId?, ingredientKey? (the Forge spends it as that material — emotional
@@ -2365,7 +2396,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const source = template.clone({
             name: label,
             system: { description: { value: `<p><em>${esc(row.truth || "")}</em></p><p style="opacity:.75;font-size:.9em;">A Receipt from ${esc(srcName)} (${acquisition}). ${esc(api.describeEffect ? (api.describeEffect(wantKeys.join("+")) || "") : "")}</p>` } },
-            flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, ...(row.ingredientKey ? { ingredientKey: String(row.ingredientKey) } : {}), source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
+            flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, ...(row.ingredientKey ? { ingredientKey: String(row.ingredientKey) } : {}), ...(row.target ? { target: { name: String(row.target) } } : {}), source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
           });
           let created = null;
           try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+"), story: true }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }
@@ -2658,7 +2689,9 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           targetType, targetName: targetName || "—", targetUuid, defenderId, rigId, creatureId: "", actorUuid: "", sceneUuid: "", tokenUuid: "",
           rounds: [], logWar: true, includeDefender: true,
           // audience (Dave 2026-11-11): who the Parley sways — observers | judges | jury | crowd | court
-          parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show"), audience: String(R.audience || "observers").toLowerCase() } : null,
+          parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show"), audience: String(R.audience || "observers").toLowerCase(),
+            // NAMED ROUNDS (2026-11-13): raid.rounds = [{ topic, prompt }] — the Parley runs exactly that many exchanges, each topic posted as it opens
+            rounds: Array.isArray(R.rounds) ? R.rounds.map(r => ({ topic: String(r?.topic || ""), prompt: String(r?.prompt || "") })) : null } : null,
           stake: String(R.stake || ""), label: String(R.label || ""),
           objectiveOnly: R.objectiveOnly === true,  // ruling 21: the fight is over an objective, never the hex (a road ambush, a room)
           // routes: where the story goes when the fight concludes — { win, stalemate, loss } beat ids (the console runs ONE of them once).

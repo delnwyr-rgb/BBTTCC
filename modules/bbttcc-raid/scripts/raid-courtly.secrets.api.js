@@ -272,8 +272,17 @@
     await scenario.lowerSuspicion(2, `secret:coverTracks:${actor.name}`);
     return { effect: "coverTracks", suspicion: "-2" };
   }
-  async function _effectFavorPlus2(actor, side, scenario) {
-    const courtier = await _pickCourtier("Choose observer — +2 favor toward your side");
+  async function _effectFavorPlus2(actor, side, scenario, meta = null) {
+    // AIMED RECEIPTS (Dave 2026-11-13, the Circuit Riders): a receipt that names its observer (secret.target = { name } —
+    // "They Taught Me a Trick" → Arviind) lands on that person without the picker; not at this table → the picker as before.
+    let courtier = null;
+    const tName = String(meta?.target?.name || "").trim().toLowerCase();
+    if (tName) {
+      const at = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []).find(t => String(t?.actor?.name || "").trim().toLowerCase() === tName);
+      courtier = at?.actor || null;
+      if (!courtier) ui.notifications?.warn?.(`${meta.target.name} is not at this table — choose who hears it.`);
+    }
+    if (!courtier) courtier = await _pickCourtier("Choose observer — +2 favor toward your side");
     if (!courtier) return { effect: "favorPlus2", cancelled: true };
     await scenario.adjustFavor(courtier, side.factionId, +2);
     return { effect: "favorPlus2", courtier: courtier.name };
@@ -433,7 +442,7 @@
     let applied = 0;
     for (const k of effectKeys) {
       let r;
-      try { r = await HANDLERS[k](actor, side, scenario); }
+      try { r = await HANDLERS[k](actor, side, scenario, secretMeta); }
       catch (e) {
         console.warn(TAG, `handler "${k}" failed`, e);
         ui.notifications?.error?.(`Receipts: effect "${k}" errored — see console.`);

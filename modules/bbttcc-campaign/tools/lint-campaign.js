@@ -50,7 +50,7 @@ const CHECK_STATS = new Set(["gm","violence","intrigue","presence","body","mind"
 const GATE_FLAGS = {              // name → [min, max] sanity band (null = unbounded)
   storyPhase: [0, 6], wendigoRung: [0, 4], tikkunDividend: [0, 5], hexesClaimed: [0, null], turn: [0, null],
   banditMercy: [0, null], banditFear: [0, null],
-  cadenceRespect: [0, 1], cadenceTribute: [0, 1], cadenceUncontested: [0, 1], crVerify: [-3, 4],
+  cadenceRespect: [0, 1], cadenceTribute: [0, 1], cadenceUncontested: [0, 1], crVerify: [-3, 4], crPassBy: [0, 3],
   geburahEarned: [0, 3], geburahForced: [0, 3],
   chucklecreekSeen: [0, 4], stillwaterCrack: [0, 4], softlandingGive: [0, 4],
   humRoofs: [0, 9]

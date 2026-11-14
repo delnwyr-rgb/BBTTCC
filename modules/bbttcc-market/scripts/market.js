@@ -309,6 +309,18 @@ function _runQueued(map, key, fn) {
   return run;
 }
 const SELL_RATE_DEFAULT = { allied: 60, friendly: 50, neutral: 40, unfriendly: 25, hostile: 10, at_war: 0 };
+// ALLIES GET A DISCOUNT (Dave 2026-11-13, the Circuit Rider market — "need to have that happen at the Farm too"): a vendor whose
+// owning Domain is ALLIED with the buyer sells at list × (1 − ALLY_DISCOUNT). Your own Domain's market is not a discount.
+const ALLY_DISCOUNT = 0.20;
+function allyDiscountFor(entry, faction) {
+  try {
+    if (!entry || !faction) return 0;
+    const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === String(entry.vendorId || ""));
+    const vf = vendor ? vendorFactionFor(vendor) : null;
+    if (!vf || vf.id === faction.id) return 0;
+    return String(game.bbttcc?.api?.factions?.relations?.get?.(vf, faction) || "") === "allied" ? ALLY_DISCOUNT : 0;
+  } catch { return 0; }
+}
 const SELL_GEAR_TYPES = new Set(["weapon", "armor", "gear"]);
 
 function _sellEnabled() {
@@ -1564,7 +1576,8 @@ async function _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, 
   const kind = String(entry.kind || "").toLowerCase();
   // Tier I kit is free within the horizon (Standard Issue); everything else pays list price
   // within it and strains ×2/×4 over it — horizonEconCost() is the one rule (2026-10-16).
-  const econCost = horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame);
+  const _allyCut = allyDiscountFor(entry, faction);
+  const econCost = Math.round(horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame) * (1 - _allyCut));
 
   // 0) Validate delivery prerequisites BEFORE spending — the OP engine has no
   //    rollback, so a delivery failure after commit would strand the marks.
@@ -2493,7 +2506,7 @@ try {
       const rarity = await resolveEntryRarity(entry);
       const distance = rarityDistance(rarity, horizon0);
       const kind = String(entry?.kind || "").toLowerCase();
-      const econCost = horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame);
+      const econCost = Math.round(horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame) * (1 - allyDiscountFor(entry, buyerFaction0)));   // allies −20% (2026-11-13)
 
       // Pool label: "Split" if multi-pool, else short label for the native pool.
       let chipPoolLabel = "Econ";
