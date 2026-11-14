@@ -4,6 +4,7 @@
  * the Parley chain — opening, respect / humor / skepticism, resolution, alliance / neutral / flagged — was GM-only
  * (playerFacing false on all five flags), so the players' seats stuck on the approach card. Every enc_circuit_riders_parley_* beat,
  * plus any beat the chain's choices lead to that is GM-only, becomes player-facing like the approach.
+ * Widened (same day): every enc_circuit_riders_* beat, not just the parley_* ids.
  * Ember Bad Eden. globalThis.__crFacingDry = false applies; else dry run. Idempotent.
  */
 (async () => {
@@ -13,7 +14,9 @@
   const beats = foundry.utils.deepClone(c.beats);
   const byId = new Map(beats.map(b => [b.id, b]));
   const FLAGS = ["playerFacing", "playerFacingDialog", "dialogPlayerFacing", "playerFacingContent", "showToPlayers"];
-  const chain = beats.filter(b => /^(ans_)?enc_circuit_riders_parley/.test(b.id));
+  // Widened the same day: the pressure outcomes (doctrine / darkness / witness · good / mixed / bad) and the five people's
+  // conversations (Captain Robot, Simone, Arviind, Howard, Dennis) were GM-only too — every enc_circuit_riders_* beat now.
+  const chain = beats.filter(b => /^(ans_)?enc_circuit_riders_/.test(b.id));
   if (!chain.length) throw new Error("Circuit Riders Parley beats missing");
   const ids = new Set(chain.map(b => b.id));
   for (const b of chain) for (const ch of b.choices || []) for (const n of [ch.next, ch.failNext]) if (n && byId.has(n)) ids.add(n);
