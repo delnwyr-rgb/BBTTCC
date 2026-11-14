@@ -49,6 +49,13 @@
                         title="Use{{#if row.charges}} ({{row.charges}} left){{/if}}">
                   Use{{#if row.charges}} ({{row.charges}}){{/if}}
                 </button>
+                {{#if row.useAndEquip}}
+                <button type="button" class="ft-inv-btn ft-inv-equip{{#if row.isEquipped}} on{{/if}}"
+                        data-action="ftItemEquip"
+                        title="{{#if row.isEquipped}}Equipped — click to stow{{else}}Stowed — click to equip{{/if}}">
+                  {{#if row.isEquipped}}◆{{else}}◇{{/if}}
+                </button>
+                {{/if}}
               {{else}}
                 <button type="button" class="ft-inv-btn ft-inv-equip{{#if row.isEquipped}} on{{/if}}"
                         data-action="ftItemEquip"
@@ -100,6 +107,13 @@
                     title="Use{{#if row.charges}} ({{row.charges}} left){{/if}}">
               Use{{#if row.charges}} ({{row.charges}}){{/if}}
             </button>
+            {{#if row.useAndEquip}}
+            <button type="button" class="ft-inv-btn ft-inv-equip{{#if row.isEquipped}} on{{/if}}"
+                    data-action="ftItemEquip"
+                    title="{{#if row.isEquipped}}Equipped — click to stow{{else}}Stowed — click to equip{{/if}}">
+              {{#if row.isEquipped}}◆{{else}}◇{{/if}}
+            </button>
+            {{/if}}
           {{else}}
             <button type="button" class="ft-inv-btn ft-inv-equip{{#if row.isEquipped}} on{{/if}}"
                     data-action="ftItemEquip"

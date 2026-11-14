@@ -8,8 +8,10 @@
  *      stomper (rig frame II, mecha walker) · sidekick (rig frame I, hero suit) · hypercalipers (tool II, +2 Investigation AE)
  *      hoop (talisman II, once per scene: target gains Imposed) · control (body armor IV, FLAT +3 Guard +3 Resolve — armorFlat)
  *      toebonk (weapon II) · fist (weapon III) · polish (consumable I, ×3, clears Restrained) · anchor (rig system II)
- *    Printed rules the GM applies (no engine hook yet): stomper's rough terrain, hypercalipers' reading, the Control Suit's
- *    Parley declaration, toe-bonk's bonus damage, the gauntlets' crit Darkness, polish's no-disarm/no-grapple, the anchor.
+ *    AUTOMATED (Dave 2026-11-13, "Let's go ahead and automate those items"): stomper rigFrame.walker (factions beforeTravel),
+ *    hypercalipers consume measureReality, control consume parleyBonus (+ Equip beside Use), toe-bonk conditionalDamage vs
+ *    construct/circuitborn (rigs count as construct), fist rfi.item.onCrit.hexDarkness, polish consume immunity, anchor
+ *    rigGear.realityAnchor (system afterTravel dark-hex).
  * 2. Vendor "The Circuit Rider Camp" (id circuit-rider-camp, owned by the Circuit Riders — allies get 20% off, market.js), inactive
  *    until the camp opens it; nine catalog entries.
  * 3. Beat enc_circuit_riders_wares (openMarket, activate, closes at turn end) + "Browse the Riders’ wares" on the camp hub.
@@ -28,11 +30,11 @@
     { key: "stomper", template: "Power-Armor Frame", name: "Leggy-Pattern Stomper Frame", img: "icons/environment/settlement/watchtower-cliff.webp", tier: "II", price: 400,
       glance: "Rig frame · Mecha walker · 1 pilot + 2 weapons · rough terrain is no obstacle · Stomp",
       signature: "Built off the same bones as Legansus Tal. Smaller. Calmer. Probably.",
-      desc: P("A walking war-frame patterned on Legansus Tal, scaled down for crews who want a giant robot that fits in a barn.", "<b>Walker.</b> Rough and broken ground does not slow it (GM: ignore difficult terrain for this rig).", "<b>Stomp.</b> The pilot's stomp lands on buildings and rigs like a ram."),
+      desc: P("A walking war-frame patterned on Legansus Tal, scaled down for crews who want a giant robot that fits in a barn.", "<b>Walker.</b> Rough and broken ground does not slow it: a leg over rough land costs what open country costs.", "<b>Stomp.</b> The pilot's stomp lands on buildings and rigs like a ram."),
       rigFrame: { bracket: "mecha", baseIntegrity: 40, tierStep: 10, pilotMount: true, mobilityAllowed: ["mobile"], slots: { weapon: 2, system: 1, output: 0 },
         capacity: { pilot: { min: 1, max: 1 }, gunner: { min: 0, max: 1 }, engineer: { min: 0, max: 1 }, crew: { min: 0, max: 2 } },
         actions: { pilot: ["steer", "evasive", "stomp", "ram", "hold-position"], gunner: ["fire-weapon", "aimed-shot"], engineer: ["repair", "vent-heat"], crew: ["brace", "hold-on"] },
-        travel: { speed: 3, range: 10 }, visualFrame: "open-corners" } },
+        travel: { speed: 3, range: 10 }, visualFrame: "open-corners", walker: true } },
     { key: "sidekick", template: "Power-Armor Frame", name: "Sidekick Frame", img: "icons/equipment/chest/breastplate-collared-steel-grey.webp", tier: "I", price: 200,
       glance: "Rig frame · Mecha · hero suit · 1 pilot + 1 weapon",
       signature: "Every hero needs one. Comes with a cape mount.",
@@ -44,7 +46,8 @@
     { key: "hypercalipers", template: "Grapnel Spool", name: "Hypercalipers", img: "icons/tools/scribal/lens-blue.webp", tier: "II", price: 60,
       glance: "Tool · +2 Investigation · measure a hex's reality",
       signature: "The number keeps changing just as you're about to write it down.",
-      desc: P("Arviind's spare pair. They count uncollapsed wave forms, and they will tell you so.", "<b>+2 Investigation</b> while carried.", "<b>Measure Reality.</b> Once per hex, take a reading: the GM tells you the hex's Darkness and anything about it that is not what it seems."),
+      desc: P("Arviind's spare pair. They count uncollapsed wave forms, and they will tell you so.", "<b>+2 Investigation</b> while carried.", "<b>Measure Reality.</b> Once per scene, Use: a reading of the hex you stand on is whispered to you — its Darkness, radiation, conditions, and whether a story is hiding there."),
+      consume: { decrement: false, target: "self", effects: [{ kind: "measureReality" }], limit: { window: "scene", uses: 1 } },
       effects: [{ name: "Hypercalipers", img: "icons/tools/scribal/lens-blue.webp", transfer: true, disabled: false, changes: [{ key: "system.skills.investigation.value", type: "add", mode: 2, value: "2", priority: null }] }] },
     { key: "hoop", template: "Anchor of the Known", name: "HOOP HOOP Novelty Projector", img: "icons/magic/sonic/projectile-sound-rings-wave.webp", tier: "II", price: 50,
       glance: "Talisman · once per scene · target gains Imposed",
@@ -54,25 +57,29 @@
     { key: "control", template: "Circuited Flak Jacket", name: "The Control Suit", img: "icons/equipment/chest/breastplate-banded-steel-gold.webp", tier: "IV", price: 600,
       glance: "Body armor · +3 Guard · +3 Resolve · flat (no line, no rank) · super rare",
       signature: "So I am what I propose to be, or am I what I am? And does it matter?",
-      desc: P("A robot costume in the Captain Robot pattern. It makes much of the discussion of what you are moot.", "<b>+3 Guard and +3 Resolve</b>, flat: it needs no armor line and no rank. It is your body armor.", "<b>I Am What I Propose to Be.</b> Once per Parley, declare what you are. Your side gains +2 on that exchange (GM)."),
+      desc: P("A robot costume in the Captain Robot pattern. It makes much of the discussion of what you are moot.", "<b>+3 Guard and +3 Resolve</b>, flat: it needs no armor line and no rank. It is your body armor.", "<b>I Am What I Propose to Be.</b> Once per scene, while you wear it and a Parley is open, Use: declare what you are. Your side gains +2 on the next exchange."),
+      consume: { decrement: false, target: "self", effects: [{ kind: "parleyBonus", amount: 2, requiresEquipped: true, text: "I am what I propose to be." }], limit: { window: "scene", uses: 1 } },
       armor: { guardBonus: 3, resolveBonus: 3, evasionBonus: 0, armorSlot: "body", armorLine: "", armorFlat: true } },
     { key: "toebonk", template: "Inlaid Warhammer", name: "Toe-Bonk Hammer", img: "icons/weapons/hammers/hammer-war-rounding.webp", tier: "II", price: 70,
       glance: "Weapon · heavy hammer · +1d6 vs constructs, rigs and Circuitborn",
       signature: "I don't CARE, Leggy, that it hurts.",
-      desc: P("Dennis's hammer, or one just like it. Made for persuading very large feet.", "<b>Bonk.</b> +1d6 damage against constructs, rigs and Circuitborn (GM adds it).") },
+      desc: P("Dennis's hammer, or one just like it. Made for persuading very large feet.", "<b>Bonk.</b> +1d6 damage against constructs, rigs and Circuitborn — it rolls itself when you apply the hit."),
+      conditionalDamage: [{ vsType: "construct", bonusFormula: "1d6" }, { vsType: "circuitborn", bonusFormula: "1d6" }] },
     { key: "fist", template: "Circuited Knuckle Dusters", name: "Fist of Justice Gauntlets", img: "icons/equipment/hand/gauntlet-armored-red-gold.webp", tier: "III", price: 160,
       glance: "Weapon · huge punches · a critical hit cracks the world (hex Darkness +1)",
       signature: "Punching hard is kind of our deal.",
-      desc: P("Hero gauntlets. They hit like the comics say they do.", "<b>Cracks the World.</b> A critical hit with these raises the current hex's Darkness by 1 (GM). You punch something too hard, you break the world too.") },
+      desc: P("Hero gauntlets. They hit like the comics say they do.", "<b>Cracks the World.</b> A critical hit (double 10) with these raises the Darkness of the hex you stand on by 1. You punch something too hard, you break the world too."),
+      onCrit: { hexDarkness: 1 } },
     { key: "polish", template: "Adrenal Burn", name: "Epic Nail Polish", img: "icons/consumables/potions/bottle-round-corked-pink.webp", tier: "I", price: 15, charges: 3,
       glance: "Consumable ×3 · for the scene: no hands (can't be disarmed or grappled)",
       signature: "And yes, the nail polish I use is epic.",
-      desc: P("Howard's. Three coats.", "<b>There Are No Hands.</b> Use: clears Restrained. For the rest of the scene you can't be disarmed or grappled (GM)."),
-      consume: { decrement: true, target: "self", effects: [{ kind: "condition", condition: "restrained", op: "remove" }] } },
+      desc: P("Howard's. Three coats.", "<b>There Are No Hands.</b> Use: clears Restrained, and you can't be Restrained (grappled, held, pinned) for the rest of the scene."),
+      consume: { decrement: true, target: "self", effects: [{ kind: "condition", condition: "restrained", op: "remove" }, { kind: "immunity", conditions: "restrained", duration: "scene" }] } },
     { key: "anchor", template: "Sensor Suite", name: "Reality Anchor", img: "icons/commodities/tech/cog-brass.webp", tier: "II", price: 120,
       glance: "Rig system · your rig's travel doesn't raise Darkness",
       signature: "Holds the world still while you drive through it.",
-      desc: P("A rig module the Riders build to keep their own footprints from wearing reality thin.", "<b>Anchored.</b> Travel in this rig does not raise Darkness (GM).") }
+      desc: P("A rig module the Riders build to keep their own footprints from wearing reality thin.", "<b>Anchored.</b> Install it on a rig. Stewards riding that rig take no Darkness from travelling through dark hexes."),
+      rigGear: { subtype: "rig-system", passive: {}, realityAnchor: true } }
   ];
 
   // folder
@@ -93,14 +100,17 @@
     if (w.charges) rfi.charges = w.charges;
     if (w.consume) rfi.consume = w.consume;
     if (w.rigFrame) data.flags.fourththing.rigFrame = w.rigFrame;
+    if (w.rigGear) data.flags.fourththing.rigGear = w.rigGear;
+    if (w.onCrit) rfi.onCrit = w.onCrit;
+    if (w.conditionalDamage) foundry.utils.setProperty(data, "system.manifestation.conditionalDamage", w.conditionalDamage);
     if (w.armor) Object.assign(data.system, w.armor);
     data.effects = w.effects ? w.effects : (w.armor ? [] : (data.effects || []));
     data.flags[MODC] = { ...(data.flags[MODC] || {}), crWare: w.key };
     const have = game.items.find(i => i.flags?.[MODC]?.crWare === w.key);
     if (!have) { report.changed.push("item " + w.name); if (!DRY_RUN) made[w.key] = await Item.create(data); else made[w.key] = { uuid: "Item.(new)" }; continue; }
     made[w.key] = have;
-    const cmp = (o) => JSON.stringify([o.name, o.img, o.system?.description?.value, o.flags?.fourththing?.rfi?.item?.glance, o.flags?.fourththing?.rfi?.item?.price?.marks, o.flags?.fourththing?.rfi?.item?.consume || null, o.flags?.fourththing?.rigFrame || null, w.armor ? [o.system.guardBonus, o.system.resolveBonus, o.system.armorFlat] : null]);
-    if (cmp(have.toObject()) !== cmp(data)) { report.changed.push("updated " + w.name); if (!DRY_RUN) await have.update({ name: data.name, img: data.img, system: data.system, flags: data.flags }); }
+    const cmp = (o) => JSON.stringify([o.name, o.img, o.system?.description?.value, o.flags?.fourththing?.rfi?.item?.glance, o.flags?.fourththing?.rfi?.item?.price?.marks, o.flags?.fourththing?.rfi?.item?.consume || null, o.flags?.fourththing?.rigFrame || null, o.flags?.fourththing?.rigGear || null, o.flags?.fourththing?.rfi?.item?.onCrit || null, o.system?.manifestation?.conditionalDamage || null, w.armor ? [o.system.guardBonus, o.system.resolveBonus, o.system.armorFlat] : null]);
+    if (cmp(have.toObject()) !== cmp(data)) { report.changed.push("updated " + w.name); if (!DRY_RUN) { if (w.rigGear) await have.update({ "flags.fourththing.-=rigGear": null }); await have.update({ name: data.name, img: data.img, system: data.system, flags: data.flags }); } }   // rigGear replaced whole (a merge kept the template's passive)
   }
 
   // vendor + catalog

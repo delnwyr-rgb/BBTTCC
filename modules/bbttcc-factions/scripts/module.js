@@ -680,6 +680,27 @@ function _installRigTravelBridge() {
     game.bbttcc ??= {};
     game.bbttcc.__rigTravelBridgeInstalled = true;
 
+    // WALKER FRAMES (Dave 2026-11-13, the Leggy-Pattern Stomper Frame): a ridden rig whose frame carries rigFrame.walker
+    // strides over rough land — the leg costs what open country costs (the terrain's surcharge channel drops; terrain
+    // that bills double Economy bills single). Water / air / space legs are unchanged. Runs before the OP spend.
+    const ROUGH_ECON_FACTOR = { forest: 1, jungle: 1, canyons: 1, badlands: 1, ruins: 1, urbanWreckage: 1, wasteland: 1, radiation: 1,
+      mountains: 2, highlands: 2, swamp: 2, mire: 2, desert: 2, ashWastes: 2 };
+    Hooks.on("bbttcc:beforeTravel", (ctx) => {
+      try {
+        const k = String(ctx?.terrainKey || ""); const f = ROUGH_ECON_FACTOR[k]; if (!f || !ctx.cost) return;
+        const sc = game.bbttcc?.api?.travel?.menace?.partyScale?.(ctx.factionId);
+        const rig = sc?.rigId ? game.actors.get(sc.rigId) : null;
+        const frame = rig?.items?.find?.(i => i?.flags?.fourththing?.rigGear?.subtype === "rig-frame");
+        if (frame?.flags?.fourththing?.rigFrame?.walker !== true) return;
+        const econ = Number(ctx.cost.economy) || 0;
+        const before = JSON.stringify(ctx.cost);
+        for (const key of Object.keys(ctx.cost)) delete ctx.cost[key];
+        if (econ) ctx.cost.economy = Math.ceil(econ / f);
+        ctx.walker = { rig: rig.name, from: before };
+        console.log("[bbttcc-factions]", "walker frame — rough ground costs open country", { rig: rig.name, terrain: k, before, after: ctx.cost });
+      } catch (eW) { console.warn("[bbttcc-factions] walker frame failed", eW); }
+    });
+
     Hooks.on("bbttcc:beforeTravel", (ctx) => {
       try {
         const faction = _resolveFactionFromTravelCtx(ctx);

@@ -13744,7 +13744,10 @@ FT.CREATURE_TYPES = {
   aberration:{ label: "Aberration" },
   fiend:     { label: "Fiend"      },
   elemental: { label: "Elemental"  },
-  swarm:     { label: "Swarm"      }
+  swarm:     { label: "Swarm"      },
+  // Pseudo-types (2026-11-13, the Toe-Bonk Hammer): matched from the actor itself, not authored on it — see ftActorCreatureTypes.
+  rig:         { label: "Rig"         },
+  circuitborn: { label: "Circuitborn" }
 };
 
 // Resolves an actor's creature type(s) for conditional-damage matching.
@@ -13761,6 +13764,9 @@ function ftActorCreatureTypes(actor) {
     const k = raw.toLowerCase(); if (valid.has(k)) out.add(k);
   }
   if (!out.size && actor.type === "character") out.add("humanoid");
+  // Pseudo-types (2026-11-13): a rig is a "rig" (and a construct); a Circuitborn steward (ancestry) is "circuitborn".
+  try { if (actor.type === "rig" || actorKind(actor) === "rig" || actor.flags?.["bbttcc-factions"]?.rig) { out.add("rig"); out.add("construct"); } } catch (_e) {}
+  if (/circuitborn/i.test(String(actor.flags?.["bbttcc-character-options"]?.nativeLinks?.ancestryName || ""))) out.add("circuitborn");
   return [...out];
 }
 
@@ -14460,6 +14466,26 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       // { kind:"faculty", faculty, amount | formula, mode:"score"|"checks", duration, rounds, slot } → ftApplyFacultyEffect (2026-11-11)
       facultyOps.push({ faculty: eff.faculty, amount: eff.amount, formula: eff.formula, kind: eff.mode === "checks" ? "checks" : "score",
         duration: eff.duration, rounds: eff.rounds, slot: eff.slot, name: item.name, img: item.img, origin: item.uuid });
+    } else if (eff.kind === "immunity") {
+      // { kind:"immunity", conditions:"restrained,…", duration:"scene" } (2026-11-13, Epic Nail Polish) — an actor AE whose
+      // grant.condImmunes row the defense pass reads; durationKind scene → the Scene Break / combat end clears it.
+      const conds = String(eff.conditions || "").split(",").map(x => x.trim().toLowerCase()).filter(k => FT.CONDITIONS?.[k]);
+      if (conds.length && (game.user?.isGM || recipient.isOwner)) {
+        await recipient.createEmbeddedDocuments("ActiveEffect", [{ name: item.name, img: item.img, origin: item.uuid, transfer: false, disabled: false,
+          description: `Immune to ${conds.join(", ")} until the scene ends.`,
+          changes: [{ key: "flags.fourththing.grant.condImmunes", mode: (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD ?? 2), value: conds.join(","), priority: 20 }],
+          flags: { fourththing: { facultyEffect: { faculty: "", amount: 0, kind: "immunity", durationKind: String(eff.duration || "scene"), slot: `immunity:${item.id}` } } } }]);
+        summary.push(`<li>Immune to <b>${ftEscapeHtml(conds.join(", "))}</b> until the scene ends</li>`);
+      }
+    } else if (eff.kind === "measureReality") {
+      // { kind:"measureReality" } (2026-11-13, Hypercalipers) — the user's party hex, read out to the user + GMs.
+      summary.push(`<li>${await ftMeasureReality(recipient, item)}</li>`);
+    } else if (eff.kind === "parleyBonus") {
+      // { kind:"parleyBonus", amount } (2026-11-13, The Control Suit) — the wearer's side gains +amount on the live Parley's next exchange.
+      if (eff.requiresEquipped && !(item.system?.equipped === true || item.flags?.fourththing?.equipped === true)) { summary.push(`<li>Wear ${ftEscapeHtml(item.name)} to use it.</li>`); continue; }
+      const fid = getLinkedFaction(recipient)?.id || "";
+      let r = null; try { r = await game.bbttcc?.api?.gmExec?.call?.("fourththing.parleyItemBonus", { factionId: fid, amount: Number(eff.amount) || 2, source: `${item.name} (${recipient.name})` }); } catch (eP) { r = { ok: false, reason: eP?.message || "no GM" }; }
+      summary.push(r?.ok ? `<li><b>${ftEscapeHtml(eff.text || "Declared.")}</b> +${Number(eff.amount) || 2} to ${ftEscapeHtml(r.sideName || "your side")} on the next exchange</li>` : `<li>No Parley for you right now (${ftEscapeHtml(r?.reason || "none open")}).</li>`);
     } else if (eff.kind === "mutation") {
       // Gene-cleanse — cure radiation mutations. op "cleanseAll"/"clear" purges
       // every mutation; otherwise cure up to `count` (default 1), letting the
@@ -14586,6 +14612,59 @@ async function ftClearFacultyEffects(actor, { slot = null, faculty = null, all =
   if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
   return ids.length;
 }
+
+// ── Circuit Rider ware helpers (2026-11-13) ─────────────────────────────────────────────────────────────────────────
+function _ftPartyHexOf(actor) {
+  const fid = getLinkedFaction(actor)?.id || "";
+  try { const w = fid ? game.bbttcc?.api?.travel?.whereIs?.(fid) : null; return w?.doc ? { fid, doc: w.doc, uuid: w.hexUuid || w.doc.uuid } : { fid, doc: null }; } catch (_e) { return { fid, doc: null }; }
+}
+async function ftCritHexDarkness(actor, item, delta) {
+  const { doc, uuid } = _ftPartyHexOf(actor);
+  if (!doc) return;
+  const nm = doc.flags?.["bbttcc-territory"]?.name || doc.text || "this hex";
+  let r = null; try { r = await game.bbttcc?.api?.gmExec?.call?.("fourththing.hexDarknessBump", { hexUuid: uuid, delta, by: actor?.name, item: item?.name }); } catch (_e) {}
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll" style="border-color:#7d3cff"><div class="ft-roll-header"><span class="ft-roll-name">💥 ${ftEscapeHtml(item?.name || "Critical")} — the world cracks</span></div><p style="margin:.2rem 0;font-size:.85rem">You punch something too hard, you break the world too. <b>${ftEscapeHtml(nm)}</b> Darkness +${delta}${r?.ok ? ` (now ${r.after})` : " — no GM to write it"}.</p></div>` });
+}
+async function ftMeasureReality(actor, item) {
+  const { fid, doc } = _ftPartyHexOf(actor);
+  if (!doc) return "No reading: you are not on a hex the map knows.";
+  const tf = doc.flags?.["bbttcc-territory"] || {};
+  const nm = tf.name || doc.text || "this hex";
+  const dark = Number(tf.mods?.darkness ?? 0) || 0, floor = Number(tf.darknessFloor ?? 0) || 0;
+  let rad = 0; try { rad = Number(game.bbttcc?.api?.territory?.radiation?.level?.(doc) ?? tf.mods?.radiation ?? 0) || 0; } catch (_e) { rad = Number(tf.mods?.radiation ?? 0) || 0; }
+  const owner = tf.factionId ? (game.actors.get(tf.factionId)?.name || "someone") : "nobody";
+  const ownDark = tf.factionId ? (Number(game.actors.get(tf.factionId)?.getFlag?.("bbttcc-factions", "darkness")?.[doc.id] ?? 0) || 0) : 0;
+  const conds = [].concat(tf.conditions || [], tf.modifiers || []).map(x => typeof x === "string" ? x : (x?.label || x?.key || "")).filter(Boolean);
+  const wm = (tf.worldModifiers || []).filter(m => m && m.enabled !== false).map(m => m.label || m.key).filter(Boolean);
+  let hidden = ""; try { const sv = game.bbttcc?.api?.territory?.survey?.check?.({ hexDoc: doc, factionId: fid }); if (sv?.blocked || (sv?.beats || []).length) hidden = `Something here is not what it seems — a story waits (${(sv.beats || []).length} unplayed beat${(sv.beats || []).length === 1 ? "" : "s"}).`; } catch (_e) {}
+  const lines = [`Darkness <b>${dark}</b>/6${floor ? ` (it will not go below ${floor})` : ""}${ownDark ? ` · ${ftEscapeHtml(owner)}'s ledger: ${ownDark}/10` : ""}`, `Radiation <b>${rad}</b>/3`,
+    conds.length ? `Conditions: ${ftEscapeHtml(conds.join(", "))}` : "No standing conditions", wm.length ? `Holding: ${ftEscapeHtml(wm.join(", "))}` : "", hidden].filter(Boolean);
+  const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+  const own = game.users.filter(u => !u.isGM && actor?.testUserPermission?.(u, "OWNER")).map(u => u.id);
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), whisper: [...new Set([...gmIds, ...own])], content: `<div class="fourththing-roll" style="border-color:#3dd6c0"><div class="ft-roll-header"><span class="ft-roll-name">📏 ${ftEscapeHtml(item?.name || "Measure")} — the reality of ${ftEscapeHtml(nm)}</span></div><ul style="margin:.2rem 0 0 1rem;font-size:.85rem">${lines.map(l => `<li>${l}</li>`).join("")}</ul></div>` });
+  return `Measured <b>${ftEscapeHtml(nm)}</b> — reading whispered to you`;
+}
+Hooks.once("ready", () => {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register("fourththing.hexDarknessBump", async (p = {}) => {
+    const doc = p.hexUuid ? await fromUuid(String(p.hexUuid)) : null;
+    if (!doc?.flags?.["bbttcc-territory"]) return { ok: false, reason: "not a hex" };
+    const delta = Math.max(-3, Math.min(3, Number(p.delta) || 0)); if (!delta) return { ok: false, reason: "no delta" };
+    await game.bbttcc?.api?.worldMutation?.applyWorldEffects?.({ id: "ft-item-crit", label: String(p.item || "item"), worldEffects: { hexDarkness: { targetHexUuid: doc.uuid, delta } } }, {});
+    return { ok: true, after: Number(doc.flags?.["bbttcc-territory"]?.mods?.darkness ?? 0) || 0 };
+  });
+  gx.register("fourththing.parleyItemBonus", async (p = {}) => {
+    const sc = game.bbttcc?.api?.raid?._lastCourtly; const st = sc?.getState?.();
+    if (!st || st.outcome !== "ongoing") return { ok: false, reason: "no Parley is open" };
+    const fid = String(p.factionId || ""); if (!fid) return { ok: false, reason: "no Domain" };
+    let side = fid === st.attackerId ? "A" : fid === st.defenderId ? "D" : null;
+    if (!side) { try { if ((game.bbttcc?.api?.radiation?.partyFactionIds?.(st.attackerId) || []).includes(fid)) side = "A"; } catch (_e) {} }
+    if (!side) return { ok: false, reason: "your Domain is not at this table" };
+    await sc.queueRollMod(side, Math.max(1, Math.min(3, Number(p.amount) || 2)), `item:${String(p.source || "item")}`);
+    return { ok: true, side, sideName: game.actors.get(side === "A" ? st.attackerId : st.defenderId)?.name || "" };
+  });
+});
 
 async function runConsumeEffects(actor, item, consume, { targets = null } = {}) {
   if (!actor || !item || !consume) return;
@@ -19655,6 +19734,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         await game.fourththing.npcAuto?.onHit?.(actor, _hitItem, _hitTgt, { maxDie });   // 2026-10-26: maxDie feeds if.critical
         await game.fourththing.npcAuto?.onStruck?.(_hitTgt, actor, _hitItem);   // the defender's retaliation rules
       } catch (e) { console.warn("[fourththing] npc automation on-hit failed", e); }
+      // ON-CRIT ITEM RULES (2026-11-13, Fist of Justice Gauntlets): rfi.item.onCrit = { hexDarkness: n } — a critical hit
+      // (double 10) cracks the world: the party's current hex gains n Darkness (GM writes it; player seats relay).
+      try {
+        const _critItem = itemUuid ? await fromUuid(itemUuid) : null;
+        const _oc = _critItem?.flags?.fourththing?.rfi?.item?.onCrit;
+        if (doubleTen && Number(_oc?.hexDarkness) > 0) await ftCritHexDarkness(actor, _critItem, Number(_oc.hexDarkness));
+      } catch (e) { console.warn("[fourththing] on-crit item rule failed", e); }
 
       // Auto-apply weapon-strike effects on a hit (playtest #6). Conditions/AEs land immediately instead of waiting for
       // the Apply Damage click; damage itself still uses the Apply button. What happened to the states is stamped on
@@ -21506,6 +21592,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (travFid) for (const a of game.actors ?? []) {
         if (_kind(a) === "steward" && getLinkedFaction(a)?.id === travFid) stewards.add(a);
       }
+      // REALITY ANCHOR (2026-11-13, Circuit Rider ware): a ridden rig carrying a rig system flagged rigGear.realityAnchor
+      // holds the world still — the stewards aboard take no Darkness from the dark hex.
+      try {
+        const _sc = travFid ? game.bbttcc?.api?.travel?.menace?.partyScale?.(travFid) : null;
+        const _rig = _sc?.rigId ? game.actors.get(_sc.rigId) : null;
+        if (_rig?.items?.some?.(i => i?.flags?.fourththing?.rigGear?.realityAnchor === true && i.system?.equipped !== false)) {
+          if (game.user?.isGM) ChatMessage.create({ speaker: { alias: _rig.name }, content: `<div class="fourththing-roll" style="border-color:#3dd6c0">⚓ <b>Reality Anchor</b> — ${ftEscapeHtml(_rig.name)} holds the world still through ${ftEscapeHtml(tf.name || hex.text || "the dark hex")}. No Darkness taken.</div>` }).catch(() => {});
+          return;
+        }
+      } catch (_eRA) {}
       // Once per hex per world turn (canonical spine: bbttcc-world).
       const turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn?.number ?? 0) || 0;
       for (const steward of stewards) {
@@ -24801,6 +24897,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           // True when the item carries a consume block — surfaces the Use
           // button on the inventory row.
           isConsumable: !!rfi?.consume,
+          // Worn AND usable (2026-11-13, The Control Suit): armor, or consume.wearable — the row keeps its equip toggle beside Use.
+          useAndEquip:  !!rfi?.consume && (i.type === "armor" || rfi?.consume?.wearable === true),
           charges:      Number(rfi?.charges ?? 0) || null,
           // Inventory CATEGORY (owner ask 2026-10-06: "list items by category") — the sheet groups rows under these headers.
           // QUEST ITEMS (Dave 2026-10-30): story objects the Steward carries (bbttcc-campaign choice.questItems) — own group,
@@ -27535,6 +27633,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           glance: ftItemGlance(actor, i) || String(rfi?.glance ?? ""),   // 2026-11-12: function, not colour
           notProficient, profTip, profSkill: prof?.label ?? "",
           isConsumable: !!rfi?.consume,
+          useAndEquip: !!rfi?.consume && (i.type === "armor" || rfi?.consume?.wearable === true),   // 2026-11-13
           charges: Number(rfi?.charges ?? 0) || null
         };
       });
