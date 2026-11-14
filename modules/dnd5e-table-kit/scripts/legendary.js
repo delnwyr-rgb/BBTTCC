@@ -17,6 +17,7 @@ import { activateRiders } from "./riders.js";
 import { activateAutomation } from "./automation.js";
 import { activateOverTime } from "./overtime.js";
 import { activateLight } from "./light.js";
+import { activateBoons } from "./boons.js";
 
 const ID = "dnd5e-table-kit";
 const KINDS = {
@@ -174,6 +175,7 @@ export function activate() {
   try { activateAutomation(); } catch(err) { console.error(`${ID} | could not start automation`, err); }
   try { activateOverTime(); } catch(err) { console.error(`${ID} | could not start over-time effects`, err); }
   try { activateLight(); } catch(err) { console.error(`${ID} | could not start effect lights`, err); }
+  try { activateBoons(); } catch(err) { console.error(`${ID} | could not start epic boons`, err); }
   try { patchCharacterData(); } catch(err) { console.error(`${ID} | could not patch CharacterData`, err); }
   Hooks.on("dnd5e.preRestCompleted", onPreRestCompleted);
   Hooks.on("renderCharacterActorSheet", onRenderCharacterSheet);

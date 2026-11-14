@@ -15,6 +15,7 @@
 // the same user account — never double-apply.
 
 import { ID, armed, consume } from "./riders.js";
+import { peerlessAim, offenseMods } from "./boons.js";
 
 const SURGE = "surge-powers";
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -125,9 +126,14 @@ async function onRollAttack(rolls, { subject: activity }={}) {
   const targets = usage.system?.targets?.length ? usage.system.targets : [...game.user.targets].map(t => ({
     ac: t.actor?.system.attributes?.ac?.value ?? null
   }));
-  if ( !targets.length || !targets.some(t => attackHits(roll, t.ac)) ) return;
+  if ( !targets.length ) return;
+  let lastAttack = usage.getAssociatedRolls("attack").pop();
+  if ( !targets.some(t => attackHits(roll, t.ac)) ) {
+    // 11-13: Boon of Combat Prowess — Peerless Aim turns the miss into a hit (stamped on the attack card for the GM)
+    if ( !(await peerlessAim(activity.actor)) ) return;
+    try { await lastAttack?.update?.({ [`flags.${ID}.forceHit`]: true }); } catch (_e) {}
+  }
 
-  const lastAttack = usage.getAssociatedRolls("attack").pop();
   const { ability, ammunitionItem: ammunition, mode: attackMode } = lastAttack?.system ?? {};
   // Carry the attack's own targets so the damage card lands on what was attacked,
   // even if the roller has since changed (or never had) token targets.
@@ -205,6 +211,9 @@ async function applyDamageCard(message) {
     value: Math.max(0, r.total), type: r.options.type, properties: new Set(r.options.properties ?? [])
   }));
   const ignoreResist = !!message.flags?.[ID]?.ignoreResist;
+  // 11-13: Boon of Irresistible Offense (attacker) — B/P/S ignores resistance; a natural 20 adds the raised score
+  const boonMods = (activity?.type === "attack") ? offenseMods(activity?.actor, (game.messages.get(message.flags?.[ID]?.attackMessage) ?? null)?.rolls?.[0], damages) : null;
+  if ( boonMods?.extra ) damages.push(boonMods.extra);
   const lines = [];
   const undo = [];
   const dodge = [];
@@ -216,7 +225,7 @@ async function applyDamageCard(message) {
     const { actor, uuid } = target;
     const name = descriptor.name ?? actor.name;
 
-    if ( attackRoll && !attackHits(attackRoll, attackAC.get(descriptor.token) ?? descriptor.ac) ) continue;
+    if ( attackRoll && !attack?.flags?.[ID]?.forceHit && !attackHits(attackRoll, attackAC.get(descriptor.token) ?? descriptor.ac) ) continue;
 
     // Surge: Reaction Miss turns the first incoming hit into a miss.
     if ( attackRoll && armed(actor, "reactionMiss") ) {
@@ -247,6 +256,7 @@ async function applyDamageCard(message) {
     const before = { value: hp.value, temp: hp.temp ?? 0 };
     const options = { isDelta: true, multiplier, origin: message, originatingMessage: message };
     if ( ignoreResist ) options.ignore = { resistance: true };
+    else if ( boonMods?.ignoreTypes ) options.ignore = { resistance: boonMods.ignoreTypes };
     await actor.applyDamage(damages, options);
     const after = actor.system.attributes.hp;
     const delta = (before.value + before.temp) - (after.value + (after.temp ?? 0));
@@ -260,7 +270,7 @@ async function applyDamageCard(message) {
     const what = delta >= 0 ? `takes <strong>${delta}</strong>` : `heals <strong>${-delta}</strong>`;
     const why = [evaded ? (multiplier ? "Evasion: half on a failed save" : "Evasion: no damage") : null,
       !evaded && multiplier !== 1 ? (multiplier ? "half, saved" : "saved, no damage") : null,
-      ignoreResist ? "resistance ignored" : null].filter(Boolean).join("; ");
+      ignoreResist ? "resistance ignored" : null, boonMods?.note ?? null].filter(Boolean).join("; ");
     lines.push(`<strong>${name}</strong> ${what}${why ? ` <em>(${why})</em>` : ""} → ${after.value}/${after.max} HP`);
   }
 
@@ -283,7 +293,7 @@ async function uncannyDodge(message, i) {
   if ( !entry || entry.used || message.flags?.[ID]?.undone ) return;
   const actor = await fromUuid(entry.uuid);
   if ( !actor?.system?.attributes?.hp ) return;
-  await actor.update({ "system.attributes.hp.value": entry.value, "system.attributes.hp.temp": Math.max(0, Number(entry.temp) || 0) || null });
+  await actor.update({ "system.attributes.hp.value": entry.value, "system.attributes.hp.temp": Math.max(0, Number(entry.temp) || 0) || null }, { [`${ID}NoBoons`]: true });
   const damages = entry.damages.map(d => ({ ...d, properties: new Set(d.properties ?? []) }));
   const options = { isDelta: true, multiplier: (Number(entry.multiplier) || 1) * 0.5 };
   if ( entry.ignoreResist ) options.ignore = { resistance: true };
@@ -312,7 +322,7 @@ async function undoDamage(message) {
     if ( !hp ) continue;
     const max = Number.isFinite(Number(hp.max)) ? Number(hp.max) : Number(value);
     const v = Math.max(0, Math.min(Number(value) || 0, max));
-    await actor.update({ "system.attributes.hp.value": v, "system.attributes.hp.temp": Math.max(0, Number(temp) || 0) || null });
+    await actor.update({ "system.attributes.hp.value": v, "system.attributes.hp.temp": Math.max(0, Number(temp) || 0) || null }, { [`${ID}NoBoons`]: true });
   }
   await message.update({ [`flags.${ID}.undone`]: true });
 }
