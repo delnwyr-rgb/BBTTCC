@@ -14952,7 +14952,7 @@ function ftComputeArmorLines(actor, sys) {
       if (item.system?.equipped === false) continue;
       const slot = _ftArmorLineSlot(item);
       pieces.push({ id: item.id, name: item.name, kind: "armor", slot, line: slot === "body" ? _ftArmorLineOf(item) : null,
-        guard: _ftArmorGuardRaw(item), resolve: _ftArmorStatRaw(item, "resolve") });
+        guard: _ftArmorGuardRaw(item), resolve: _ftArmorStatRaw(item, "resolve"), flat: item.system?.armorFlat === true });   // flat (2026-11-13): the Control Suit
     } else if (item.type === "gear" && FT.WORN_GEAR_SLOTS.has(String(item.system?.slot || ""))) {
       if (!item.getFlag?.("fourththing", "equipped")) continue;
       const g = _ftArmorGuardRaw(item), r = _ftArmorStatRaw(item, "resolve");

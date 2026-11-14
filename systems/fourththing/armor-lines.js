@@ -131,7 +131,10 @@ export function computeLinesArmor({ pieces = [], ranks = {}, twoHanded = false, 
   const notCounted = (p, why) => out.breakdown.push({ item: `${p.name} (not counted: ${why})`, skill: null, rank: 0, guard: 0, resolve: 0, slot: p.slot });
 
   // Rule 3 — one body armor: the best value on its own line.
+  // FLAT body armor (Dave 2026-11-13, the Control Suit): `flat` pieces give their listed Guard AND Resolve as-is — no line,
+  // no rank gate. Super-rare story armor only; it is still the one body armor (best total wins the slot).
   const bodies = pieces.filter(p => p.slot === "body").map(p => {
+    if (p.flat) { const g = Number(p.guard) || 0, r = Number(p.resolve) || 0; return { p, line: "flat", def: null, rank: null, v: g + r, g, r, flat: true }; }
     const line = ARMOR_LINES[p.line] ? p.line : inferArmorLine(p);
     const def = ARMOR_LINES[line].defense, rank = Number(ranks[line]) || 0;
     const v = bodyArmorValue(def === "guard" ? p.guard : p.resolve, rank, scale);
@@ -140,6 +143,7 @@ export function computeLinesArmor({ pieces = [], ranks = {}, twoHanded = false, 
   bodies.forEach((b, i) => {
     if (i > 0) return notCounted(b.p, "one body armor");
     out.countedIds.add(b.p.id);
+    if (b.flat) { out.guard += b.g; out.resolve += b.r; out.breakdown.push({ item: b.p.name, skill: null, rank: null, slot: "body", line: "flat", guard: b.g, resolve: b.r }); return; }
     out[b.def] += b.v;
     out.breakdown.push({ item: b.p.name, skill: b.line, rank: b.rank, slot: "body", line: b.line,
       guard: b.def === "guard" ? b.v : 0, resolve: b.def === "resolve" ? b.v : 0 });
